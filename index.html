@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Récré Magic - Troupe de spectacle vivant</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="stars"></div>
+    <div class="stars-layer-2"></div>
+    
+    <div class="container">
+        <header class="header">
+            <div class="magic-sparkle">✨</div>
+            <h1 class="title">
+                <span class="title-recre">Récré</span>
+                <span class="title-magic">Magic</span>
+            </h1>
+            <div class="magic-sparkle">🎪</div>
+        </header>
+
+        <main class="main">
+            <div class="content">
+                <p class="tagline">L'art du spectacle vivant au service de l'émerveillement</p>
+                
+                <div class="status-card">
+                    <div class="status-icon">🔮</div>
+                    <p class="status-text">Site en construction</p>
+                    <p class="status-subtitle">Notre nouvelle plateforme arrive bientôt avec tous nos spectacles</p>
+                </div>
+
+                <div class="features">
+                    <div class="feature">
+                        <span class="feature-icon">🎭</span>
+                        <span class="feature-text">Spectacles vivants</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">🎉</span>
+                        <span class="feature-text">Animations enfants</span>
+                    </div>
+                    <div class="feature">
+                        <span class="feature-icon">✨</span>
+                        <span class="feature-text">Magie & émerveillement</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer class="footer">
+            <div class="footer-content">
+                <p class="copyright">© 2024 Récré Magic. Tous droits réservés.</p>
+                <div class="social-links">
+                    <a href="#" class="social-link">Instagram</a>
+                    <span class="separator">•</span>
+                    <a href="#" class="social-link">Facebook</a>
+                    <span class="separator">•</span>
+                    <a href="#" class="social-link">Contact</a>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <script>
+        // Animation on load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.body.classList.add('loaded');
+        });
+
+        // Sparkle cursor effect
+        document.addEventListener('mousemove', (e) => {
+            if (Math.random() > 0.95) {
+                createSparkle(e.clientX, e.clientY);
+            }
+        });
+
+        function createSparkle(x, y) {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'cursor-sparkle';
+            sparkle.style.left = x + 'px';
+            sparkle.style.top = y + 'px';
+            sparkle.textContent = ['✨', '⭐', '💫', '🌟'][Math.floor(Math.random() * 4)];
+            document.body.appendChild(sparkle);
+            
+            setTimeout(() => sparkle.remove(), 1000);
+        }
+    </script>
+</body>
+</html>
