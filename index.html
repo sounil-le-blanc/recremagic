@@ -15,11 +15,34 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="#home" class="navbar-logo">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <ul class="navbar-menu">
+                <li><a href="#spectacles">Spectacles</a></li>
+                <li><a href="#personnages">Personnages</a></li>
+                <li><a href="#expos">Expositions</a></li>
+                <li><a href="#tournee">Tournée</a></li>
+                <li><a href="#videos">Vidéos</a></li>
+                <li><a href="#histoire">Notre Histoire</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+            <button class="navbar-toggle" id="navbar-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </nav>
+
     <!-- Confetti animation background -->
     <div class="confetti-container" id="confetti"></div>
 
     <!-- Hero Section -->
-    <section class="hero">
+    <section class="hero" id="home">
         <div class="hero-overlay"></div>
         <div class="hero-content">
             <img src="images/logo.png" alt="Récré Magic Logo" class="hero-logo">
@@ -56,7 +79,7 @@
                 <!-- Spectacle 1 : Du Coup -->
                 <div class="spectacle-card spectacle-vert">
                     <div class="spectacle-image">
-                        <img src="images/spectacle-ducoup.png" alt="Du Coup on revient chez vous" loading="lazy">
+                        <img src="images/spectacle-ducoup.jpg" alt="Du Coup on revient chez vous" loading="lazy">
                         <div class="spectacle-badge">VERT</div>
                     </div>
                     <div class="spectacle-content">
@@ -75,7 +98,7 @@
                 <!-- Spectacle 2 : Roulettes -->
                 <div class="spectacle-card spectacle-rose">
                     <div class="spectacle-image">
-                        <img src="images/spectacle-roulettes.png" alt="Comme sur des Roulettes" loading="lazy">
+                        <img src="images/spectacle-roulettes.jpg" alt="Comme sur des Roulettes" loading="lazy">
                         <div class="spectacle-badge">ROSE</div>
                     </div>
                     <div class="spectacle-content">
@@ -94,7 +117,7 @@
                 <!-- Spectacle 3 : Maboul -->
                 <div class="spectacle-card spectacle-rouge">
                     <div class="spectacle-image">
-                        <img src="images/spectacle-maboul.png" alt="Délicieusement Maboul" loading="lazy">
+                        <img src="images/spectacle-maboul.jpg" alt="Délicieusement Maboul" loading="lazy">
                         <div class="spectacle-badge">ROUGE</div>
                     </div>
                     <div class="spectacle-content">
@@ -118,41 +141,135 @@
         </div>
     </section>
 
-    <!-- La Caravane Section -->
-    <section class="caravane">
+    <!-- Personnages Section -->
+    <section class="personnages" id="personnages">
         <div class="container">
-            <div class="caravane-content">
-                <div class="caravane-text">
-                    <span class="section-label">Notre maison</span>
-                    <h2 class="section-title">La Caravane Magique</h2>
-                    <p class="caravane-description">
-                        Depuis 60 ans, notre caravane parcourt les routes de France pour apporter 
-                        le spectacle vivant au cœur des villages et des villes. Peinte à la main, 
-                        elle est le symbole de notre engagement : être des artisans du spectacle, 
-                        proches du public, authentiques et passionnés.
-                    </p>
-                    <p class="caravane-description">
-                        Une nouvelle génération d'artistes a pris le volant, perpétuant la tradition 
-                        familiale tout en apportant un souffle nouveau à nos créations.
-                    </p>
-                    <div class="caravane-stats">
-                        <div class="stat">
-                            <span class="stat-number">60+</span>
-                            <span class="stat-label">ans de tournées</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">3</span>
-                            <span class="stat-label">spectacles en 2026</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">♾️</span>
-                            <span class="stat-label">sourires d'enfants</span>
-                        </div>
+            <div class="section-header">
+                <span class="section-label">Rencontrez</span>
+                <h2 class="section-title">Nos Personnages</h2>
+                <p class="section-subtitle">Les artistes qui donnent vie à la magie</p>
+            </div>
+
+            <div class="personnages-grid">
+                <div class="personnage-card">
+                    <div class="personnage-image">
+                        <img src="images/toto.jpg" alt="Monsieur Toto" loading="lazy">
+                    </div>
+                    <div class="personnage-content">
+                        <h3 class="personnage-name">Monsieur TOTO</h3>
+                        <p class="personnage-role">Maître de cérémonie & Artiste complet</p>
+                        <p class="personnage-description">
+                            Avec son costume rayé multicolore et son chapeau iconique, Monsieur Toto 
+                            est le cœur battant du Circus Récré Magic. Artiste aux multiples talents, 
+                            il enchante petits et grands avec ses tours de magie, ses facéties clownesques, 
+                            sa présence chaleureuse et son sens inné du spectacle.
+                        </p>
                     </div>
                 </div>
-                <div class="caravane-image">
-                    <img src="images/caravane-detail.jpg" alt="La caravane Récré Magic" loading="lazy">
+
+                <div class="personnage-card">
+                    <div class="personnage-image">
+                        <img src="images/flo.jpg" alt="Flo" loading="lazy">
+                    </div>
+                    <div class="personnage-content">
+                        <h3 class="personnage-name">FLO</h3>
+                        <p class="personnage-role">Musicien & Conteur</p>
+                        <p class="personnage-description">
+                            Guitariste talentueux et personnage attachant, Flo apporte une touche 
+                            musicale et poétique aux spectacles. Avec son énergie débordante et 
+                            sa créativité sans limite, il forme avec Toto un duo complice qui fait 
+                            vibrer le public au rythme de leurs aventures loufoques.
+                        </p>
+                    </div>
                 </div>
+
+                <div class="personnage-card">
+                    <div class="personnage-image">
+                        <img src="images/spectacle-ducoup.jpg" alt="Arlequin" loading="lazy">
+                    </div>
+                    <div class="personnage-content">
+                        <h3 class="personnage-name">ARLEQUIN</h3>
+                        <p class="personnage-role">Marionnette à fils</p>
+                        <p class="personnage-description">
+                            Figure emblématique de la Commedia dell'arte, Arlequin prend vie dans 
+                            nos spectacles grâce à la magie des fils. Farceur et malicieux, il 
+                            enchante le public avec ses pirouettes et ses aventures rocambolesques.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="personnage-card">
+                    <div class="personnage-image">
+                        <img src="images/spectacle-roulettes.jpg" alt="Baptiste" loading="lazy">
+                    </div>
+                    <div class="personnage-content">
+                        <h3 class="personnage-name">BAPTISTE</h3>
+                        <p class="personnage-role">Personnage fantaisiste</p>
+                        <p class="personnage-description">
+                            Drôle et imprévisible, Baptiste apporte une dose de fantaisie et de 
+                            surprise dans chaque représentation. Son humour décalé et ses 
+                            interactions avec le public créent des moments inoubliables.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Expositions Section -->
+    <section class="expos" id="expos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Découvrez</span>
+                <h2 class="section-title">Nos Expositions</h2>
+                <p class="section-subtitle">Univers magiques et personnages géants</p>
+            </div>
+
+            <div class="expos-grid">
+                <div class="expo-card">
+                    <div class="expo-image">
+                        <img src="images/expo-marionnettes.jpg" alt="La Féerie des Marionnettes" loading="lazy">
+                    </div>
+                    <div class="expo-content">
+                        <h3 class="expo-title">La Féerie des Marionnettes</h3>
+                        <p class="expo-description">
+                            12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le 
+                            spectateur appuie sur un simple bouton ! Une exposition interactive de 2 mètres 
+                            de haut, 60 cm de profondeur et 1,90 mètres de façade qui émerveille petits et grands.
+                        </p>
+                        <ul class="expo-features">
+                            <li>✨ 12 scènes animées</li>
+                            <li>🎭 56 personnages articulés</li>
+                            <li>🎵 Ambiance sonore immersive</li>
+                            <li>👨‍👩‍👧‍👦 Pour toute la famille</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <div class="expo-card">
+                    <div class="expo-image">
+                        <img src="images/expo-geants.jpg" alt="Les Géants du Carnaval" loading="lazy">
+                    </div>
+                    <div class="expo-content">
+                        <h3 class="expo-title">Les Géants du Carnaval</h3>
+                        <p class="expo-description">
+                            12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
+                            spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval, 
+                            avec des créations impressionnantes qui captivent l'imagination.
+                        </p>
+                        <ul class="expo-features">
+                            <li>🎪 Personnages de 2 à 3 mètres</li>
+                            <li>🎨 Costumes éclatants</li>
+                            <li>🤹 Animation mécanique</li>
+                            <li>📸 Parfait pour les photos souvenirs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <div class="expos-cta">
+                <p>Nos expositions peuvent enrichir vos événements, festivals et manifestations culturelles.</p>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
             </div>
         </div>
     </section>
@@ -203,6 +320,103 @@
             <div class="tournee-note">
                 <p><strong>Code couleurs :</strong> Vert = "DU COUP on revient chez vous" • Rose = "Comme sur des Roulettes" • Rouge = "Délicieusement Maboul"</p>
                 <p>Tournée mise à jour régulièrement</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vidéos Section -->
+    <section class="videos" id="videos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Extraits</span>
+                <h2 class="section-title">Nos Spectacles en Vidéo</h2>
+                <p class="section-subtitle">Plongez dans l'ambiance de nos représentations</p>
+            </div>
+
+            <div class="videos-grid">
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                title="Du Coup on revient chez vous" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <h3 class="video-title">DU COUP on revient chez vous</h3>
+                    <p class="video-description">Promo 2026 - Découvrez notre nouveau spectacle</p>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                title="Comme sur des Roulettes" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <h3 class="video-title">COMME SUR DES ROULETTES</h3>
+                    <p class="video-description">Le duo Toto et Flo en action</p>
+                </div>
+
+                <div class="video-card">
+                    <div class="video-wrapper">
+                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
+                                title="Délicieusement Maboul" 
+                                frameborder="0" 
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+                                allowfullscreen>
+                        </iframe>
+                    </div>
+                    <h3 class="video-title">DÉLICIEUSEMENT MABOUL</h3>
+                    <p class="video-description">Magie burlesque et moments musicaux</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Histoire / Caravane Section -->
+    <section class="histoire" id="histoire">
+        <div class="container">
+            <div class="histoire-content">
+                <div class="histoire-text">
+                    <span class="section-label">Notre histoire</span>
+                    <h2 class="section-title">60 ans de passion</h2>
+                    <p class="histoire-description">
+                        Depuis 60 ans, notre caravane parcourt les routes de France pour apporter 
+                        le spectacle vivant au cœur des villages et des villes. Peinte à la main, 
+                        elle est le symbole de notre engagement : être des artisans du spectacle, 
+                        proches du public, authentiques et passionnés.
+                    </p>
+                    <p class="histoire-description">
+                        Une nouvelle génération d'artistes a pris le volant, perpétuant la tradition 
+                        familiale tout en apportant un souffle nouveau à nos créations. De génération 
+                        en génération, nous continuons à faire vivre la magie du cirque-théâtre 
+                        ambulant, fidèles à nos valeurs d'artisanat, de créativité et de proximité.
+                    </p>
+                    <div class="histoire-stats">
+                        <div class="stat">
+                            <span class="stat-number">1964</span>
+                            <span class="stat-label">Année de création</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">60+</span>
+                            <span class="stat-label">ans de tournées</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">spectacles en 2026</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">♾️</span>
+                            <span class="stat-label">sourires d'enfants</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="histoire-image">
+                    <img src="images/caravane-detail.jpg" alt="La caravane Récré Magic" loading="lazy">
+                </div>
             </div>
         </div>
     </section>
@@ -265,7 +479,11 @@
                 </div>
                 <div class="footer-links">
                     <a href="#spectacles">Spectacles</a>
+                    <a href="#personnages">Personnages</a>
+                    <a href="#expos">Expositions</a>
                     <a href="#tournee">Tournée</a>
+                    <a href="#videos">Vidéos</a>
+                    <a href="#histoire">Notre Histoire</a>
                     <a href="#contact">Contact</a>
                 </div>
             </div>
