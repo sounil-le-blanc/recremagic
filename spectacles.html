@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Spectacles - Récré Magic Pro</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #f9f9f9; padding-top: 80px; }
+        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
+        .page-header { background: linear-gradient(135deg, #1a3a4d, #7CB69F); color: white; padding: 4rem 2rem; text-align: center; }
+        .page-header h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
+        .back-btn { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; }
+        .back-btn:hover { background: #FFB300; color: #2C1810; }
+        .spectacles-list { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem; }
+        .spectacle-item { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1); display: grid; grid-template-columns: 400px 1fr; transition: transform 0.3s; }
+        .spectacle-item:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.15); }
+        .spectacle-img { height: 100%; }
+        .spectacle-img img { width: 100%; height: 100%; object-fit: cover; }
+        .spectacle-content { padding: 3rem; }
+        .spectacle-badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; margin-bottom: 1rem; text-transform: uppercase; }
+        .badge-vert { background: #7CB69F; }
+        .badge-rose { background: #EC407A; }
+        .badge-rouge { background: #D32F2F; }
+        .spectacle-title { font-family: 'Fredoka', cursive; font-size: 2.2rem; color: #1a3a4d; margin-bottom: 1rem; text-transform: uppercase; }
+        .spectacle-description { line-height: 1.8; margin-bottom: 2rem; }
+        .spectacle-specs { background: #FFF8E1; padding: 2rem; border-radius: 15px; margin-bottom: 1.5rem; }
+        .spec-item { display: flex; padding: 0.7rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .spec-item:last-child { border: none; }
+        .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 120px; }
+        .contact-cta { background: linear-gradient(135deg, #D32F2F, #EC407A); color: white; padding: 3rem; border-radius: 20px; text-align: center; margin-top: 4rem; }
+        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
+        .contact-cta p { font-size: 1.2rem; margin-bottom: 2rem; }
+        .contact-cta a { color: #FFB300; text-decoration: none; font-weight: 700; font-size: 1.3rem; }
+        @media (max-width: 968px) { .spectacle-item { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <a href="pros.html" class="back-btn">← Retour Espace Pro</a>
+        <h1>🎭 Nos Spectacles</h1>
+        <p>3 créations itinérantes pour tous publics</p>
+    </div>
+
+    <div class="spectacles-list">
+        <div class="spectacle-item">
+            <div class="spectacle-img"><img src="images/spectacle-ducoup.jpg" alt="Du Coup"></div>
+            <div class="spectacle-content">
+                <span class="spectacle-badge badge-vert">NOUVEAU 2026</span>
+                <h2 class="spectacle-title">DU COUP on revient chez vous</h2>
+                <p class="spectacle-description">
+                    Toto et Flo vous invitent à plonger dans leur univers décalé où se mêlent marionnettes 
+                    à fils, illusions magiques, mime, gags clownesques et moments musicaux. Une heure de 
+                    pur bonheur et de détente pour petits et grands.
+                </p>
+                <div class="spectacle-specs">
+                    <div class="spec-item"><span class="spec-label">⏱️ Durée :</span> 1h00</div>
+                    <div class="spec-item"><span class="spec-label">👥 Public :</span> Tout public dès 3 ans</div>
+                    <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 6m x 4m minimum</div>
+                    <div class="spec-item"><span class="spec-label">🏠 Lieu :</span> Intérieur ou extérieur</div>
+                    <div class="spec-item"><span class="spec-label">⚡ Technique :</span> Prise 220V, sono fournie</div>
+                    <div class="spec-item"><span class="spec-label">🚐 Installation :</span> Avec notre roulotte scénique</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+        </div>
+
+        <div class="spectacle-item">
+            <div class="spectacle-img"><img src="images/spectacle-roulettes.jpg" alt="Roulettes"></div>
+            <div class="spectacle-content">
+                <span class="spectacle-badge badge-rose">GRAND SUCCÈS</span>
+                <h2 class="spectacle-title">COMME SUR DES ROULETTES</h2>
+                <p class="spectacle-description">
+                    Monsieur Toto doit partager la scène avec Flo, un personnage aussi imprévisible qu'attachant. 
+                    Entre humour, illusion, quiproquos et moments de tendresse, ce duo complice embarque petits 
+                    et grands pour un moment drôle et décalé.
+                </p>
+                <div class="spectacle-specs">
+                    <div class="spec-item"><span class="spec-label">⏱️ Durée :</span> 55 minutes</div>
+                    <div class="spec-item"><span class="spec-label">👥 Public :</span> Tout public</div>
+                    <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 6m x 4m minimum</div>
+                    <div class="spec-item"><span class="spec-label">🏠 Lieu :</span> Intérieur ou extérieur</div>
+                    <div class="spec-item"><span class="spec-label">⚡ Technique :</span> Prise 220V</div>
+                    <div class="spec-item"><span class="spec-label">🎪 Montage :</span> 1h avant, 45min après</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+        </div>
+
+        <div class="spectacle-item">
+            <div class="spectacle-img"><img src="images/spectacle-maboul.jpg" alt="Maboul"></div>
+            <div class="spectacle-content">
+                <span class="spectacle-badge badge-rouge">INTERACTIF</span>
+                <h2 class="spectacle-title">DÉLICIEUSEMENT MABOUL</h2>
+                <p class="spectacle-description">
+                    Entouré d'improbables complices, je vous amène sur les pentes de l'humour, de la tendresse 
+                    et de l'étonnement. Voyagez en musique tout au long de ce spectacle interactif recommandé 
+                    à tous âges. Gags clownesques, magie inventive et collaborative.
+                </p>
+                <div class="spectacle-specs">
+                    <div class="spec-item"><span class="spec-label">⏱️ Durée :</span> 1h00</div>
+                    <div class="spec-item"><span class="spec-label">👥 Public :</span> Tout public dès 4 ans</div>
+                    <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 6m x 4m minimum</div>
+                    <div class="spec-item"><span class="spec-label">🏠 Lieu :</span> Intérieur ou extérieur</div>
+                    <div class="spec-item"><span class="spec-label">⚡ Technique :</span> Prise 220V + son</div>
+                    <div class="spec-item"><span class="spec-label">🎭 Particularité :</span> Participation du public</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+        </div>
+
+        <div class="contact-cta" id="contact">
+            <h2>Intéressé par nos spectacles ?</h2>
+            <p>Contactez-nous pour un devis gratuit et personnalisé</p>
+            <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
+                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="pros.html">Espace Pro</a>
+                    <a href="familles.html">Familles</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

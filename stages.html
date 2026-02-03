@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Stages - Récré Magic Pro</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #f9f9f9; padding-top: 80px; }
+        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
+        .page-header { background: linear-gradient(135deg, #FFB300, #f9a825); color: #2C1810; padding: 4rem 2rem; text-align: center; }
+        .page-header h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
+        .back-btn { display: inline-block; background: rgba(44,24,16,0.2); color: #2C1810; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; font-weight: 700; }
+        .back-btn:hover { background: #2C1810; color: white; }
+        .stages-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .stages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem; margin-bottom: 3rem; }
+        .stage-card { background: white; padding: 3rem 2rem; border-radius: 20px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.1); transition: all 0.3s; }
+        .stage-card:hover { transform: translateY(-10px); box-shadow: 0 15px 50px rgba(0,0,0,0.15); }
+        .stage-icon { font-size: 5rem; margin-bottom: 1.5rem; }
+        .stage-title { font-family: 'Fredoka', cursive; font-size: 2rem; color: #FFB300; margin-bottom: 1rem; text-transform: uppercase; }
+        .stage-description { line-height: 1.7; margin-bottom: 1.5rem; }
+        .stage-specs { background: #FFF8E1; padding: 1.5rem; border-radius: 10px; text-align: left; margin-bottom: 1.5rem; }
+        .stage-specs div { padding: 0.5rem 0; }
+        .stage-note { background: linear-gradient(135deg, #7CB69F, #2E7D32); color: white; padding: 3rem; border-radius: 20px; text-align: center; font-size: 1.2rem; }
+        .contact-cta { background: linear-gradient(135deg, #FFB300, #f9a825); color: #2C1810; padding: 3rem; border-radius: 20px; text-align: center; margin-top: 3rem; }
+        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
+        .contact-cta a { color: #2C1810; text-decoration: none; font-weight: 700; font-size: 1.3rem; }
+        @media (max-width: 768px) { .stages-grid { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a>
+        </div>
+    </nav>
+
+    <div class="page-header">
+        <a href="pros.html" class="back-btn">← Retour Espace Pro</a>
+        <h1>🎓 Nos Stages</h1>
+        <p>Ateliers d'initiation aux arts du spectacle</p>
+    </div>
+
+    <div class="stages-container">
+        <div class="stages-grid">
+            <div class="stage-card">
+                <div class="stage-icon">🎭</div>
+                <h2 class="stage-title">Stage Marionnettes</h2>
+                <p class="stage-description">
+                    Initiation à la manipulation de marionnettes à fils et à gaine. Les participants 
+                    créent leur propre personnage et apprennent les bases de la manipulation pour 
+                    réaliser un petit spectacle final.
+                </p>
+                <div class="stage-specs">
+                    <div><strong>⏱️ Durée :</strong> 1 à 5 jours (adaptable)</div>
+                    <div><strong>👥 Public :</strong> Enfants dès 7 ans / Adultes</div>
+                    <div><strong>👨‍👩‍👧 Groupe :</strong> 8 à 15 participants</div>
+                    <div><strong>🎨 Matériel :</strong> Fourni par Récré Magic</div>
+                    <div><strong>📍 Lieu :</strong> Votre structure</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+
+            <div class="stage-card">
+                <div class="stage-icon">🤹</div>
+                <h2 class="stage-title">Stage Cirque-Théâtre</h2>
+                <p class="stage-description">
+                    Découverte des arts du cirque et du clown. Jonglerie, équilibre, expression 
+                    corporelle et jeu d'acteur. Apprentissage ludique dans une ambiance conviviale 
+                    et bienveillante.
+                </p>
+                <div class="stage-specs">
+                    <div><strong>⏱️ Durée :</strong> 2 à 5 jours</div>
+                    <div><strong>👥 Public :</strong> Enfants 6-16 ans</div>
+                    <div><strong>👨‍👩‍👧 Groupe :</strong> 10 à 20 participants</div>
+                    <div><strong>🎪 Matériel :</strong> Fourni (balles, foulards, etc.)</div>
+                    <div><strong>📍 Lieu :</strong> Salle ou extérieur</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+
+            <div class="stage-card">
+                <div class="stage-icon">🎨</div>
+                <h2 class="stage-title">Stage Création</h2>
+                <p class="stage-description">
+                    Atelier de construction de marionnettes et personnages. Techniques artisanales, 
+                    recyclage créatif et mise en vie des créations. De l'imagination à la réalisation 
+                    concrète.
+                </p>
+                <div class="stage-specs">
+                    <div><strong>⏱️ Durée :</strong> 2 à 5 jours</div>
+                    <div><strong>👥 Public :</strong> Tout public dès 8 ans</div>
+                    <div><strong>👨‍👩‍👧 Groupe :</strong> 6 à 12 participants</div>
+                    <div><strong>🛠️ Matériel :</strong> Fourni (tissus, bois, etc.)</div>
+                    <div><strong>🎁 Repartez :</strong> Avec votre création</div>
+                </div>
+                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            </div>
+        </div>
+
+        <div class="stage-note">
+            <p>
+                💡 <strong>Formules sur-mesure :</strong> Nous adaptons nos stages à vos besoins spécifiques. 
+                Écoles, centres de loisirs, MJC, bibliothèques, festivals... Contactez-nous pour construire 
+                ensemble un programme personnalisé qui correspond à votre projet et à votre budget.
+            </p>
+        </div>
+
+        <div class="contact-cta" id="contact">
+            <h2>Organiser un stage ?</h2>
+            <p>Contactez-nous pour un devis adapté à votre structure</p>
+            <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
+                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
+                </div>
+                <div class="footer-links">
+                    <a href="index.html">Accueil</a>
+                    <a href="pros.html">Espace Pro</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
