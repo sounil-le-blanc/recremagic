@@ -34,6 +34,78 @@ body {
     padding: 0 2rem;
 }
 
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(44, 24, 16, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-100%);
+    transition: transform 0.3s ease;
+}
+
+.navbar.visible {
+    transform: translateY(0);
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.navbar-menu a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.navbar-menu a:hover {
+    color: var(--jaune-accent);
+}
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.navbar-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-light);
+    margin: 3px 0;
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
 /* Confetti Animation */
 .confetti-container {
     position: fixed;
@@ -696,5 +768,388 @@ body {
     .contact-awards {
         flex-direction: column;
         text-align: center;
+    }
+}
+
+/* ========== NOUVELLES SECTIONS ========== */
+
+/* Personnages Section */
+.personnages {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, var(--rose-spectacle) 0%, var(--rouge-spectacle) 100%);
+    color: var(--text-light);
+}
+
+.personnages .section-label { color: var(--jaune-accent); }
+.personnages .section-title { color: var(--text-light); }
+.personnages .section-subtitle { color: rgba(255, 255, 255, 0.9); }
+
+.personnages-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2.5rem;
+}
+
+.personnage-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.4s ease;
+}
+
+.personnage-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    border-color: var(--jaune-accent);
+}
+
+.personnage-image {
+    height: 350px;
+    overflow: hidden;
+}
+
+.personnage-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.personnage-card:hover .personnage-image img {
+    transform: scale(1.1);
+}
+
+.personnage-content {
+    padding: 2rem;
+}
+
+.personnage-name {
+    font-family: 'Fredoka', cursive;
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: var(--jaune-accent);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+}
+
+.personnage-role {
+    font-size: 1rem;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.8);
+    margin-bottom: 1rem;
+    font-style: italic;
+}
+
+.personnage-description {
+    line-height: 1.7;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+/* Expositions Section */
+.expos {
+    padding: 6rem 0;
+    background: var(--creme-vintage);
+}
+
+.expos-grid {
+    display: grid;
+    gap: 4rem;
+    margin-bottom: 3rem;
+}
+
+.expo-card {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    background: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+    transition: all 0.4s ease;
+}
+
+.expo-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.expo-card:nth-child(even) .expo-image {
+    order: 2;
+}
+
+.expo-image {
+    height: 400px;
+    overflow: hidden;
+}
+
+.expo-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.expo-card:hover .expo-image img {
+    transform: scale(1.05);
+}
+
+.expo-content {
+    padding: 3rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.expo-title {
+    font-family: 'Fredoka', cursive;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--vert-fonce);
+    margin-bottom: 1.5rem;
+    text-transform: uppercase;
+}
+
+.expo-description {
+    color: var(--text-dark);
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+}
+
+.expo-features {
+    list-style: none;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+}
+
+.expo-features li {
+    font-weight: 600;
+    color: var(--marron-bois);
+    font-size: 0.95rem;
+}
+
+.expos-cta {
+    text-align: center;
+    padding: 3rem;
+    background: linear-gradient(135deg, var(--vert-caravane), var(--vert-fonce));
+    border-radius: 20px;
+    color: var(--text-light);
+}
+
+.expos-cta p {
+    font-size: 1.2rem;
+    margin-bottom: 2rem;
+}
+
+/* Vidéos Section */
+.videos {
+    padding: 6rem 0;
+    background: var(--vert-fonce);
+    color: var(--text-light);
+}
+
+.videos .section-label { color: var(--jaune-accent); }
+.videos .section-title { color: var(--text-light); }
+.videos .section-subtitle { color: rgba(255, 255, 255, 0.9); }
+
+.videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 3rem;
+}
+
+.video-card {
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow: hidden;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(255, 255, 255, 0.2);
+    transition: all 0.3s ease;
+}
+
+.video-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--jaune-accent);
+}
+
+.video-wrapper {
+    position: relative;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+}
+
+.video-wrapper iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.video-title {
+    font-family: 'Fredoka', cursive;
+    font-size: 1.3rem;
+    font-weight: 700;
+    color: var(--jaune-accent);
+    padding: 1.5rem 1.5rem 0.5rem;
+    text-transform: uppercase;
+}
+
+.video-description {
+    padding: 0 1.5rem 1.5rem;
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 0.95rem;
+}
+
+/* Histoire Section */
+.histoire {
+    padding: 6rem 0;
+    background: linear-gradient(135deg, var(--vert-caravane) 0%, var(--vert-fonce) 100%);
+    color: var(--text-light);
+}
+
+.histoire .section-label { color: var(--jaune-accent); }
+.histoire .section-title { color: var(--text-light); }
+
+.histoire-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 4rem;
+    align-items: center;
+}
+
+.histoire-description {
+    font-size: 1.1rem;
+    line-height: 1.8;
+    margin-bottom: 1.5rem;
+    color: rgba(255, 255, 255, 0.95);
+}
+
+.histoire-stats {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+    margin-top: 2.5rem;
+}
+
+.histoire-image {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+}
+
+.histoire-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: rgba(44, 24, 16, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 1000;
+    padding: 1rem 0;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.navbar-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.navbar-logo img {
+    height: 50px;
+    width: auto;
+}
+
+.navbar-menu {
+    display: flex;
+    list-style: none;
+    gap: 2rem;
+    align-items: center;
+}
+
+.navbar-menu a {
+    color: var(--text-light);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.navbar-menu a:hover {
+    color: var(--jaune-accent);
+}
+
+.navbar-toggle {
+    display: none;
+    flex-direction: column;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.navbar-toggle span {
+    width: 25px;
+    height: 3px;
+    background: var(--text-light);
+    margin: 3px 0;
+    border-radius: 3px;
+}
+
+/* Responsive - nouvelles sections */
+@media (max-width: 968px) {
+    .histoire-content,
+    .expo-card {
+        grid-template-columns: 1fr;
+    }
+    
+    .expo-card:nth-child(even) .expo-image {
+        order: 0;
+    }
+    
+    .histoire-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .navbar-menu {
+        display: none;
+    }
+    
+    .navbar-toggle {
+        display: flex;
+    }
+}
+
+@media (max-width: 768px) {
+    .personnages-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .videos-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .expo-features {
+        grid-template-columns: 1fr;
+    }
+    
+    .histoire-stats {
+        grid-template-columns: 1fr 1fr;
     }
 }

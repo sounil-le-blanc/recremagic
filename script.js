@@ -9,6 +9,33 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
     });
 });
 
+// Navbar show/hide on scroll
+let lastScroll = 0;
+const navbar = document.querySelector('.navbar');
+
+window.addEventListener('scroll', () => {
+    const currentScroll = window.pageYOffset;
+    
+    if (currentScroll > 100) {
+        navbar.classList.add('visible');
+    } else {
+        navbar.classList.remove('visible');
+    }
+    
+    lastScroll = currentScroll;
+});
+
+// Mobile menu toggle
+const navbarToggle = document.getElementById('navbar-toggle');
+const navbarMenu = document.querySelector('.navbar-menu');
+
+if (navbarToggle) {
+    navbarToggle.addEventListener('click', () => {
+        navbarMenu.classList.toggle('active');
+        navbarToggle.classList.toggle('active');
+    });
+}
+
 // Confetti animation
 function createConfetti() {
     const container = document.getElementById('confetti');
@@ -70,7 +97,7 @@ const observer = new IntersectionObserver((entries) => {
 
 // Observe elements for scroll animations
 document.addEventListener('DOMContentLoaded', () => {
-    const elements = document.querySelectorAll('.spectacle-card, .tournee-card, .section-header');
+    const elements = document.querySelectorAll('.spectacle-card, .tournee-card, .section-header, .personnage-card, .expo-card, .video-card');
     elements.forEach(el => {
         el.style.opacity = '0';
         el.style.transform = 'translateY(30px)';
