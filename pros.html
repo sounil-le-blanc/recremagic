@@ -8,363 +8,488 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        /* PRO PAGE SPECIFIC STYLES */
-        body { background: #f9f9f9; }
-        .navbar { transform: translateY(0); background: rgba(44, 24, 16, 0.98); }
-        .btn-nav { background: var(--jaune-accent); color: var(--text-dark); padding: 0.7rem 1.5rem; border-radius: 25px; font-weight: 700; }
-        .hero-pro { min-height: 70vh; background: linear-gradient(135deg, #1a3a4d 0%, var(--vert-caravane) 100%); display: flex; align-items: center; color: white; padding: 8rem 0 4rem; }
-        .hero-pro-content { text-align: center; max-width: 900px; margin: 0 auto; }
-        .hero-label { display: inline-block; background: var(--jaune-accent); color: var(--text-dark); padding: 0.5rem 1.5rem; border-radius: 20px; font-weight: 700; margin-bottom: 1.5rem; }
-        .hero-pro-title { font-family: 'Fredoka', cursive; font-size: clamp(3rem, 6vw, 5rem); margin-bottom: 1rem; }
-        .hero-pro-subtitle { font-size: 1.3rem; line-height: 1.8; margin-bottom: 3rem; opacity: 0.95; }
-        .hero-pro-stats { display: flex; justify-content: center; gap: 3rem; margin-bottom: 3rem; flex-wrap: wrap; }
-        .stat-pro { text-align: center; }
-        .stat-pro-number { display: block; font-family: 'Fredoka', cursive; font-size: 3rem; color: var(--jaune-accent); }
-        .stat-pro-label { font-size: 0.95rem; }
-        .btn-large { font-size: 1.2rem; padding: 1.3rem 3rem; }
+        body { background: var(--creme-vintage); }
         
-        .spectacles-pro, .expos-pro, .stages-pro, .infos-pro { padding: 6rem 0; }
-        .spectacles-pro { background: white; }
-        .expos-pro { background: var(--creme-vintage); }
-        .stages-pro { background: white; }
-        .infos-pro { background: var(--creme-vintage); }
+        /* Hero Pro Simple */
+        .hero-pro-simple {
+            background: linear-gradient(135deg, #1a3a4d 0%, var(--vert-caravane) 100%);
+            padding: 8rem 2rem 4rem;
+            text-align: center;
+            color: white;
+        }
+        .hero-pro-simple h1 {
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(3rem, 6vw, 5rem);
+            margin-bottom: 1rem;
+        }
+        .hero-pro-simple p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            max-width: 700px;
+            margin: 0 auto 2rem;
+        }
+        .hero-back {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+        .hero-back:hover {
+            background: var(--jaune-accent);
+            color: var(--text-dark);
+        }
         
-        .prestations-list { display: flex; flex-direction: column; gap: 3rem; }
-        .prestation-card { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1); display: grid; grid-template-columns: 400px 1fr; transition: transform 0.3s; }
-        .prestation-card:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.15); }
-        .prestation-image { position: relative; height: 100%; }
-        .prestation-image img { width: 100%; height: 100%; object-fit: cover; }
-        .prestation-badge { position: absolute; top: 1.5rem; right: 1.5rem; padding: 0.7rem 1.5rem; border-radius: 25px; font-weight: 700; color: white; font-size: 0.85rem; text-transform: uppercase; }
-        .badge-vert { background: var(--vert-caravane); }
-        .badge-rose { background: var(--rose-spectacle); }
-        .badge-rouge { background: var(--rouge-spectacle); }
-        .badge-special { background: var(--jaune-accent); color: var(--text-dark); }
-        .prestation-content { padding: 3rem; display: flex; flex-direction: column; }
-        .prestation-title { font-family: 'Fredoka', cursive; font-size: 2rem; color: #1a3a4d; margin-bottom: 1rem; text-transform: uppercase; }
-        .prestation-description { line-height: 1.8; margin-bottom: 2rem; color: var(--text-dark); }
-        .prestation-specs { background: var(--creme-vintage); padding: 2rem; border-radius: 15px; margin-bottom: 2rem; }
-        .spec-item { display: flex; align-items: center; padding: 0.8rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .spec-item:last-child { border-bottom: none; }
-        .spec-icon { font-size: 1.3rem; margin-right: 1rem; }
-        .spec-label { font-weight: 600; margin-right: 0.5rem; }
-        .spec-value { color: var(--marron-bois); }
+        /* Masonry Grid */
+        .pros-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 4rem 2rem;
+        }
         
-        .stages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2.5rem; }
-        .stage-card { background: white; padding: 3rem 2rem; border-radius: 20px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.08); }
-        .stage-icon { font-size: 4rem; margin-bottom: 1.5rem; }
-        .stage-title { font-family: 'Fredoka', cursive; font-size: 1.6rem; color: var(--vert-caravane); margin-bottom: 1rem; text-transform: uppercase; }
-        .stage-description { line-height: 1.7; margin-bottom: 1.5rem; }
-        .stage-specs { list-style: none; text-align: left; background: var(--creme-vintage); padding: 1.5rem; border-radius: 10px; margin-bottom: 1.5rem; }
-        .stage-specs li { padding: 0.5rem 0; }
-        .stages-note { background: linear-gradient(135deg, var(--vert-caravane), #1a3a4d); color: white; padding: 2.5rem; border-radius: 20px; text-align: center; font-size: 1.1rem; margin-top: 3rem; }
+        .masonry-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2rem;
+            align-items: start;
+        }
         
-        .infos-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
-        .info-card { background: white; padding: 2.5rem; border-radius: 15px; text-align: center; box-shadow: 0 5px 20px rgba(0,0,0,0.08); }
-        .info-icon { font-size: 3.5rem; margin-bottom: 1rem; }
-        .info-title { font-family: 'Fredoka', cursive; color: #1a3a4d; margin-bottom: 1rem; font-size: 1.3rem; }
-        .info-text { line-height: 1.7; color: var(--text-dark); }
+        /* Accordion Tiles */
+        .tile {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
         
-        .devis-pro { padding: 6rem 0; background: linear-gradient(135deg, #1a3a4d 0%, var(--vert-caravane) 100%); color: white; }
-        .devis-pro .section-label { color: var(--jaune-accent); }
-        .devis-wrapper { display: grid; grid-template-columns: 400px 1fr; gap: 4rem; align-items: start; }
-        .devis-description { font-size: 1.1rem; line-height: 1.8; margin-bottom: 2rem; }
-        .devis-contact { background: rgba(255,255,255,0.1); padding: 2rem; border-radius: 15px; margin-top: 2rem; }
-        .devis-contact-item { display: flex; align-items: center; gap: 1rem; margin: 1rem 0; font-size: 1.1rem; }
-        .devis-icon { font-size: 1.5rem; }
-        .devis-contact a { color: var(--jaune-accent); text-decoration: none; }
-        .form-devis { background: white; padding: 3rem; border-radius: 20px; color: var(--text-dark); }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
-        .form-group { margin-bottom: 1.5rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #1a3a4d; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 1rem; border: 2px solid #e0e0e0; border-radius: 10px; font-family: 'Quicksand', sans-serif; font-size: 1rem; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: var(--vert-caravane); }
+        .tile:hover {
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+        }
         
+        .tile-header {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--vert-fonce));
+            color: white;
+            padding: 2rem;
+            cursor: pointer;
+            user-select: none;
+            position: relative;
+            transition: background 0.3s;
+        }
+        
+        .tile-header:hover {
+            background: linear-gradient(135deg, var(--vert-fonce), var(--vert-caravane));
+        }
+        
+        .tile-header h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            margin: 0;
+            text-transform: uppercase;
+        }
+        
+        .tile-header .toggle-icon {
+            position: absolute;
+            right: 2rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2rem;
+            transition: transform 0.3s;
+        }
+        
+        .tile.active .toggle-icon {
+            transform: translateY(-50%) rotate(180deg);
+        }
+        
+        .tile-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.4s ease-out;
+        }
+        
+        .tile.active .tile-content {
+            max-height: 2000px;
+            transition: max-height 0.6s ease-in;
+        }
+        
+        .tile-inner {
+            padding: 2rem;
+        }
+        
+        /* Item Cards inside Tiles */
+        .item-card {
+            background: var(--creme-vintage);
+            padding: 1.5rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+            border-left: 5px solid var(--vert-caravane);
+            transition: all 0.3s;
+        }
+        
+        .item-card:hover {
+            transform: translateX(5px);
+            border-left-color: var(--jaune-accent);
+        }
+        
+        .item-card:last-child {
+            margin-bottom: 0;
+        }
+        
+        .item-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.3rem;
+            color: var(--vert-fonce);
+            margin-bottom: 0.5rem;
+        }
+        
+        .item-badge {
+            display: inline-block;
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+        
+        .badge-vert { background: var(--vert-caravane); color: white; }
+        .badge-rose { background: var(--rose-spectacle); color: white; }
+        .badge-rouge { background: var(--rouge-spectacle); color: white; }
+        .badge-jaune { background: var(--jaune-accent); color: var(--text-dark); }
+        
+        .item-description {
+            line-height: 1.7;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+        
+        .item-specs {
+            font-size: 0.9rem;
+            color: var(--marron-bois);
+        }
+        
+        .item-specs div {
+            margin: 0.3rem 0;
+        }
+        
+        /* Color Variants for Headers */
+        .tile-header.header-rose {
+            background: linear-gradient(135deg, var(--rose-spectacle), #c2185b);
+        }
+        .tile-header.header-rose:hover {
+            background: linear-gradient(135deg, #c2185b, var(--rose-spectacle));
+        }
+        
+        .tile-header.header-jaune {
+            background: linear-gradient(135deg, var(--jaune-accent), #f9a825);
+            color: var(--text-dark);
+        }
+        .tile-header.header-jaune:hover {
+            background: linear-gradient(135deg, #f9a825, var(--jaune-accent));
+        }
+        
+        /* Contact CTA */
+        .contact-cta {
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            padding: 3rem 2rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 3rem;
+        }
+        
+        .contact-cta h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .contact-cta p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-cta .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin-bottom: 2rem;
+        }
+        
+        .contact-info-item {
+            font-size: 1.3rem;
+        }
+        
+        .contact-info-item a {
+            color: var(--jaune-accent);
+            text-decoration: none;
+            font-weight: 700;
+        }
+        
+        /* Responsive */
         @media (max-width: 968px) {
-            .prestation-card, .devis-wrapper { grid-template-columns: 1fr; }
-            .form-row { grid-template-columns: 1fr; }
-            .hero-pro-stats { gap: 2rem; }
+            .masonry-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic"></a>
-            <ul class="navbar-menu">
-                <li><a href="#spectacles">Spectacles</a></li>
-                <li><a href="#expos">Expositions</a></li>
-                <li><a href="#stages">Stages</a></li>
-                <li><a href="#infos">Infos</a></li>
-                <li><a href="#devis" class="btn-nav">Devis</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <section class="hero-pro">
-        <div class="container">
-            <div class="hero-pro-content">
-                <span class="hero-label">Espace Professionnels</span>
-                <h1 class="hero-pro-title">Bonjour les Pros</h1>
-                <p class="hero-pro-subtitle">
-                    Organisateurs, mairies, collectivités : découvrez notre catalogue de prestations 
-                    clés en main pour vos événements, festivals et animations culturelles.
-                </p>
-                <div class="hero-pro-stats">
-                    <div class="stat-pro"><span class="stat-pro-number">60+</span><span class="stat-pro-label">ans d'expérience</span></div>
-                    <div class="stat-pro"><span class="stat-pro-number">3</span><span class="stat-pro-label">spectacles</span></div>
-                    <div class="stat-pro"><span class="stat-pro-number">2</span><span class="stat-pro-label">expositions</span></div>
-                    <div class="stat-pro"><span class="stat-pro-number">100%</span><span class="stat-pro-label">autonomes</span></div>
-                </div>
-                <a href="#devis" class="btn btn-primary btn-large">Demander un devis gratuit</a>
-            </div>
-        </div>
+    <!-- Hero Simple -->
+    <section class="hero-pro-simple">
+        <a href="index.html" class="hero-back">← Retour</a>
+        <h1>Bonjour les Pros</h1>
+        <p>Organisateurs • Mairies • Collectivités • Festivals</p>
+        <p>Découvrez notre catalogue de prestations professionnelles</p>
     </section>
 
-    <section class="spectacles-pro" id="spectacles">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Catalogue</span>
-                <h2 class="section-title">Nos Spectacles</h2>
-                <p class="section-subtitle">3 créations itinérantes pour tous publics</p>
-            </div>
-            <div class="prestations-list">
-                <div class="prestation-card">
-                    <div class="prestation-image">
-                        <img src="images/spectacle-ducoup.jpg" alt="Du Coup">
-                        <div class="prestation-badge badge-vert">NOUVEAU 2026</div>
+    <!-- Masonry Grid with Accordions -->
+    <div class="pros-container">
+        <div class="masonry-grid">
+            
+            <!-- COLONNE 1 : NOS SPECTACLES -->
+            <div class="tile-column">
+                <div class="tile active">
+                    <div class="tile-header" onclick="toggleTile(this)">
+                        <h2>🎭 Nos Spectacles</h2>
+                        <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="prestation-content">
-                        <h3 class="prestation-title">DU COUP on revient chez vous</h3>
-                        <p class="prestation-description">Marionnettes, magie, mime et musique. Toto et Flo dans un univers décalé pour 1h de pur bonheur.</p>
-                        <div class="prestation-specs">
-                            <div class="spec-item"><span class="spec-icon">⏱️</span><span class="spec-label">Durée :</span><span class="spec-value">1h00</span></div>
-                            <div class="spec-item"><span class="spec-icon">👥</span><span class="spec-label">Public :</span><span class="spec-value">Dès 3 ans</span></div>
-                            <div class="spec-item"><span class="spec-icon">📍</span><span class="spec-label">Espace :</span><span class="spec-value">6m x 4m</span></div>
-                            <div class="spec-item"><span class="spec-icon">🏠</span><span class="spec-label">Lieu :</span><span class="spec-value">Intérieur / Extérieur</span></div>
-                            <div class="spec-item"><span class="spec-icon">⚡</span><span class="spec-label">Technique :</span><span class="spec-value">Prise 220V</span></div>
+                    <div class="tile-content">
+                        <div class="tile-inner">
+                            
+                            <!-- Spectacle 1 -->
+                            <div class="item-card">
+                                <span class="item-badge badge-vert">NOUVEAU 2026</span>
+                                <h3 class="item-title">Du Coup on revient chez vous</h3>
+                                <p class="item-description">
+                                    Marionnettes, magie, mime et musique. Toto et Flo dans un spectacle décalé pour toute la famille.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 1h00</div>
+                                    <div>👥 Public : Dès 3 ans</div>
+                                    <div>📍 Espace : 6m x 4m</div>
+                                </div>
+                            </div>
+
+                            <!-- Spectacle 2 -->
+                            <div class="item-card">
+                                <span class="item-badge badge-rose">GRAND SUCCÈS</span>
+                                <h3 class="item-title">Comme sur des Roulettes</h3>
+                                <p class="item-description">
+                                    Duo Toto et Flo. Humour, illusions et moments de tendresse pour tous les âges.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 55min</div>
+                                    <div>👥 Public : Tout public</div>
+                                    <div>📍 Espace : 6m x 4m</div>
+                                </div>
+                            </div>
+
+                            <!-- Spectacle 3 -->
+                            <div class="item-card">
+                                <span class="item-badge badge-rouge">INTERACTIF</span>
+                                <h3 class="item-title">Délicieusement Maboul</h3>
+                                <p class="item-description">
+                                    Gags clownesques, magie collaborative. Un spectacle participatif plein de surprises.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 1h00</div>
+                                    <div>👥 Public : Dès 4 ans</div>
+                                    <div>📍 Espace : 6m x 4m</div>
+                                </div>
+                            </div>
+
+                            <!-- Spectacles de l'année -->
+                            <div class="item-card">
+                                <span class="item-badge badge-jaune">CALENDRIER</span>
+                                <h3 class="item-title">Spectacles de l'année</h3>
+                                <p class="item-description">
+                                    Consultez notre calendrier 2026 et réservez vos dates dès maintenant.
+                                </p>
+                                <div class="item-specs">
+                                    <div>📅 Tournée : Toute la France</div>
+                                    <div>🗓️ Réservation : 2-6 mois à l'avance</div>
+                                </div>
+                            </div>
+
+                            <!-- Thèmes spéciaux -->
+                            <div class="item-card">
+                                <span class="item-badge badge-vert">SUR MESURE</span>
+                                <h3 class="item-title">Spectacles Thématiques</h3>
+                                <p class="item-description">
+                                    Spectacles adaptés à vos événements : Noël, Carnaval, fêtes thématiques...
+                                </p>
+                                <div class="item-specs">
+                                    <div>🎨 Personnalisable</div>
+                                    <div>💡 Devis sur demande</div>
+                                </div>
+                            </div>
+
+                            <!-- Personnages -->
+                            <div class="item-card">
+                                <h3 class="item-title">Nos Personnages</h3>
+                                <p class="item-description">
+                                    Toto, Flo, Arlequin, Baptiste... Découvrez nos artistes et marionnettes.
+                                </p>
+                                <div class="item-specs">
+                                    <div>🎭 Artistes professionnels</div>
+                                    <div>🪆 Marionnettes artisanales</div>
+                                </div>
+                            </div>
+
                         </div>
-                        <a href="#devis" class="btn btn-secondary">Demander un devis</a>
                     </div>
                 </div>
-                <div class="prestation-card">
-                    <div class="prestation-image">
-                        <img src="images/spectacle-roulettes.jpg" alt="Roulettes">
-                        <div class="prestation-badge badge-rose">SUCCÈS</div>
+            </div>
+
+            <!-- COLONNE 2 : NOS EXPOS -->
+            <div class="tile-column">
+                <div class="tile active">
+                    <div class="tile-header header-rose" onclick="toggleTile(this)">
+                        <h2>🎨 Nos Expos</h2>
+                        <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="prestation-content">
-                        <h3 class="prestation-title">COMME SUR DES ROULETTES</h3>
-                        <p class="prestation-description">Duo Toto/Flo. Humour, illusion et moments de tendresse pour toutes les générations.</p>
-                        <div class="prestation-specs">
-                            <div class="spec-item"><span class="spec-icon">⏱️</span><span class="spec-label">Durée :</span><span class="spec-value">55 min</span></div>
-                            <div class="spec-item"><span class="spec-icon">👥</span><span class="spec-label">Public :</span><span class="spec-value">Tout public</span></div>
-                            <div class="spec-item"><span class="spec-icon">📍</span><span class="spec-label">Espace :</span><span class="spec-value">6m x 4m</span></div>
-                            <div class="spec-item"><span class="spec-icon">🏠</span><span class="spec-label">Lieu :</span><span class="spec-value">Intérieur / Extérieur</span></div>
-                            <div class="spec-item"><span class="spec-icon">⚡</span><span class="spec-label">Technique :</span><span class="spec-value">Prise 220V</span></div>
+                    <div class="tile-content">
+                        <div class="tile-inner">
+                            
+                            <!-- Expo Marionnettes -->
+                            <div class="item-card">
+                                <span class="item-badge badge-rose">UNIQUE</span>
+                                <h3 class="item-title">La Féerie des Marionnettes</h3>
+                                <p class="item-description">
+                                    12 vitrines animées et sonorisées. 56 personnages prennent vie sur simple pression d'un bouton.
+                                </p>
+                                <div class="item-specs">
+                                    <div>📏 H 2m x P 0,60m x L 1,90m</div>
+                                    <div>🎭 12 vitrines / 56 personnages</div>
+                                    <div>📍 25m² minimum</div>
+                                    <div>🏠 Intérieur uniquement</div>
+                                </div>
+                            </div>
+
+                            <!-- Expo Carnaval -->
+                            <div class="item-card">
+                                <span class="item-badge badge-jaune">SPECTACULAIRE</span>
+                                <h3 class="item-title">Les Géants du Carnaval</h3>
+                                <p class="item-description">
+                                    12 personnages géants de 2 à 3m. Une installation impressionnante pour vos festivals.
+                                </p>
+                                <div class="item-specs">
+                                    <div>📏 2 à 3m de hauteur</div>
+                                    <div>🎪 12 personnages géants</div>
+                                    <div>📍 40m² minimum</div>
+                                    <div>🏠 Intérieur / Extérieur</div>
+                                </div>
+                            </div>
+
+                            <!-- Roulotte -->
+                            <div class="item-card">
+                                <h3 class="item-title">Notre Roulotte Scénique</h3>
+                                <p class="item-description">
+                                    Caravane décorée à la main, emblème de Récré Magic depuis 60 ans. Espace scénique autonome.
+                                </p>
+                                <div class="item-specs">
+                                    <div>🚐 Autonome et mobile</div>
+                                    <div>🎨 Décor artisanal unique</div>
+                                    <div>🔌 Installation rapide</div>
+                                </div>
+                            </div>
+
                         </div>
-                        <a href="#devis" class="btn btn-secondary">Demander un devis</a>
                     </div>
                 </div>
-                <div class="prestation-card">
-                    <div class="prestation-image">
-                        <img src="images/spectacle-maboul.jpg" alt="Maboul">
-                        <div class="prestation-badge badge-rouge">INTERACTIF</div>
+            </div>
+
+            <!-- COLONNE 3 : NOS STAGES -->
+            <div class="tile-column">
+                <div class="tile active">
+                    <div class="tile-header header-jaune" onclick="toggleTile(this)">
+                        <h2>🎓 Nos Stages</h2>
+                        <span class="toggle-icon">▼</span>
                     </div>
-                    <div class="prestation-content">
-                        <h3 class="prestation-title">DÉLICIEUSEMENT MABOUL</h3>
-                        <p class="prestation-description">Spectacle participatif. Gags, magie collaborative et complicité canine. Humour et étonnement garantis.</p>
-                        <div class="prestation-specs">
-                            <div class="spec-item"><span class="spec-icon">⏱️</span><span class="spec-label">Durée :</span><span class="spec-value">1h00</span></div>
-                            <div class="spec-item"><span class="spec-icon">👥</span><span class="spec-label">Public :</span><span class="spec-value">Dès 4 ans</span></div>
-                            <div class="spec-item"><span class="spec-icon">📍</span><span class="spec-label">Espace :</span><span class="spec-value">6m x 4m</span></div>
-                            <div class="spec-item"><span class="spec-icon">🏠</span><span class="spec-label">Lieu :</span><span class="spec-value">Intérieur / Extérieur</span></div>
-                            <div class="spec-item"><span class="spec-icon">⚡</span><span class="spec-label">Technique :</span><span class="spec-value">Prise 220V + son</span></div>
+                    <div class="tile-content">
+                        <div class="tile-inner">
+                            
+                            <!-- Stage 1 -->
+                            <div class="item-card">
+                                <h3 class="item-title">🎭 Stage Marionnettes</h3>
+                                <p class="item-description">
+                                    Initiation à la manipulation de marionnettes à fils. Création et spectacle final.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 1 à 5 jours</div>
+                                    <div>👥 Public : Dès 7 ans</div>
+                                    <div>👨‍👩‍👧 Groupe : 8-15 pers.</div>
+                                </div>
+                            </div>
+
+                            <!-- Stage 2 -->
+                            <div class="item-card">
+                                <h3 class="item-title">🤹 Stage Cirque-Théâtre</h3>
+                                <p class="item-description">
+                                    Jonglerie, équilibre, clown et magie. Découverte ludique des arts du cirque.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 2 à 5 jours</div>
+                                    <div>👥 Public : Dès 6 ans</div>
+                                    <div>👨‍👩‍👧 Groupe : 10-20 pers.</div>
+                                </div>
+                            </div>
+
+                            <!-- Stage 3 -->
+                            <div class="item-card">
+                                <h3 class="item-title">🎨 Stage Création</h3>
+                                <p class="item-description">
+                                    Fabrication de marionnettes, décors et costumes. De l'imagination à la réalisation.
+                                </p>
+                                <div class="item-specs">
+                                    <div>⏱️ Durée : 3 à 5 jours</div>
+                                    <div>👥 Public : Dès 8 ans</div>
+                                    <div>👨‍👩‍👧 Groupe : 8-12 pers.</div>
+                                </div>
+                            </div>
+
+                            <!-- Formule sur mesure -->
+                            <div class="item-card">
+                                <span class="item-badge badge-vert">SUR MESURE</span>
+                                <h3 class="item-title">Stages Personnalisés</h3>
+                                <p class="item-description">
+                                    Nous adaptons nos interventions à vos besoins : écoles, centres de loisirs, MJC...
+                                </p>
+                                <div class="item-specs">
+                                    <div>💡 Programme flexible</div>
+                                    <div>📋 Devis personnalisé</div>
+                                </div>
+                            </div>
+
                         </div>
-                        <a href="#devis" class="btn btn-secondary">Demander un devis</a>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
 
-    <section class="expos-pro" id="expos">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Animations</span>
-                <h2 class="section-title">Nos Expositions</h2>
-                <p class="section-subtitle">Installations interactives pour enrichir vos événements</p>
-            </div>
-            <div class="prestations-list">
-                <div class="prestation-card">
-                    <div class="prestation-image">
-                        <img src="images/expo-marionnettes.jpg" alt="Marionnettes">
-                        <div class="prestation-badge badge-special">UNIQUE</div>
-                    </div>
-                    <div class="prestation-content">
-                        <h3 class="prestation-title">LA FÉERIE DES MARIONNETTES</h3>
-                        <p class="prestation-description">12 vitrines animées et sonorisées. 56 personnages prennent vie sur simple pression d'un bouton.</p>
-                        <div class="prestation-specs">
-                            <div class="spec-item"><span class="spec-icon">📏</span><span class="spec-label">Dimensions :</span><span class="spec-value">H 2m x P 0,60m x L 1,90m</span></div>
-                            <div class="spec-item"><span class="spec-icon">🎭</span><span class="spec-label">Éléments :</span><span class="spec-value">12 vitrines / 56 personnages</span></div>
-                            <div class="spec-item"><span class="spec-icon">📍</span><span class="spec-label">Espace :</span><span class="spec-value">25m² minimum</span></div>
-                            <div class="spec-item"><span class="spec-icon">⚡</span><span class="spec-label">Technique :</span><span class="spec-value">Prises 220V</span></div>
-                            <div class="spec-item"><span class="spec-icon">🏠</span><span class="spec-label">Lieu :</span><span class="spec-value">Intérieur uniquement</span></div>
-                        </div>
-                        <a href="#devis" class="btn btn-secondary">Demander un devis</a>
-                    </div>
-                </div>
-                <div class="prestation-card">
-                    <div class="prestation-image">
-                        <img src="images/expo-geants.jpg" alt="Géants">
-                        <div class="prestation-badge badge-special">SPECTACULAIRE</div>
-                    </div>
-                    <div class="prestation-content">
-                        <h3 class="prestation-title">LES GÉANTS DU CARNAVAL</h3>
-                        <p class="prestation-description">12 personnages géants de 2 à 3m. Créations impressionnantes qui transportent dans l'univers du carnaval.</p>
-                        <div class="prestation-specs">
-                            <div class="spec-item"><span class="spec-icon">📏</span><span class="spec-label">Dimensions :</span><span class="spec-value">2 à 3m de hauteur</span></div>
-                            <div class="spec-item"><span class="spec-icon">🎪</span><span class="spec-label">Éléments :</span><span class="spec-value">12 personnages géants</span></div>
-                            <div class="spec-item"><span class="spec-icon">📍</span><span class="spec-label">Espace :</span><span class="spec-value">40m² minimum</span></div>
-                            <div class="spec-item"><span class="spec-icon">⚡</span><span class="spec-label">Technique :</span><span class="spec-value">Autonome</span></div>
-                            <div class="spec-item"><span class="spec-icon">🏠</span><span class="spec-label">Lieu :</span><span class="spec-value">Intérieur / Extérieur</span></div>
-                        </div>
-                        <a href="#devis" class="btn btn-secondary">Demander un devis</a>
-                    </div>
-                </div>
-            </div>
         </div>
-    </section>
 
-    <section class="stages-pro" id="stages">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Formation</span>
-                <h2 class="section-title">Nos Stages</h2>
-                <p class="section-subtitle">Ateliers d'initiation aux arts du spectacle</p>
-            </div>
-            <div class="stages-grid">
-                <div class="stage-card">
-                    <div class="stage-icon">🎭</div>
-                    <h3 class="stage-title">Marionnettes</h3>
-                    <p class="stage-description">Initiation à la manipulation et création d'un petit spectacle.</p>
-                    <ul class="stage-specs">
-                        <li><strong>Durée :</strong> 1 à 5 jours</li>
-                        <li><strong>Public :</strong> Dès 7 ans</li>
-                        <li><strong>Groupe :</strong> 8-15 pers.</li>
-                    </ul>
+        <!-- Contact CTA -->
+        <div class="contact-cta">
+            <h2>Intéressé par nos prestations ?</h2>
+            <p>Contactez-nous pour un devis gratuit et personnalisé</p>
+            <div class="contact-info">
+                <div class="contact-info-item">
+                    📞 <a href="tel:+33671525089">06 71 52 50 89</a>
                 </div>
-                <div class="stage-card">
-                    <div class="stage-icon">🤹</div>
-                    <h3 class="stage-title">Cirque</h3>
-                    <p class="stage-description">Jonglerie, équilibre, magie et clown dans une ambiance conviviale.</p>
-                    <ul class="stage-specs">
-                        <li><strong>Durée :</strong> 2 à 5 jours</li>
-                        <li><strong>Public :</strong> Dès 6 ans</li>
-                        <li><strong>Groupe :</strong> 10-20 pers.</li>
-                    </ul>
-                </div>
-                <div class="stage-card">
-                    <div class="stage-icon">🎨</div>
-                    <h3 class="stage-title">Création</h3>
-                    <p class="stage-description">Fabrication de marionnettes, décors et costumes. De l'imagination à la réalisation.</p>
-                    <ul class="stage-specs">
-                        <li><strong>Durée :</strong> 3 à 5 jours</li>
-                        <li><strong>Public :</strong> Dès 8 ans</li>
-                        <li><strong>Groupe :</strong> 8-12 pers.</li>
-                    </ul>
+                <div class="contact-info-item">
+                    📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
                 </div>
             </div>
-            <div class="stages-note">
-                <p>💡 Formule sur-mesure : Nous adaptons nos stages à vos besoins. Contactez-nous !</p>
-            </div>
+            <a href="index.html" class="btn btn-secondary">Retour à l'accueil</a>
         </div>
-    </section>
+    </div>
 
-    <section class="infos-pro" id="infos">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Pratique</span>
-                <h2 class="section-title">Informations</h2>
-            </div>
-            <div class="infos-grid">
-                <div class="info-card">
-                    <div class="info-icon">🎪</div>
-                    <h3 class="info-title">Autonomie</h3>
-                    <p class="info-text">Roulotte décorée, matériel son/lumière. Installation et démontage en autonomie.</p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">📍</div>
-                    <h3 class="info-title">Adaptabilité</h3>
-                    <p class="info-text">Intérieur, extérieur, petite salle ou grande place publique.</p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">💼</div>
-                    <h3 class="info-title">Devis gratuit</h3>
-                    <p class="info-text">Réponse sous 48h. Tarifs dégressifs pour plusieurs prestations.</p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">🛡️</div>
-                    <h3 class="info-title">Assurances</h3>
-                    <p class="info-text">RC Pro. Licences SACEM. Déclarations à jour.</p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">🌍</div>
-                    <h3 class="info-title">Zone</h3>
-                    <p class="info-text">Ariège, Haute-Garonne et limitrophes. Déplacements France entière possibles.</p>
-                </div>
-                <div class="info-card">
-                    <div class="info-icon">📞</div>
-                    <h3 class="info-title">Réactif</h3>
-                    <p class="info-text">Réponse 24-48h. Disponibles pour construire votre projet ensemble.</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="devis-pro" id="devis">
-        <div class="container">
-            <div class="devis-wrapper">
-                <div class="devis-info">
-                    <span class="section-label">Contact</span>
-                    <h2 class="section-title">Demander un devis</h2>
-                    <p class="devis-description">Remplissez ce formulaire, nous vous recontactons sous 48h avec une proposition personnalisée.</p>
-                    <div class="devis-contact">
-                        <div class="devis-contact-item"><span class="devis-icon">📞</span><a href="tel:+33671525089">06 71 52 50 89</a></div>
-                        <div class="devis-contact-item"><span class="devis-icon">📧</span><a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></div>
-                    </div>
-                </div>
-                <form class="form-devis">
-                    <div class="form-row">
-                        <div class="form-group"><label>Organisation *</label><input type="text" required></div>
-                        <div class="form-group"><label>Votre nom *</label><input type="text" required></div>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Email *</label><input type="email" required></div>
-                        <div class="form-group"><label>Téléphone *</label><input type="tel" required></div>
-                    </div>
-                    <div class="form-group">
-                        <label>Prestation *</label>
-                        <select required>
-                            <option>Spectacle "Du Coup"</option>
-                            <option>Spectacle "Roulettes"</option>
-                            <option>Spectacle "Maboul"</option>
-                            <option>Expo Marionnettes</option>
-                            <option>Expo Géants</option>
-                            <option>Stage Marionnettes</option>
-                            <option>Stage Cirque</option>
-                            <option>Plusieurs / Sur-mesure</option>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <div class="form-group"><label>Date</label><input type="date"></div>
-                        <div class="form-group"><label>Ville</label><input type="text"></div>
-                    </div>
-                    <div class="form-group"><label>Votre projet</label><textarea rows="4"></textarea></div>
-                    <button type="submit" class="btn btn-primary btn-large">Envoyer</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
+    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="footer-content">
@@ -378,10 +503,28 @@
                     <a href="pros.html">Pro</a>
                 </div>
             </div>
-            <div class="footer-bottom"><p>&copy; 2026 Récré Magic - Tous droits réservés</p></div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Récré Magic - Tous droits réservés</p>
+            </div>
         </div>
     </footer>
 
-    <script src="script.js"></script>
+    <script>
+        function toggleTile(header) {
+            const tile = header.parentElement;
+            tile.classList.toggle('active');
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+    </script>
 </body>
 </html>
