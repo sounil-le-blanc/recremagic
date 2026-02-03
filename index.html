@@ -3,496 +3,383 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic - Circus Théâtre Ambulant | 60 ans de Spectacle Vivant</title>
-    <meta name="description" content="Récré Magic, troupe de spectacle vivant itinérante. Circus, théâtre, marionnettes et magie pour toute la famille depuis 60 ans.">
+    <title>Récré Magic - Bienvenue</title>
+    <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace : Familles & Fans, Professionnels ou Boutique.">
     
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="images/favicon.png">
-    
-    <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
+            --jaune-accent: #FFB300;
+            --creme-vintage: #FFF8E1;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--vert-caravane) 0%, var(--rose-spectacle) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Confetti Background */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            max-width: 1200px;
+            width: 100%;
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInDown 1s ease-out;
+        }
+
+        .logo {
+            max-width: 250px;
+            width: 100%;
+            filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.3));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 4rem;
+            animation: fadeIn 1.2s ease-out 0.3s both;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .welcome-title {
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            font-weight: 700;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            text-transform: uppercase;
+        }
+
+        .welcome-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            color: var(--creme-vintage);
+            font-weight: 500;
+        }
+
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+            animation: fadeInUp 1.4s ease-out 0.6s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .choice-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid transparent;
+        }
+
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
+        }
+
+        .choice-card:hover::before {
+            opacity: 1;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
+        }
+
+        .choice-card.familles {
+            border-color: var(--rose-spectacle);
+        }
+
+        .choice-card.familles:hover {
+            background: linear-gradient(135deg, rgba(236, 64, 122, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .choice-card.pros {
+            border-color: var(--vert-caravane);
+        }
+
+        .choice-card.pros:hover {
+            background: linear-gradient(135deg, rgba(124, 182, 159, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .choice-card.boutique {
+            border-color: var(--jaune-accent);
+        }
+
+        .choice-card.boutique:hover {
+            background: linear-gradient(135deg, rgba(255, 179, 0, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        }
+
+        .choice-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .choice-card:hover .choice-icon {
+            animation: spin 0.6s ease-in-out;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.2); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+
+        .choice-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .familles .choice-title { color: var(--rose-spectacle); }
+        .pros .choice-title { color: var(--vert-caravane); }
+        .boutique .choice-title { color: var(--jaune-accent); }
+
+        .choice-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+        }
+
+        .choice-cta {
+            display: inline-block;
+            padding: 1rem 2rem;
+            background: var(--text-dark);
+            color: var(--text-light);
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+        }
+
+        .choice-card:hover .choice-cta {
+            transform: scale(1.1);
+        }
+
+        .familles:hover .choice-cta { background: var(--rose-spectacle); }
+        .pros:hover .choice-cta { background: var(--vert-caravane); }
+        .boutique:hover .choice-cta { background: var(--jaune-accent); color: var(--text-dark); }
+
+        .footer-note {
+            text-align: center;
+            margin-top: 3rem;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            opacity: 0.9;
+            animation: fadeIn 2s ease-out 1s both;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+
+            .choice-card {
+                padding: 2.5rem 2rem;
+            }
+
+            .choice-icon {
+                font-size: 4rem;
+            }
+
+            .choice-title {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="#home" class="navbar-logo">
-                <img src="images/logo.png" alt="Récré Magic">
-            </a>
-            <ul class="navbar-menu">
-                <li><a href="#spectacles">Spectacles</a></li>
-                <li><a href="#personnages">Personnages</a></li>
-                <li><a href="#expos">Expositions</a></li>
-                <li><a href="#tournee">Tournée</a></li>
-                <li><a href="#videos">Vidéos</a></li>
-                <li><a href="#histoire">Notre Histoire</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <button class="navbar-toggle" id="navbar-toggle">
-                <span></span>
-                <span></span>
-                <span></span>
-            </button>
-        </div>
-    </nav>
-
-    <!-- Confetti animation background -->
     <div class="confetti-container" id="confetti"></div>
 
-    <!-- Hero Section -->
-    <section class="hero" id="home">
-        <div class="hero-overlay"></div>
-        <div class="hero-content">
-            <img src="images/logo.png" alt="Récré Magic Logo" class="hero-logo">
-            <h1 class="hero-title">
-                <span class="hero-subtitle">Circus Théâtre Ambulant</span>
-                <span class="hero-years">60 ans de spectacle vivant</span>
-            </h1>
-            <p class="hero-tagline">Une nouvelle génération prend la route</p>
-            <div class="hero-cta">
-                <a href="#spectacles" class="btn btn-primary">Découvrir nos spectacles</a>
-                <a href="#contact" class="btn btn-secondary">Nous contacter</a>
-            </div>
-            <div class="awards-badge">
-                <span class="badge-year">Event AWARDS 2026</span>
-                <span class="badge-text">événementiel pour tous</span>
-            </div>
+    <div class="container">
+        <div class="logo-container">
+            <img src="images/logo.png" alt="Récré Magic" class="logo">
         </div>
-        <div class="scroll-indicator">
-            <div class="scroll-mouse"></div>
-            <span>Scroll</span>
+
+        <div class="welcome-text">
+            <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
+            <p class="welcome-subtitle">Choisissez votre espace</p>
         </div>
-    </section>
 
-    <!-- Spectacles Section -->
-    <section class="spectacles" id="spectacles">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">En tournée 2026</span>
-                <h2 class="section-title">Nos 3 spectacles</h2>
-                <p class="section-subtitle">Découvrez nos créations pour petits et grands</p>
-            </div>
+        <div class="choices-grid">
+            <!-- Familles & Fans -->
+            <a href="familles.html" class="choice-card familles">
+                <span class="choice-icon">🎪</span>
+                <h2 class="choice-title">Familles<br>& Fans</h2>
+                <p class="choice-description">
+                    Découvrez nos spectacles, nos personnages et notre univers magique. 
+                    Réservez vos places et plongez dans 60 ans d'histoire !
+                </p>
+                <span class="choice-cta">Entrer</span>
+            </a>
 
-            <div class="spectacles-grid">
-                <!-- Spectacle 1 : Du Coup -->
-                <div class="spectacle-card spectacle-vert">
-                    <div class="spectacle-image">
-                        <img src="images/spectacle-ducoup.jpg" alt="Du Coup on revient chez vous" loading="lazy">
-                        <div class="spectacle-badge">VERT</div>
-                    </div>
-                    <div class="spectacle-content">
-                        <h3 class="spectacle-title">DU COUP<br>on revient chez vous</h3>
-                        <p class="spectacle-description">
-                            Toto et Flo vous invitent à plonger dans leur univers décalé, où se mêlent 
-                            marionnettes à fils, illusions magiques, mime, gags clownesques et moments 
-                            musicaux pour une heure de pur bonheur et de détente.
-                        </p>
-                        <p class="spectacle-info">
-                            La création 2026 de Toto et Flo
-                        </p>
-                    </div>
-                </div>
+            <!-- Professionnels -->
+            <a href="#" class="choice-card pros" onclick="alert('Page Professionnels en construction'); return false;">
+                <span class="choice-icon">🤝</span>
+                <h2 class="choice-title">Bonjour<br>les Pros</h2>
+                <p class="choice-description">
+                    Vous êtes organisateur, mairie ou collectivité ? 
+                    Découvrez nos prestations et demandez un devis personnalisé.
+                </p>
+                <span class="choice-cta">Accéder</span>
+            </a>
 
-                <!-- Spectacle 2 : Roulettes -->
-                <div class="spectacle-card spectacle-rose">
-                    <div class="spectacle-image">
-                        <img src="images/spectacle-roulettes.jpg" alt="Comme sur des Roulettes" loading="lazy">
-                        <div class="spectacle-badge">ROSE</div>
-                    </div>
-                    <div class="spectacle-content">
-                        <h3 class="spectacle-title">COMME SUR<br>DES ROULETTES</h3>
-                        <p class="spectacle-description">
-                            Monsieur Toto doit partager la scène avec Flo, un personnage aussi imprévisible 
-                            qu'attachant. Entre humour, illusion, quiproquos et moment de tendresse, 
-                            ce duo complice embarque petits et grands pour un moment drôle et décalé.
-                        </p>
-                        <p class="spectacle-info">
-                            Spectacle haut en couleur
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Spectacle 3 : Maboul -->
-                <div class="spectacle-card spectacle-rouge">
-                    <div class="spectacle-image">
-                        <img src="images/spectacle-maboul.jpg" alt="Délicieusement Maboul" loading="lazy">
-                        <div class="spectacle-badge">ROUGE</div>
-                    </div>
-                    <div class="spectacle-content">
-                        <h3 class="spectacle-title">DÉLICIEUSEMENT<br>MABOUL</h3>
-                        <p class="spectacle-description">
-                            Entouré d'improbables complices, je vous amène sur les pentes de l'humour, 
-                            de la tendresse et de l'étonnement. Voyagez en musique tout au long de ce 
-                            spectacle interactif recommandé à tous âges.
-                        </p>
-                        <p class="spectacle-info">
-                            Gags clownesques, magie inventive et collaborative
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="spectacles-note">
-                <p>Nos 3 spectacles peuvent se présenter à l'extérieur avec notre roulotte et son espace scénique, 
-                mais aussi à l'intérieur sur votre scène.</p>
-            </div>
+            <!-- Boutique -->
+            <a href="#" class="choice-card boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
+                <span class="choice-icon">🛍️</span>
+                <h2 class="choice-title">Boutique</h2>
+                <p class="choice-description">
+                    Jeux, produits dérivés et souvenirs de vos spectacles préférés. 
+                    La magie à emporter chez vous !
+                </p>
+                <span class="choice-cta">Découvrir</span>
+            </a>
         </div>
-    </section>
 
-    <!-- Personnages Section -->
-    <section class="personnages" id="personnages">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Rencontrez</span>
-                <h2 class="section-title">Nos Personnages</h2>
-                <p class="section-subtitle">Les artistes qui donnent vie à la magie</p>
-            </div>
+        <p class="footer-note">
+            Récré Magic • Circus Théâtre Ambulant • Depuis 1964
+        </p>
+    </div>
 
-            <div class="personnages-grid">
-                <div class="personnage-card">
-                    <div class="personnage-image">
-                        <img src="images/toto.jpg" alt="Monsieur Toto" loading="lazy">
-                    </div>
-                    <div class="personnage-content">
-                        <h3 class="personnage-name">Monsieur TOTO</h3>
-                        <p class="personnage-role">Maître de cérémonie & Artiste complet</p>
-                        <p class="personnage-description">
-                            Avec son costume rayé multicolore et son chapeau iconique, Monsieur Toto 
-                            est le cœur battant du Circus Récré Magic. Artiste aux multiples talents, 
-                            il enchante petits et grands avec ses tours de magie, ses facéties clownesques, 
-                            sa présence chaleureuse et son sens inné du spectacle.
-                        </p>
-                    </div>
-                </div>
+    <script>
+        // Confetti animation
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+            const confettiCount = 60;
 
-                <div class="personnage-card">
-                    <div class="personnage-image">
-                        <img src="images/flo.jpg" alt="Flo" loading="lazy">
-                    </div>
-                    <div class="personnage-content">
-                        <h3 class="personnage-name">FLO</h3>
-                        <p class="personnage-role">Musicien & Conteur</p>
-                        <p class="personnage-description">
-                            Guitariste talentueux et personnage attachant, Flo apporte une touche 
-                            musicale et poétique aux spectacles. Avec son énergie débordante et 
-                            sa créativité sans limite, il forme avec Toto un duo complice qui fait 
-                            vibrer le public au rythme de leurs aventures loufoques.
-                        </p>
-                    </div>
-                </div>
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = Math.random() * 12 + 5 + 'px';
+                confetti.style.height = Math.random() * 12 + 5 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -20 + 'px';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
+                const duration = Math.random() * 4 + 5;
+                const delay = Math.random() * 3;
+                
+                confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                
+                container.appendChild(confetti);
+            }
 
-                <div class="personnage-card">
-                    <div class="personnage-image">
-                        <img src="images/spectacle-ducoup.jpg" alt="Arlequin" loading="lazy">
-                    </div>
-                    <div class="personnage-content">
-                        <h3 class="personnage-name">ARLEQUIN</h3>
-                        <p class="personnage-role">Marionnette à fils</p>
-                        <p class="personnage-description">
-                            Figure emblématique de la Commedia dell'arte, Arlequin prend vie dans 
-                            nos spectacles grâce à la magie des fils. Farceur et malicieux, il 
-                            enchante le public avec ses pirouettes et ses aventures rocambolesques.
-                        </p>
-                    </div>
-                </div>
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(720deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
 
-                <div class="personnage-card">
-                    <div class="personnage-image">
-                        <img src="images/spectacle-roulettes.jpg" alt="Baptiste" loading="lazy">
-                    </div>
-                    <div class="personnage-content">
-                        <h3 class="personnage-name">BAPTISTE</h3>
-                        <p class="personnage-role">Personnage fantaisiste</p>
-                        <p class="personnage-description">
-                            Drôle et imprévisible, Baptiste apporte une dose de fantaisie et de 
-                            surprise dans chaque représentation. Son humour décalé et ses 
-                            interactions avec le public créent des moments inoubliables.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Expositions Section -->
-    <section class="expos" id="expos">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Découvrez</span>
-                <h2 class="section-title">Nos Expositions</h2>
-                <p class="section-subtitle">Univers magiques et personnages géants</p>
-            </div>
-
-            <div class="expos-grid">
-                <div class="expo-card">
-                    <div class="expo-image">
-                        <img src="images/expo-marionnettes.jpg" alt="La Féerie des Marionnettes" loading="lazy">
-                    </div>
-                    <div class="expo-content">
-                        <h3 class="expo-title">La Féerie des Marionnettes</h3>
-                        <p class="expo-description">
-                            12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le 
-                            spectateur appuie sur un simple bouton ! Une exposition interactive de 2 mètres 
-                            de haut, 60 cm de profondeur et 1,90 mètres de façade qui émerveille petits et grands.
-                        </p>
-                        <ul class="expo-features">
-                            <li>✨ 12 scènes animées</li>
-                            <li>🎭 56 personnages articulés</li>
-                            <li>🎵 Ambiance sonore immersive</li>
-                            <li>👨‍👩‍👧‍👦 Pour toute la famille</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <div class="expo-card">
-                    <div class="expo-image">
-                        <img src="images/expo-geants.jpg" alt="Les Géants du Carnaval" loading="lazy">
-                    </div>
-                    <div class="expo-content">
-                        <h3 class="expo-title">Les Géants du Carnaval</h3>
-                        <p class="expo-description">
-                            12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
-                            spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval, 
-                            avec des créations impressionnantes qui captivent l'imagination.
-                        </p>
-                        <ul class="expo-features">
-                            <li>🎪 Personnages de 2 à 3 mètres</li>
-                            <li>🎨 Costumes éclatants</li>
-                            <li>🤹 Animation mécanique</li>
-                            <li>📸 Parfait pour les photos souvenirs</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-
-            <div class="expos-cta">
-                <p>Nos expositions peuvent enrichir vos événements, festivals et manifestations culturelles.</p>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Tournée Section -->
-    <section class="tournee" id="tournee">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Calendrier</span>
-                <h2 class="section-title">Tournée 2026</h2>
-                <p class="section-subtitle">Retrouvez-nous dans toute la France</p>
-            </div>
-
-            <div class="tournee-grid">
-                <div class="tournee-card">
-                    <div class="tournee-month">Février 2026</div>
-                    <ul class="tournee-dates">
-                        <li class="date-item date-rose">8 - Saiguede (31)</li>
-                        <li>25 - St Nicolas de la Grave (82)</li>
-                    </ul>
-                </div>
-
-                <div class="tournee-card">
-                    <div class="tournee-month">Mai 2026</div>
-                    <ul class="tournee-dates">
-                        <li>15 - St Denis D'Oléron (17)</li>
-                        <li>16 - St Denis D'Oléron (17)</li>
-                    </ul>
-                </div>
-
-                <div class="tournee-card">
-                    <div class="tournee-month">Octobre 2026</div>
-                    <ul class="tournee-dates">
-                        <li>3 - Macon (71)</li>
-                        <li>4 - Macon (71)</li>
-                        <li class="date-item date-rouge">7 - Martel (46)</li>
-                    </ul>
-                </div>
-
-                <div class="tournee-card">
-                    <div class="tournee-month">Décembre 2026</div>
-                    <ul class="tournee-dates">
-                        <li>6 - Carmaux (81)</li>
-                    </ul>
-                </div>
-            </div>
-
-            <div class="tournee-note">
-                <p><strong>Code couleurs :</strong> Vert = "DU COUP on revient chez vous" • Rose = "Comme sur des Roulettes" • Rouge = "Délicieusement Maboul"</p>
-                <p>Tournée mise à jour régulièrement</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Vidéos Section -->
-    <section class="videos" id="videos">
-        <div class="container">
-            <div class="section-header">
-                <span class="section-label">Extraits</span>
-                <h2 class="section-title">Nos Spectacles en Vidéo</h2>
-                <p class="section-subtitle">Plongez dans l'ambiance de nos représentations</p>
-            </div>
-
-            <div class="videos-grid">
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                                title="Du Coup on revient chez vous" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                    <h3 class="video-title">DU COUP on revient chez vous</h3>
-                    <p class="video-description">Promo 2026 - Découvrez notre nouveau spectacle</p>
-                </div>
-
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                                title="Comme sur des Roulettes" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                    <h3 class="video-title">COMME SUR DES ROULETTES</h3>
-                    <p class="video-description">Le duo Toto et Flo en action</p>
-                </div>
-
-                <div class="video-card">
-                    <div class="video-wrapper">
-                        <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" 
-                                title="Délicieusement Maboul" 
-                                frameborder="0" 
-                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                                allowfullscreen>
-                        </iframe>
-                    </div>
-                    <h3 class="video-title">DÉLICIEUSEMENT MABOUL</h3>
-                    <p class="video-description">Magie burlesque et moments musicaux</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Histoire / Caravane Section -->
-    <section class="histoire" id="histoire">
-        <div class="container">
-            <div class="histoire-content">
-                <div class="histoire-text">
-                    <span class="section-label">Notre histoire</span>
-                    <h2 class="section-title">60 ans de passion</h2>
-                    <p class="histoire-description">
-                        Depuis 60 ans, notre caravane parcourt les routes de France pour apporter 
-                        le spectacle vivant au cœur des villages et des villes. Peinte à la main, 
-                        elle est le symbole de notre engagement : être des artisans du spectacle, 
-                        proches du public, authentiques et passionnés.
-                    </p>
-                    <p class="histoire-description">
-                        Une nouvelle génération d'artistes a pris le volant, perpétuant la tradition 
-                        familiale tout en apportant un souffle nouveau à nos créations. De génération 
-                        en génération, nous continuons à faire vivre la magie du cirque-théâtre 
-                        ambulant, fidèles à nos valeurs d'artisanat, de créativité et de proximité.
-                    </p>
-                    <div class="histoire-stats">
-                        <div class="stat">
-                            <span class="stat-number">1964</span>
-                            <span class="stat-label">Année de création</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">60+</span>
-                            <span class="stat-label">ans de tournées</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">3</span>
-                            <span class="stat-label">spectacles en 2026</span>
-                        </div>
-                        <div class="stat">
-                            <span class="stat-number">♾️</span>
-                            <span class="stat-label">sourires d'enfants</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="histoire-image">
-                    <img src="images/caravane-detail.jpg" alt="La caravane Récré Magic" loading="lazy">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Contact Section -->
-    <section class="contact" id="contact">
-        <div class="container">
-            <div class="contact-wrapper">
-                <div class="contact-info">
-                    <span class="section-label">Contact</span>
-                    <h2 class="section-title">Nous contacter</h2>
-                    <p class="contact-description">
-                        Une envie de spectacle dans votre commune ? Un événement à organiser ? 
-                        Contactez-nous pour un devis gratuit et sans engagement.
-                    </p>
-                    
-                    <div class="contact-details">
-                        <div class="contact-item">
-                            <div class="contact-icon">📧</div>
-                            <div>
-                                <div class="contact-label">Email</div>
-                                <a href="mailto:recremagic@wanadoo.fr" class="contact-value">recremagic@wanadoo.fr</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">📞</div>
-                            <div>
-                                <div class="contact-label">Téléphone</div>
-                                <a href="tel:+33671525089" class="contact-value">06 71 52 50 89</a>
-                            </div>
-                        </div>
-                        <div class="contact-item">
-                            <div class="contact-icon">🎪</div>
-                            <div>
-                                <div class="contact-label">Type</div>
-                                <div class="contact-value">Artisans du spectacle</div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="contact-awards">
-                        <img src="images/logo.png" alt="Récré Magic" class="contact-logo">
-                        <div class="awards-info">
-                            <strong>Event AWARDS 2026</strong><br>
-                            événementiel pour tous
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
-                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
-                </div>
-                <div class="footer-links">
-                    <a href="#spectacles">Spectacles</a>
-                    <a href="#personnages">Personnages</a>
-                    <a href="#expos">Expositions</a>
-                    <a href="#tournee">Tournée</a>
-                    <a href="#videos">Vidéos</a>
-                    <a href="#histoire">Notre Histoire</a>
-                    <a href="#contact">Contact</a>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 Récré Magic - Artisans du spectacle - Tous droits réservés</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="script.js"></script>
+        window.addEventListener('load', () => {
+            createConfetti();
+        });
+    </script>
 </body>
 </html>
