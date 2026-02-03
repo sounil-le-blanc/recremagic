@@ -1,0 +1,29 @@
+# Config files
+.gitconfig
+.lesshst
+.node_repl_history
+.viminfo
+.bash_history
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Temp
+*.tmp
+
+# Node modules (if needed later)
+node_modules/
+
+# Build files (if needed later)
+dist/
+build/

@@ -3,90 +3,278 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic - Troupe de spectacle vivant</title>
+    <title>Récré Magic - Circus Théâtre Ambulant | 60 ans de Spectacle Vivant</title>
+    <meta name="description" content="Récré Magic, troupe de spectacle vivant itinérante. Circus, théâtre, marionnettes et magie pour toute la famille depuis 60 ans.">
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Righteous&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-    <div class="stars"></div>
-    <div class="stars-layer-2"></div>
-    
-    <div class="container">
-        <header class="header">
-            <div class="magic-sparkle">✨</div>
-            <h1 class="title">
-                <span class="title-recre">Récré</span>
-                <span class="title-magic">Magic</span>
+    <!-- Confetti animation background -->
+    <div class="confetti-container" id="confetti"></div>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-overlay"></div>
+        <div class="hero-content">
+            <img src="images/logo.png" alt="Récré Magic Logo" class="hero-logo">
+            <h1 class="hero-title">
+                <span class="hero-subtitle">Circus Théâtre Ambulant</span>
+                <span class="hero-years">60 ans de spectacle vivant</span>
             </h1>
-            <div class="magic-sparkle">🎪</div>
-        </header>
+            <p class="hero-tagline">Une nouvelle génération prend la route</p>
+            <div class="hero-cta">
+                <a href="#spectacles" class="btn btn-primary">Découvrir nos spectacles</a>
+                <a href="#contact" class="btn btn-secondary">Nous contacter</a>
+            </div>
+            <div class="awards-badge">
+                <span class="badge-year">Event AWARDS 2026</span>
+                <span class="badge-text">événementiel pour tous</span>
+            </div>
+        </div>
+        <div class="scroll-indicator">
+            <div class="scroll-mouse"></div>
+            <span>Scroll</span>
+        </div>
+    </section>
 
-        <main class="main">
-            <div class="content">
-                <p class="tagline">L'art du spectacle vivant au service de l'émerveillement</p>
-                
-                <div class="status-card">
-                    <div class="status-icon">🔮</div>
-                    <p class="status-text">Site en construction</p>
-                    <p class="status-subtitle">Notre nouvelle plateforme arrive bientôt avec tous nos spectacles</p>
+    <!-- Spectacles Section -->
+    <section class="spectacles" id="spectacles">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">En tournée 2026</span>
+                <h2 class="section-title">Nos 3 spectacles</h2>
+                <p class="section-subtitle">Découvrez nos créations pour petits et grands</p>
+            </div>
+
+            <div class="spectacles-grid">
+                <!-- Spectacle 1 : Du Coup -->
+                <div class="spectacle-card spectacle-vert">
+                    <div class="spectacle-image">
+                        <img src="images/spectacle-ducoup.jpg" alt="Du Coup on revient chez vous" loading="lazy">
+                        <div class="spectacle-badge">VERT</div>
+                    </div>
+                    <div class="spectacle-content">
+                        <h3 class="spectacle-title">DU COUP<br>on revient chez vous</h3>
+                        <p class="spectacle-description">
+                            Toto et Flo vous invitent à plonger dans leur univers décalé, où se mêlent 
+                            marionnettes à fils, illusions magiques, mime, gags clownesques et moments 
+                            musicaux pour une heure de pur bonheur et de détente.
+                        </p>
+                        <p class="spectacle-info">
+                            La création 2026 de Toto et Flo
+                        </p>
+                    </div>
                 </div>
 
-                <div class="features">
-                    <div class="feature">
-                        <span class="feature-icon">🎭</span>
-                        <span class="feature-text">Spectacles vivants</span>
+                <!-- Spectacle 2 : Roulettes -->
+                <div class="spectacle-card spectacle-rose">
+                    <div class="spectacle-image">
+                        <img src="images/spectacle-roulettes.jpg" alt="Comme sur des Roulettes" loading="lazy">
+                        <div class="spectacle-badge">ROSE</div>
                     </div>
-                    <div class="feature">
-                        <span class="feature-icon">🎉</span>
-                        <span class="feature-text">Animations enfants</span>
+                    <div class="spectacle-content">
+                        <h3 class="spectacle-title">COMME SUR<br>DES ROULETTES</h3>
+                        <p class="spectacle-description">
+                            Monsieur Toto doit partager la scène avec Flo, un personnage aussi imprévisible 
+                            qu'attachant. Entre humour, illusion, quiproquos et moment de tendresse, 
+                            ce duo complice embarque petits et grands pour un moment drôle et décalé.
+                        </p>
+                        <p class="spectacle-info">
+                            Spectacle haut en couleur
+                        </p>
                     </div>
-                    <div class="feature">
-                        <span class="feature-icon">✨</span>
-                        <span class="feature-text">Magie & émerveillement</span>
+                </div>
+
+                <!-- Spectacle 3 : Maboul -->
+                <div class="spectacle-card spectacle-rouge">
+                    <div class="spectacle-image">
+                        <img src="images/spectacle-maboul.jpg" alt="Délicieusement Maboul" loading="lazy">
+                        <div class="spectacle-badge">ROUGE</div>
+                    </div>
+                    <div class="spectacle-content">
+                        <h3 class="spectacle-title">DÉLICIEUSEMENT<br>MABOUL</h3>
+                        <p class="spectacle-description">
+                            Entouré d'improbables complices, je vous amène sur les pentes de l'humour, 
+                            de la tendresse et de l'étonnement. Voyagez en musique tout au long de ce 
+                            spectacle interactif recommandé à tous âges.
+                        </p>
+                        <p class="spectacle-info">
+                            Gags clownesques, magie inventive et collaborative
+                        </p>
                     </div>
                 </div>
             </div>
-        </main>
 
-        <footer class="footer">
+            <div class="spectacles-note">
+                <p>Nos 3 spectacles peuvent se présenter à l'extérieur avec notre roulotte et son espace scénique, 
+                mais aussi à l'intérieur sur votre scène.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- La Caravane Section -->
+    <section class="caravane">
+        <div class="container">
+            <div class="caravane-content">
+                <div class="caravane-text">
+                    <span class="section-label">Notre maison</span>
+                    <h2 class="section-title">La Caravane Magique</h2>
+                    <p class="caravane-description">
+                        Depuis 60 ans, notre caravane parcourt les routes de France pour apporter 
+                        le spectacle vivant au cœur des villages et des villes. Peinte à la main, 
+                        elle est le symbole de notre engagement : être des artisans du spectacle, 
+                        proches du public, authentiques et passionnés.
+                    </p>
+                    <p class="caravane-description">
+                        Une nouvelle génération d'artistes a pris le volant, perpétuant la tradition 
+                        familiale tout en apportant un souffle nouveau à nos créations.
+                    </p>
+                    <div class="caravane-stats">
+                        <div class="stat">
+                            <span class="stat-number">60+</span>
+                            <span class="stat-label">ans de tournées</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">3</span>
+                            <span class="stat-label">spectacles en 2026</span>
+                        </div>
+                        <div class="stat">
+                            <span class="stat-number">♾️</span>
+                            <span class="stat-label">sourires d'enfants</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="caravane-image">
+                    <img src="images/caravane-detail.jpg" alt="La caravane Récré Magic" loading="lazy">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Tournée Section -->
+    <section class="tournee" id="tournee">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-label">Calendrier</span>
+                <h2 class="section-title">Tournée 2026</h2>
+                <p class="section-subtitle">Retrouvez-nous dans toute la France</p>
+            </div>
+
+            <div class="tournee-grid">
+                <div class="tournee-card">
+                    <div class="tournee-month">Février 2026</div>
+                    <ul class="tournee-dates">
+                        <li class="date-item date-rose">8 - Saiguede (31)</li>
+                        <li>25 - St Nicolas de la Grave (82)</li>
+                    </ul>
+                </div>
+
+                <div class="tournee-card">
+                    <div class="tournee-month">Mai 2026</div>
+                    <ul class="tournee-dates">
+                        <li>15 - St Denis D'Oléron (17)</li>
+                        <li>16 - St Denis D'Oléron (17)</li>
+                    </ul>
+                </div>
+
+                <div class="tournee-card">
+                    <div class="tournee-month">Octobre 2026</div>
+                    <ul class="tournee-dates">
+                        <li>3 - Macon (71)</li>
+                        <li>4 - Macon (71)</li>
+                        <li class="date-item date-rouge">7 - Martel (46)</li>
+                    </ul>
+                </div>
+
+                <div class="tournee-card">
+                    <div class="tournee-month">Décembre 2026</div>
+                    <ul class="tournee-dates">
+                        <li>6 - Carmaux (81)</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tournee-note">
+                <p><strong>Code couleurs :</strong> Vert = "DU COUP on revient chez vous" • Rose = "Comme sur des Roulettes" • Rouge = "Délicieusement Maboul"</p>
+                <p>Tournée mise à jour régulièrement</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="contact-wrapper">
+                <div class="contact-info">
+                    <span class="section-label">Contact</span>
+                    <h2 class="section-title">Nous contacter</h2>
+                    <p class="contact-description">
+                        Une envie de spectacle dans votre commune ? Un événement à organiser ? 
+                        Contactez-nous pour un devis gratuit et sans engagement.
+                    </p>
+                    
+                    <div class="contact-details">
+                        <div class="contact-item">
+                            <div class="contact-icon">📧</div>
+                            <div>
+                                <div class="contact-label">Email</div>
+                                <a href="mailto:recremagic@wanadoo.fr" class="contact-value">recremagic@wanadoo.fr</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">📞</div>
+                            <div>
+                                <div class="contact-label">Téléphone</div>
+                                <a href="tel:+33671525089" class="contact-value">06 71 52 50 89</a>
+                            </div>
+                        </div>
+                        <div class="contact-item">
+                            <div class="contact-icon">🎪</div>
+                            <div>
+                                <div class="contact-label">Type</div>
+                                <div class="contact-value">Artisans du spectacle</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="contact-awards">
+                        <img src="images/logo.png" alt="Récré Magic" class="contact-logo">
+                        <div class="awards-info">
+                            <strong>Event AWARDS 2026</strong><br>
+                            événementiel pour tous
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
             <div class="footer-content">
-                <p class="copyright">© 2024 Récré Magic. Tous droits réservés.</p>
-                <div class="social-links">
-                    <a href="#" class="social-link">Instagram</a>
-                    <span class="separator">•</span>
-                    <a href="#" class="social-link">Facebook</a>
-                    <span class="separator">•</span>
-                    <a href="#" class="social-link">Contact</a>
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
+                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
+                </div>
+                <div class="footer-links">
+                    <a href="#spectacles">Spectacles</a>
+                    <a href="#tournee">Tournée</a>
+                    <a href="#contact">Contact</a>
                 </div>
             </div>
-        </footer>
-    </div>
+            <div class="footer-bottom">
+                <p>&copy; 2026 Récré Magic - Artisans du spectacle - Tous droits réservés</p>
+            </div>
+        </div>
+    </footer>
 
-    <script>
-        // Animation on load
-        document.addEventListener('DOMContentLoaded', () => {
-            document.body.classList.add('loaded');
-        });
-
-        // Sparkle cursor effect
-        document.addEventListener('mousemove', (e) => {
-            if (Math.random() > 0.95) {
-                createSparkle(e.clientX, e.clientY);
-            }
-        });
-
-        function createSparkle(x, y) {
-            const sparkle = document.createElement('div');
-            sparkle.className = 'cursor-sparkle';
-            sparkle.style.left = x + 'px';
-            sparkle.style.top = y + 'px';
-            sparkle.textContent = ['✨', '⭐', '💫', '🌟'][Math.floor(Math.random() * 4)];
-            document.body.appendChild(sparkle);
-            
-            setTimeout(() => sparkle.remove(), 1000);
-        }
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
