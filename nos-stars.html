@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nos Stars - Récré Magic</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #FFF8E1; padding-top: 80px; }
+        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
+        .page-hero { background: linear-gradient(135deg, #FFB300, #f9a825); color: #2C1810; padding: 4rem 2rem; text-align: center; }
+        .page-hero h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
+        .back-btn { display: inline-block; background: rgba(44,24,16,0.2); color: #2C1810; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; font-weight: 700; }
+        .back-btn:hover { background: #2C1810; color: white; }
+        .stars-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .stars-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .star-card { background: white; border-radius: 20px; padding: 2rem; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.1); }
+        .star-card img { width: 200px; height: 200px; object-fit: cover; border-radius: 50%; margin-bottom: 1rem; }
+        .star-card h2 { font-family: 'Fredoka', cursive; font-size: 2rem; color: #FFB300; margin-bottom: 0.5rem; }
+        .star-card p { line-height: 1.7; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a>
+        </div>
+    </nav>
+    
+    <div class="page-hero">
+        <a href="familles.html" class="back-btn">← Retour</a>
+        <h1>⭐ Nos Stars</h1>
+        <p>Rencontrez les artistes de Récré Magic</p>
+    </div>
+    
+    <div class="stars-container">
+        <div class="stars-grid">
+            <div class="star-card">
+                <img src="images/toto.jpg" alt="Toto">
+                <h2>Monsieur TOTO</h2>
+                <p>Maître de cérémonie et artiste complet. Avec son costume rayé et son chapeau iconique, Toto enchante petits et grands depuis des années.</p>
+            </div>
+            
+            <div class="star-card">
+                <img src="images/flo.jpg" alt="Flo">
+                <h2>FLO</h2>
+                <p>Musicien talentueux et personnage attachant. Flo apporte une touche musicale et poétique aux spectacles avec sa guitare et sa créativité débordante.</p>
+            </div>
+            
+            <div class="star-card">
+                <img src="images/spectacle-ducoup.jpg" alt="Arlequin">
+                <h2>ARLEQUIN</h2>
+                <p>Marionnette à fils emblématique. Farceur et malicieux, Arlequin enchante le public avec ses pirouettes et ses aventures rocambolesques.</p>
+            </div>
+            
+            <div class="star-card">
+                <img src="images/spectacle-roulettes.jpg" alt="Baptiste">
+                <h2>BAPTISTE</h2>
+                <p>Personnage fantaisiste plein de surprises. Son humour décalé et ses interactions avec le public créent des moments inoubliables.</p>
+            </div>
+        </div>
+    </div>
+    
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
+                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

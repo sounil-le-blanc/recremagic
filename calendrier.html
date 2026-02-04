@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calendrier - Récré Magic</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { background: #FFF8E1; padding-top: 80px; }
+        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
+        .page-hero { background: linear-gradient(135deg, #D32F2F, #c2185b); color: white; padding: 4rem 2rem; text-align: center; }
+        .page-hero h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
+        .back-btn { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; font-weight: 600; }
+        .back-btn:hover { background: #FFB300; color: #2C1810; }
+        .calendrier-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
+        .calendrier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
+        .calendrier-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border-left: 5px solid #D32F2F; }
+        .calendrier-card h2 { font-family: 'Fredoka', cursive; font-size: 1.8rem; color: #D32F2F; margin-bottom: 1rem; }
+        .calendrier-card ul { list-style: none; }
+        .calendrier-card li { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar"><div class="navbar-container"><a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a></div></nav>
+    <div class="page-hero">
+        <a href="familles.html" class="back-btn">← Retour</a>
+        <h1>📅 Calendrier 2026</h1>
+        <p>Où nous voir cette année ?</p>
+    </div>
+    <div class="calendrier-container">
+        <div class="calendrier-grid">
+            <div class="calendrier-card">
+                <h2>Février 2026</h2>
+                <ul>
+                    <li>8 - Saiguede (31)</li>
+                    <li>25 - St Nicolas de la Grave (82)</li>
+                </ul>
+            </div>
+            <div class="calendrier-card">
+                <h2>Mai 2026</h2>
+                <ul>
+                    <li>15 - St Denis D'Oléron (17)</li>
+                    <li>16 - St Denis D'Oléron (17)</li>
+                </ul>
+            </div>
+            <div class="calendrier-card">
+                <h2>Octobre 2026</h2>
+                <ul>
+                    <li>3 - Macon (71)</li>
+                    <li>4 - Macon (71)</li>
+                    <li>7 - Martel (46)</li>
+                </ul>
+            </div>
+            <div class="calendrier-card">
+                <h2>Décembre 2026</h2>
+                <ul>
+                    <li>6 - Carmaux (81)</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><img src="images/logo.png" alt="Récré Magic" class="footer-logo"><p>Circus Théâtre Ambulant depuis 60 ans</p></div></div></div></footer>
+</body>
+</html>

@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Récré Magic - Familles & Fans</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
+            --jaune-accent: #FFB300;
+            --creme-vintage: #FFF8E1;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--rose-spectacle) 0%, var(--vert-caravane) 100%);
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 10;
+        }
+        .back-link {
+            display: inline-block;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 25px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            transition: all 0.3s;
+        }
+        .back-link:hover {
+            background: var(--jaune-accent);
+            color: var(--text-dark);
+        }
+        .welcome-section {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
+        }
+        .logo-main {
+            max-width: 200px;
+            margin-bottom: 2rem;
+            filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
+            animation: logoFloat 4s ease-in-out infinite;
+        }
+        @keyframes logoFloat {
+            0%, 100% { transform: translateY(0) rotate(0deg); }
+            50% { transform: translateY(-15px) rotate(2deg); }
+        }
+        .welcome-title {
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            margin-bottom: 1rem;
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
+        }
+        .welcome-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            opacity: 0.95;
+        }
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+        .choice-card {
+            background: white;
+            border-radius: 25px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+        .choice-card:hover::before { opacity: 1; }
+        .choice-card:hover {
+            transform: translateY(-10px) scale(1.03);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
+        }
+        .choice-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
+        }
+        .choice-card:hover .choice-icon {
+            animation: spin 0.6s ease-in-out;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.15); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        .choice-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+        }
+        .choice-description {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+        }
+        
+        /* Couleurs par card */
+        .card-spectacles { border-color: var(--vert-caravane); }
+        .card-spectacles .choice-title { color: var(--vert-caravane); }
+        .card-spectacles:hover { background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%); }
+        
+        .card-stars { border-color: var(--jaune-accent); }
+        .card-stars .choice-title { color: var(--jaune-accent); }
+        .card-stars:hover { background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%); }
+        
+        .card-expos { border-color: var(--rose-spectacle); }
+        .card-expos .choice-title { color: var(--rose-spectacle); }
+        .card-expos:hover { background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%); }
+        
+        .card-calendrier { border-color: var(--rouge-spectacle); }
+        .card-calendrier .choice-title { color: var(--rouge-spectacle); }
+        .card-calendrier:hover { background: linear-gradient(135deg, rgba(211,47,47,0.1) 0%, white 100%); }
+        
+        .card-videos { border-color: var(--vert-caravane); }
+        .card-videos .choice-title { color: var(--vert-caravane); }
+        .card-videos:hover { background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%); }
+        
+        .card-histoire { border-color: var(--rose-spectacle); }
+        .card-histoire .choice-title { color: var(--rose-spectacle); }
+        .card-histoire:hover { background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%); }
+        
+        .card-boutique { border-color: var(--jaune-accent); }
+        .card-boutique .choice-title { color: var(--jaune-accent); }
+        .card-boutique:hover { background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%); }
+        
+        @media (max-width: 768px) {
+            .choices-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="confetti-container" id="confetti"></div>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+        
+        <div class="welcome-section">
+            <img src="images/logo.png" alt="Récré Magic" class="logo-main">
+            <h1 class="welcome-title">Bienvenue Familles & Fans !</h1>
+            <p class="welcome-subtitle">Découvrez l'univers magique de Récré Magic</p>
+        </div>
+
+        <div class="choices-grid">
+            
+            <a href="nos-spectacles-familles.html" class="choice-card card-spectacles">
+                <span class="choice-icon">🎭</span>
+                <h2 class="choice-title">Nos Spectacles</h2>
+                <p class="choice-description">3 créations magiques pour toute la famille</p>
+            </a>
+
+            <a href="nos-stars.html" class="choice-card card-stars">
+                <span class="choice-icon">⭐</span>
+                <h2 class="choice-title">Nos Stars</h2>
+                <p class="choice-description">Découvrez Toto, Flo et leurs amis</p>
+            </a>
+
+            <a href="nos-expos-familles.html" class="choice-card card-expos">
+                <span class="choice-icon">🎨</span>
+                <h2 class="choice-title">Nos Expos</h2>
+                <p class="choice-description">Marionnettes et géants du carnaval</p>
+            </a>
+
+            <a href="calendrier.html" class="choice-card card-calendrier">
+                <span class="choice-icon">📅</span>
+                <h2 class="choice-title">Calendrier</h2>
+                <p class="choice-description">Où nous voir en 2026 ?</p>
+            </a>
+
+            <a href="videos.html" class="choice-card card-videos">
+                <span class="choice-icon">🎬</span>
+                <h2 class="choice-title">Vidéos</h2>
+                <p class="choice-description">Extraits de nos spectacles</p>
+            </a>
+
+            <a href="notre-histoire.html" class="choice-card card-histoire">
+                <span class="choice-icon">📖</span>
+                <h2 class="choice-title">Notre Histoire</h2>
+                <p class="choice-description">60 ans de magie itinérante</p>
+            </a>
+
+            <a href="#" class="choice-card card-boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
+                <span class="choice-icon">🛍️</span>
+                <h2 class="choice-title">Boutique</h2>
+                <p class="choice-description">Bientôt : jeux et souvenirs !</p>
+            </a>
+
+        </div>
+    </div>
+
+    <script>
+        // Confetti
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+            const confettiCount = 60;
+            for (let i = 0; i < confettiCount; i++) {
+                const confetti = document.createElement('div');
+                confetti.style.position = 'absolute';
+                confetti.style.width = Math.random() * 12 + 5 + 'px';
+                confetti.style.height = Math.random() * 12 + 5 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.left = Math.random() * 100 + '%';
+                confetti.style.top = -20 + 'px';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                const duration = Math.random() * 4 + 5;
+                const delay = Math.random() * 3;
+                confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                container.appendChild(confetti);
+            }
+            const style = document.createElement('style');
+            style.textContent = `
+                @keyframes fall {
+                    to {
+                        transform: translateY(100vh) rotate(720deg);
+                        opacity: 0;
+                    }
+                }
+            `;
+            document.head.appendChild(style);
+        }
+        window.addEventListener('load', () => { createConfetti(); });
+    </script>
+</body>
+</html>
