@@ -14,17 +14,18 @@
             --jaune-accent: #FFB300;
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
-            --text-light: #ffffff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(135deg, var(--rose-spectacle) 0%, var(--vert-caravane) 100%);
             min-height: 100vh;
-            padding: 2rem;
+            padding: 2rem 1rem;
             position: relative;
             overflow-x: hidden;
         }
+        
+        /* Confetti */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -35,154 +36,225 @@
             z-index: 1;
             overflow: hidden;
         }
+        
         .container {
             max-width: 1400px;
             margin: 0 auto;
             position: relative;
             z-index: 10;
         }
+        
         .back-link {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255,255,255,0.3);
             color: white;
             padding: 0.7rem 1.5rem;
             border-radius: 25px;
             text-decoration: none;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 2rem;
+            backdrop-filter: blur(10px);
             transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
         }
         .back-link:hover {
             background: var(--jaune-accent);
             color: var(--text-dark);
+            transform: translateY(-2px);
         }
+        
         .welcome-section {
             text-align: center;
-            margin-bottom: 4rem;
+            margin-bottom: 3rem;
             color: white;
         }
+        
         .logo-main {
-            max-width: 200px;
-            margin-bottom: 2rem;
+            max-width: 180px;
+            margin-bottom: 1.5rem;
             filter: drop-shadow(0 10px 30px rgba(0,0,0,0.3));
             animation: logoFloat 4s ease-in-out infinite;
         }
+        
         @keyframes logoFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
             50% { transform: translateY(-15px) rotate(2deg); }
         }
+        
         .welcome-title {
             font-family: 'Fredoka', cursive;
-            font-size: clamp(2.5rem, 5vw, 4rem);
-            margin-bottom: 1rem;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            margin-bottom: 0.5rem;
             text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
         }
+        
         .welcome-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
             opacity: 0.95;
+            margin-bottom: 0.5rem;
         }
-        .choices-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
+        
+        .instruction {
+            font-size: clamp(0.9rem, 2vw, 1.1rem);
+            background: rgba(255,255,255,0.2);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            display: inline-block;
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+            animation: pulse 2s ease-in-out infinite;
         }
-        .choice-card {
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+        
+        /* Interactive Caravane */
+        .caravane-interactive {
+            position: relative;
+            max-width: 100%;
+            margin: 0 auto;
             background: white;
-            border-radius: 25px;
-            padding: 2.5rem 2rem;
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        
+        .caravane-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 15px;
+            cursor: pointer;
+        }
+        
+        /* Hotspot overlays */
+        .hotspots {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            right: 2rem;
+            bottom: 2rem;
+            pointer-events: none;
+        }
+        
+        .hotspot {
+            position: absolute;
+            pointer-events: all;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 10px;
+        }
+        
+        .hotspot:hover {
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 0 30px rgba(255, 179, 0, 0.6);
+        }
+        
+        .hotspot:hover .tooltip {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .tooltip {
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%) translateY(10px);
+            background: white;
+            color: var(--text-dark);
+            padding: 0.8rem 1.5rem;
+            border-radius: 15px;
+            font-weight: 700;
+            font-size: 1rem;
+            white-space: nowrap;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
+            opacity: 0;
+            transition: all 0.3s ease;
+            pointer-events: none;
+            z-index: 100;
+        }
+        
+        .tooltip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+        
+        /* Hotspot positions (approximatives - à ajuster selon l'image) */
+        .hotspot-spectacles { top: 25%; left: 35%; width: 20%; height: 35%; }
+        .hotspot-stars { top: 30%; left: 15%; width: 15%; height: 30%; }
+        .hotspot-expos { top: 20%; left: 55%; width: 20%; height: 40%; }
+        .hotspot-calendrier { top: 45%; left: 5%; width: 12%; height: 25%; }
+        .hotspot-videos { top: 70%; left: 15%; width: 30%; height: 15%; }
+        .hotspot-histoire { top: 5%; left: 25%; width: 45%; height: 12%; }
+        .hotspot-boutique { top: 25%; left: 78%; width: 18%; height: 40%; }
+        
+        /* Mobile legend */
+        .mobile-legend {
+            display: none;
+            background: white;
+            border-radius: 20px;
+            padding: 2rem;
+            margin-top: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        .mobile-legend h3 {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            color: var(--vert-caravane);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+        
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .legend-item {
+            background: var(--creme-vintage);
+            padding: 1rem;
+            border-radius: 15px;
             text-align: center;
             text-decoration: none;
             color: var(--text-dark);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid;
-            min-height: 320px;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            position: relative;
-            overflow: hidden;
-        }
-        .choice-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 100%);
-            opacity: 0;
-            transition: opacity 0.4s;
-        }
-        .choice-card:hover::before { opacity: 1; }
-        .choice-card:hover {
-            transform: translateY(-10px) scale(1.03);
-            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
-        }
-        .choice-icon {
-            font-size: 4rem;
-            margin-bottom: 1rem;
-            animation: bounce 2s ease-in-out infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
-        }
-        .choice-card:hover .choice-icon {
-            animation: spin 0.6s ease-in-out;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(10deg) scale(1.15); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-        .choice-title {
-            font-family: 'Fredoka', cursive;
-            font-size: 1.8rem;
-            font-weight: 700;
-            margin-bottom: 0.8rem;
-            text-transform: uppercase;
-        }
-        .choice-description {
-            font-size: 1rem;
-            line-height: 1.6;
-            opacity: 0.9;
+            font-weight: 600;
+            transition: all 0.3s;
+            border: 3px solid transparent;
         }
         
-        /* Couleurs par card */
-        .card-spectacles { border-color: var(--vert-caravane); }
-        .card-spectacles .choice-title { color: var(--vert-caravane); }
-        .card-spectacles:hover { background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%); }
+        .legend-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+        }
         
-        .card-stars { border-color: var(--jaune-accent); }
-        .card-stars .choice-title { color: var(--jaune-accent); }
-        .card-stars:hover { background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%); }
+        .legend-item.item-spectacles { border-color: var(--vert-caravane); }
+        .legend-item.item-stars { border-color: var(--jaune-accent); }
+        .legend-item.item-expos { border-color: var(--rose-spectacle); }
+        .legend-item.item-calendrier { border-color: var(--rouge-spectacle); }
+        .legend-item.item-videos { border-color: var(--vert-caravane); }
+        .legend-item.item-histoire { border-color: var(--rose-spectacle); }
+        .legend-item.item-boutique { border-color: var(--jaune-accent); }
         
-        .card-expos { border-color: var(--rose-spectacle); }
-        .card-expos .choice-title { color: var(--rose-spectacle); }
-        .card-expos:hover { background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%); }
-        
-        .card-calendrier { border-color: var(--rouge-spectacle); }
-        .card-calendrier .choice-title { color: var(--rouge-spectacle); }
-        .card-calendrier:hover { background: linear-gradient(135deg, rgba(211,47,47,0.1) 0%, white 100%); }
-        
-        .card-videos { border-color: var(--vert-caravane); }
-        .card-videos .choice-title { color: var(--vert-caravane); }
-        .card-videos:hover { background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%); }
-        
-        .card-histoire { border-color: var(--rose-spectacle); }
-        .card-histoire .choice-title { color: var(--rose-spectacle); }
-        .card-histoire:hover { background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%); }
-        
-        .card-boutique { border-color: var(--jaune-accent); }
-        .card-boutique .choice-title { color: var(--jaune-accent); }
-        .card-boutique:hover { background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%); }
+        .legend-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
         
         @media (max-width: 768px) {
-            .choices-grid {
-                grid-template-columns: 1fr;
-            }
+            .hotspots { display: none; }
+            .mobile-legend { display: block; }
+            .instruction { display: none; }
         }
     </style>
 </head>
@@ -196,61 +268,87 @@
             <img src="images/logo.png" alt="Récré Magic" class="logo-main">
             <h1 class="welcome-title">Bienvenue Familles & Fans !</h1>
             <p class="welcome-subtitle">Découvrez l'univers magique de Récré Magic</p>
+            <p class="instruction">👆 Cliquez sur la caravane pour explorer !</p>
         </div>
 
-        <div class="choices-grid">
+        <div class="caravane-interactive">
+            <img src="images/caravane-interactive.jpg" alt="Caravane Récré Magic" class="caravane-image">
             
-            <a href="nos-spectacles-familles.html" class="choice-card card-spectacles">
-                <span class="choice-icon">🎭</span>
-                <h2 class="choice-title">Nos Spectacles</h2>
-                <p class="choice-description">3 créations magiques pour toute la famille</p>
-            </a>
+            <!-- Hotspots cliquables -->
+            <div class="hotspots">
+                <a href="nos-spectacles-familles.html" class="hotspot hotspot-spectacles">
+                    <div class="tooltip">🎭 Nos Spectacles</div>
+                </a>
+                
+                <a href="nos-stars.html" class="hotspot hotspot-stars">
+                    <div class="tooltip">⭐ Nos Stars</div>
+                </a>
+                
+                <a href="nos-expos-familles.html" class="hotspot hotspot-expos">
+                    <div class="tooltip">🎨 Nos Expos</div>
+                </a>
+                
+                <a href="calendrier.html" class="hotspot hotspot-calendrier">
+                    <div class="tooltip">📅 Calendrier</div>
+                </a>
+                
+                <a href="videos.html" class="hotspot hotspot-videos">
+                    <div class="tooltip">🎬 Vidéos</div>
+                </a>
+                
+                <a href="notre-histoire.html" class="hotspot hotspot-histoire">
+                    <div class="tooltip">📖 Notre Histoire</div>
+                </a>
+                
+                <a href="#" class="hotspot hotspot-boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
+                    <div class="tooltip">🛍️ Boutique</div>
+                </a>
+            </div>
+        </div>
 
-            <a href="nos-stars.html" class="choice-card card-stars">
-                <span class="choice-icon">⭐</span>
-                <h2 class="choice-title">Nos Stars</h2>
-                <p class="choice-description">Découvrez Toto, Flo et leurs amis</p>
-            </a>
-
-            <a href="nos-expos-familles.html" class="choice-card card-expos">
-                <span class="choice-icon">🎨</span>
-                <h2 class="choice-title">Nos Expos</h2>
-                <p class="choice-description">Marionnettes et géants du carnaval</p>
-            </a>
-
-            <a href="calendrier.html" class="choice-card card-calendrier">
-                <span class="choice-icon">📅</span>
-                <h2 class="choice-title">Calendrier</h2>
-                <p class="choice-description">Où nous voir en 2026 ?</p>
-            </a>
-
-            <a href="videos.html" class="choice-card card-videos">
-                <span class="choice-icon">🎬</span>
-                <h2 class="choice-title">Vidéos</h2>
-                <p class="choice-description">Extraits de nos spectacles</p>
-            </a>
-
-            <a href="notre-histoire.html" class="choice-card card-histoire">
-                <span class="choice-icon">📖</span>
-                <h2 class="choice-title">Notre Histoire</h2>
-                <p class="choice-description">60 ans de magie itinérante</p>
-            </a>
-
-            <a href="#" class="choice-card card-boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
-                <span class="choice-icon">🛍️</span>
-                <h2 class="choice-title">Boutique</h2>
-                <p class="choice-description">Bientôt : jeux et souvenirs !</p>
-            </a>
-
+        <!-- Mobile fallback: liste de liens -->
+        <div class="mobile-legend">
+            <h3>Explorez Récré Magic</h3>
+            <div class="legend-grid">
+                <a href="nos-spectacles-familles.html" class="legend-item item-spectacles">
+                    <span class="legend-icon">🎭</span>
+                    Nos Spectacles
+                </a>
+                <a href="nos-stars.html" class="legend-item item-stars">
+                    <span class="legend-icon">⭐</span>
+                    Nos Stars
+                </a>
+                <a href="nos-expos-familles.html" class="legend-item item-expos">
+                    <span class="legend-icon">🎨</span>
+                    Nos Expos
+                </a>
+                <a href="calendrier.html" class="legend-item item-calendrier">
+                    <span class="legend-icon">📅</span>
+                    Calendrier
+                </a>
+                <a href="videos.html" class="legend-item item-videos">
+                    <span class="legend-icon">🎬</span>
+                    Vidéos
+                </a>
+                <a href="notre-histoire.html" class="legend-item item-histoire">
+                    <span class="legend-icon">📖</span>
+                    Notre Histoire
+                </a>
+                <a href="#" class="legend-item item-boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
+                    <span class="legend-icon">🛍️</span>
+                    Boutique
+                </a>
+            </div>
         </div>
     </div>
 
     <script>
-        // Confetti
+        // Confetti animation
         function createConfetti() {
             const container = document.getElementById('confetti');
             const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
             const confettiCount = 60;
+            
             for (let i = 0; i < confettiCount; i++) {
                 const confetti = document.createElement('div');
                 confetti.style.position = 'absolute';
@@ -262,11 +360,15 @@
                 confetti.style.opacity = Math.random() * 0.7 + 0.3;
                 confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
                 confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                
                 const duration = Math.random() * 4 + 5;
                 const delay = Math.random() * 3;
+                
                 confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+                
                 container.appendChild(confetti);
             }
+            
             const style = document.createElement('style');
             style.textContent = `
                 @keyframes fall {
@@ -278,7 +380,10 @@
             `;
             document.head.appendChild(style);
         }
-        window.addEventListener('load', () => { createConfetti(); });
+        
+        window.addEventListener('load', () => {
+            createConfetti();
+        });
     </script>
 </body>
 </html>
