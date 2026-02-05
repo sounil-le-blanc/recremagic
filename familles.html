@@ -12,6 +12,7 @@
         html, body {
             width: 100%;
             height: 100%;
+            overflow: hidden;
             font-family: 'Quicksand', sans-serif;
             background: #1a1a1a;
         }
@@ -19,12 +20,6 @@
         /* ========== DESKTOP VERSION ========== */
         .desktop-view {
             display: block;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
         }
         
         .caravane-wrapper {
@@ -132,6 +127,9 @@
         /* ========== MOBILE VERSION ========== */
         .mobile-view {
             display: none;
+        }
+        
+        .mobile-caravane-wrapper {
             position: fixed;
             top: 0;
             left: 0;
@@ -153,56 +151,18 @@
         .mobile-caravane-image {
             height: 60vh;
             width: auto;
+            display: block;
             border-radius: 10px;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-            transition: opacity 0.1s ease;
-        }
-        
-        .mobile-center-line {
-            display: none;
-        }
-        
-        .mobile-slide-info {
-            display: none;
-        }
-        
-        .mobile-slide-btn {
-            display: none;
-        }
-        
-        .mobile-scroll-hint {
-            display: none;
-        }
-        
-        .mobile-nav-dots {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            flex-direction: row;
-            gap: 0.5rem;
-            z-index: 100;
-        }
-        
-        .nav-dot {
-            width: 10px;
-            height: 10px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            transition: all 0.3s;
-        }
-        
-        .nav-dot.active {
-            background: #FFB300;
-            width: 12px;
-            height: 12px;
         }
         
         /* ========== RESPONSIVE ========== */
         @media (max-width: 968px) {
             .desktop-view { display: none; }
             .mobile-view { display: block; }
+            .logo-header { max-width: 80px; top: 1rem; }
+            .back-link { top: 1rem; left: 1rem; padding: 0.6rem 1rem; font-size: 0.85rem; }
+            .instruction { display: none; }
         }
     </style>
 </head>
@@ -221,7 +181,6 @@
                      class="caravane-image" 
                      id="caravaneImg">
                 
-                <!-- SVG avec TES zones exactes -->
                 <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
                     
                     <!-- Zone 1: TOTO -->
@@ -286,16 +245,17 @@
     </div>
     
     <!-- ========== MOBILE VERSION ========== -->
-    <div class="mobile-view" id="mobileView">
+    <div class="mobile-view">
         <a href="index.html" class="back-link">← Retour</a>
         <img src="images/logo.png" alt="Récré Magic" class="logo-header">
-        <div class="mobile-center-line"></div>
         
-        <div class="mobile-caravane-container">
-            <img src="images/caravane-base.png" 
-                 alt="Caravane Récré Magic" 
-                 class="mobile-caravane-image" 
-                 id="mobileCaravaneImg">
+        <div class="mobile-caravane-wrapper" id="mobileWrapper">
+            <div class="mobile-caravane-container">
+                <img src="images/caravane-base.png" 
+                     alt="Caravane Récré Magic" 
+                     class="mobile-caravane-image" 
+                     id="mobileCaravaneImg">
+            </div>
         </div>
     </div>
     
@@ -303,7 +263,9 @@
         // ========== DESKTOP: Image switching ==========
         function changeImage(imageName) {
             const img = document.getElementById('caravaneImg');
-            if (img) img.src = 'images/' + imageName;
+            if (img) {
+                img.src = 'images/' + imageName;
+            }
         }
         
         // Preload desktop images
@@ -328,64 +290,62 @@
         
         // ========== MOBILE: Horizontal scroll with zone detection ==========
         if (window.innerWidth <= 968) {
-            const mobileView = document.getElementById('mobileView');
-            const mobileImg = document.getElementById('mobileCaravaneImg');
+            const wrapper = document.getElementById('mobileWrapper');
+            const img = document.getElementById('mobileCaravaneImg');
             
-            if (!mobileView || !mobileImg) return;
-            
-            // Zones définies (même coordonnées qu'en desktop, adaptées en %)
-            const zones = [
-                { name: 'toto', xPercent: 12.5, widthPercent: 9, image: 'caravane-toto.png' },
-                { name: 'rideau', xPercent: 26.75, widthPercent: 20.5, image: 'caravane-rideau.png' },
-                { name: 'flo', xPercent: 50, widthPercent: 10, image: 'caravane-flo.png' },
-                { name: 'rideau-or', xPercent: 62, widthPercent: 9.5, image: 'caravane-rideau-or.png' },
-                { name: 'calendrier', xPercent: 80.5, widthPercent: 6, image: 'caravane-calendrier.png' },
-                { name: 'baptiste', xPercent: 80, widthPercent: 7.5, image: 'caravane-baptiste.png' },
-                { name: 'gus', xPercent: 90, widthPercent: 10, image: 'caravane-gus.png' },
-                { name: 'cookie', xPercent: 25.75, widthPercent: 5, image: 'caravane-cookie.png' }
-            ];
-            
-            let currentZone = null;
-            
-            function checkZoneAtCenter() {
-                const imgRect = mobileImg.getBoundingClientRect();
-                const imgWidth = imgRect.width;
-                const screenCenter = window.innerWidth / 2;
+            if (wrapper && img) {
+                // Zones (en % de l'image, de gauche à droite)
+                const zones = [
+                    { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png' },
+                    { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png' },
+                    { name: 'cookie', start: 25.75, end: 30.75, image: 'caravane-cookie.png' },
+                    { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png' },
+                    { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png' },
+                    { name: 'baptiste', start: 80, end: 87.5, image: 'caravane-baptiste.png' },
+                    { name: 'calendrier', start: 80.5, end: 86.5, image: 'caravane-calendrier.png' },
+                    { name: 'gus', start: 90, end: 100, image: 'caravane-gus.png' }
+                ];
                 
-                // Position du centre de l'écran par rapport à l'image
-                const centerOnImage = screenCenter - imgRect.left;
-                const centerPercent = (centerOnImage / imgWidth) * 100;
+                let currentZone = null;
                 
-                // Trouver quelle zone est au centre
-                let foundZone = null;
-                zones.forEach(zone => {
-                    const zoneStart = zone.xPercent;
-                    const zoneEnd = zone.xPercent + zone.widthPercent;
+                function checkZone() {
+                    const imgRect = img.getBoundingClientRect();
+                    const imgWidth = imgRect.width;
+                    const screenCenter = window.innerWidth / 2;
                     
-                    if (centerPercent >= zoneStart && centerPercent <= zoneEnd) {
-                        foundZone = zone;
+                    // Position du centre écran sur l'image
+                    const centerOnImage = screenCenter - imgRect.left;
+                    const centerPercent = (centerOnImage / imgWidth) * 100;
+                    
+                    // Trouver la zone au centre
+                    let foundZone = null;
+                    for (let zone of zones) {
+                        if (centerPercent >= zone.start && centerPercent <= zone.end) {
+                            foundZone = zone;
+                            break;
+                        }
                     }
+                    
+                    // Changer l'image si nécessaire
+                    if (foundZone && foundZone.name !== currentZone) {
+                        currentZone = foundZone.name;
+                        img.src = 'images/' + foundZone.image;
+                    } else if (!foundZone && currentZone !== null) {
+                        currentZone = null;
+                        img.src = 'images/caravane-base.png';
+                    }
+                }
+                
+                // Écouter le scroll
+                let scrollTimeout;
+                wrapper.addEventListener('scroll', () => {
+                    clearTimeout(scrollTimeout);
+                    scrollTimeout = setTimeout(checkZone, 50);
                 });
                 
-                // Si on change de zone, changer l'image
-                if (foundZone && foundZone.name !== currentZone) {
-                    currentZone = foundZone.name;
-                    mobileImg.src = 'images/' + foundZone.image;
-                } else if (!foundZone && currentZone !== null) {
-                    currentZone = null;
-                    mobileImg.src = 'images/caravane-base.png';
-                }
+                // Check initial
+                setTimeout(checkZone, 200);
             }
-            
-            // Check au scroll
-            let scrollTimeout;
-            mobileView.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(checkZoneAtCenter, 30);
-            });
-            
-            // Check au chargement
-            setTimeout(checkZoneAtCenter, 100);
         }
     </script>
 </body>
