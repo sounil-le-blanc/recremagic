@@ -7,14 +7,6 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --rouge-spectacle: #D32F2F;
-            --jaune-accent: #FFB300;
-            --text-dark: #2C1810;
-        }
-        
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
         html, body {
@@ -22,80 +14,94 @@
             height: 100%;
             overflow: hidden;
             font-family: 'Quicksand', sans-serif;
+            background: #1a1a1a;
         }
         
-        /* Background fullscreen */
-        .background {
+        /* Container principal */
+        .caravane-wrapper {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background-image: url('images/caravane-interactive.jpg');
-            background-size: contain;
-            background-position: center;
-            background-repeat: no-repeat;
-            z-index: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #2d1b1b 0%, #1a1a1a 100%);
         }
         
-        /* Overlay léger pour améliorer la lisibilité */
-        .overlay {
-            position: fixed;
+        /* Container de l'image */
+        .caravane-container {
+            position: relative;
+            width: 90%;
+            max-width: 1800px;
+            margin: 0 auto;
+        }
+        
+        /* Image principale */
+        .caravane-image {
+            width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.05s ease;
+        }
+        
+        /* SVG overlay pour les zones cliquables */
+        .hotspots-svg {
+            position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.1);
-            z-index: 2;
-        }
-        
-        /* UI Layer */
-        .ui-layer {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 10;
             pointer-events: none;
         }
         
+        .hotspot {
+            cursor: pointer;
+            pointer-events: all;
+            fill: transparent;
+            transition: all 0.2s ease;
+        }
+        
+        /*.hotspot:hover {
+            fill: rgba(255, 179, 0, 0.15);
+            filter: drop-shadow(0 0 20px rgba(255, 179, 0, 0.8));
+        }
+        */
         /* Back button */
         .back-link {
             position: fixed;
             top: 2rem;
             left: 2rem;
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.9);
-            color: var(--text-dark);
+            background: rgba(255, 255, 255, 0.95);
+            color: #2C1810;
             padding: 0.8rem 1.5rem;
             border-radius: 30px;
             text-decoration: none;
             font-weight: 700;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
             transition: all 0.3s;
-            pointer-events: all;
-            z-index: 100;
+            z-index: 1000;
         }
         
         .back-link:hover {
-            background: var(--jaune-accent);
+            background: #FFB300;
             transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
         }
         
-        /* Logo top center */
+        /* Logo */
         .logo-header {
             position: fixed;
             top: 2rem;
             left: 50%;
             transform: translateX(-50%);
-            max-width: 150px;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.5));
+            max-width: 120px;
+            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
             animation: logoFloat 4s ease-in-out infinite;
-            pointer-events: none;
-            z-index: 100;
+            z-index: 1000;
         }
         
         @keyframes logoFloat {
@@ -103,23 +109,21 @@
             50% { transform: translateX(-50%) translateY(-10px); }
         }
         
-        /* Instruction tooltip */
+        /* Instruction */
         .instruction {
             position: fixed;
-            bottom: 3rem;
+            bottom: 2rem;
             left: 50%;
             transform: translateX(-50%);
             background: rgba(255, 255, 255, 0.95);
-            color: var(--text-dark);
+            color: #2C1810;
             padding: 1rem 2.5rem;
             border-radius: 50px;
             font-weight: 700;
-            font-size: 1.1rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
-            backdrop-filter: blur(10px);
-            pointer-events: none;
+            font-size: 1rem;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
             animation: pulse 2s ease-in-out infinite;
-            z-index: 100;
+            z-index: 1000;
         }
         
         @keyframes pulse {
@@ -127,123 +131,7 @@
             50% { transform: translateX(-50%) scale(1.05); }
         }
         
-        /* Hotspots container */
-        .hotspots {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 50;
-        }
-        
-        /* Individual hotspot */
-        .hotspot {
-            position: absolute;
-            pointer-events: all;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 15px;
-            text-decoration: none;
-        }
-        
-        .hotspot:hover {
-            background: rgba(255, 255, 255, 0.25);
-            backdrop-filter: blur(8px);
-            box-shadow: 0 0 40px rgba(255, 179, 0, 0.8);
-            transform: scale(1.05);
-        }
-        
-        .hotspot:active {
-            transform: scale(0.98);
-        }
-        
-        /* Tooltip on hover */
-        .tooltip {
-            position: absolute;
-            bottom: calc(100% + 15px);
-            left: 50%;
-            transform: translateX(-50%) translateY(10px);
-            background: white;
-            color: var(--text-dark);
-            padding: 1rem 2rem;
-            border-radius: 20px;
-            font-weight: 700;
-            font-size: 1.2rem;
-            white-space: nowrap;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            opacity: 0;
-            transition: all 0.3s ease;
-            pointer-events: none;
-        }
-        
-        .tooltip::after {
-            content: '';
-            position: absolute;
-            top: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            border: 10px solid transparent;
-            border-top-color: white;
-        }
-        
-        .hotspot:hover .tooltip {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-        
-        /* Hotspot positions - AJUSTER SELON TON IMAGE */
-        .hotspot-spectacles {
-            top: 35%;
-            left: 38%;
-            width: 12%;
-            height: 20%;
-        }
-        
-        .hotspot-stars {
-            top: 37%;
-            left: 25%;
-            width: 10%;
-            height: 18%;
-        }
-        
-        .hotspot-expos {
-            top: 32%;
-            left: 54%;
-            width: 12%;
-            height: 22%;
-        }
-        
-        .hotspot-calendrier {
-            top: 50%;
-            left: 14%;
-            width: 8%;
-            height: 15%;
-        }
-        
-        .hotspot-videos {
-            top: 68%;
-            left: 28%;
-            width: 20%;
-            height: 10%;
-        }
-        
-        .hotspot-histoire {
-            top: 18%;
-            left: 32%;
-            width: 30%;
-            height: 8%;
-        }
-        
-        .hotspot-boutique {
-            top: 34%;
-            left: 68%;
-            width: 12%;
-            height: 22%;
-        }
-        
-        /* Mobile fallback */
+        /* Mobile menu */
         .mobile-menu {
             display: none;
             position: fixed;
@@ -251,56 +139,53 @@
             left: 0;
             right: 0;
             background: rgba(255, 255, 255, 0.98);
-            padding: 2rem 1rem;
+            padding: 1.5rem 1rem;
             border-radius: 30px 30px 0 0;
-            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.3);
-            z-index: 100;
-            max-height: 60vh;
+            box-shadow: 0 -10px 40px rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            max-height: 50vh;
             overflow-y: auto;
         }
         
         .mobile-menu h3 {
             font-family: 'Fredoka', cursive;
-            font-size: 1.5rem;
+            font-size: 1.3rem;
             text-align: center;
-            margin-bottom: 1.5rem;
-            color: var(--vert-caravane);
+            margin-bottom: 1rem;
+            color: #7CB69F;
         }
         
         .mobile-links {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 1rem;
+            gap: 0.8rem;
         }
         
         .mobile-link {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            background: linear-gradient(135deg, #EC407A, #7CB69F);
             color: white;
-            padding: 1.5rem 1rem;
-            border-radius: 20px;
+            padding: 1.2rem 0.8rem;
+            border-radius: 15px;
             text-decoration: none;
             text-align: center;
             font-weight: 700;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s;
-        }
-        
-        .mobile-link:active {
-            transform: scale(0.95);
+            font-size: 0.9rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
         }
         
         .mobile-link-icon {
-            font-size: 2.5rem;
+            font-size: 2rem;
             display: block;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.3rem;
         }
         
-        @media (max-width: 768px) {
-            .hotspots { display: none; }
+        @media (max-width: 968px) {
+            .hotspots-svg { display: none; }
             .instruction { display: none; }
             .mobile-menu { display: block; }
-            .logo-header { max-width: 100px; top: 1rem; }
-            .back-link { top: 1rem; left: 1rem; padding: 0.6rem 1rem; font-size: 0.9rem; }
+            .logo-header { max-width: 80px; top: 1rem; }
+            .back-link { top: 1rem; left: 1rem; padding: 0.6rem 1rem; font-size: 0.85rem; }
+            .caravane-container { width: 95%; }
         }
         
         @media (max-width: 480px) {
@@ -309,49 +194,84 @@
     </style>
 </head>
 <body>
-    <!-- Background image -->
-    <div class="background"></div>
-    <div class="overlay"></div>
+    <!-- UI Elements -->
+    <a href="index.html" class="back-link">← Retour</a>
+    <img src="images/logo.png" alt="Récré Magic" class="logo-header">
+    <div class="instruction">✨ Survolez les personnages pour les découvrir !</div>
     
-    <!-- UI Layer -->
-    <div class="ui-layer">
-        <a href="index.html" class="back-link">← Retour</a>
-        <img src="images/logo.png" alt="Récré Magic" class="logo-header">
-        <div class="instruction">👆 Cliquez sur la caravane pour explorer !</div>
+    <!-- Main Caravane Container -->
+    <div class="caravane-wrapper">
+        <div class="caravane-container">
+            <!-- Image principale (change au hover) -->
+            <img src="images/caravane-base.png" 
+                 alt="Caravane Récré Magic" 
+                 class="caravane-image" 
+                 id="caravaneImg">
+            
+            <!-- SVG avec zones cliquables (coordonnées en % de viewBox 2000x660) -->
+            <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
+                
+                <!-- Zone 1: TOTO (gauche) -->
+                <a href="nos-stars.html" 
+                   onmouseover="changeImage('caravane-toto.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="250" y="140" width="180" height="380" class="hotspot" />
+                </a>
+                
+                <!-- Zone 2: RIDEAU ROUGE (centre) -->
+                <a href="nos-spectacles-familles.html"
+                   onmouseover="changeImage('caravane-rideau.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="535" y="275" width="410" height="200" class="hotspot" />
+                </a>
+                
+                <!-- Zone 3: FLO (orange, centre-gauche) -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-flo.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1000" y="180" width="200" height="400" class="hotspot" />
+                </a>
+                
+                <!-- Zone 4: RIDEAU OR (doré, droite) -->
+                <a href="nos-expos-familles.html"
+                   onmouseover="changeImage('caravane-rideau-or.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1240" y="140" width="190" height="400" class="hotspot" />
+                </a>
+                
+                <!-- Zone 5: CALENDRIER 2026 (affiche) -->
+                <a href="calendrier.html"
+                   onmouseover="changeImage('caravane-calendrier.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1610" y="210" width="120" height="100" class="hotspot" />
+                </a>
+                
+                <!-- Zone 6: BAPTISTE (vert, centre-droit) -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-baptiste.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1600" y="360" width="150" height="220" class="hotspot" />
+                </a>
+                
+                <!-- Zone 7: GUS (clown, extrême droite) -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-gus.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1800" y="260" width="200" height="420" class="hotspot" />
+                </a>
+
+                <!-- Zone 8: COOKIE (chien, devant scène) -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-cookie.png')" 
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="515" y="480" width="100" height="100" class="hotspot" />
+                </a>
+                
+            </svg>
+        </div>
     </div>
     
-    <!-- Clickable hotspots -->
-    <div class="hotspots">
-        <a href="nos-spectacles-familles.html" class="hotspot hotspot-spectacles">
-            <div class="tooltip">🎭 Nos Spectacles</div>
-        </a>
-        
-        <a href="nos-stars.html" class="hotspot hotspot-stars">
-            <div class="tooltip">⭐ Nos Stars</div>
-        </a>
-        
-        <a href="nos-expos-familles.html" class="hotspot hotspot-expos">
-            <div class="tooltip">🎨 Nos Expos</div>
-        </a>
-        
-        <a href="calendrier.html" class="hotspot hotspot-calendrier">
-            <div class="tooltip">📅 Calendrier</div>
-        </a>
-        
-        <a href="videos.html" class="hotspot hotspot-videos">
-            <div class="tooltip">🎬 Vidéos</div>
-        </a>
-        
-        <a href="notre-histoire.html" class="hotspot hotspot-histoire">
-            <div class="tooltip">📖 Notre Histoire</div>
-        </a>
-        
-        <a href="#" class="hotspot hotspot-boutique" onclick="alert('Boutique bientôt disponible !'); return false;">
-            <div class="tooltip">🛍️ Boutique</div>
-        </a>
-    </div>
-    
-    <!-- Mobile menu -->
+    <!-- Mobile fallback menu -->
     <div class="mobile-menu">
         <h3>Explorez Récré Magic</h3>
         <div class="mobile-links">
@@ -379,11 +299,34 @@
                 <span class="mobile-link-icon">📖</span>
                 Histoire
             </a>
-            <a href="#" class="mobile-link" onclick="alert('Boutique bientôt disponible !'); return false;">
-                <span class="mobile-link-icon">🛍️</span>
-                Boutique
-            </a>
         </div>
     </div>
+    
+    <script>
+        // Switch d'image au hover
+        function changeImage(imageName) {
+            const img = document.getElementById('caravaneImg');
+            img.src = 'images/' + imageName;
+        }
+        
+        // Preload images pour éviter le lag
+        window.addEventListener('load', () => {
+            const imagesToPreload = [
+                'caravane-base.png',
+                'caravane-toto.png',
+                'caravane-rideau.png',
+                'caravane-flo.png',
+                'caravane-rideau-or.png',
+                'caravane-calendrier.png',
+                'caravane-baptiste.png',
+                'caravane-gus.png'
+            ];
+            
+            imagesToPreload.forEach(src => {
+                const img = new Image();
+                img.src = 'images/' + src;
+            });
+        });
+    </script>
 </body>
 </html>
