@@ -137,23 +137,25 @@
             left: 0;
             width: 100%;
             height: 100%;
-            overflow-y: scroll;
-            overflow-x: hidden;
-            scroll-snap-type: y mandatory;
+            overflow-x: scroll;
+            overflow-y: hidden;
             background: #1a1a1a;
             -webkit-overflow-scrolling: touch;
         }
         
+        .mobile-slides-container {
+            display: flex;
+            height: 100%;
+            align-items: center;
+            padding: 0 5vw;
+            gap: 2rem;
+        }
+        
         .mobile-slide {
-            position: relative;
-            width: 100%;
-            height: 100vh;
-            scroll-snap-align: center;
+            flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 0;
-            margin: 0;
         }
         
         .mobile-slide a {
@@ -161,8 +163,8 @@
         }
         
         .mobile-slide-image {
-            width: 80vw;
-            height: auto;
+            height: 70vh;
+            width: auto;
             border-radius: 15px;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
         }
@@ -181,11 +183,11 @@
         
         .mobile-nav-dots {
             position: fixed;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
             display: flex;
-            flex-direction: column;
+            flex-direction: row;
             gap: 0.5rem;
             z-index: 100;
         }
@@ -297,60 +299,62 @@
         
         <div class="mobile-nav-dots" id="navDots"></div>
         
-        <!-- Slide 1: TOTO -->
-        <div class="mobile-slide" data-character="toto">
-            <a href="nos-stars.html">
-                <img src="images/toto-neutre.png" class="mobile-slide-image" data-animated="images/toto-anime.png">
-            </a>
-        </div>
-
-        <!-- Slide 8: COOKIE -->
-        <div class="mobile-slide" data-character="cookie">
-            <a href="nos-stars.html">
-                <img src="images/cookie-neutre.png" class="mobile-slide-image" data-animated="images/cookie-anime.png">
-            </a>
-        </div>
-        
-        <!-- Slide 2: RIDEAU ROUGE -->
-        <div class="mobile-slide" data-character="rideau">
-            <a href="nos-spectacles-familles.html">
-                <img src="images/rideau-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-anime.jpg">
-            </a>
-        </div>
-        
-        <!-- Slide 3: FLO -->
-        <div class="mobile-slide" data-character="flo">
-            <a href="nos-stars.html">
-                <img src="images/flo-neutre.jpg" class="mobile-slide-image" data-animated="images/flo-anime.jpg">
-            </a>
-        </div>
-        
-        <!-- Slide 4: RIDEAU OR -->
-        <div class="mobile-slide" data-character="rideau-or">
-            <a href="nos-expos-familles.html">
-                <img src="images/rideau-or-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-or-anime.jpg">
-            </a>
-        </div>
-        
-        <!-- Slide 5: CALENDRIER -->
-        <div class="mobile-slide" data-character="calendrier">
-            <a href="calendrier.html">
-                <img src="images/calendrier-neutre.jpg" class="mobile-slide-image" data-animated="images/calendrier-anime.jpg">
-            </a>
-        </div>
-        
-        <!-- Slide 6: BAPTISTE -->
-        <div class="mobile-slide" data-character="baptiste">
-            <a href="nos-stars.html">
-                <img src="images/baptiste-neutre.jpg" class="mobile-slide-image" data-animated="images/baptiste-anime.jpg">
-            </a>
-        </div>
-        
-        <!-- Slide 7: GUS -->
-        <div class="mobile-slide" data-character="gus">
-            <a href="nos-stars.html">
-                <img src="images/gus-neutre.jpg" class="mobile-slide-image" data-animated="images/gus-anime.jpg">
-            </a>
+        <div class="mobile-slides-container">
+            <!-- Slide 1: TOTO -->
+            <div class="mobile-slide" data-character="toto">
+                <a href="nos-stars.html">
+                    <img src="images/toto-neutre.jpg" class="mobile-slide-image" data-animated="images/toto-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 2: RIDEAU ROUGE -->
+            <div class="mobile-slide" data-character="rideau">
+                <a href="nos-spectacles-familles.html">
+                    <img src="images/rideau-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 3: FLO -->
+            <div class="mobile-slide" data-character="flo">
+                <a href="nos-stars.html">
+                    <img src="images/flo-neutre.jpg" class="mobile-slide-image" data-animated="images/flo-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 4: RIDEAU OR -->
+            <div class="mobile-slide" data-character="rideau-or">
+                <a href="nos-expos-familles.html">
+                    <img src="images/rideau-or-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-or-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 5: CALENDRIER -->
+            <div class="mobile-slide" data-character="calendrier">
+                <a href="calendrier.html">
+                    <img src="images/calendrier-neutre.jpg" class="mobile-slide-image" data-animated="images/calendrier-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 6: BAPTISTE -->
+            <div class="mobile-slide" data-character="baptiste">
+                <a href="nos-stars.html">
+                    <img src="images/baptiste-neutre.jpg" class="mobile-slide-image" data-animated="images/baptiste-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 7: GUS -->
+            <div class="mobile-slide" data-character="gus">
+                <a href="nos-stars.html">
+                    <img src="images/gus-neutre.jpg" class="mobile-slide-image" data-animated="images/gus-anime.jpg">
+                </a>
+            </div>
+            
+            <!-- Slide 8: COOKIE -->
+            <div class="mobile-slide" data-character="cookie">
+                <a href="nos-stars.html">
+                    <img src="images/cookie-neutre.jpg" class="mobile-slide-image" data-animated="images/cookie-anime.jpg">
+                </a>
+            </div>
         </div>
     </div>
     
@@ -381,10 +385,11 @@
             });
         });
         
-        // ========== MOBILE: Simple scroll detection ==========
+        // ========== MOBILE: Horizontal scroll detection ==========
         if (window.innerWidth <= 968) {
             const slides = document.querySelectorAll('.mobile-slide');
             const navDotsContainer = document.getElementById('navDots');
+            const mobileView = document.getElementById('mobileView');
             
             // Create navigation dots
             slides.forEach((slide, index) => {
@@ -396,13 +401,13 @@
             const dots = document.querySelectorAll('.nav-dot');
             let currentSlide = -1;
             
-            // Check quelle slide est au centre
+            // Check quelle slide est au centre (horizontal)
             function checkCenteredSlide() {
-                const viewportCenter = window.innerHeight / 2 + window.scrollY;
+                const viewportCenter = window.innerWidth / 2 + mobileView.scrollLeft;
                 
                 slides.forEach((slide, index) => {
                     const rect = slide.getBoundingClientRect();
-                    const slideCenter = rect.top + window.scrollY + rect.height / 2;
+                    const slideCenter = rect.left + mobileView.scrollLeft + rect.width / 2;
                     const distance = Math.abs(viewportCenter - slideCenter);
                     
                     const img = slide.querySelector('.mobile-slide-image');
@@ -424,7 +429,7 @@
             
             // Check au scroll
             let scrollTimeout;
-            window.addEventListener('scroll', () => {
+            mobileView.addEventListener('scroll', () => {
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(checkCenteredSlide, 50);
             });
