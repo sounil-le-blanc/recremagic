@@ -162,6 +162,7 @@
             display: block;
             border-radius: 10px;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            cursor: pointer;
         }
         
         /* ========== RESPONSIVE ========== */
@@ -315,6 +316,7 @@
                 ];
                 
                 let currentZone = null;
+                let currentZoneData = null;
                 
                 function checkZone() {
                     const imgRect = img.getBoundingClientRect();
@@ -337,12 +339,36 @@
                     // Changer l'image si nécessaire
                     if (foundZone && foundZone.name !== currentZone) {
                         currentZone = foundZone.name;
+                        currentZoneData = foundZone;
                         img.src = 'images/' + foundZone.image;
                     } else if (!foundZone && currentZone !== null) {
                         currentZone = null;
+                        currentZoneData = null;
                         img.src = 'images/caravane-base.png';
                     }
                 }
+                
+                // Tap sur l'image pour naviguer
+                img.addEventListener('click', () => {
+                    if (currentZoneData) {
+                        // Mapper les zones vers les pages
+                        const zoneLinks = {
+                            'toto': 'nos-stars.html',
+                            'cookie': 'nos-stars.html',
+                            'rideau': 'nos-spectacles-familles.html',
+                            'flo': 'nos-stars.html',
+                            'rideau-or': 'nos-expos-familles.html',
+                            'calendrier': 'calendrier.html',
+                            'baptiste': 'nos-stars.html',
+                            'gus': 'nos-stars.html'
+                        };
+                        
+                        const link = zoneLinks[currentZoneData.name];
+                        if (link) {
+                            window.location.href = link;
+                        }
+                    }
+                });
                 
                 // Écouter le scroll
                 let scrollTimeout;
