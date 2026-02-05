@@ -143,30 +143,30 @@
             -webkit-overflow-scrolling: touch;
         }
         
-        .mobile-slides-container {
-            display: flex;
+        .mobile-caravane-container {
             height: 100%;
-            align-items: center;
-            padding: 0 5vw;
-            gap: 2rem;
-        }
-        
-        .mobile-slide {
-            flex-shrink: 0;
             display: flex;
             align-items: center;
-            justify-content: center;
+            padding: 0 50vw;
         }
         
-        .mobile-slide a {
-            display: block;
-        }
-        
-        .mobile-slide-image {
-            height: 70vh;
+        .mobile-caravane-image {
+            height: 60vh;
             width: auto;
-            border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.6);
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.1s ease;
+        }
+        
+        .mobile-center-line {
+            position: fixed;
+            left: 50%;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: rgba(255, 179, 0, 0.3);
+            pointer-events: none;
+            z-index: 500;
         }
         
         .mobile-slide-info {
@@ -296,65 +296,13 @@
     <div class="mobile-view" id="mobileView">
         <a href="index.html" class="back-link">← Retour</a>
         <img src="images/logo.png" alt="Récré Magic" class="logo-header">
+        <div class="mobile-center-line"></div>
         
-        <div class="mobile-nav-dots" id="navDots"></div>
-        
-        <div class="mobile-slides-container">
-            <!-- Slide 1: TOTO -->
-            <div class="mobile-slide" data-character="toto">
-                <a href="nos-stars.html">
-                    <img src="images/toto-neutre.jpg" class="mobile-slide-image" data-animated="images/toto-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 2: RIDEAU ROUGE -->
-            <div class="mobile-slide" data-character="rideau">
-                <a href="nos-spectacles-familles.html">
-                    <img src="images/rideau-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 3: FLO -->
-            <div class="mobile-slide" data-character="flo">
-                <a href="nos-stars.html">
-                    <img src="images/flo-neutre.jpg" class="mobile-slide-image" data-animated="images/flo-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 4: RIDEAU OR -->
-            <div class="mobile-slide" data-character="rideau-or">
-                <a href="nos-expos-familles.html">
-                    <img src="images/rideau-or-neutre.jpg" class="mobile-slide-image" data-animated="images/rideau-or-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 5: CALENDRIER -->
-            <div class="mobile-slide" data-character="calendrier">
-                <a href="calendrier.html">
-                    <img src="images/calendrier-neutre.jpg" class="mobile-slide-image" data-animated="images/calendrier-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 6: BAPTISTE -->
-            <div class="mobile-slide" data-character="baptiste">
-                <a href="nos-stars.html">
-                    <img src="images/baptiste-neutre.jpg" class="mobile-slide-image" data-animated="images/baptiste-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 7: GUS -->
-            <div class="mobile-slide" data-character="gus">
-                <a href="nos-stars.html">
-                    <img src="images/gus-neutre.jpg" class="mobile-slide-image" data-animated="images/gus-anime.jpg">
-                </a>
-            </div>
-            
-            <!-- Slide 8: COOKIE -->
-            <div class="mobile-slide" data-character="cookie">
-                <a href="nos-stars.html">
-                    <img src="images/cookie-neutre.jpg" class="mobile-slide-image" data-animated="images/cookie-anime.jpg">
-                </a>
-            </div>
+        <div class="mobile-caravane-container">
+            <img src="images/caravane-base.png" 
+                 alt="Caravane Récré Magic" 
+                 class="mobile-caravane-image" 
+                 id="mobileCaravaneImg">
         </div>
     </div>
     
@@ -385,57 +333,66 @@
             });
         });
         
-        // ========== MOBILE: Horizontal scroll detection ==========
+        // ========== MOBILE: Horizontal scroll with zone detection ==========
         if (window.innerWidth <= 968) {
-            const slides = document.querySelectorAll('.mobile-slide');
-            const navDotsContainer = document.getElementById('navDots');
             const mobileView = document.getElementById('mobileView');
+            const mobileImg = document.getElementById('mobileCaravaneImg');
             
-            // Create navigation dots
-            slides.forEach((slide, index) => {
-                const dot = document.createElement('div');
-                dot.classList.add('nav-dot');
-                navDotsContainer.appendChild(dot);
-            });
+            if (!mobileView || !mobileImg) return;
             
-            const dots = document.querySelectorAll('.nav-dot');
-            let currentSlide = -1;
+            // Zones définies (même coordonnées qu'en desktop, adaptées en %)
+            const zones = [
+                { name: 'toto', xPercent: 12.5, widthPercent: 9, image: 'caravane-toto.png' },
+                { name: 'rideau', xPercent: 26.75, widthPercent: 20.5, image: 'caravane-rideau.png' },
+                { name: 'flo', xPercent: 50, widthPercent: 10, image: 'caravane-flo.png' },
+                { name: 'rideau-or', xPercent: 62, widthPercent: 9.5, image: 'caravane-rideau-or.png' },
+                { name: 'calendrier', xPercent: 80.5, widthPercent: 6, image: 'caravane-calendrier.png' },
+                { name: 'baptiste', xPercent: 80, widthPercent: 7.5, image: 'caravane-baptiste.png' },
+                { name: 'gus', xPercent: 90, widthPercent: 10, image: 'caravane-gus.png' },
+                { name: 'cookie', xPercent: 25.75, widthPercent: 5, image: 'caravane-cookie.png' }
+            ];
             
-            // Check quelle slide est au centre (horizontal)
-            function checkCenteredSlide() {
-                const viewportCenter = window.innerWidth / 2 + mobileView.scrollLeft;
+            let currentZone = null;
+            
+            function checkZoneAtCenter() {
+                const imgRect = mobileImg.getBoundingClientRect();
+                const imgWidth = imgRect.width;
+                const screenCenter = window.innerWidth / 2;
                 
-                slides.forEach((slide, index) => {
-                    const rect = slide.getBoundingClientRect();
-                    const slideCenter = rect.left + mobileView.scrollLeft + rect.width / 2;
-                    const distance = Math.abs(viewportCenter - slideCenter);
+                // Position du centre de l'écran par rapport à l'image
+                const centerOnImage = screenCenter - imgRect.left;
+                const centerPercent = (centerOnImage / imgWidth) * 100;
+                
+                // Trouver quelle zone est au centre
+                let foundZone = null;
+                zones.forEach(zone => {
+                    const zoneStart = zone.xPercent;
+                    const zoneEnd = zone.xPercent + zone.widthPercent;
                     
-                    const img = slide.querySelector('.mobile-slide-image');
-                    const animatedSrc = img.getAttribute('data-animated');
-                    const neutralSrc = animatedSrc.replace('-anime.jpg', '-neutre.jpg');
-                    
-                    // Si cette slide est au centre (distance < 200px)
-                    if (distance < 200) {
-                        if (currentSlide !== index) {
-                            currentSlide = index;
-                            img.src = animatedSrc;
-                            dots.forEach((dot, i) => dot.classList.toggle('active', i === index));
-                        }
-                    } else {
-                        img.src = neutralSrc;
+                    if (centerPercent >= zoneStart && centerPercent <= zoneEnd) {
+                        foundZone = zone;
                     }
                 });
+                
+                // Si on change de zone, changer l'image
+                if (foundZone && foundZone.name !== currentZone) {
+                    currentZone = foundZone.name;
+                    mobileImg.src = 'images/' + foundZone.image;
+                } else if (!foundZone && currentZone !== null) {
+                    currentZone = null;
+                    mobileImg.src = 'images/caravane-base.png';
+                }
             }
             
             // Check au scroll
             let scrollTimeout;
             mobileView.addEventListener('scroll', () => {
                 clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(checkCenteredSlide, 50);
+                scrollTimeout = setTimeout(checkZoneAtCenter, 30);
             });
             
             // Check au chargement
-            checkCenteredSlide();
+            setTimeout(checkZoneAtCenter, 100);
         }
     </script>
 </body>
