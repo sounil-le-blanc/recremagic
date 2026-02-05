@@ -1,0 +1,1373 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Boutique Recré Magique - Le Cirque des Merveilles</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* ==================== */
+    /* VARIABLES CLOWNESQUES */
+    /* ==================== */
+    :root {
+      --red-clown: #ff3366;
+      --blue-clown: #3366ff;
+      --yellow-clown: #ffcc00;
+      --green-clown: #33cc66;
+      --purple-clown: #9966ff;
+      --orange-clown: #ff6633;
+      --pink-clown: #ff66cc;
+      --bg-circus: #fff0f5;
+      --bg-stripes: #fffaf0;
+      --text-dark: #333333;
+      --text-light: #ffffff;
+      --shadow-color: rgba(255, 51, 102, 0.2);
+    }
+    
+    /* ==================== */
+    /* RESET & BASE */
+    /* ==================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      background: var(--bg-circus);
+      background-image: 
+        radial-gradient(circle at 10% 20%, rgba(255, 204, 0, 0.1) 0%, transparent 20%),
+        radial-gradient(circle at 90% 80%, rgba(255, 51, 102, 0.1) 0%, transparent 20%),
+        linear-gradient(45deg, transparent 49%, var(--red-clown) 49%, var(--red-clown) 51%, transparent 51%),
+        linear-gradient(-45deg, transparent 49%, var(--blue-clown) 49%, var(--blue-clown) 51%, transparent 51%);
+      background-size: 100% 100%, 100% 100%, 50px 50px, 50px 50px;
+      font-family: 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif;
+      color: var(--text-dark);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+    
+    /* ==================== */
+    /* HEADER CLOWN */
+    /* ==================== */
+    .clown-header {
+      background: linear-gradient(135deg, var(--red-clown), var(--blue-clown), var(--yellow-clown));
+      padding: 20px 40px;
+      text-align: center;
+      border-bottom: 8px dotted var(--green-clown);
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 5px 20px var(--shadow-color);
+    }
+    
+    .clown-header::before {
+      content: '🎪🎭🎨';
+      position: absolute;
+      top: 10px;
+      left: 0;
+      right: 0;
+      font-size: 2rem;
+      opacity: 0.3;
+      animation: confetti 10s infinite linear;
+    }
+    
+    @keyframes confetti {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(-100px) rotate(360deg); }
+    }
+    
+    .logo-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      margin-bottom: 15px;
+    }
+    
+    .logo-clown {
+      font-size: 4rem;
+      animation: bounce 2s infinite alternate;
+    }
+    
+    @keyframes bounce {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-20px) scale(1.1); }
+    }
+    
+    .logo-text {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .logo-title {
+      font-size: 3.5rem;
+      font-weight: 900;
+      color: white;
+      text-shadow: 
+        3px 3px 0 var(--yellow-clown),
+        6px 6px 0 var(--red-clown);
+      letter-spacing: 2px;
+      line-height: 1;
+    }
+    
+    .logo-subtitle {
+      font-size: 1.2rem;
+      color: white;
+      background: var(--purple-clown);
+      padding: 5px 15px;
+      border-radius: 20px;
+      margin-top: 5px;
+      transform: rotate(-2deg);
+      border: 3px dashed white;
+    }
+    
+    .header-tagline {
+      font-size: 1.3rem;
+      color: white;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 10px 30px;
+      border-radius: 30px;
+      display: inline-block;
+      margin-top: 10px;
+      border: 3px solid var(--yellow-clown);
+    }
+    
+    /* ==================== */
+    /* NAVIGATION JOYEUSE */
+    /* ==================== */
+    .clown-nav {
+      background: white;
+      padding: 15px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 5px solid var(--green-clown);
+      box-shadow: 0 3px 15px rgba(0, 0, 0, 0.1);
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 25px;
+      list-style: none;
+    }
+    
+    .nav-link {
+      color: var(--blue-clown);
+      text-decoration: none;
+      font-size: 1.2rem;
+      font-weight: bold;
+      padding: 8px 20px;
+      border-radius: 25px;
+      transition: all 0.3s;
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .nav-link:hover {
+      background: var(--yellow-clown);
+      color: white;
+      transform: translateY(-3px) rotate(2deg);
+    }
+    
+    .nav-link.active {
+      background: var(--red-clown);
+      color: white;
+      box-shadow: 0 4px 0 var(--blue-clown);
+    }
+    
+    .cart-button {
+      background: linear-gradient(135deg, var(--orange-clown), var(--red-clown));
+      color: white;
+      border: none;
+      padding: 12px 25px;
+      border-radius: 30px;
+      font-size: 1.1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.3s;
+      box-shadow: 0 4px 0 var(--purple-clown);
+    }
+    
+    .cart-button:hover {
+      transform: translateY(-3px) scale(1.05);
+      box-shadow: 0 6px 0 var(--purple-clown);
+    }
+    
+    .cart-count {
+      background: white;
+      color: var(--red-clown);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: bold;
+    }
+    
+    /* ==================== */
+    /* MAIN CONTENT */
+    /* ==================== */
+    .main-container {
+      max-width: 1400px;
+      margin: 30px auto;
+      padding: 0 20px;
+    }
+    
+    .shop-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 40px;
+      background: white;
+      padding: 20px 30px;
+      border-radius: 20px;
+      border: 5px solid var(--yellow-clown);
+      box-shadow: 0 8px 0 var(--blue-clown);
+    }
+    
+    .welcome-message {
+      font-size: 1.8rem;
+      color: var(--blue-clown);
+    }
+    
+    .welcome-message span {
+      color: var(--red-clown);
+      font-weight: bold;
+      text-decoration: underline;
+    }
+    
+    .category-filter {
+      display: flex;
+      gap: 15px;
+    }
+    
+    .filter-btn {
+      background: white;
+      border: 3px solid var(--green-clown);
+      padding: 10px 20px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: var(--green-clown);
+      cursor: pointer;
+      transition: all 0.3s;
+    }
+    
+    .filter-btn:hover {
+      background: var(--green-clown);
+      color: white;
+      transform: translateY(-2px);
+    }
+    
+    .filter-btn.active {
+      background: var(--green-clown);
+      color: white;
+      box-shadow: 0 4px 0 var(--blue-clown);
+    }
+    
+    /* ==================== */
+    /* PRODUCT GRID */
+    /* ==================== */
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 30px;
+      margin-bottom: 50px;
+    }
+    
+    .product-card {
+      background: white;
+      border-radius: 20px;
+      overflow: hidden;
+      transition: all 0.4s;
+      position: relative;
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+      border: 5px solid transparent;
+      animation: cardFloat 3s infinite alternate;
+    }
+    
+    @keyframes cardFloat {
+      0% { transform: translateY(0); }
+      100% { transform: translateY(-10px); }
+    }
+    
+    .product-card:hover {
+      transform: translateY(-15px) scale(1.03);
+      box-shadow: 0 20px 40px var(--shadow-color);
+    }
+    
+    .product-card:nth-child(3n+1) { border-color: var(--red-clown); }
+    .product-card:nth-child(3n+2) { border-color: var(--blue-clown); }
+    .product-card:nth-child(3n+3) { border-color: var(--yellow-clown); }
+    
+    .product-badge {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: var(--red-clown);
+      color: white;
+      padding: 5px 15px;
+      border-radius: 15px;
+      font-weight: bold;
+      font-size: 0.9rem;
+      z-index: 2;
+      transform: rotate(5deg);
+    }
+    
+    .product-image {
+      height: 200px;
+      background: linear-gradient(45deg, var(--pink-clown), var(--purple-clown));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 4rem;
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .product-image::after {
+      content: '🎈';
+      position: absolute;
+      font-size: 6rem;
+      opacity: 0.2;
+      animation: balloon 8s infinite linear;
+    }
+    
+    @keyframes balloon {
+      0% { transform: translateY(0) translateX(0); }
+      25% { transform: translateY(-50px) translateX(30px); }
+      50% { transform: translateY(0) translateX(60px); }
+      75% { transform: translateY(-50px) translateX(30px); }
+      100% { transform: translateY(0) translateX(0); }
+    }
+    
+    .product-info {
+      padding: 25px;
+    }
+    
+    .product-category {
+      color: var(--blue-clown);
+      font-size: 0.9rem;
+      font-weight: bold;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 5px;
+    }
+    
+    .product-title {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--text-dark);
+      margin-bottom: 10px;
+      min-height: 60px;
+    }
+    
+    .product-description {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.5;
+      margin-bottom: 20px;
+      min-height: 70px;
+    }
+    
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .product-price {
+      font-size: 1.8rem;
+      font-weight: 900;
+      color: var(--red-clown);
+      text-shadow: 2px 2px 0 var(--yellow-clown);
+    }
+    
+    .product-price small {
+      font-size: 1rem;
+      color: #999;
+    }
+    
+    .add-to-cart {
+      background: linear-gradient(135deg, var(--green-clown), var(--blue-clown));
+      color: white;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 20px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.3s;
+    }
+    
+    .add-to-cart:hover {
+      background: linear-gradient(135deg, var(--blue-clown), var(--green-clown));
+      transform: scale(1.1) rotate(2deg);
+      box-shadow: 0 5px 15px rgba(51, 204, 102, 0.4);
+    }
+    
+    /* ==================== */
+    /* SPECIAL OFFERS */
+    /* ==================== */
+    .special-offers {
+      margin: 60px 0;
+    }
+    
+    .section-title {
+      font-size: 2.5rem;
+      text-align: center;
+      color: var(--purple-clown);
+      margin-bottom: 40px;
+      position: relative;
+      display: inline-block;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    
+    .section-title::before, .section-title::after {
+      content: '🎪';
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 2rem;
+    }
+    
+    .section-title::before { left: -60px; }
+    .section-title::after { right: -60px; }
+    
+    .offers-slider {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 30px;
+    }
+    
+    .offer-card {
+      background: linear-gradient(135deg, var(--yellow-clown), var(--orange-clown));
+      border-radius: 25px;
+      padding: 30px;
+      display: flex;
+      align-items: center;
+      gap: 25px;
+      box-shadow: 0 15px 30px rgba(255, 102, 51, 0.3);
+      border: 5px dashed white;
+      animation: offerPulse 2s infinite;
+    }
+    
+    @keyframes offerPulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.02); }
+    }
+    
+    .offer-icon {
+      font-size: 4rem;
+      background: white;
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 0 var(--red-clown);
+    }
+    
+    .offer-content h3 {
+      color: white;
+      font-size: 1.8rem;
+      margin-bottom: 10px;
+    }
+    
+    .offer-content p {
+      color: white;
+      opacity: 0.9;
+      font-size: 1.1rem;
+    }
+    
+    /* ==================== */
+    /* FOOTER CLOWN */
+    /* ==================== */
+    .clown-footer {
+      background: linear-gradient(135deg, var(--blue-clown), var(--purple-clown));
+      color: white;
+      padding: 40px;
+      text-align: center;
+      border-top: 10px solid var(--yellow-clown);
+      margin-top: 60px;
+    }
+    
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 40px;
+      text-align: left;
+    }
+    
+    .footer-column h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--yellow-clown);
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .footer-links {
+      list-style: none;
+    }
+    
+    .footer-links li {
+      margin-bottom: 10px;
+    }
+    
+    .footer-links a {
+      color: white;
+      text-decoration: none;
+      transition: color 0.3s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    
+    .footer-links a:hover {
+      color: var(--yellow-clown);
+      transform: translateX(5px);
+    }
+    
+    .social-icons {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+    }
+    
+    .social-icon {
+      width: 40px;
+      height: 40px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: var(--blue-clown);
+      font-size: 1.2rem;
+      transition: all 0.3s;
+    }
+    
+    .social-icon:hover {
+      transform: translateY(-5px) rotate(10deg);
+      background: var(--yellow-clown);
+      color: white;
+    }
+    
+    .copyright {
+      text-align: center;
+      margin-top: 40px;
+      padding-top: 20px;
+      border-top: 2px dashed white;
+      font-size: 0.9rem;
+      opacity: 0.8;
+    }
+    
+    /* ==================== */
+    /* CART MODAL */
+    /* ==================== */
+    .cart-modal {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+      animation: fadeIn 0.3s;
+    }
+    
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+    
+    .cart-content {
+      background: white;
+      width: 90%;
+      max-width: 800px;
+      max-height: 80vh;
+      border-radius: 30px;
+      padding: 30px;
+      position: relative;
+      border: 10px solid var(--red-clown);
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      overflow-y: auto;
+    }
+    
+    .close-cart {
+      position: absolute;
+      top: 20px;
+      right: 20px;
+      background: var(--red-clown);
+      color: white;
+      border: none;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      font-size: 1.5rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    
+    /* ==================== */
+    /* RESPONSIVE */
+    /* ==================== */
+    @media (max-width: 1024px) {
+      .products-grid {
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      }
+      
+      .logo-title {
+        font-size: 2.8rem;
+      }
+    }
+    
+    @media (max-width: 768px) {
+      .clown-nav {
+        flex-direction: column;
+        gap: 15px;
+        padding: 15px 20px;
+      }
+      
+      .nav-links {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 15px;
+      }
+      
+      .shop-header {
+        flex-direction: column;
+        gap: 20px;
+        text-align: center;
+      }
+      
+      .category-filter {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .logo-container {
+        flex-direction: column;
+        gap: 10px;
+      }
+      
+      .logo-title {
+        font-size: 2.5rem;
+      }
+      
+      .product-card {
+        animation: none;
+      }
+      
+      .product-card:hover {
+        transform: translateY(-5px) scale(1.01);
+      }
+    }
+    
+    @media (max-width: 480px) {
+      .clown-header {
+        padding: 15px 20px;
+      }
+      
+      .logo-title {
+        font-size: 2rem;
+        text-shadow: 
+          2px 2px 0 var(--yellow-clown),
+          4px 4px 0 var(--red-clown);
+      }
+      
+      .logo-clown {
+        font-size: 3rem;
+      }
+      
+      .header-tagline {
+        font-size: 1rem;
+        padding: 8px 20px;
+      }
+      
+      .section-title {
+        font-size: 2rem;
+      }
+      
+      .section-title::before,
+      .section-title::after {
+        display: none;
+      }
+      
+      .offer-card {
+        flex-direction: column;
+        text-align: center;
+      }
+      
+      .footer-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+    }
+    
+    /* ==================== */
+    /* UTILITY CLASSES */
+    /* ==================== */
+    .pulse {
+      animation: pulse 1s infinite;
+    }
+    
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+    
+    .rotate {
+      animation: rotate 10s infinite linear;
+    }
+    
+    @keyframes rotate {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+  <!-- HEADER CLOWN -->
+  <header class="clown-header">
+    <div class="logo-container">
+      <div class="logo-clown">🤡</div>
+      <div class="logo-text">
+        <h1 class="logo-title">RECRÉ MAGIQUE</h1>
+        <div class="logo-subtitle">Le Cirque des Merveilles</div>
+      </div>
+      <div class="logo-clown">🎪</div>
+    </div>
+    <div class="header-tagline">
+      <i class="fas fa-magic"></i> La boutique la plus joyeuse du monde !
+    </div>
+  </header>
+  
+  <!-- NAVIGATION -->
+  <nav class="clown-nav">
+    <ul class="nav-links">
+      <li><a href="#" class="nav-link"><i class="fas fa-home"></i> Accueil</a></li>
+      <li><a href="#" class="nav-link active"><i class="fas fa-store"></i> Boutique</a></li>
+      <li><a href="#" class="nav-link"><i class="fas fa-hat-wizard"></i> Magie</a></li>
+      <li><a href="#" class="nav-link"><i class="fas fa-gamepad"></i> Jeux</a></li>
+      <li><a href="#" class="nav-link"><i class="fas fa-gift"></i> Cadeaux</a></li>
+      <li><a href="#" class="nav-link"><i class="fas fa-info-circle"></i> Contact</a></li>
+    </ul>
+    <button class="cart-button" onclick="openCart()">
+      <i class="fas fa-shopping-bag"></i>
+      <span>Panier</span>
+      <span class="cart-count" id="cartCount">0</span>
+    </button>
+  </nav>
+  
+  <!-- MAIN CONTENT -->
+  <main class="main-container">
+    <!-- SHOP HEADER -->
+    <div class="shop-header">
+      <div class="welcome-message">
+        Bienvenue au <span>Cirque Recré Magique</span> ! 🎭
+      </div>
+      <div class="category-filter">
+        <button class="filter-btn active" onclick="filterProducts('all')">Tout</button>
+        <button class="filter-btn" onclick="filterProducts('magic')">Magie</button>
+        <button class="filter-btn" onclick="filterProducts('toys')">Jouets</button>
+        <button class="filter-btn" onclick="filterProducts('costumes')">Costumes</button>
+        <button class="filter-btn" onclick="filterProducts('deco')">Décorations</button>
+      </div>
+    </div>
+    
+    <!-- PRODUCTS GRID -->
+    <div class="products-grid" id="productsGrid">
+      <!-- Product 1 -->
+      <div class="product-card" data-category="magic">
+        <div class="product-badge">Nouveau!</div>
+        <div class="product-image">
+          <i class="fas fa-hat-wizard"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Magie</div>
+          <h3 class="product-title">Chapeau Magique du Clown Mystique</h3>
+          <p class="product-description">Chapeau qui produit des lapins colorés et des confettis magiques à l'infini.</p>
+          <div class="product-footer">
+            <div class="product-price">49.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(1)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 2 -->
+      <div class="product-card" data-category="toys">
+        <div class="product-badge">Meilleure Vente</div>
+        <div class="product-image">
+          <i class="fas fa-drum"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Jouets</div>
+          <h3 class="product-title">Tambour Joyeux du Petit Clown</h3>
+          <p class="product-description">Tambour coloré qui joue 20 mélodies clownesques différentes.</p>
+          <div class="product-footer">
+            <div class="product-price">24.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(2)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 3 -->
+      <div class="product-card" data-category="costumes">
+        <div class="product-image">
+          <i class="fas fa-tshirt"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Costumes</div>
+          <h3 class="product-title">Costume de Clown Arc-en-Ciel</h3>
+          <p class="product-description">Costume complet avec perruque, nez rouge et chaussures géantes.</p>
+          <div class="product-footer">
+            <div class="product-price">89.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(3)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 4 -->
+      <div class="product-card" data-category="deco">
+        <div class="product-badge">Promo -20%</div>
+        <div class="product-image">
+          <i class="fas fa-lightbulb"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Décorations</div>
+          <h3 class="product-title">Guirlande Lumineuse Clown</h3>
+          <p class="product-description">20 mètres de guirlande avec ampoules en forme de têtes de clown.</p>
+          <div class="product-footer">
+            <div class="product-price">34.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(4)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 5 -->
+      <div class="product-card" data-category="magic">
+        <div class="product-image">
+          <i class="fas fa-magic"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Magie</div>
+          <h3 class="product-title">Baguette Magique à Paillettes</h3>
+          <p class="product-description">Produit des étincelles et des paillettes colorées à chaque mouvement.</p>
+          <div class="product-footer">
+            <div class="product-price">19.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(5)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 6 -->
+      <div class="product-card" data-category="toys">
+        <div class="product-image">
+          <i class="fas fa-car"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Jouets</div>
+          <h3 class="product-title">Voiture Clown Sonore</h3>
+          <p class="product-description">Voiture qui klaxonne une mélodie drôle et éjecte des confettis.</p>
+          <div class="product-footer">
+            <div class="product-price">39.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(6)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 7 -->
+      <div class="product-card" data-category="costumes">
+        <div class="product-badge">Éco-responsable</div>
+        <div class="product-image">
+          <i class="fas fa-mask"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Costumes</div>
+          <h3 class="product-title">Masque de Clown Bio Dégradable</h3>
+          <p class="product-description">Masque écologique aux couleurs vives, fait à partir de matériaux recyclés.</p>
+          <div class="product-footer">
+            <div class="product-price">14.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(7)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Product 8 -->
+      <div class="product-card" data-category="deco">
+        <div class="product-image">
+          <i class="fas fa-couch"></i>
+        </div>
+        <div class="product-info">
+          <div class="product-category">Décorations</div>
+          <h3 class="product-title">Tapis de Bain Clown</h3>
+          <p class="product-description">Tapis de bain extra-doux avec motif de clown souriant, antidérapant.</p>
+          <div class="product-footer">
+            <div class="product-price">29.99€ <small>TTC</small></div>
+            <button class="add-to-cart" onclick="addToCart(8)">
+              <i class="fas fa-cart-plus"></i> Ajouter
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- SPECIAL OFFERS -->
+    <section class="special-offers">
+      <h2 class="section-title">Offres Spéciales du Cirque</h2>
+      <div class="offers-slider">
+        <div class="offer-card">
+          <div class="offer-icon">🎁</div>
+          <div class="offer-content">
+            <h3>Cadeau Gratuit !</h3>
+            <p>Pour tout achat supérieur à 50€, recevez un nez de clown magique gratuit !</p>
+          </div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-icon">🚚</div>
+          <div class="offer-content">
+            <h3>Livraison Offerte</h3>
+            <p>Livraison gratuite à domicile pour toutes les commandes en France métropolitaine !</p>
+          </div>
+        </div>
+        <div class="offer-card">
+          <div class="offer-icon">👑</div>
+          <div class="offer-content">
+            <h3>Club VIP Clown</h3>
+            <p>Devenez membre VIP et bénéficiez de -15% sur tous vos achats toute l'année !</p>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <!-- FOOTER -->
+  <footer class="clown-footer">
+    <div class="footer-content">
+      <div class="footer-column">
+        <h3><i class="fas fa-map-marker-alt"></i> Notre Cirque</h3>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-chevron-right"></i> 123 Avenue du Rire</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> 75000 Paris</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> France</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Tél: 01 23 45 67 89</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3><i class="fas fa-question-circle"></i> Aide & Support</h3>
+        <ul class="footer-links">
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Questions fréquentes</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Livraison & Retours</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Paiement sécurisé</a></li>
+          <li><a href="#"><i class="fas fa-chevron-right"></i> Contactez-nous</a></li>
+        </ul>
+      </div>
+      
+      <div class="footer-column">
+        <h3><i class="fas fa-share-alt"></i> Suivez le Cirque</h3>
+        <p>Rejoignez notre communauté de joyeux drilles !</p>
+        <div class="social-icons">
+          <a href="#" class="social-icon"><i class="fab fa-facebook-f"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="social-icon"><i class="fab fa-youtube"></i></a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="copyright">
+      © 2024 Recré Magique - Tous droits réservés | Le cirque le plus joyeux du monde web ! 🎪
+    </div>
+  </footer>
+  
+  <!-- CART MODAL -->
+  <div class="cart-modal" id="cartModal">
+    <div class="cart-content">
+      <button class="close-cart" onclick="closeCart()">×</button>
+      <h2 style="color: var(--red-clown); margin-bottom: 20px;">🛒 Votre Panier Magique</h2>
+      <div id="cartItems">
+        <!-- Cart items will be added here by JavaScript -->
+        <p style="text-align: center; padding: 40px; color: #666;">Votre panier est vide. Ajoutez des produits magiques !</p>
+      </div>
+      <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 30px; padding-top: 20px; border-top: 3px dashed var(--yellow-clown);">
+        <div style="font-size: 1.5rem; font-weight: bold; color: var(--blue-clown);">
+          Total: <span id="cartTotal">0.00</span>€
+        </div>
+        <button style="background: linear-gradient(135deg, var(--red-clown), var(--orange-clown)); color: white; border: none; padding: 15px 30px; border-radius: 25px; font-size: 1.2rem; font-weight: bold; cursor: pointer;">
+          <i class="fas fa-check-circle"></i> Commander Maintenant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // ========================
+    // INITIALISATION
+    // ========================
+    window.addEventListener('load', function() {
+      // Initialise le panier
+      initCart();
+      
+      // Effets amusants au chargement
+      animateEntrance();
+      
+      // Jouer une musique de cirque (simulée)
+      console.log('🎵 Musique de cirque activée ! 🎪');
+    });
+    
+    // ========================
+    // ANIMATION D'ENTRÉE
+    // ========================
+    function animateEntrance() {
+      // Animation des cartes produit
+      const cards = document.querySelectorAll('.product-card');
+      cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(50px)';
+        
+        setTimeout(() => {
+          card.style.transition = 'opacity 0.5s, transform 0.5s';
+          card.style.opacity = '1';
+          card.style.transform = 'translateY(0)';
+        }, 100 * index);
+      });
+      
+      // Animation du header
+      const header = document.querySelector('.clown-header');
+      header.style.opacity = '0';
+      setTimeout(() => {
+        header.style.transition = 'opacity 1s';
+        header.style.opacity = '1';
+      }, 300);
+    }
+    
+    // ========================
+    // FILTRAGE DES PRODUITS
+    // ========================
+    function filterProducts(category) {
+      // Met à jour les boutons de filtre
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      filterBtns.forEach(btn => btn.classList.remove('active'));
+      event.target.classList.add('active');
+      
+      // Filtre les produits
+      const products = document.querySelectorAll('.product-card');
+      products.forEach(product => {
+        if (category === 'all' || product.dataset.category === category) {
+          product.style.display = 'block';
+          setTimeout(() => {
+            product.style.opacity = '1';
+            product.style.transform = 'translateY(0)';
+          }, 10);
+        } else {
+          product.style.opacity = '0';
+          product.style.transform = 'translateY(20px)';
+          setTimeout(() => {
+            product.style.display = 'none';
+          }, 300);
+        }
+      });
+      
+      // Effet sonore (simulé)
+      playClownSound();
+    }
+    
+    // ========================
+    // GESTION DU PANIER
+    // ========================
+    let cart = [];
+    let cartCount = 0;
+    let cartTotal = 0;
+    
+    function initCart() {
+      // Charge le panier depuis le localStorage
+      const savedCart = localStorage.getItem('recremagique_cart');
+      if (savedCart) {
+        cart = JSON.parse(savedCart);
+        updateCartDisplay();
+      }
+    }
+    
+    function addToCart(productId) {
+      // Trouve le produit
+      const products = [
+        { id: 1, name: "Chapeau Magique du Clown Mystique", price: 49.99, emoji: "🎩" },
+        { id: 2, name: "Tambour Joyeux du Petit Clown", price: 24.99, emoji: "🥁" },
+        { id: 3, name: "Costume de Clown Arc-en-Ciel", price: 89.99, emoji: "👕" },
+        { id: 4, name: "Guirlande Lumineuse Clown", price: 34.99, emoji: "💡" },
+        { id: 5, name: "Baguette Magique à Paillettes", price: 19.99, emoji: "✨" },
+        { id: 6, name: "Voiture Clown Sonore", price: 39.99, emoji: "🚗" },
+        { id: 7, name: "Masque de Clown Bio Dégradable", price: 14.99, emoji: "🎭" },
+        { id: 8, name: "Tapis de Bain Clown", price: 29.99, emoji: "🛁" }
+      ];
+      
+      const product = products.find(p => p.id === productId);
+      
+      if (product) {
+        // Vérifie si le produit est déjà dans le panier
+        const existingItem = cart.find(item => item.id === productId);
+        
+        if (existingItem) {
+          existingItem.quantity += 1;
+        } else {
+          cart.push({
+            ...product,
+            quantity: 1
+          });
+        }
+        
+        // Met à jour l'affichage
+        updateCartDisplay();
+        
+        // Sauvegarde dans le localStorage
+        localStorage.setItem('recremagique_cart', JSON.stringify(cart));
+        
+        // Animation de succès
+        showAddToCartAnimation(event.target);
+        
+        // Notification
+        showNotification(`🎉 ${product.emoji} Ajouté au panier !`);
+      }
+    }
+    
+    function updateCartDisplay() {
+      // Calcule le total
+      cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+      cartTotal = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+      
+      // Met à jour le compteur
+      document.getElementById('cartCount').textContent = cartCount;
+      document.getElementById('cartTotal').textContent = cartTotal.toFixed(2);
+      
+      // Met à jour la liste du panier
+      const cartItems = document.getElementById('cartItems');
+      
+      if (cart.length === 0) {
+        cartItems.innerHTML = '<p style="text-align: center; padding: 40px; color: #666;">Votre panier est vide. Ajoutez des produits magiques !</p>';
+      } else {
+        let html = '<div style="max-height: 300px; overflow-y: auto;">';
+        
+        cart.forEach(item => {
+          html += `
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 15px; background: #f9f9f9; border-radius: 15px; margin-bottom: 10px; border: 2px solid ${getCategoryColor(item.id)};">
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <span style="font-size: 2rem;">${item.emoji}</span>
+                <div>
+                  <div style="font-weight: bold; color: var(--text-dark);">${item.name}</div>
+                  <div style="color: #666; font-size: 0.9rem;">${item.price.toFixed(2)}€ × ${item.quantity}</div>
+                </div>
+              </div>
+              <div style="display: flex; align-items: center; gap: 15px;">
+                <div style="font-weight: bold; color: var(--red-clown); font-size: 1.2rem;">
+                  ${(item.price * item.quantity).toFixed(2)}€
+                </div>
+                <button onclick="removeFromCart(${item.id})" style="background: var(--red-clown); color: white; border: none; width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center;">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+            </div>
+          `;
+        });
+        
+        html += '</div>';
+        cartItems.innerHTML = html;
+      }
+    }
+    
+    function removeFromCart(productId) {
+      cart = cart.filter(item => item.id !== productId);
+      updateCartDisplay();
+      localStorage.setItem('recremagique_cart', JSON.stringify(cart));
+      showNotification('🗑️ Produit retiré du panier');
+    }
+    
+    function getCategoryColor(productId) {
+      const colors = {
+        1: '#ff3366', // rouge
+        2: '#3366ff', // bleu
+        3: '#ffcc00', // jaune
+        4: '#33cc66', // vert
+        5: '#9966ff', // violet
+        6: '#ff6633', // orange
+        7: '#ff66cc', // rose
+        8: '#33ccff'  // cyan
+      };
+      return colors[productId] || '#ff3366';
+    }
+    
+    // ========================
+    // MODAL PANIER
+    // ========================
+    function openCart() {
+      document.getElementById('cartModal').style.display = 'flex';
+      playCartSound();
+    }
+    
+    function closeCart() {
+      document.getElementById('cartModal').style.display = 'none';
+    }
+    
+    // Ferme le modal en cliquant en dehors
+    window.addEventListener('click', function(event) {
+      const modal = document.getElementById('cartModal');
+      if (event.target === modal) {
+        closeCart();
+      }
+    });
+    
+    // ========================
+    // ANIMATIONS & EFFETS
+    // ========================
+    function showAddToCartAnimation(button) {
+      // Animation du bouton
+      button.style.transform = 'scale(1.5)';
+      button.style.background = 'linear-gradient(135deg, #33cc66, #3366ff)';
+      
+      // Effet de confetti
+      const confetti = document.createElement('div');
+      confetti.innerHTML = '🎉✨🎊';
+      confetti.style.cssText = `
+        position: fixed;
+        top: ${event.clientY}px;
+        left: ${event.clientX}px;
+        font-size: 2rem;
+        z-index: 1000;
+        pointer-events: none;
+        animation: confettiFly 1s forwards;
+      `;
+      
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes confettiFly {
+          0% { transform: translate(0, 0) scale(1); opacity: 1; }
+          100% { transform: translate(${Math.random() * 100 - 50}px, -100px) scale(0); opacity: 0; }
+        }
+      `;
+      
+      document.head.appendChild(style);
+      document.body.appendChild(confetti);
+      
+      setTimeout(() => {
+        button.style.transform = '';
+        button.style.background = '';
+        document.body.removeChild(confetti);
+      }, 1000);
+    }
+    
+    function showNotification(message) {
+      const notification = document.createElement('div');
+      notification.textContent = message;
+      notification.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: linear-gradient(135deg, var(--yellow-clown), var(--orange-clown));
+        color: white;
+        padding: 15px 25px;
+        border-radius: 15px;
+        font-weight: bold;
+        z-index: 1001;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        animation: slideIn 0.3s, slideOut 0.3s 2.7s forwards;
+      `;
+      
+      const style = document.createElement('style');
+      style.textContent = `
+        @keyframes slideIn {
+          from { transform: translateX(100%); opacity: 0; }
+          to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes slideOut {
+          from { transform: translateX(0); opacity: 1; }
+          to { transform: translateX(100%); opacity: 0; }
+        }
+      `;
+      
+      document.head.appendChild(style);
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        if (notification.parentNode) {
+          document.body.removeChild(notification);
+        }
+      }, 3000);
+    }
+    
+    // ========================
+    // SONS (SIMULÉS)
+    // ========================
+    function playClownSound() {
+      // Dans une vraie application, on jouerait un son
+      console.log('🤡 Honk honk ! (Son de clown)');
+    }
+    
+    function playCartSound() {
+      console.log('🛒 Ding ding ! (Son de caisse)');
+    }
+    
+    // ========================
+    // EFFETS INTERACTIFS
+    // ========================
+    // Survol des produits
+    document.querySelectorAll('.product-card').forEach(card => {
+      card.addEventListener('mouseenter', function() {
+        this.style.zIndex = '10';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.style.zIndex = '1';
+      });
+    });
+    
+    // ========================
+    // RESPONSIVE HELPERS
+    // ========================
+    window.addEventListener('resize', function() {
+      // Ajuste les animations sur mobile
+      if (window.innerWidth < 768) {
+        document.querySelectorAll('.product-card').forEach(card => {
+          card.style.animation = 'none';
+        });
+      }
+    });
+  </script>
+</body>
+</html>
