@@ -1,385 +1,873 @@
-!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Récré Magic - Bienvenue</title>
     <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace : Familles & Fans, Professionnels ou Boutique.">
-    
+
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --rouge-spectacle: #D32F2F;
-            --jaune-accent: #FFB300;
-            --creme-vintage: #FFF8E1;
-            --text-dark: #2C1810;
-            --text-light: #ffffff;
+            --turquoise:    #6BBFB5;
+            --turquoise-l:  #A0D8D2;
+            --rouge:        #B8352A;
+            --rouge-l:      #D95F52;
+            --brun:         #7A4728;
+            --brun-l:       #A86B40;
+            --or:           #D4A820;
+            --or-l:         #F0C94A;
+            --beige:        #F0DFA8;
+            --beige-l:      #FAF0D0;
+            --bleu-motif:   #4A7FA8;
+            --vert-motif:   #4E8A5A;
+            --rose-rideau:  #D4736A;
+            --text-dark:    #2C1608;
+            --text-mid:     #6B3D1E;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, var(--vert-caravane) 0%, var(--rose-spectacle) 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
         }
 
-        /* Confetti Background */
-        .confetti-container {
+        /* =============================================
+           DÉGRADÉ ANIMÉ
+           ============================================= */
+        .gradient-bg {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(
+                125deg,
+                var(--turquoise)   0%,
+                var(--bleu-motif)  14%,
+                var(--vert-motif)  28%,
+                var(--or)          42%,
+                var(--rouge)       57%,
+                var(--rose-rideau) 70%,
+                var(--brun-l)      83%,
+                var(--beige)       100%
+            );
+            background-size: 300% 300%;
+            animation: gradientFlow 14s ease infinite;
         }
 
-        .container {
+        @keyframes gradientFlow {
+            0%   { background-position:   0%  50%; }
+            25%  { background-position:  50%   0%; }
+            50%  { background-position: 100%  50%; }
+            75%  { background-position:  50% 100%; }
+            100% { background-position:   0%  50%; }
+        }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.18);
+        }
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath d='M50 20 C53 28 58 30 50 35 C42 30 47 28 50 20Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M50 80 C53 72 58 70 50 65 C42 70 47 72 50 80Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M20 50 C28 47 30 42 35 50 C30 58 28 53 20 50Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M80 50 C72 47 70 42 65 50 C70 58 72 53 80 50Z' fill='white' fill-opacity='0.07'/%3E%3Ccircle cx='50' cy='50' r='2.5' fill='white' fill-opacity='0.10'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* =============================================
+           BARRE NAV
+           ============================================= */
+        .top-bar {
+            background: rgba(184, 120, 70, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0 2rem;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 5px solid var(--or-l);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar-logo { display: flex; align-items: center; gap: 1rem; }
+        .top-bar-logo img { height: 48px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35)); }
+        .top-bar-logo span {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--beige);
+            letter-spacing: 2px;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.35);
+        }
+
+        .top-bar nav { display: flex; gap: 0.5rem; }
+        .top-bar nav a {
+            color: var(--beige-l);
+            text-decoration: none;
+            font-weight: 600;
+            padding: 0.45rem 0.9rem;
+            border-radius: 25px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+        .top-bar nav a:hover { background: rgba(240,223,168,0.25); color: var(--or-l); transform: translateY(-2px); }
+        .top-bar nav a.active { background: var(--or); color: var(--brun); }
+
+        /* SCROLLBAR */
+        body::-webkit-scrollbar { width: 14px; }
+        body::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); }
+        body::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--turquoise), var(--or), var(--rouge));
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        body { scrollbar-width: thin; scrollbar-color: var(--or) rgba(255,255,255,0.2); }
+
+        /* CONFETTI */
+        .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+
+        /* =============================================
+           CONTENU PRINCIPAL
+           ============================================= */
+        .page-content {
             position: relative;
             z-index: 10;
-            max-width: 1200px;
             width: 100%;
         }
 
-        .logo-container {
+        /* HERO */
+        .hero {
+            max-width: 1200px;
+            margin: 2.5rem auto 0;
+            padding: 0 2rem;
             text-align: center;
-            margin-bottom: 3rem;
             animation: fadeInDown 1s ease-out;
         }
 
         .logo {
-            max-width: 250px;
+            max-width: 200px;
             width: 100%;
-            filter: drop-shadow(0 15px 40px rgba(0, 0, 0, 0.3));
-            animation: logoFloat 4s ease-in-out infinite;
+            filter: drop-shadow(0 12px 32px rgba(0,0,0,0.3));
+            animation: logoFloat 5s ease-in-out infinite;
+            margin-bottom: 1.5rem;
         }
 
         @keyframes logoFloat {
             0%, 100% { transform: translateY(0) rotate(0deg); }
-            50% { transform: translateY(-15px) rotate(2deg); }
+            50%       { transform: translateY(-13px) rotate(1.5deg); }
         }
 
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .welcome-text {
-            text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeIn 1.2s ease-out 0.3s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from { opacity: 0; transform: translateY(-50px); }
+            to   { opacity: 1; transform: translateY(0); }
         }
 
         .welcome-title {
             font-family: 'Fredoka', cursive;
             font-size: clamp(2rem, 5vw, 3.5rem);
             font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            color: white;
+            text-shadow: 2px 2px 0 rgba(122,71,40,0.5), 0 0 30px rgba(0,0,0,0.15);
             text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
         }
 
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.8rem 0 1.2rem;
+        }
+        .sep-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+        .sep-line { height: 2px; width: 55px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); }
+
         .welcome-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: var(--creme-vintage);
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: rgba(255,255,255,0.9);
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            margin-bottom: 2.5rem;
+        }
+
+        /* =============================================
+           BANDEAU CHIFFRES CLÉS (ticker)
+           ============================================= */
+        .ticker-band {
+            width: 100%;
+            background: rgba(122, 71, 40, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 3px solid var(--or);
+            border-bottom: 3px solid var(--or);
+            padding: 0.9rem 0;
+            overflow: hidden;
+            position: relative;
+            z-index: 10;
+            margin: 0;
+        }
+
+        .ticker-track {
+            display: flex;
+            gap: 0;
+            animation: ticker 28s linear infinite;
+            width: max-content;
+        }
+
+        .ticker-track:hover { animation-play-state: paused; }
+
+        @keyframes ticker {
+            0%   { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .ticker-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0 2.5rem;
+            color: var(--beige);
+            font-weight: 700;
+            font-size: 0.95rem;
+            letter-spacing: 1px;
+            white-space: nowrap;
+        }
+
+        .ticker-item .ticker-icon { font-size: 1.2rem; }
+        .ticker-item .ticker-sep { color: var(--or-l); margin: 0 0.5rem; }
+
+        /* =============================================
+           SECTION PRÉSENTATION
+           ============================================= */
+        .section-presentation {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            align-items: center;
+            animation: fadeIn 1.2s ease-out 0.2s both;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .presentation-card {
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 22px;
+            padding: 2.5rem;
+            box-shadow: 0 8px 40px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.95);
+            border-top: 6px solid var(--turquoise);
+        }
+
+        .presentation-card h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--rouge);
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .presentation-card p {
+            color: var(--text-mid);
+            font-size: 1rem;
+            line-height: 1.8;
             font-weight: 500;
+        }
+
+        .presentation-card .card-icon {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            display: block;
+        }
+
+        .presentation-card.right {
+            border-top-color: var(--rouge);
+        }
+
+        /* =============================================
+           BANDEAU CHIFFRES (3 colonnes)
+           ============================================= */
+        .stats-band {
+            width: 100%;
+            background: rgba(74, 127, 168, 0.75);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 3px solid var(--turquoise-l);
+            border-bottom: 3px solid var(--turquoise-l);
+            padding: 2rem 0;
+            position: relative;
+            z-index: 10;
+        }
+
+        .stats-inner {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 1rem;
+            text-align: center;
+        }
+
+        .stat-item { color: white; }
+        .stat-number {
+            font-family: 'Fredoka', cursive;
+            font-size: 3rem;
+            font-weight: 700;
+            color: var(--or-l);
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.2);
+            line-height: 1;
+        }
+        .stat-label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            opacity: 0.9;
+            margin-top: 0.3rem;
+        }
+
+        /* =============================================
+           SECTION VALEURS (3 blocs)
+           ============================================= */
+        .section-valeurs {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-valeurs h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 0 rgba(122,71,40,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
+        }
+
+        .valeurs-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
+        }
+
+        .valeur-card {
+            background: rgba(255,255,255,0.80);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border-radius: 18px;
+            padding: 2rem 1.5rem;
+            text-align: center;
+            box-shadow: 0 6px 30px rgba(0,0,0,0.15);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .valeur-card:hover { transform: translateY(-6px); box-shadow: 0 12px 40px rgba(0,0,0,0.22); }
+
+        .valeur-card:nth-child(1) { border-top: 5px solid var(--rouge); }
+        .valeur-card:nth-child(2) { border-top: 5px solid var(--vert-motif); }
+        .valeur-card:nth-child(3) { border-top: 5px solid var(--or); }
+
+        .valeur-icon { font-size: 2.8rem; margin-bottom: 0.8rem; display: block; }
+        .valeur-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--brun);
+            text-transform: uppercase;
+            margin-bottom: 0.6rem;
+        }
+        .valeur-text { color: var(--text-mid); font-size: 0.92rem; line-height: 1.7; font-weight: 500; }
+
+        /* =============================================
+           BANDEAU CITATION
+           ============================================= */
+        .quote-band {
+            width: 100%;
+            background: rgba(78, 138, 90, 0.72);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 3px solid var(--or);
+            border-bottom: 3px solid var(--or);
+            padding: 2.5rem 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
+        }
+
+        .quote-band blockquote {
+            max-width: 800px;
+            margin: 0 auto;
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(1.3rem, 2.5vw, 1.8rem);
+            font-weight: 600;
+            color: white;
+            text-shadow: 1px 2px 6px rgba(0,0,0,0.25);
+            line-height: 1.5;
+        }
+
+        .quote-band blockquote::before { content: '« '; color: var(--or-l); font-size: 1.5em; line-height: 0; vertical-align: -0.3em; }
+        .quote-band blockquote::after  { content: ' »'; color: var(--or-l); font-size: 1.5em; line-height: 0; vertical-align: -0.3em; }
+
+        .quote-band cite {
+            display: block;
+            margin-top: 1rem;
+            color: rgba(255,255,255,0.8);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-style: normal;
+        }
+
+        /* =============================================
+           SECTION CHOIX (cartes principales)
+           ============================================= */
+        .section-choix {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-choix h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2rem;
+            font-weight: 700;
+            color: white;
+            text-align: center;
+            text-shadow: 2px 2px 0 rgba(122,71,40,0.4);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 2rem;
         }
 
         .choices-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
             gap: 2.5rem;
-            animation: fadeInUp 1.4s ease-out 0.6s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .choice-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 3rem 2rem;
+            background: rgba(255,255,255,0.82);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 22px;
+            padding: 0 2rem 2.5rem;
             text-align: center;
             text-decoration: none;
-            color: var(--text-dark);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 8px 40px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.95);
+            transition: all 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
             position: relative;
             overflow: hidden;
-            border: 4px solid transparent;
+            border: 3px solid rgba(255,255,255,0.6);
         }
+
+        .choice-card-banner {
+            height: 10px;
+            border-radius: 19px 19px 0 0;
+            margin: 0 -2rem 2rem;
+            transition: height 0.3s ease;
+        }
+
+        .choice-card:hover .choice-card-banner { height: 14px; }
 
         .choice-card::before {
             content: '';
             position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
+            inset: 0;
             opacity: 0;
             transition: opacity 0.4s ease;
+            border-radius: 19px;
+        }
+        .choice-card:hover::before { opacity: 1; }
+        .choice-card:hover { transform: translateY(-12px) scale(1.03); box-shadow: 0 25px 70px rgba(0,0,0,0.28); border-color: rgba(255,255,255,0.9); }
+
+        .familles .choice-card-banner { background: linear-gradient(90deg, var(--turquoise), var(--bleu-motif), var(--vert-motif), var(--turquoise-l)); }
+        .choice-card.familles::before { background: linear-gradient(155deg, rgba(107,191,181,0.15) 0%, rgba(255,255,255,0) 65%); }
+
+        .pros .choice-card-banner { background: linear-gradient(90deg, var(--rouge), var(--rose-rideau), var(--rouge-l), var(--rose-rideau)); }
+        .choice-card.pros::before { background: linear-gradient(155deg, rgba(184,53,42,0.12) 0%, rgba(255,255,255,0) 65%); }
+
+        .boutique .choice-card-banner { background: linear-gradient(90deg, var(--brun-l), var(--or), var(--or-l), var(--beige)); }
+        .choice-card.boutique::before { background: linear-gradient(155deg, rgba(212,168,32,0.15) 0%, rgba(255,255,255,0) 65%); }
+
+        .choice-icon { font-size: 4.5rem; margin-bottom: 1.2rem; display: block; animation: bounce 3s ease-in-out infinite; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.15)); }
+
+        @keyframes bounce { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-10px); } }
+
+        .choice-card:hover .choice-icon { animation: wiggle 0.5s ease-in-out; }
+        @keyframes wiggle { 0%,100% { transform: rotate(0deg) scale(1); } 25% { transform: rotate(-8deg) scale(1.15); } 75% { transform: rotate(8deg) scale(1.15); } }
+
+        .choice-title { font-family: 'Fredoka', cursive; font-size: 2rem; font-weight: 700; margin-bottom: 0.9rem; text-transform: uppercase; line-height: 1.2; }
+        .familles .choice-title { color: #2E8A80; }
+        .pros     .choice-title { color: var(--rouge); }
+        .boutique .choice-title { color: var(--brun); }
+
+        .choice-divider { width: 50px; height: 3px; border-radius: 3px; margin: 0 auto 1.2rem; }
+        .familles .choice-divider { background: linear-gradient(90deg, var(--turquoise), var(--bleu-motif)); }
+        .pros     .choice-divider { background: linear-gradient(90deg, var(--rouge), var(--rose-rideau)); }
+        .boutique .choice-divider { background: linear-gradient(90deg, var(--or), var(--brun-l)); }
+
+        .choice-dots { display: flex; justify-content: center; gap: 6px; margin-bottom: 1.5rem; }
+        .choice-dots span { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
+        .choice-description { font-size: 1rem; line-height: 1.7; color: var(--text-mid); margin-bottom: 2rem; font-weight: 500; }
+
+        .choice-cta { display: inline-block; padding: 0.85rem 2.2rem; border-radius: 50px; font-weight: 700; font-size: 0.95rem; text-transform: uppercase; letter-spacing: 2px; transition: all 0.3s ease; color: white; }
+        .familles .choice-cta { background: linear-gradient(135deg, var(--turquoise), var(--bleu-motif)); box-shadow: 0 4px 15px rgba(107,191,181,0.4); }
+        .pros     .choice-cta { background: linear-gradient(135deg, var(--rouge), var(--rose-rideau)); box-shadow: 0 4px 15px rgba(184,53,42,0.35); }
+        .boutique .choice-cta { background: linear-gradient(135deg, var(--or), var(--brun-l)); box-shadow: 0 4px 15px rgba(212,168,32,0.4); }
+        .choice-card:hover .choice-cta { transform: scale(1.08); }
+
+        /* =============================================
+           BANDEAU PARTENAIRES / TERRITOIRES
+           ============================================= */
+        .partner-band {
+            width: 100%;
+            background: rgba(212,115,106,0.65);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 3px solid var(--beige);
+            border-bottom: 3px solid var(--beige);
+            padding: 2rem;
+            text-align: center;
+            position: relative;
+            z-index: 10;
         }
 
-        .choice-card:hover::before {
-            opacity: 1;
-        }
-
-        .choice-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
-        }
-
-        .choice-card.familles {
-            border-color: var(--rose-spectacle);
-        }
-
-        .choice-card.familles:hover {
-            background: linear-gradient(135deg, rgba(236, 64, 122, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
-        }
-
-        .choice-card.pros {
-            border-color: var(--vert-caravane);
-        }
-
-        .choice-card.pros:hover {
-            background: linear-gradient(135deg, rgba(124, 182, 159, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
-        }
-
-        .choice-card.boutique {
-            border-color: var(--jaune-accent);
-        }
-
-        .choice-card.boutique:hover {
-            background: linear-gradient(135deg, rgba(255, 179, 0, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
-        }
-
-        .choice-icon {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        .choice-card:hover .choice-icon {
-            animation: spin 0.6s ease-in-out;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(10deg) scale(1.2); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-
-        .choice-title {
+        .partner-band h3 {
             font-family: 'Fredoka', cursive;
-            font-size: 2rem;
+            font-size: 1.4rem;
             font-weight: 700;
-            margin-bottom: 1rem;
+            color: white;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 1.2rem;
+            text-shadow: 1px 1px 4px rgba(0,0,0,0.25);
         }
 
-        .familles .choice-title { color: var(--rose-spectacle); }
-        .pros .choice-title { color: var(--vert-caravane); }
-        .boutique .choice-title { color: var(--jaune-accent); }
-
-        .choice-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
+        .partner-tags {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.8rem;
         }
 
-        .choice-cta {
-            display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--text-dark);
-            color: var(--text-light);
+        .partner-tag {
+            background: rgba(255,255,255,0.22);
+            border: 2px solid rgba(255,255,255,0.5);
+            color: white;
+            padding: 0.45rem 1.2rem;
             border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+            backdrop-filter: blur(5px);
         }
 
-        .choice-card:hover .choice-cta {
-            transform: scale(1.1);
-        }
-
-        .familles:hover .choice-cta { background: var(--rose-spectacle); }
-        .pros:hover .choice-cta { background: var(--vert-caravane); }
-        .boutique:hover .choice-cta { background: var(--jaune-accent); color: var(--text-dark); }
-
+        /* FOOTER */
         .footer-note {
             text-align: center;
-            margin-top: 3rem;
-            color: var(--text-light);
-            font-size: 0.95rem;
-            opacity: 0.9;
-            animation: fadeIn 2s ease-out 1s both;
+            margin: 3rem auto 0;
+            max-width: 1200px;
+            padding: 0 2rem 3rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
         }
 
-        /* Responsive */
+        /* RESPONSIVE */
+        @media (max-width: 900px) {
+            .section-presentation { grid-template-columns: 1fr; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+            .valeurs-grid { grid-template-columns: 1fr; }
+        }
+
         @media (max-width: 768px) {
-            .choices-grid {
-                grid-template-columns: 1fr;
-                gap: 2rem;
-            }
-
-            .choice-card {
-                padding: 2.5rem 2rem;
-            }
-
-            .choice-icon {
-                font-size: 4rem;
-            }
-
-            .choice-title {
-                font-size: 1.6rem;
-            }
+            .top-bar { flex-direction: column; height: auto; gap: 0.8rem; padding: 1rem; }
+            .top-bar nav { flex-wrap: wrap; justify-content: center; gap: 0.4rem; }
+            .choices-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+            .choice-card { padding: 0 1.5rem 2rem; }
+            .choice-icon { font-size: 4rem; }
+            .choice-title { font-size: 1.7rem; }
+            .stats-inner { grid-template-columns: repeat(2, 1fr); }
         }
     </style>
 </head>
 <body>
+
+    <div class="gradient-bg"></div>
     <div class="confetti-container" id="confetti"></div>
 
-    <div class="container">
-        <div class="logo-container">
+    <!-- NAV -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="images/logo.png" alt="Récré Magic">
+            <span>RECRÉ MAGIC</span>
+        </div>
+        <nav>
+            <a href="index.html" class="active"><span>🏠</span> Accueil</a>
+            <a href="familles.html"><span>🎪</span> Familles</a>
+            <a href="pros.html"><span>🤝</span> Pros</a>
+            <a href="Boutique.html"><span>🛍️</span> Boutique</a>
+            <a href="expo.html"><span>📸</span> Expo</a>
+        </nav>
+    </div>
+
+    <div class="page-content">
+
+        <!-- HERO -->
+        <div class="hero">
             <img src="images/logo.png" alt="Récré Magic" class="logo">
-        </div>
-
-        <div class="welcome-text">
             <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
-            <p class="welcome-subtitle">Choisissez votre espace</p>
+            <div class="separator">
+                <div class="sep-line"></div>
+                <span class="sep-dot" style="background:var(--turquoise)"></span>
+                <span class="sep-dot" style="background:var(--bleu-motif)"></span>
+                <span class="sep-dot" style="background:var(--vert-motif)"></span>
+                <span class="sep-dot" style="background:var(--or)"></span>
+                <span class="sep-dot" style="background:var(--rouge)"></span>
+                <span class="sep-dot" style="background:var(--rose-rideau)"></span>
+                <span class="sep-dot" style="background:var(--brun-l)"></span>
+                <div class="sep-line"></div>
+            </div>
+            <p class="welcome-subtitle">Artisans du spectacle depuis 1964</p>
         </div>
 
-        <div class="choices-grid">
-            <!-- Familles & Fans -->
-            <a href="familles.html" class="choice-card familles">
-                <span class="choice-icon">🎪</span>
-                <h2 class="choice-title">Familles<br>& Fans</h2>
-                <p class="choice-description">
-                    Découvrez nos spectacles, nos personnages et notre univers magique. 
-                    Réservez vos places et plongez dans 60 ans d'histoire !
-                </p>
-                <span class="choice-cta">Entrer</span>
-            </a>
-
-            <!-- Professionnels -->
-            <a href="pros.html" class="choice-card pros">
-                <span class="choice-icon">🤝</span>
-                <h2 class="choice-title">Bonjour<br>les Pros</h2>
-                <p class="choice-description">
-                    Vous êtes organisateur, mairie ou collectivité ? 
-                    Découvrez nos prestations et demandez un devis personnalisé.
-                </p>
-                <span class="choice-cta">Accéder</span>
-            </a>
-
-            <!-- Boutique -->
-            <a href="Boutique.html" class="choice-card boutique">
-                <span class="choice-icon">🛍️</span>
-                <h2 class="choice-title">Boutique</h2>
-                <p class="choice-description">
-                    Jeux, produits dérivés et souvenirs de vos spectacles préférés. 
-                    La magie à emporter chez vous !
-                </p>
-                <span class="choice-cta">Découvrir</span>
-            </a>
+        <!-- BANDEAU TICKER -->
+        <div class="ticker-band">
+            <div class="ticker-track" id="ticker">
+                <span class="ticker-item"><span class="ticker-icon">🎪</span> Compagnie de spectacle ambulant <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">⭐</span> 60 ans de magie et de rires <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🗺️</span> Tournée dans toute la France <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🎭</span> Théâtre, cirque & marionnettes <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">👨‍👩‍👧‍👦</span> Spectacles pour tous les âges <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🏆</span> + de 500 représentations par an <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🌟</span> Troupe familiale passionnée <span class="ticker-sep">•</span></span>
+                <!-- doublon pour boucle infinie -->
+                <span class="ticker-item"><span class="ticker-icon">🎪</span> Compagnie de spectacle ambulant <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">⭐</span> 60 ans de magie et de rires <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🗺️</span> Tournée dans toute la France <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🎭</span> Théâtre, cirque & marionnettes <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">👨‍👩‍👧‍👦</span> Spectacles pour tous les âges <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🏆</span> + de 500 représentations par an <span class="ticker-sep">•</span></span>
+                <span class="ticker-item"><span class="ticker-icon">🌟</span> Troupe familiale passionnée <span class="ticker-sep">•</span></span>
+            </div>
         </div>
 
+        <!-- SECTION PRÉSENTATION -->
+        <div class="section-presentation">
+            <div class="presentation-card">
+                <span class="card-icon">🎠</span>
+                <h2>Qui sommes-nous ?</h2>
+                <p>Récré Magic est une compagnie de cirque-théâtre ambulant fondée en 1964 par la famille Dumont. Depuis plus de 60 ans, nous sillonnons les routes de France avec notre roulotte colorée pour apporter la magie du spectacle vivant dans les villages, les villes et les festivals.<br><br>
+                Acrobates, clowns, jongleurs, marionnettistes… notre troupe de 12 artistes passionnés renouvelle chaque saison un répertoire unique, mêlant tradition du cirque et inventivité contemporaine.</p>
+            </div>
+            <div class="presentation-card right">
+                <span class="card-icon">🌍</span>
+                <h2>Notre mission</h2>
+                <p>Rendre le spectacle vivant accessible à tous, partout en France, c'est le fil conducteur de notre aventure. Chaque représentation est une invitation au rêve, à la surprise et au partage.<br><br>
+                Nous intervenons à la demande des collectivités, des mairies, des festivals et des événements privés. Notre approche itinérante nous permet de toucher des territoires souvent éloignés des grandes scènes culturelles — car la magie n'appartient à personne, elle est pour tout le monde.</p>
+            </div>
+        </div>
+
+        <!-- BANDEAU CHIFFRES CLÉS -->
+        <div class="stats-band">
+            <div class="stats-inner">
+                <div class="stat-item">
+                    <div class="stat-number">60</div>
+                    <div class="stat-label">ans d'histoire</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">500+</div>
+                    <div class="stat-label">spectacles par an</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">12</div>
+                    <div class="stat-label">artistes en troupe</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">80+</div>
+                    <div class="stat-label">villes visitées</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SECTION VALEURS -->
+        <div class="section-valeurs">
+            <h2>Nos valeurs</h2>
+            <div class="valeurs-grid">
+                <div class="valeur-card">
+                    <span class="valeur-icon">❤️</span>
+                    <div class="valeur-title">La passion avant tout</div>
+                    <p class="valeur-text">Chaque spectacle est préparé avec soin et amour du métier. Nos artistes sont avant tout des passionnés qui croient au pouvoir transformateur du spectacle vivant.</p>
+                </div>
+                <div class="valeur-card">
+                    <span class="valeur-icon">🌱</span>
+                    <div class="valeur-title">Ancrage local</div>
+                    <p class="valeur-text">Nous adaptons nos spectacles aux territoires et aux publics que nous rencontrons. Chaque étape de notre tournée est une rencontre humaine et artistique unique.</p>
+                </div>
+                <div class="valeur-card">
+                    <span class="valeur-icon">✨</span>
+                    <div class="valeur-title">L'émerveillement</div>
+                    <p class="valeur-text">Faire briller les yeux des enfants comme des adultes — c'est notre plus belle récompense. Nous croyons que la magie est un langage universel qui transcende les âges.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- BANDEAU CITATION -->
+        <div class="quote-band">
+            <blockquote>
+                Le spectacle vivant est un cadeau qu'on offre au présent. Chaque soir, la magie repart de zéro… et c'est pour ça qu'on l'aime.
+            </blockquote>
+            <cite>— La famille Dumont, fondatrice de Récré Magic</cite>
+        </div>
+
+        <!-- SECTION CHOIX -->
+        <div class="section-choix">
+            <h2>Choisissez votre espace</h2>
+            <div class="choices-grid">
+
+                <a href="familles.html" class="choice-card familles">
+                    <div class="choice-card-banner"></div>
+                    <span class="choice-icon">🎪</span>
+                    <h2 class="choice-title">Familles<br>& Fans</h2>
+                    <div class="choice-divider"></div>
+                    <div class="choice-dots">
+                        <span style="background:var(--turquoise)"></span>
+                        <span style="background:var(--bleu-motif)"></span>
+                        <span style="background:var(--vert-motif)"></span>
+                    </div>
+                    <p class="choice-description">
+                        Découvrez nos spectacles, nos personnages et notre univers magique.
+                        Réservez vos places et plongez dans 60 ans d'histoire !
+                    </p>
+                    <span class="choice-cta">Entrer</span>
+                </a>
+
+                <a href="pros.html" class="choice-card pros">
+                    <div class="choice-card-banner"></div>
+                    <span class="choice-icon">🤝</span>
+                    <h2 class="choice-title">Bonjour<br>les Pros</h2>
+                    <div class="choice-divider"></div>
+                    <div class="choice-dots">
+                        <span style="background:var(--rouge)"></span>
+                        <span style="background:var(--rose-rideau)"></span>
+                        <span style="background:var(--rouge-l)"></span>
+                    </div>
+                    <p class="choice-description">
+                        Vous êtes organisateur, mairie ou collectivité ?
+                        Découvrez nos prestations et demandez un devis personnalisé.
+                    </p>
+                    <span class="choice-cta">Accéder</span>
+                </a>
+
+                <a href="Boutique.html" class="choice-card boutique">
+                    <div class="choice-card-banner"></div>
+                    <span class="choice-icon">🛍️</span>
+                    <h2 class="choice-title">Boutique</h2>
+                    <div class="choice-divider"></div>
+                    <div class="choice-dots">
+                        <span style="background:var(--or)"></span>
+                        <span style="background:var(--brun-l)"></span>
+                        <span style="background:var(--beige)"></span>
+                    </div>
+                    <p class="choice-description">
+                        Jeux, produits dérivés et souvenirs de vos spectacles préférés.
+                        La magie à emporter chez vous !
+                    </p>
+                    <span class="choice-cta">Découvrir</span>
+                </a>
+
+            </div>
+        </div>
+
+        <!-- BANDEAU TERRITOIRES -->
+        <div class="partner-band">
+            <h3>🗺️ Nous intervenons partout en France</h3>
+            <div class="partner-tags">
+                <span class="partner-tag">🎡 Festivals</span>
+                <span class="partner-tag">🏛️ Mairies & collectivités</span>
+                <span class="partner-tag">🏫 Écoles & centres de loisirs</span>
+                <span class="partner-tag">🎂 Événements privés</span>
+                <span class="partner-tag">🏕️ Campings & parcs</span>
+                <span class="partner-tag">🛍️ Marchés & foires</span>
+                <span class="partner-tag">🎄 Marchés de Noël</span>
+                <span class="partner-tag">🏥 Hôpitaux & EHPAD</span>
+            </div>
+        </div>
+
+        <!-- FOOTER -->
         <p class="footer-note">
-            Récré Magic • Circus Théâtre Ambulant • Depuis 1964
+            ✦ Récré Magic &nbsp;•&nbsp; Circus Théâtre Ambulant &nbsp;•&nbsp; Depuis 1964 ✦
         </p>
+
     </div>
 
     <script>
-        // Confetti animation
         function createConfetti() {
             const container = document.getElementById('confetti');
-            const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
-            const confettiCount = 60;
-
-            for (let i = 0; i < confettiCount; i++) {
-                const confetti = document.createElement('div');
-                confetti.style.position = 'absolute';
-                confetti.style.width = Math.random() * 12 + 5 + 'px';
-                confetti.style.height = Math.random() * 12 + 5 + 'px';
-                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-                confetti.style.left = Math.random() * 100 + '%';
-                confetti.style.top = -20 + 'px';
-                confetti.style.opacity = Math.random() * 0.7 + 0.3;
-                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-                confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-                
-                const duration = Math.random() * 4 + 5;
-                const delay = Math.random() * 3;
-                
-                confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-                
-                container.appendChild(confetti);
+            const colors = [
+                '#6BBFB5','#A0D8D2','#B8352A','#D95F52',
+                '#7A4728','#A86B40','#D4A820','#F0C94A',
+                '#F0DFA8','#4A7FA8','#7AAECE',
+                '#4E8A5A','#7BB887','#D4736A','#E8A090',
+            ];
+            for (let i = 0; i < 55; i++) {
+                const el = document.createElement('div');
+                const size = Math.random() * 11 + 5;
+                el.style.cssText = `
+                    position:absolute;
+                    width:${size}px; height:${size}px;
+                    background-color:${colors[Math.floor(Math.random()*colors.length)]};
+                    left:${Math.random()*100}%; top:-20px;
+                    opacity:${Math.random()*0.55+0.2};
+                    border-radius:${Math.random()>0.5?'50%':'2px'};
+                    animation:fall ${Math.random()*6+7}s linear ${Math.random()*5}s infinite;
+                `;
+                container.appendChild(el);
             }
-
-            const style = document.createElement('style');
-            style.textContent = `
-                @keyframes fall {
-                    to {
-                        transform: translateY(100vh) rotate(720deg);
-                        opacity: 0;
-                    }
-                }
-            `;
-            document.head.appendChild(style);
+            const s = document.createElement('style');
+            s.textContent = `@keyframes fall { 0%{transform:translateY(-20px) rotate(0deg);} 100%{transform:translateY(100vh) rotate(540deg);opacity:0;} }`;
+            document.head.appendChild(s);
         }
-
-        window.addEventListener('load', () => {
-            createConfetti();
-        });
+        window.addEventListener('load', createConfetti);
     </script>
 </body>
 </html>

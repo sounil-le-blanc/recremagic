@@ -3,230 +3,529 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic - Espace Professionnels</title>
+    <title>Récré Magic - Spectacles & Expositions</title>
+    <meta name="description" content="Récré Magic - Nos spectacles de cirque et nos expositions itinérantes.">
+
     <link rel="icon" type="image/png" href="images/favicon.png">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <style>
         :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --jaune-accent: #FFB300;
-            --text-dark: #2C1810;
-            --text-light: #ffffff;
+            --turquoise:    #6BBFB5;
+            --turquoise-l:  #A0D8D2;
+            --rouge:        #B8352A;
+            --rouge-l:      #D95F52;
+            --brun:         #7A4728;
+            --brun-l:       #A86B40;
+            --or:           #D4A820;
+            --or-l:         #F0C94A;
+            --beige:        #F0DFA8;
+            --beige-l:      #FAF0D0;
+            --bleu-motif:   #4A7FA8;
+            --vert-motif:   #4E8A5A;
+            --rose-rideau:  #D4736A;
         }
+
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #1a3a4d 0%, var(--vert-caravane) 100%);
             min-height: 100vh;
             display: flex;
             flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-        }
-        .container {
-            max-width: 1400px;
-            width: 100%;
             position: relative;
-            z-index: 10;
+            overflow-x: hidden;
         }
-        .back-link {
-            display: inline-block;
-            background: rgba(255,255,255,0.2);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
+
+        /* DÉGRADÉ ANIMÉ */
+        .gradient-bg {
+            position: fixed;
+            inset: 0;
+            z-index: 0;
+            background: linear-gradient(
+                125deg,
+                var(--turquoise)   0%,
+                var(--bleu-motif)  14%,
+                var(--vert-motif)  28%,
+                var(--or)          42%,
+                var(--rouge)       57%,
+                var(--rose-rideau) 70%,
+                var(--brun-l)      83%,
+                var(--beige)       100%
+            );
+            background-size: 300% 300%;
+            animation: gradientFlow 14s ease infinite;
+        }
+
+        @keyframes gradientFlow {
+            0%   { background-position:   0%  50%; }
+            25%  { background-position:  50%   0%; }
+            50%  { background-position: 100%  50%; }
+            75%  { background-position:  50% 100%; }
+            100% { background-position:   0%  50%; }
+        }
+
+        .gradient-bg::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: rgba(255,255,255,0.18);
+        }
+
+        .gradient-bg::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            z-index: 1;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none'%3E%3Cpath d='M50 20 C53 28 58 30 50 35 C42 30 47 28 50 20Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M50 80 C53 72 58 70 50 65 C42 70 47 72 50 80Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M20 50 C28 47 30 42 35 50 C30 58 28 53 20 50Z' fill='white' fill-opacity='0.07'/%3E%3Cpath d='M80 50 C72 47 70 42 65 50 C70 58 72 53 80 50Z' fill='white' fill-opacity='0.07'/%3E%3Ccircle cx='50' cy='50' r='2.5' fill='white' fill-opacity='0.10'/%3E%3C/g%3E%3C/svg%3E");
+            pointer-events: none;
+        }
+
+        /* NAV */
+        .top-bar {
+            background: rgba(184, 120, 70, 0.88);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 0 2rem;
+            height: 68px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 5px solid var(--or-l);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .top-bar-logo { display: flex; align-items: center; gap: 1rem; }
+        .top-bar-logo img { height: 48px; filter: drop-shadow(0 2px 5px rgba(0,0,0,0.35)); }
+        .top-bar-logo span {
+            font-family: 'Fredoka', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--beige);
+            letter-spacing: 2px;
+            text-shadow: 1px 2px 5px rgba(0,0,0,0.35);
+        }
+
+        .top-bar nav { display: flex; gap: 0.5rem; }
+        .top-bar nav a {
+            color: var(--beige-l);
             text-decoration: none;
             font-weight: 600;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
-        }
-        .back-link:hover {
-            background: var(--jaune-accent);
-            color: var(--text-dark);
-        }
-        .welcome-text {
-            text-align: center;
-            margin-bottom: 4rem;
-            color: white;
-        }
-        .welcome-title {
-            font-family: 'Fredoka', cursive;
-            font-size: clamp(3rem, 6vw, 5rem);
-            margin-bottom: 1rem;
-            text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
-        }
-        .welcome-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            opacity: 0.95;
-        }
-        .choices-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 2.5rem;
-            animation: fadeInUp 1s ease-out;
-        }
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        .choice-card {
-            background: white;
+            padding: 0.45rem 0.9rem;
             border-radius: 25px;
-            padding: 3rem 2rem;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            font-size: 0.9rem;
+        }
+        .top-bar nav a:hover { background: rgba(240,223,168,0.25); color: var(--or-l); transform: translateY(-2px); }
+        .top-bar nav a.active { background: var(--or); color: var(--brun); }
+
+        /* SCROLLBAR */
+        body::-webkit-scrollbar { width: 14px; }
+        body::-webkit-scrollbar-track { background: rgba(255,255,255,0.2); }
+        body::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, var(--turquoise), var(--or), var(--rouge));
+            border-radius: 10px;
+            border: 2px solid rgba(255,255,255,0.3);
+        }
+        body { scrollbar-width: thin; scrollbar-color: var(--or) rgba(255,255,255,0.2); }
+
+        /* CONFETTI */
+        .confetti-container { position: fixed; inset: 0; pointer-events: none; z-index: 2; overflow: hidden; }
+
+        /* PAGE */
+        .page-content {
+            position: relative;
+            z-index: 10;
+            width: 100%;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* HERO */
+        .hero {
+            max-width: 1200px;
+            margin: 3rem auto 2.5rem;
+            padding: 0 2rem;
             text-align: center;
-            text-decoration: none;
-            color: var(--text-dark);
-            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            animation: fadeInDown 1s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .hero-icon {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 1rem;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.25));
+            animation: float 4s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%,100% { transform: translateY(0); }
+            50%      { transform: translateY(-12px); }
+        }
+
+        .hero-title {
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(2rem, 5vw, 3.2rem);
+            font-weight: 700;
+            color: white;
+            text-shadow: 2px 2px 0 rgba(122,71,40,0.5);
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 0.5rem;
+        }
+
+        .separator {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            margin: 0.8rem 0 1.2rem;
+        }
+        .sep-dot { width: 9px; height: 9px; border-radius: 50%; display: inline-block; box-shadow: 0 1px 3px rgba(0,0,0,0.25); }
+        .sep-line { height: 2px; width: 55px; background: linear-gradient(90deg, transparent, rgba(255,255,255,0.8), transparent); }
+
+        .hero-subtitle {
+            font-size: 1.1rem;
+            color: rgba(255,255,255,0.92);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+        }
+
+        /* =============================================
+           BANDEAUX PRÉSENTATION
+           ============================================= */
+        .sections-wrapper {
+            max-width: 1200px;
+            margin: 1rem auto 4rem;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+            animation: fadeInUp 1.2s ease-out 0.3s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(40px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .pres-band {
+            background: rgba(255,255,255,0.84);
+            backdrop-filter: blur(14px);
+            -webkit-backdrop-filter: blur(14px);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 10px 50px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.95);
+            border: 3px solid rgba(255,255,255,0.65);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 320px;
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .pres-band:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 65px rgba(0,0,0,0.24);
+        }
+
+        /* Côté visuel */
+        .pres-visual {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 7rem;
             position: relative;
             overflow: hidden;
-            border: 4px solid transparent;
-            min-height: 400px;
+        }
+
+        .pres-band.spectacles .pres-visual {
+            background: linear-gradient(135deg, var(--turquoise), var(--bleu-motif), var(--vert-motif));
+        }
+
+        .pres-band.expositions .pres-visual {
+            background: linear-gradient(135deg, var(--rouge), var(--rose-rideau), var(--or));
+            order: 2;
+        }
+
+        /* Décor de fond dans le visuel */
+        .pres-visual::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(255,255,255,0.15) 0%, transparent 60%),
+                        radial-gradient(circle at 70% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);
+        }
+
+        .pres-emoji {
+            position: relative;
+            z-index: 1;
+            animation: float 4s ease-in-out infinite;
+            filter: drop-shadow(0 8px 20px rgba(0,0,0,0.2));
+        }
+
+        .pres-band.expositions .pres-emoji { animation-delay: -2s; }
+
+        /* Côté texte */
+        .pres-text {
+            padding: 3rem 3rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            gap: 1rem;
         }
-        .choice-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-        .choice-card:hover::before { opacity: 1; }
-        .choice-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
-        }
-        .choice-card.spectacles {
-            border-color: var(--vert-caravane);
-        }
-        .choice-card.spectacles:hover {
-            background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%);
-        }
-        .choice-card.expos {
-            border-color: var(--rose-spectacle);
-        }
-        .choice-card.expos:hover {
-            background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%);
-        }
-        .choice-card.stages {
-            border-color: var(--jaune-accent);
-        }
-        .choice-card.stages:hover {
-            background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%);
-        }
-        .choice-icon {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-        .choice-card:hover .choice-icon {
-            animation: spin 0.6s ease-in-out;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(10deg) scale(1.2); }
-            100% { transform: rotate(0deg) scale(1); }
-        }
-        .choice-title {
-            font-family: 'Fredoka', cursive;
-            font-size: 2.5rem;
+
+        .pres-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.78rem;
             font-weight: 700;
-            margin-bottom: 1rem;
             text-transform: uppercase;
+            letter-spacing: 1.5px;
+            width: fit-content;
         }
-        .spectacles .choice-title { color: var(--vert-caravane); }
-        .expos .choice-title { color: var(--rose-spectacle); }
-        .stages .choice-title { color: var(--jaune-accent); }
-        .choice-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-        }
-        .choice-count {
+
+        .spectacles .pres-tag { background: var(--turquoise-l, #A0D8D2); color: #1A5C56; }
+        .expositions .pres-tag { background: #FDDDD9; color: var(--rouge); }
+
+        .pres-title {
+            font-family: 'Fredoka', cursive;
+            font-size: clamp(1.8rem, 3vw, 2.4rem);
             font-weight: 700;
-            font-size: 1.2rem;
-            color: var(--text-dark);
-            opacity: 0.7;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            line-height: 1.15;
         }
-        .contact-note {
-            text-align: center;
-            margin-top: 3rem;
-            color: white;
-            font-size: 1.1rem;
+
+        .spectacles .pres-title { color: #2A7A72; }
+        .expositions .pres-title { color: var(--rouge); }
+
+        .pres-divider {
+            width: 50px;
+            height: 3px;
+            border-radius: 3px;
         }
-        .contact-note a {
-            color: var(--jaune-accent);
+
+        .spectacles .pres-divider { background: linear-gradient(90deg, var(--turquoise), var(--bleu-motif)); }
+        .expositions .pres-divider { background: linear-gradient(90deg, var(--rouge), var(--or)); }
+
+        .pres-desc {
+            color: #5A3520;
+            font-size: 1.05rem;
+            line-height: 1.75;
+            font-weight: 500;
+        }
+
+        .pres-cta {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.85rem 2rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
             text-decoration: none;
-            font-weight: 700;
+            color: white;
+            width: fit-content;
+            transition: all 0.3s ease;
+            margin-top: 0.5rem;
         }
-        @media (max-width: 968px) {
-            .choices-grid {
+
+        .spectacles .pres-cta {
+            background: linear-gradient(135deg, var(--turquoise), var(--bleu-motif));
+            box-shadow: 0 4px 18px rgba(107,191,181,0.4);
+        }
+
+        .expositions .pres-cta {
+            background: linear-gradient(135deg, var(--rouge), var(--rose-rideau));
+            box-shadow: 0 4px 18px rgba(184,53,42,0.35);
+        }
+
+        .pres-cta:hover { transform: translateX(6px) scale(1.04); }
+
+        .cta-arrow {
+            transition: transform 0.3s ease;
+        }
+
+        .pres-cta:hover .cta-arrow { transform: translateX(4px); }
+
+        /* FOOTER */
+        .footer-note {
+            text-align: center;
+            padding: 0 2rem 3rem;
+            color: rgba(255,255,255,0.9);
+            font-size: 0.9rem;
+            font-weight: 600;
+            letter-spacing: 3px;
+            text-transform: uppercase;
+            text-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            position: relative;
+            z-index: 10;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 768px) {
+            .top-bar { flex-direction: column; height: auto; gap: 0.8rem; padding: 1rem; }
+            .top-bar nav { flex-wrap: wrap; justify-content: center; gap: 0.4rem; }
+
+            .pres-band {
                 grid-template-columns: 1fr;
-                gap: 2rem;
+            }
+
+            .pres-band.expositions .pres-visual {
+                order: 0;
+            }
+
+            .pres-visual {
+                min-height: 180px;
+                font-size: 5rem;
+            }
+
+            .pres-text {
+                padding: 2rem;
             }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Retour à l'accueil</a>
-        
-        <div class="welcome-text">
-            <h1 class="welcome-title">Bonjour les Pros</h1>
-            <p class="welcome-subtitle">Organisateurs • Mairies • Collectivités • Festivals</p>
-            <p class="welcome-subtitle">Choisissez votre prestation</p>
+
+    <div class="gradient-bg"></div>
+    <div class="confetti-container" id="confetti"></div>
+
+    <!-- NAV -->
+    <div class="top-bar">
+        <div class="top-bar-logo">
+            <img src="images/logo.png" alt="Récré Magic">
+            <span>RECRÉ MAGIC</span>
         </div>
-
-        <div class="choices-grid">
-            <!-- Nos Spectacles -->
-            <a href="spectacles.html" class="choice-card spectacles">
-                <span class="choice-icon">🎭</span>
-                <h2 class="choice-title">Nos<br>Spectacles</h2>
-                <p class="choice-description">
-                    3 créations itinérantes pour tous publics. Cirque, théâtre, marionnettes et magie.
-                </p>
-                <span class="choice-count">Découvrir →</span>
-            </a>
-
-            <!-- Nos Expos -->
-            <a href="expos.html" class="choice-card expos">
-                <span class="choice-icon">🎨</span>
-                <h2 class="choice-title">Nos<br>Expos</h2>
-                <p class="choice-description">
-                    Expositions interactives pour enrichir vos événements et festivals.
-                </p>
-                <span class="choice-count">Découvrir →</span>
-            </a>
-
-            <!-- Nos Stages -->
-            <a href="stages.html" class="choice-card stages">
-                <span class="choice-icon">🎓</span>
-                <h2 class="choice-title">Nos<br>Stages</h2>
-                <p class="choice-description">
-                    Ateliers d'initiation aux arts du spectacle pour tous les âges.
-                </p>
-                <span class="choice-count">Découvrir →</span>
-            </a>
-        </div>
-
-        <p class="contact-note">
-            Une question ? Contactez-nous directement :<br>
-            📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
-            📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
-        </p>
+        <nav>
+            <a href="index.html"><span>🏠</span> Accueil</a>
+            <a href="familles.html"><span>🎪</span> Familles</a>
+            <a href="pros.html"><span>🤝</span> Pros</a>
+            <a href="Boutique.html"><span>🛍️</span> Boutique</a>
+            <a href="expo.html" class="active"><span>📸</span> Expo</a>
+        </nav>
     </div>
+
+    <div class="page-content">
+
+        <!-- HERO -->
+        <div class="hero">
+            <span class="hero-icon">🎪</span>
+            <h1 class="hero-title">Ce qu'on fait</h1>
+            <div class="separator">
+                <div class="sep-line"></div>
+                <span class="sep-dot" style="background:var(--turquoise)"></span>
+                <span class="sep-dot" style="background:var(--or)"></span>
+                <span class="sep-dot" style="background:var(--rouge)"></span>
+                <span class="sep-dot" style="background:var(--bleu-motif)"></span>
+                <span class="sep-dot" style="background:var(--vert-motif)"></span>
+                <div class="sep-line"></div>
+            </div>
+            <p class="hero-subtitle">Spectacles vivants & expositions itinérantes</p>
+        </div>
+
+        <!-- BANDEAUX -->
+        <div class="sections-wrapper">
+
+            <!-- SPECTACLES -->
+            <div class="pres-band spectacles">
+                <div class="pres-visual">
+                    <span class="pres-emoji">🤹</span>
+                </div>
+                <div class="pres-text">
+                    <span class="pres-tag">🎭 Depuis 1964</span>
+                    <h2 class="pres-title">Nos spectacles</h2>
+                    <div class="pres-divider"></div>
+                    <p class="pres-desc">
+                        Cirque, théâtre, magie, marionnettes… Récré Magic crée et joue des spectacles vivants
+                        pour tous les publics, partout en France. Chaque représentation est un moment unique,
+                        conçu pour surprendre, faire rire et émerveiller petits et grands.
+                    </p>
+                    <a href="spectacles.html" class="pres-cta">
+                        Découvrir nos spectacles
+                        <span class="cta-arrow">→</span>
+                    </a>
+                </div>
+            </div>
+
+            <!-- EXPOSITIONS -->
+            <div class="pres-band expositions">
+                <div class="pres-text">
+                    <span class="pres-tag">📸 Itinérant</span>
+                    <h2 class="pres-title">Nos expositions</h2>
+                    <div class="pres-divider"></div>
+                    <p class="pres-desc">
+                        Nos expositions photo et documentaires voyagent avec nous. Disponibles à la location
+                        pour vos festivals, médiathèques et événements culturels, elles racontent
+                        60 ans d'histoire du spectacle, les coulisses du cirque et la vie de troupe sur la route.
+                    </p>
+                    <a href="expositions.html" class="pres-cta">
+                        Voir nos expositions
+                        <span class="cta-arrow">→</span>
+                    </a>
+                </div>
+                <div class="pres-visual">
+                    <span class="pres-emoji">🖼️</span>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- FOOTER -->
+        <p class="footer-note">
+            ✦ Récré Magic &nbsp;•&nbsp; Circus Théâtre Ambulant &nbsp;•&nbsp; Depuis 1964 ✦
+        </p>
+
+    </div>
+
+    <script>
+        function createConfetti() {
+            const container = document.getElementById('confetti');
+            const colors = [
+                '#6BBFB5','#A0D8D2','#B8352A','#D95F52',
+                '#7A4728','#A86B40','#D4A820','#F0C94A',
+                '#F0DFA8','#4A7FA8','#7AAECE',
+                '#4E8A5A','#7BB887','#D4736A','#E8A090',
+            ];
+            for (let i = 0; i < 45; i++) {
+                const el = document.createElement('div');
+                const size = Math.random() * 10 + 5;
+                el.style.cssText = `
+                    position:absolute;width:${size}px;height:${size}px;
+                    background-color:${colors[Math.floor(Math.random()*colors.length)]};
+                    left:${Math.random()*100}%;top:-20px;
+                    opacity:${Math.random()*0.45+0.15};
+                    border-radius:${Math.random()>0.5?'50%':'2px'};
+                    animation:fall ${Math.random()*6+8}s linear ${Math.random()*6}s infinite;
+                `;
+                container.appendChild(el);
+            }
+            const s = document.createElement('style');
+            s.textContent = `@keyframes fall{0%{transform:translateY(-20px) rotate(0deg);}100%{transform:translateY(100vh) rotate(540deg);opacity:0;}}`;
+            document.head.appendChild(s);
+        }
+        window.addEventListener('load', createConfetti);
+    </script>
 </body>
 </html>
