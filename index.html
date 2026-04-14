@@ -38,7 +38,42 @@
             justify-content: center;
             padding: 2rem;
             position: relative;
-            overflow: hidden;
+            overflow-x: hidden;
+        }
+
+        /* ==================== */
+        /* SCROLLBAR PERSONNALISÉE */
+        /* ==================== */
+        
+        /* Largeur de la scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        /* Track (la piste) */
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            margin: 10px 0;
+        }
+
+        /* Handle (la barre qui glisse) */
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--jaune-accent));
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        /* Handle au survol */
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+            transform: scaleX(1.1);
+        }
+
+        /* Pour Firefox */
+        * {
+            scrollbar-width: thin;
+            scrollbar-color: var(--rose-spectacle) rgba(255, 255, 255, 0.2);
         }
 
         /* Confetti Background */
@@ -264,6 +299,28 @@
             animation: fadeIn 2s ease-out 1s both;
         }
 
+        /* Indicateur de scroll (optionnel) */
+        .scroll-indicator {
+            position: fixed;
+            bottom: 20px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+            z-index: 100;
+            pointer-events: none;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            font-family: monospace;
+        }
+
+        .scroll-indicator:hover {
+            opacity: 1;
+        }
+
         /* Responsive */
         @media (max-width: 768px) {
             .choices-grid {
@@ -281,6 +338,28 @@
 
             .choice-title {
                 font-size: 1.6rem;
+            }
+
+            /* Scrollbar plus fine sur mobile */
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+
+            .scroll-indicator {
+                bottom: 10px;
+                right: 15px;
+                font-size: 0.7rem;
+                padding: 5px 10px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 1rem;
+            }
+            
+            ::-webkit-scrollbar {
+                width: 6px;
             }
         }
     </style>
@@ -322,7 +401,7 @@
             </a>
 
             <!-- Boutique -->
-            <a href="Boutique.html" class="choice-card boutique">
+            <a href="boutique.html" class="choice-card boutique">
                 <span class="choice-icon">🛍️</span>
                 <h2 class="choice-title">Boutique</h2>
                 <p class="choice-description">
@@ -338,8 +417,13 @@
         </p>
     </div>
 
+    <!-- Indicateur de scroll -->
+    <div class="scroll-indicator" id="scrollIndicator">
+        ↓ SCROLL ↓
+    </div>
+
     <script>
-        // Confetti animation
+        // Confetti animation (optimisée)
         function createConfetti() {
             const container = document.getElementById('confetti');
             const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
@@ -377,8 +461,25 @@
             document.head.appendChild(style);
         }
 
+        // Indicateur de scroll qui disparaît après le premier scroll
+        function initScrollIndicator() {
+            const indicator = document.getElementById('scrollIndicator');
+            let hasScrolled = false;
+            
+            window.addEventListener('scroll', function() {
+                if (!hasScrolled && window.scrollY > 50) {
+                    hasScrolled = true;
+                    indicator.style.opacity = '0';
+                    setTimeout(() => {
+                        indicator.style.display = 'none';
+                    }, 500);
+                }
+            });
+        }
+
         window.addEventListener('load', () => {
             createConfetti();
+            initScrollIndicator();
         });
     </script>
 </body>
