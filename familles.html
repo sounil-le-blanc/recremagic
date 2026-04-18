@@ -196,8 +196,9 @@
                 
                 <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
                     
-                    <!-- Zone 1: TOTO -->
-                    <a href="nos-stars.html" 
+                    <!-- Zone 1: TOTO (ouverture YouTube dans un NOUVEL ONGLET) -->
+                    <a href="https://www.youtube.com/@recremagic" 
+                       target="_blank"
                        onmouseover="changeImage('caravane-toto.png')" 
                        onmouseout="changeImage('caravane-base.png')">
                         <rect x="250" y="140" width="180" height="380" class="hotspot" />
@@ -309,14 +310,14 @@
             if (wrapper && img) {
                 // Zones (en % de l'image, de gauche à droite)
                 const zones = [
-                    { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png' },
-                    { name: 'cookie', start: 23, end: 29, image: 'caravane-cookie.png' },
-                    { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png' },
-                    { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png' },
-                    { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png' },
-                    { name: 'calendrier', start: 78, end: 83, image: 'caravane-calendrier.png' },
-                    { name: 'baptiste', start: 84, end: 90, image: 'caravane-baptiste.png' },
-                    { name: 'gus', start: 91, end: 100, image: 'caravane-gus.png' }
+                    { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png', link: 'https://www.youtube.com/@recremagic', external: true },
+                    { name: 'cookie', start: 23, end: 29, image: 'caravane-cookie.png', link: 'nos-stars.html', external: false },
+                    { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png', link: 'spectacles.html', external: false },
+                    { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png', link: 'nos-stars.html', external: false },
+                    { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png', link: 'nos-expos-familles.html', external: false },
+                    { name: 'calendrier', start: 78, end: 83, image: 'caravane-calendrier.png', link: 'calendrier.html', external: false },
+                    { name: 'baptiste', start: 84, end: 90, image: 'caravane-baptiste.png', link: 'nos-stars.html', external: false },
+                    { name: 'gus', start: 91, end: 100, image: 'caravane-gus.png', link: 'nos-stars.html', external: false }
                 ];
                 
                 let currentZone = null;
@@ -355,21 +356,12 @@
                 // Tap sur l'image pour naviguer
                 img.addEventListener('click', () => {
                     if (currentZoneData) {
-                        // Mapper les zones vers les pages
-                        const zoneLinks = {
-                            'toto': 'nos-stars.html',
-                            'cookie': 'nos-stars.html',
-                            'rideau': 'nos-spectacles-familles.html',
-                            'flo': 'nos-stars.html',
-                            'rideau-or': 'nos-expos-familles.html',
-                            'calendrier': 'calendrier.html',
-                            'baptiste': 'nos-stars.html',
-                            'gus': 'nos-stars.html'
-                        };
-                        
-                        const link = zoneLinks[currentZoneData.name];
-                        if (link) {
-                            window.location.href = link;
+                        if (currentZoneData.external) {
+                            // Lien externe (YouTube) → ouvre dans un NOUVEL ONGLET
+                            window.open(currentZoneData.link, '_blank');
+                        } else {
+                            // Lien interne → ouvre dans la même page
+                            window.location.href = currentZoneData.link;
                         }
                     }
                 });
