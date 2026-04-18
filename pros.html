@@ -3,384 +3,230 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic - Espace Pro</title>
+    <title>Récré Magic - Espace Professionnels</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
     <style>
-        /* ==================== */
-        /* SCROLLBAR PERSONNALISÉE - AJOUTÉE */
-        /* ==================== */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #EC407A, #7CB69F);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #7CB69F, #EC407A);
-        }
-
-        /* ==================== */
-        /* RESET & BASE */
-        /* ==================== */
         :root {
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
-            --rouge-spectacle: #D32F2F;
             --jaune-accent: #FFB300;
-            --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
-            --bg-light: #f9f9f9;
         }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
+        * { margin: 0; padding: 0; box-sizing: border-box; }
         body {
             font-family: 'Quicksand', sans-serif;
-            background: var(--bg-light);
-            color: var(--text-dark);
-            line-height: 1.6;
+            background: linear-gradient(135deg, #1a3a4d 0%, var(--vert-caravane) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
         }
-
-        /* ==================== */
-        /* NAVBAR */
-        /* ==================== */
-        .navbar {
-            background: rgba(44, 24, 16, 0.98);
-            backdrop-filter: blur(10px);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+        .container {
+            max-width: 1400px;
+            width: 100%;
+            position: relative;
+            z-index: 10;
         }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-        }
-
-        .navbar-logo img {
-            height: 50px;
-            transition: transform 0.3s;
-        }
-
-        .navbar-logo img:hover {
-            transform: scale(1.05);
-        }
-
-        /* ==================== */
-        /* PAGE HEADER */
-        /* ==================== */
-        .page-header {
-            background: linear-gradient(135deg, #1a3a4d, var(--vert-caravane));
-            color: white;
-            padding: 4rem 2rem;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-family: 'Fredoka', cursive;
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
-        }
-
-        .page-header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
-        }
-
-        .back-btn {
+        .back-link {
             display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255,255,255,0.2);
             color: white;
             padding: 0.7rem 1.5rem;
             border-radius: 25px;
             text-decoration: none;
+            font-weight: 600;
             margin-bottom: 2rem;
             transition: all 0.3s;
-            font-weight: 600;
         }
-
-        .back-btn:hover {
+        .back-link:hover {
             background: var(--jaune-accent);
             color: var(--text-dark);
-            transform: translateX(-5px);
         }
-
-        /* ==================== */
-        /* CONTACT SECTION */
-        /* ==================== */
-        .contact-section {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 3rem;
+        .welcome-text {
+            text-align: center;
+            margin-bottom: 4rem;
+            color: white;
         }
-
-        .contact-info {
-            background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
-        }
-
-        .contact-info h2 {
+        .welcome-title {
             font-family: 'Fredoka', cursive;
-            font-size: 1.8rem;
+            font-size: clamp(3rem, 6vw, 5rem);
             margin-bottom: 1rem;
-            color: var(--rose-spectacle);
+            text-shadow: 3px 3px 10px rgba(0,0,0,0.3);
         }
-
-        .contact-details {
-            margin: 1.5rem 0;
+        .welcome-subtitle {
+            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+            opacity: 0.95;
         }
-
-        .contact-details p {
-            margin: 0.8rem 0;
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
+        .choices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            animation: fadeInUp 1s ease-out;
         }
-
-        .contact-form {
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .choice-card {
             background: white;
-            border-radius: 20px;
-            padding: 2rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            text-align: center;
+            text-decoration: none;
+            color: var(--text-dark);
+            box-shadow: 0 15px 50px rgba(0,0,0,0.2);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            position: relative;
+            overflow: hidden;
+            border: 4px solid transparent;
+            min-height: 400px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
         }
-
-        .contact-form h2 {
-            font-family: 'Fredoka', cursive;
-            font-size: 1.8rem;
-            margin-bottom: 1.5rem;
-            color: var(--vert-caravane);
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.3) 100%);
+            opacity: 0;
+            transition: opacity 0.4s ease;
         }
-
-        .form-group {
-            margin-bottom: 1.2rem;
+        .choice-card:hover::before { opacity: 1; }
+        .choice-card:hover {
+            transform: translateY(-15px) scale(1.05);
+            box-shadow: 0 25px 70px rgba(0,0,0,0.3);
         }
-
-        .form-group label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
+        .choice-card.spectacles {
+            border-color: var(--vert-caravane);
         }
-
-        .form-group input,
-        .form-group select,
-        .form-group textarea {
-            width: 100%;
-            padding: 0.8rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 10px;
-            font-family: inherit;
-            transition: border-color 0.3s;
+        .choice-card.spectacles:hover {
+            background: linear-gradient(135deg, rgba(124,182,159,0.1) 0%, white 100%);
         }
-
-        .form-group input:focus,
-        .form-group select:focus,
-        .form-group textarea:focus {
-            outline: none;
+        .choice-card.expos {
             border-color: var(--rose-spectacle);
         }
-
-        .form-group textarea {
-            resize: vertical;
-            min-height: 100px;
+        .choice-card.expos:hover {
+            background: linear-gradient(135deg, rgba(236,64,122,0.1) 0%, white 100%);
         }
-
-        .btn-submit {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--rouge-spectacle));
-            color: white;
-            padding: 0.8rem 2rem;
-            border: none;
-            border-radius: 50px;
+        .choice-card.stages {
+            border-color: var(--jaune-accent);
+        }
+        .choice-card.stages:hover {
+            background: linear-gradient(135deg, rgba(255,179,0,0.1) 0%, white 100%);
+        }
+        .choice-icon {
+            font-size: 5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+            animation: bounce 2s ease-in-out infinite;
+        }
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .choice-card:hover .choice-icon {
+            animation: spin 0.6s ease-in-out;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(10deg) scale(1.2); }
+            100% { transform: rotate(0deg) scale(1); }
+        }
+        .choice-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
             font-weight: 700;
-            cursor: pointer;
-            transition: transform 0.3s;
-            width: 100%;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
         }
-
-        .btn-submit:hover {
-            transform: translateY(-3px);
+        .spectacles .choice-title { color: var(--vert-caravane); }
+        .expos .choice-title { color: var(--rose-spectacle); }
+        .stages .choice-title { color: var(--jaune-accent); }
+        .choice-description {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
         }
-
-        /* ==================== */
-        /* FOOTER */
-        /* ==================== */
-        .footer {
-            background: var(--text-dark);
-            color: var(--text-light);
-            padding: 3rem 2rem;
-            margin-top: 4rem;
+        .choice-count {
+            font-weight: 700;
+            font-size: 1.2rem;
+            color: var(--text-dark);
+            opacity: 0.7;
         }
-
-        .footer .container {
-            max-width: 1200px;
-            margin: 0 auto;
+        .contact-note {
+            text-align: center;
+            margin-top: 3rem;
+            color: white;
+            font-size: 1.1rem;
         }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
+        .contact-note a {
             color: var(--jaune-accent);
+            text-decoration: none;
+            font-weight: 700;
         }
-
-        /* ==================== */
-        /* RESPONSIVE */
-        /* ==================== */
         @media (max-width: 968px) {
-            .contact-section {
+            .choices-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
-            }
-            
-            .page-header h1 {
-                font-size: 2.5rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
-            }
-            
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .page-header {
-                padding: 2rem 1rem;
-            }
-            
-            .page-header h1 {
-                font-size: 1.8rem;
             }
         }
     </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo">
-                <img src="images/logo.png" alt="Récré Magic">
+    <div class="container">
+        <a href="index.html" class="back-link">← Retour à l'accueil</a>
+        
+        <div class="welcome-text">
+            <h1 class="welcome-title">Bonjour les Pros</h1>
+            <p class="welcome-subtitle">Organisateurs • Mairies • Collectivités • Festivals</p>
+            <p class="welcome-subtitle">Choisissez votre prestation</p>
+        </div>
+
+        <div class="choices-grid">
+            <!-- Nos Spectacles -->
+            <a href="spectacles.html" class="choice-card spectacles">
+                <span class="choice-icon">🎭</span>
+                <h2 class="choice-title">Nos<br>Spectacles</h2>
+                <p class="choice-description">
+                    3 créations itinérantes pour tous publics. Cirque, théâtre, marionnettes et magie.
+                </p>
+                <span class="choice-count">Découvrir →</span>
+            </a>
+
+            <!-- Nos Expos -->
+            <a href="expos.html" class="choice-card expos">
+                <span class="choice-icon">🎨</span>
+                <h2 class="choice-title">Nos<br>Expos</h2>
+                <p class="choice-description">
+                    Expositions interactives pour enrichir vos événements et festivals.
+                </p>
+                <span class="choice-count">Découvrir →</span>
+            </a>
+
+            <!-- Nos Stages -->
+            <a href="stages.html" class="choice-card stages">
+                <span class="choice-icon">🎓</span>
+                <h2 class="choice-title">Nos<br>Stages</h2>
+                <p class="choice-description">
+                    Ateliers d'initiation aux arts du spectacle pour tous les âges.
+                </p>
+                <span class="choice-count">Découvrir →</span>
             </a>
         </div>
-    </nav>
 
-    <!-- PAGE HEADER -->
-    <div class="page-header">
-        <a href="index.html" class="back-btn">← Retour Accueil</a>
-        <h1>🤝 Espace Professionnels</h1>
-        <p>Organisateurs, mairies, collectivités — Découvrez nos prestations sur mesure</p>
+        <p class="contact-note">
+            Une question ? Contactez-nous directement :<br>
+            📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
+            📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
+        </p>
     </div>
-
-    <!-- CONTACT SECTION -->
-    <div class="contact-section">
-        <div class="contact-info">
-            <h2>📞 Nous contacter</h2>
-            <div class="contact-details">
-                <p>📱 <strong>06 71 52 50 89</strong></p>
-                <p>✉️ <strong>recremagic@wanadoo.fr</strong></p>
-                <p>📍 Spectacle itinérant - France</p>
-            </div>
-            <p style="margin-top: 1rem; font-size: 0.9rem; color: #666;">
-                Disponible sur toute la France pour vos événements : fêtes de village, 
-                festivals, médiathèques, centres commerciaux, anniversaires...
-            </p>
-        </div>
-
-        <div class="contact-form">
-            <h2>📩 Demande de devis</h2>
-            <form id="devisForm">
-                <div class="form-group">
-                    <label>Nom / Structure</label>
-                    <input type="text" placeholder="Votre nom ou le nom de votre structure" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" placeholder="votre@email.com" required>
-                </div>
-                <div class="form-group">
-                    <label>Téléphone</label>
-                    <input type="tel" placeholder="06 12 34 56 78">
-                </div>
-                <div class="form-group">
-                    <label>Type d'événement</label>
-                    <select>
-                        <option>Fête de village / Fête de quartier</option>
-                        <option>Festival</option>
-                        <option>Médiathèque / Bibliothèque</option>
-                        <option>École / Centre de loisirs</option>
-                        <option>Centre commercial</option>
-                        <option>Anniversaire / Événement privé</option>
-                        <option>Autre</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Message / Demande spécifique</label>
-                    <textarea placeholder="Décrivez votre projet, la date souhaitée, le lieu, etc."></textarea>
-                </div>
-                <button type="submit" class="btn-submit">📩 Envoyer ma demande</button>
-            </form>
-        </div>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <p>Récré Magic • Circus Théâtre Ambulant depuis 1964</p>
-                </div>
-                <div class="footer-links">
-                    <a href="index.html">Accueil</a>
-                    <a href="spectacles.html">Nos spectacles</a>
-                    <a href="familles.html">Familles</a>
-                    <a href="boutique.html">Boutique</a>
-                </div>
-            </div>
-        </div>
-    </footer>
 </body>
 </html>
