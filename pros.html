@@ -56,7 +56,7 @@
         }
 
         /* ==================== */
-        /* NAVBAR (comme spectacles.html) */
+        /* NAVBAR AVEC CALENDRIER */
         /* ==================== */
         .navbar {
             position: fixed;
@@ -76,6 +76,8 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
         .navbar-logo img {
@@ -91,6 +93,8 @@
             display: flex;
             gap: 1.5rem;
             list-style: none;
+            flex-wrap: wrap;
+            align-items: center;
         }
 
         .nav-links a {
@@ -98,10 +102,27 @@
             text-decoration: none;
             font-weight: 600;
             transition: color 0.3s;
+            font-size: 0.95rem;
         }
 
         .nav-links a:hover {
             color: var(--jaune-accent);
+        }
+
+        /* Lien calendrier (emoji) */
+        .calendar-link {
+            color: white;
+            text-decoration: none;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            margin-left: 0.5rem;
+        }
+
+        .calendar-link:hover {
+            color: var(--jaune-accent);
+            transform: scale(1.1);
         }
 
         /* ==================== */
@@ -116,23 +137,6 @@
             z-index: 10;
         }
 
-        .back-link {
-            display: inline-block;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(5px);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            font-weight: 600;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
-        }
-        .back-link:hover {
-            background: var(--jaune-accent);
-            color: var(--text-dark);
-            transform: translateX(-5px);
-        }
         .welcome-text {
             text-align: center;
             margin-bottom: 4rem;
@@ -268,7 +272,7 @@
         }
 
         /* ==================== */
-        /* BOUTON DEVIS (comme spectacles.html) */
+        /* BOUTON DEVIS */
         /* ==================== */
         .btn {
             display: inline-block;
@@ -317,7 +321,7 @@
                 height: 45px;
             }
             .nav-links {
-                display: none;
+                justify-content: center;
             }
             .container {
                 padding: 0 1rem;
@@ -341,12 +345,21 @@
                 padding: 2rem;
                 min-height: 320px;
             }
+            .nav-links {
+                gap: 1rem;
+            }
+            .nav-links a {
+                font-size: 0.8rem;
+            }
+            .calendar-link {
+                font-size: 1rem;
+            }
         }
     </style>
 </head>
 <body>
     <!-- ==================== -->
-    <!-- NAVBAR -->
+    <!-- NAVBAR AVEC CALENDRIER -->
     <!-- ==================== -->
     <nav class="navbar">
         <div class="navbar-container">
@@ -354,11 +367,15 @@
                 <img src="images/logo.png" alt="Récré Magic">
             </a>
             <ul class="nav-links">
-                <li><a href="index.html">Accueil</a></li>
                 <li><a href="spectacles.html">Spectacles</a></li>
                 <li><a href="pros.html">Espace Pro</a></li>
                 <li><a href="familles.html">Familles</a></li>
                 <li><a href="boutique.html">Boutique</a></li>
+                <li>
+                    <a href="calendrier.html" class="calendar-link" title="Calendrier">
+                        📅
+                    </a>
+                </li>
             </ul>
         </div>
     </nav>
@@ -367,8 +384,6 @@
     <!-- CONTENU PRINCIPAL -->
     <!-- ==================== -->
     <div class="container">
-        <a href="index.html" class="back-link">← Retour à l'accueil</a>
-        
         <div class="welcome-text">
             <h1 class="welcome-title">Bonjour les Pros</h1>
             <p class="welcome-subtitle">Organisateurs • Mairies • Collectivités • Festivals</p>
@@ -413,7 +428,7 @@
             📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
         </p>
 
-        <!-- BOUTON DEMANDER UN DEVIS (comme spectacles.html) -->
+        <!-- BOUTON DEMANDER UN DEVIS -->
         <div class="devis-button-container">
             <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
         </div>
