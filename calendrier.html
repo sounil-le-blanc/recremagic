@@ -20,7 +20,6 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
-            --bg-light: #f9f9f9;
         }
 
         * {
@@ -35,6 +34,27 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+        }
+
+        /* ==================== */
+        /* SCROLLBAR PERSONNALISÉE */
+        /* ==================== */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
         }
 
         /* ==================== */
@@ -75,7 +95,7 @@
         .page-hero {
             background: linear-gradient(135deg, var(--rouge-spectacle), #c2185b);
             color: white;
-            padding: 6rem 2rem 4rem;
+            padding: 6rem 2rem 3rem;
             text-align: center;
         }
 
@@ -110,51 +130,43 @@
         }
 
         /* ==================== */
-        /* MESSAGE (remplace les cadres) */
+        /* TABLEAU SIMPLE - UNIQUEMENT LES MOIS */
         /* ==================== */
-        .info-message {
-            max-width: 600px;
-            margin: 4rem auto;
-            padding: 3rem 2rem;
-            text-align: center;
+        .calendar-table-container {
+            max-width: 500px;
+            margin: 3rem auto;
+            padding: 0 2rem 4rem;
+        }
+
+        .calendar-table {
+            width: 100%;
+            border-collapse: collapse;
             background: white;
             border-radius: 20px;
+            overflow: hidden;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            border-left: 5px solid var(--vert-caravane);
         }
 
-        .info-message i {
-            font-size: 3rem;
-            color: var(--vert-caravane);
-            margin-bottom: 1rem;
-        }
-
-        .info-message h2 {
-            font-family: 'Fredoka', cursive;
-            font-size: 1.8rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .info-message p {
-            color: #666;
-            line-height: 1.6;
-        }
-
-        .info-message .contact-link {
-            display: inline-block;
-            margin-top: 1.5rem;
-            background: var(--vert-caravane);
+        .calendar-table th {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
             color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            transition: all 0.3s;
+            padding: 1rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
-        .info-message .contact-link:hover {
-            background: var(--rose-spectacle);
-            transform: scale(1.05);
+        .calendar-table td {
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            text-align: center;
+        }
+
+        .month-cell {
+            background: var(--creme-vintage);
+            font-weight: 700;
+            color: var(--rouge-spectacle);
         }
 
         /* ==================== */
@@ -230,7 +242,7 @@
             }
             
             .page-hero {
-                padding: 5rem 1rem 3rem;
+                padding: 5rem 1rem 2rem;
             }
             
             .footer-content {
@@ -238,13 +250,14 @@
                 text-align: center;
             }
             
-            .info-message {
-                margin: 2rem 1rem;
-                padding: 2rem;
+            .calendar-table-container {
+                padding: 0 1rem 2rem;
             }
             
-            .info-message h2 {
-                font-size: 1.5rem;
+            .calendar-table th,
+            .calendar-table td {
+                padding: 0.5rem;
+                font-size: 0.9rem;
             }
         }
 
@@ -277,16 +290,21 @@
     <div class="page-hero">
         <a href="familles.html" class="back-btn">← Retour</a>
         <h1>📅 Calendrier 2026</h1>
-        <p>Où nous voir cette année ?</p>
+        <p>Planning des représentations</p>
     </div>
 
-    <!-- MESSAGE CENTRAL (TOUS LES CADRES SUPPRIMÉS) -->
-    <div class="info-message">
-        <i class="fas fa-calendar-alt"></i>
-        <h2>Calendrier à venir</h2>
-        <p>Les dates de nos prochaines représentations seront bientôt disponibles.</p>
-        <p style="margin-top: 0.5rem;">Restez connectés ou contactez-nous pour plus d'informations !</p>
-        <a href="pros.html" class="contact-link">📞 Nous contacter</a>
+    <!-- TABLEAU SIMPLE : UNIQUEMENT LES MOIS -->
+    <div class="calendar-table-container">
+        <table class="calendar-table">
+            <thead>
+                <tr>
+                    <th>Mois</th>
+                </tr>
+            </thead>
+            <tbody id="calendarBody">
+                <!-- Les mois seront générés par JavaScript -->
+            </tbody>
+         </table>
     </div>
 
     <!-- FOOTER -->
@@ -307,5 +325,33 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // ==================== //
+        // LISTE DES MOIS
+        // ==================== //
+        
+        const months = [
+            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+        ];
+        
+        // Générer le tableau
+        function generateCalendar() {
+            const tbody = document.getElementById('calendarBody');
+            tbody.innerHTML = '';
+            
+            months.forEach(month => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td class="month-cell">${month}</td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+        
+        // Initialiser la page
+        document.addEventListener('DOMContentLoaded', generateCalendar);
+    </script>
 </body>
 </html>
