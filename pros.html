@@ -10,23 +10,43 @@
         :root {
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
             --text-light: #ffffff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ==================== */
+        /* SCROLLBAR PERSONNALISÉE */
+        /* ==================== */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            border-radius: 10px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+        }
+
         body {
             font-family: 'Quicksand', sans-serif;
             background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe, #667eea);
             background-size: 400% 400%;
             animation: gradientMove 15s ease infinite;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
+            padding-top: 80px;
             position: relative;
+            overflow-x: hidden;
         }
 
         @keyframes gradientMove {
@@ -35,12 +55,67 @@
             100% { background-position: 0% 50%; }
         }
 
+        /* ==================== */
+        /* NAVBAR (comme spectacles.html) */
+        /* ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-logo img {
+            height: 50px;
+            transition: transform 0.3s;
+        }
+
+        .navbar-logo img:hover {
+            transform: scale(1.05);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 1.5rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: var(--jaune-accent);
+        }
+
+        /* ==================== */
+        /* CONTENU PRINCIPAL */
+        /* ==================== */
         .container {
             max-width: 1400px;
             width: 100%;
+            margin: 0 auto;
+            padding: 0 2rem;
             position: relative;
             z-index: 10;
         }
+
         .back-link {
             display: inline-block;
             background: rgba(0, 0, 0, 0.4);
@@ -178,6 +253,7 @@
         .contact-note {
             text-align: center;
             margin-top: 3rem;
+            margin-bottom: 2rem;
             color: white;
             font-size: 1.1rem;
             text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
@@ -190,18 +266,106 @@
         .contact-note a:hover {
             text-decoration: underline;
         }
+
+        /* ==================== */
+        /* BOUTON DEVIS (comme spectacles.html) */
+        /* ==================== */
+        .btn {
+            display: inline-block;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
+        }
+
+        .devis-button-container {
+            text-align: center;
+            margin-top: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        /* ==================== */
+        /* RESPONSIVE */
+        /* ==================== */
         @media (max-width: 968px) {
             .choices-grid {
                 grid-template-columns: 1fr;
                 gap: 2rem;
             }
             body {
-                padding: 1rem;
+                padding-top: 70px;
+            }
+            .navbar-container {
+                padding: 0.6rem 1.5rem;
+            }
+            .navbar-logo img {
+                height: 45px;
+            }
+            .nav-links {
+                display: none;
+            }
+            .container {
+                padding: 0 1rem;
+            }
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .welcome-title {
+                font-size: 1.8rem;
+            }
+            .choice-title {
+                font-size: 1.8rem;
+            }
+            .choice-icon {
+                font-size: 3.5rem;
+            }
+            .choice-card {
+                padding: 2rem;
+                min-height: 320px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- ==================== -->
+    <!-- NAVBAR -->
+    <!-- ==================== -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <a href="index.html" class="navbar-logo">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <ul class="nav-links">
+                <li><a href="index.html">Accueil</a></li>
+                <li><a href="spectacles.html">Spectacles</a></li>
+                <li><a href="pros.html">Espace Pro</a></li>
+                <li><a href="familles.html">Familles</a></li>
+                <li><a href="boutique.html">Boutique</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- ==================== -->
+    <!-- CONTENU PRINCIPAL -->
+    <!-- ==================== -->
     <div class="container">
         <a href="index.html" class="back-link">← Retour à l'accueil</a>
         
@@ -248,6 +412,11 @@
             📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
             📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
         </p>
+
+        <!-- BOUTON DEMANDER UN DEVIS (comme spectacles.html) -->
+        <div class="devis-button-container">
+            <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
+        </div>
     </div>
 </body>
 </html>
