@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Récré Magic - Bienvenue</title>
-    <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace : Familles & Fans, Professionnels ou Boutique.">
+    <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace : Familles & Fans, Prestations.">
     
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -41,42 +41,26 @@
             overflow-x: hidden;
         }
 
-        /* ==================== */
-        /* SCROLLBAR PERSONNALISÉE */
-        /* ==================== */
-        
-        /* Largeur de la scrollbar */
+        /* Scrollbar */
         ::-webkit-scrollbar {
             width: 12px;
         }
 
-        /* Track (la piste) */
         ::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
-            margin: 10px 0;
         }
 
-        /* Handle (la barre qui glisse) */
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--jaune-accent));
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
             border-radius: 10px;
-            transition: all 0.3s ease;
         }
 
-        /* Handle au survol */
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
-            transform: scaleX(1.1);
         }
 
-        /* Pour Firefox */
-        * {
-            scrollbar-width: thin;
-            scrollbar-color: var(--rose-spectacle) rgba(255, 255, 255, 0.2);
-        }
-
-        /* Confetti Background */
+        /* Confettis */
         .confetti-container {
             position: fixed;
             top: 0;
@@ -91,7 +75,7 @@
         .container {
             position: relative;
             z-index: 10;
-            max-width: 1200px;
+            max-width: 1400px;
             width: 100%;
         }
 
@@ -114,14 +98,8 @@
         }
 
         @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+            from { opacity: 0; transform: translateY(-50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .welcome-text {
@@ -151,215 +129,166 @@
             font-weight: 500;
         }
 
+        /* 2 colonnes : Familles à gauche / Prestations à droite */
         .choices-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2.5rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: stretch;
+            gap: 3rem;
+            flex-wrap: wrap;
             animation: fadeInUp 1.4s ease-out 0.6s both;
-        }
-
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(50px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .choice-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 25px;
-            padding: 3rem 2rem;
+            backdrop-filter: blur(2px);
+            border-radius: 32px;
+            padding: 2rem 2rem;
             text-align: center;
             text-decoration: none;
             color: var(--text-dark);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.2);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            position: relative;
-            overflow: hidden;
-            border: 4px solid transparent;
+            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
+            border: 1px solid rgba(255, 255, 255, 0.5);
+            width: 320px;
+            min-height: 440px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .choice-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: linear-gradient(135deg, transparent 0%, rgba(255, 255, 255, 0.3) 100%);
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .choice-card:hover::before {
-            opacity: 1;
-        }
-
-        .choice-card:hover {
-            transform: translateY(-15px) scale(1.05);
-            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.3);
-        }
-
+        /* Alignement */
         .choice-card.familles {
-            border-color: var(--rose-spectacle);
-        }
-
-        .choice-card.familles:hover {
-            background: linear-gradient(135deg, rgba(236, 64, 122, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+            align-self: flex-start;
         }
 
         .choice-card.pros {
-            border-color: var(--vert-caravane);
+            align-self: flex-end;
         }
 
-        .choice-card.pros:hover {
-            background: linear-gradient(135deg, rgba(124, 182, 159, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        /* Bordures colorées */
+        .choice-card.familles {
+            border-top: 6px solid var(--rose-spectacle);
+            box-shadow: 0 20px 35px -12px rgba(236, 64, 122, 0.3);
         }
 
-        .choice-card.boutique {
-            border-color: var(--jaune-accent);
+        .choice-card.pros {
+            border-top: 6px solid var(--vert-caravane);
+            box-shadow: 0 20px 35px -12px rgba(124, 182, 159, 0.3);
         }
 
-        .choice-card.boutique:hover {
-            background: linear-gradient(135deg, rgba(255, 179, 0, 0.1) 0%, rgba(255, 255, 255, 0.95) 100%);
+        .choice-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.35);
         }
 
         .choice-icon {
-            font-size: 5rem;
-            margin-bottom: 1.5rem;
-            display: block;
-            animation: bounce 2s ease-in-out infinite;
-        }
-
-        @keyframes bounce {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
+            font-size: 4.2rem;
+            margin-bottom: 1.2rem;
+            display: inline-block;
+            transition: transform 0.2s ease;
         }
 
         .choice-card:hover .choice-icon {
-            animation: spin 0.6s ease-in-out;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg) scale(1); }
-            50% { transform: rotate(10deg) scale(1.2); }
-            100% { transform: rotate(0deg) scale(1); }
+            transform: scale(1.08);
         }
 
         .choice-title {
             font-family: 'Fredoka', cursive;
-            font-size: 2rem;
+            font-size: 1.9rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-transform: uppercase;
+            letter-spacing: -0.5px;
         }
 
         .familles .choice-title { color: var(--rose-spectacle); }
         .pros .choice-title { color: var(--vert-caravane); }
-        .boutique .choice-title { color: var(--jaune-accent); }
 
         .choice-description {
-            font-size: 1.1rem;
-            line-height: 1.6;
+            font-size: 1rem;
+            line-height: 1.5;
             color: var(--text-dark);
-            margin-bottom: 1.5rem;
+            margin-bottom: 1.8rem;
+            padding: 0 0.5rem;
+            opacity: 0.85;
         }
 
         .choice-cta {
             display: inline-block;
-            padding: 1rem 2rem;
-            background: var(--text-dark);
-            color: var(--text-light);
-            border-radius: 50px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
             font-weight: 700;
-            font-size: 1rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1px;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
+            width: fit-content;
+            margin: 0 auto;
+        }
+
+        .familles .choice-cta {
+            background: rgba(236, 64, 122, 0.1);
+            color: var(--rose-spectacle);
+        }
+
+        .pros .choice-cta {
+            background: rgba(124, 182, 159, 0.1);
+            color: var(--vert-caravane);
         }
 
         .choice-card:hover .choice-cta {
-            transform: scale(1.1);
+            transform: scale(1.02);
+            padding: 0.7rem 1.8rem;
         }
 
-        .familles:hover .choice-cta { background: var(--rose-spectacle); }
-        .pros:hover .choice-cta { background: var(--vert-caravane); }
-        .boutique:hover .choice-cta { background: var(--jaune-accent); color: var(--text-dark); }
+        .familles:hover .choice-cta {
+            background: var(--rose-spectacle);
+            color: white;
+        }
+
+        .pros:hover .choice-cta {
+            background: var(--vert-caravane);
+            color: white;
+        }
 
         .footer-note {
             text-align: center;
-            margin-top: 3rem;
+            margin-top: 5rem;
             color: var(--text-light);
-            font-size: 0.95rem;
-            opacity: 0.9;
+            font-size: 0.9rem;
+            opacity: 0.85;
             animation: fadeIn 2s ease-out 1s both;
         }
 
-        /* Indicateur de scroll (optionnel) */
-        .scroll-indicator {
-            position: fixed;
-            bottom: 20px;
-            right: 30px;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(10px);
-            padding: 8px 15px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            color: var(--text-light);
-            z-index: 100;
-            pointer-events: none;
-            opacity: 0.7;
-            transition: opacity 0.3s;
-            font-family: monospace;
-        }
-
-        .scroll-indicator:hover {
-            opacity: 1;
-        }
-
         /* Responsive */
-        @media (max-width: 768px) {
+        @media (max-width: 850px) {
             .choices-grid {
-                grid-template-columns: 1fr;
+                justify-content: center;
                 gap: 2rem;
             }
 
             .choice-card {
-                padding: 2.5rem 2rem;
-            }
-
-            .choice-icon {
-                font-size: 4rem;
+                width: 300px;
+                min-height: 420px;
             }
 
             .choice-title {
                 font-size: 1.6rem;
             }
-
-            /* Scrollbar plus fine sur mobile */
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-
-            .scroll-indicator {
-                bottom: 10px;
-                right: 15px;
-                font-size: 0.7rem;
-                padding: 5px 10px;
-            }
         }
 
-        @media (max-width: 480px) {
-            body {
-                padding: 1rem;
+        @media (max-width: 700px) {
+            .choices-grid {
+                flex-direction: column;
+                align-items: center;
             }
-            
-            ::-webkit-scrollbar {
-                width: 6px;
+
+            .choice-card.familles,
+            .choice-card.pros {
+                align-self: center;
+                width: 100%;
+                max-width: 360px;
             }
         }
     </style>
@@ -378,37 +307,30 @@
         </div>
 
         <div class="choices-grid">
-            <!-- Familles & Fans -->
+            <!-- Familles & Fans (tout à gauche) -->
             <a href="familles.html" class="choice-card familles">
-                <span class="choice-icon">🎪</span>
-                <h2 class="choice-title">Familles<br>& Fans</h2>
-                <p class="choice-description">
-                    Découvrez nos spectacles, nos personnages et notre univers magique. 
-                    Réservez vos places et plongez dans 60 ans d'histoire !
-                </p>
+                <div>
+                    <div class="choice-icon">🎪</div>
+                    <h2 class="choice-title">Familles<br>& Fans</h2>
+                    <p class="choice-description">
+                        Découvrez nos spectacles, nos personnages et notre univers magique. 
+                        Réservez vos places et plongez dans 60 ans d'histoire !
+                    </p>
+                </div>
                 <span class="choice-cta">Entrer</span>
             </a>
 
-            <!-- Professionnels -->
+            <!-- Prestations (ex‑Pros, tout à droite) -->
             <a href="pros.html" class="choice-card pros">
-                <span class="choice-icon">🤝</span>
-                <h2 class="choice-title">Bonjour<br>les Pros</h2>
-                <p class="choice-description">
-                    Vous êtes organisateur, mairie ou collectivité ? 
-                    Découvrez nos prestations et demandez un devis personnalisé.
-                </p>
+                <div>
+                    <div class="choice-icon">🤝</div>
+                    <h2 class="choice-title">PRESTATIONS</h2>
+                    <p class="choice-description">
+                        Vous êtes organisateur, mairie ou collectivité ? 
+                        Découvrez nos prestations et demandez un devis personnalisé.
+                    </p>
+                </div>
                 <span class="choice-cta">Accéder</span>
-            </a>
-
-            <!-- Boutique -->
-            <a href="boutique.html" class="choice-card boutique">
-                <span class="choice-icon">🛍️</span>
-                <h2 class="choice-title">Boutique</h2>
-                <p class="choice-description">
-                    Jeux, produits dérivés et souvenirs de vos spectacles préférés. 
-                    La magie à emporter chez vous !
-                </p>
-                <span class="choice-cta">Découvrir</span>
             </a>
         </div>
 
@@ -417,13 +339,7 @@
         </p>
     </div>
 
-    <!-- Indicateur de scroll -->
-    <div class="scroll-indicator" id="scrollIndicator">
-        ↓ SCROLL ↓
-    </div>
-
     <script>
-        // Confetti animation (optimisée)
         function createConfetti() {
             const container = document.getElementById('confetti');
             const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
@@ -461,25 +377,8 @@
             document.head.appendChild(style);
         }
 
-        // Indicateur de scroll qui disparaît après le premier scroll
-        function initScrollIndicator() {
-            const indicator = document.getElementById('scrollIndicator');
-            let hasScrolled = false;
-            
-            window.addEventListener('scroll', function() {
-                if (!hasScrolled && window.scrollY > 50) {
-                    hasScrolled = true;
-                    indicator.style.opacity = '0';
-                    setTimeout(() => {
-                        indicator.style.display = 'none';
-                    }, 500);
-                }
-            });
-        }
-
         window.addEventListener('load', () => {
             createConfetti();
-            initScrollIndicator();
         });
     </script>
 </body>

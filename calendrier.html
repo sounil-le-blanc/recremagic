@@ -20,6 +20,7 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
+            --bg-light: #f9f9f9;
         }
 
         * {
@@ -34,6 +35,7 @@
             min-height: 100vh;
             display: flex;
             flex-direction: column;
+            padding-top: 80px;
         }
 
         /* ==================== */
@@ -58,17 +60,17 @@
         }
 
         /* ==================== */
-        /* NAVBAR */
+        /* NAVBAR (identique aux autres pages) */
         /* ==================== */
         .navbar {
-            background: rgba(44, 24, 16, 0.98);
-            backdrop-filter: blur(10px);
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-container {
@@ -78,15 +80,140 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
         }
 
-        .navbar-logo img {
-            height: 50px;
-            transition: transform 0.3s;
+        /* Groupe gauche : bouton retour + logo */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
         }
 
-        .navbar-logo img:hover {
+        /* Bouton retour (page précédente) */
+        .back-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-wrapper span:first-child {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .back-wrapper .back-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .back-wrapper:hover span:first-child {
             transform: scale(1.05);
+            color: var(--jaune-accent);
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        /* Logo avec texte "Accueil" au survol */
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logo-wrapper img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper span {
+            font-size: 1.3rem;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: var(--jaune-accent);
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: var(--jaune-accent);
         }
 
         /* ==================== */
@@ -95,8 +222,9 @@
         .page-hero {
             background: linear-gradient(135deg, var(--rouge-spectacle), #c2185b);
             color: white;
-            padding: 6rem 2rem 3rem;
+            padding: 4rem 2rem;
             text-align: center;
+            margin-top: 0;
         }
 
         .page-hero h1 {
@@ -111,31 +239,14 @@
             opacity: 0.95;
         }
 
-        .back-btn {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 25px;
-            text-decoration: none;
-            margin-bottom: 2rem;
-            transition: all 0.3s;
-            font-weight: 600;
-        }
-
-        .back-btn:hover {
-            background: var(--jaune-accent);
-            color: var(--text-dark);
-            transform: translateX(-5px);
-        }
-
         /* ==================== */
-        /* TABLEAU SIMPLE - UNIQUEMENT LES MOIS */
+        /* TABLEAU CALENDRIER */
         /* ==================== */
         .calendar-table-container {
-            max-width: 500px;
+            max-width: 800px;
             margin: 3rem auto;
             padding: 0 2rem 4rem;
+            overflow-x: auto;
         }
 
         .calendar-table {
@@ -170,84 +281,32 @@
         }
 
         /* ==================== */
-        /* FOOTER */
-        /* ==================== */
-        .footer {
-            background: var(--text-dark);
-            color: var(--text-light);
-            padding: 3rem 2rem;
-            margin-top: auto;
-        }
-
-        .footer .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-
-        .footer-content {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 2rem;
-        }
-
-        .footer-brand {
-            display: flex;
-            flex-direction: column;
-            gap: 0.5rem;
-        }
-
-        .footer-logo {
-            height: 50px;
-            width: auto;
-            filter: brightness(0) invert(1);
-        }
-
-        .footer-brand p {
-            opacity: 0.8;
-            font-size: 0.9rem;
-        }
-
-        .footer-links {
-            display: flex;
-            gap: 2rem;
-            flex-wrap: wrap;
-        }
-
-        .footer-links a {
-            color: var(--text-light);
-            text-decoration: none;
-            transition: color 0.3s;
-        }
-
-        .footer-links a:hover {
-            color: var(--jaune-accent);
-        }
-
-        /* ==================== */
         /* RESPONSIVE */
         /* ==================== */
         @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            
             .navbar-container {
+                flex-direction: column;
                 padding: 0.6rem 1.5rem;
             }
             
-            .navbar-logo img {
+            .nav-left {
+                gap: 1rem;
+            }
+            
+            .nav-icons {
+                gap: 1.5rem;
+            }
+            
+            .logo-wrapper img {
                 height: 45px;
             }
             
             .page-hero h1 {
                 font-size: 2.5rem;
-            }
-            
-            .page-hero {
-                padding: 5rem 1rem 2rem;
-            }
-            
-            .footer-content {
-                flex-direction: column;
-                text-align: center;
             }
             
             .calendar-table-container {
@@ -259,9 +318,17 @@
                 padding: 0.5rem;
                 font-size: 0.9rem;
             }
+            
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
         }
 
         @media (max-width: 480px) {
+            .page-hero {
+                padding: 2rem 1rem;
+            }
+            
             .page-hero h1 {
                 font-size: 1.8rem;
             }
@@ -269,89 +336,92 @@
             .page-hero p {
                 font-size: 1rem;
             }
-            
-            .back-btn {
-                font-size: 0.9rem;
-            }
         }
     </style>
 </head>
 <body>
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo">
+
+<!-- BARRE MARRON -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <!-- Bouton retour (page précédente) -->
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
+            </div>
+
+            <!-- Logo avec texte "Accueil" au survol -->
+            <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
             </a>
         </div>
-    </nav>
 
-    <!-- PAGE HEADER -->
-    <div class="page-hero">
-        <a href="familles.html" class="back-btn">← Retour</a>
-        <h1>📅 Calendrier 2026</h1>
-        <p>Planning des représentations</p>
-    </div>
-
-    <!-- TABLEAU SIMPLE : UNIQUEMENT LES MOIS -->
-    <div class="calendar-table-container">
-        <table class="calendar-table">
-            <thead>
-                <tr>
-                    <th>Mois</th>
-                </tr>
-            </thead>
-            <tbody id="calendarBody">
-                <!-- Les mois seront générés par JavaScript -->
-            </tbody>
-         </table>
-    </div>
-
-    <!-- FOOTER -->
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo" onerror="this.style.display='none'">
-                    <p>Récré Magic • Circus Théâtre Ambulant depuis 1964</p>
-                </div>
-                <div class="footer-links">
-                    <a href="index.html">Accueil</a>
-                    <a href="spectacles.html">Spectacles</a>
-                    <a href="pros.html">Espace Pro</a>
-                    <a href="familles.html">Familles</a>
-                    <a href="boutique.html">Boutique</a>
-                </div>
-            </div>
+        <div class="nav-icons">
+            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
+                <span>📅</span>
+                <span class="icon-label">Calendrier</span>
+            </a>
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
         </div>
-    </footer>
+    </div>
+</nav>
 
-    <script>
-        // ==================== //
-        // LISTE DES MOIS
-        // ==================== //
+<!-- PAGE HEADER -->
+<div class="page-hero">
+    <h1>📅 Calendrier 2026</h1>
+    <p>Planning des représentations</p>
+</div>
+
+<!-- TABLEAU CALENDRIER -->
+<div class="calendar-table-container">
+    <table class="calendar-table">
+        <thead>
+            <tr>
+                <th>Mois</th>
+            </tr>
+        </thead>
+        <tbody id="calendarBody">
+            <!-- Les mois seront générés par JavaScript -->
+        </tbody>
+    </table>
+</div>
+
+<script>
+    // ==================== //
+    // LISTE DES MOIS
+    // ==================== //
+    
+    const months = [
+        "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
+        "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
+    ];
+    
+    // Générer le tableau
+    function generateCalendar() {
+        const tbody = document.getElementById('calendarBody');
+        tbody.innerHTML = '';
         
-        const months = [
-            "Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
-            "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"
-        ];
-        
-        // Générer le tableau
-        function generateCalendar() {
-            const tbody = document.getElementById('calendarBody');
-            tbody.innerHTML = '';
-            
-            months.forEach(month => {
-                const row = document.createElement('tr');
-                row.innerHTML = `
-                    <td class="month-cell">${month}</td>
-                `;
-                tbody.appendChild(row);
-            });
-        }
-        
-        // Initialiser la page
-        document.addEventListener('DOMContentLoaded', generateCalendar);
-    </script>
+        months.forEach(month => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td class="month-cell">${month}</td>
+            `;
+            tbody.appendChild(row);
+        });
+    }
+    
+    // Initialiser la page
+    document.addEventListener('DOMContentLoaded', generateCalendar);
+</script>
+
 </body>
 </html>
