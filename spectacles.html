@@ -93,7 +93,7 @@
         }
 
         /* ==================== */
-        /* NAVBAR (identique à pros.html) */
+        /* NAVBAR (avec bouton retour) */
         /* ==================== */
         .navbar {
             position: fixed;
@@ -117,14 +117,13 @@
             gap: 1rem;
         }
 
-        /* Groupe gauche : bouton retour + logo */
         .nav-left {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
 
-        /* Bouton retour (page précédente) */
+        /* Bouton retour */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -631,6 +630,10 @@
             .page-header {
                 margin: 1rem;
             }
+            
+            .navbar-container {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 768px) {
@@ -704,10 +707,6 @@
                 max-height: 70%;
             }
             
-            .navbar-container {
-                flex-direction: column;
-            }
-            
             .nav-left {
                 gap: 1rem;
             }
@@ -754,30 +753,21 @@
 </head>
 <body>
 
-<!-- ==================== -->
-<!-- BARRE MARRON (identique à pros.html) -->
-<!-- ==================== -->
+<!-- BARRE MARRON (avec bouton retour) -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <!-- Bouton retour (page précédente) -->
+            <!-- Bouton retour -->
             <div class="back-wrapper" onclick="history.back()">
                 <span>← Retour</span>
                 <span class="back-label">Retour</span>
             </div>
-
-            <!-- Logo avec texte "Accueil" au survol -->
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
                 <span class="logo-label">Accueil</span>
             </a>
         </div>
-
         <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
-                <span>📅</span>
-                <span class="icon-label">Calendrier</span>
-            </a>
             <a href="boutique.html" class="icon-wrapper" title="Boutique">
                 <span>💰</span>
                 <span class="icon-label">Boutique</span>

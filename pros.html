@@ -72,14 +72,13 @@
             gap: 1rem;
         }
 
-        /* Groupe gauche : bouton retour + logo */
         .nav-left {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
 
-        /* Bouton retour (page précédente) */
+        /* Bouton retour */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -277,7 +276,6 @@
         .spectacles .choice-title { color: var(--vert-caravane); }
         .expos .choice-title { color: var(--rose-spectacle); }
         .stages .choice-title { color: var(--jaune-accent); }
-        .calendrier .choice-title { color: #4D96FF; }
 
         .choice-description {
             font-size: 1rem;
@@ -298,7 +296,6 @@
         .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); }
         .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); }
         .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); }
-        .calendrier .choice-cta { color: #4D96FF; background: rgba(77,150,255,0.1); }
 
         .choice-card:hover .choice-cta {
             transform: scale(1.02);
@@ -356,15 +353,6 @@
             .nav-icons {
                 gap: 1.5rem;
             }
-            .nav-left {
-                gap: 1rem;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-            }
         }
     </style>
 </head>
@@ -374,24 +362,17 @@
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <!-- Bouton retour (page précédente) -->
+            <!-- Bouton retour (réintégré) -->
             <div class="back-wrapper" onclick="history.back()">
                 <span>← Retour</span>
                 <span class="back-label">Retour</span>
             </div>
-
-            <!-- Logo avec texte "Accueil" au survol -->
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
                 <span class="logo-label">Accueil</span>
             </a>
         </div>
-
         <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
-                <span>📅</span>
-                <span class="icon-label">Calendrier</span>
-            </a>
             <a href="boutique.html" class="icon-wrapper" title="Boutique">
                 <span>💰</span>
                 <span class="icon-label">Boutique</span>
@@ -443,17 +424,6 @@
                 <span class="choice-cta">Découvrir →</span>
             </a>
             <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
-        </div>
-
-        <!-- Bloc 4 : Calendrier (carte à droite) -->
-        <div class="prestation-block right">
-            <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
-            <a href="calendrier.html" class="choice-card calendrier">
-                <div class="choice-icon">📅</div>
-                <h2 class="choice-title">Calendrier</h2>
-                <p class="choice-description">Dates, tournées et événements.</p>
-                <span class="choice-cta">Voir →</span>
-            </a>
         </div>
 
     </div>

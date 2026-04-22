@@ -3,21 +3,57 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic - Familles & Fans</title>
+    <title>Nos Expositions - Récré Magic Pro</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        
-        html, body {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Quicksand', sans-serif;
-            background: #1a1a1a;
+        /* ==================== */
+        /* RESET & VARIABLES */
+        /* ==================== */
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
+            --jaune-accent: #FFB300;
+            --creme-vintage: #FFF8E1;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
         }
 
-        /* ========== SCROLLBAR ========== */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            background-image: url('images/expos-fond.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            animation: subtleZoom 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes subtleZoom {
+            0% {
+                background-size: cover;
+                background-position: center;
+            }
+            100% {
+                background-size: 110%;
+                background-position: 52% 48%;
+            }
+        }
+
+        /* ==================== */
+        /* SCROLLBAR PERSONNALISÉE */
+        /* ==================== */
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -26,18 +62,19 @@
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #EC407A, #7CB69F);
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
             border-radius: 10px;
         }
         ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #7CB69F, #EC407A);
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
         }
 
-        /* ========== NAVBAR (barre marron) ========== */
+        /* ==================== */
+        /* NAVBAR (sans calendrier) */
+        /* ==================== */
         .navbar {
-            position: fixed;
+            position: sticky;
             top: 0;
-            left: 0;
             width: 100%;
             background: rgba(44, 24, 16, 0.95);
             backdrop-filter: blur(10px);
@@ -62,6 +99,7 @@
             gap: 1.5rem;
         }
 
+        /* Bouton retour (page précédente) */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -95,14 +133,15 @@
 
         .back-wrapper:hover span:first-child {
             transform: scale(1.05);
-            color: #FFB300;
+            color: var(--jaune-accent);
         }
 
         .back-wrapper:hover .back-label {
             opacity: 1;
-            color: #FFB300;
+            color: var(--jaune-accent);
         }
 
+        /* Logo avec texte "Accueil" au survol */
         .logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -137,7 +176,7 @@
 
         .logo-wrapper:hover .logo-label {
             opacity: 1;
-            color: #FFB300;
+            color: var(--jaune-accent);
         }
 
         .nav-icons {
@@ -177,143 +216,199 @@
 
         .icon-wrapper:hover span {
             transform: scale(1.1);
-            color: #FFB300;
+            color: var(--jaune-accent);
         }
 
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            color: #FFB300;
+            color: var(--jaune-accent);
         }
 
-        /* ========== DESKTOP VERSION ========== */
-        .desktop-view {
-            display: block;
+        /* ==================== */
+        /* PAGE HEADER */
+        /* ==================== */
+        .page-header {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 30px;
+            margin: 1rem;
         }
 
-        .caravane-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+        .page-header h1 {
+            font-family: 'Fredoka', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* ==================== */
+        /* EXPOS LIST */
+        /* ==================== */
+        .expos-list {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
             display: flex;
-            align-items: center;
-            justify-content: center;
-            background: linear-gradient(135deg, #2d1b1b 0%, #1a1a1a 100%);
+            flex-direction: column;
+            gap: 3rem;
         }
 
-        .caravane-container {
-            position: relative;
-            width: 90%;
-            max-width: 1800px;
-            margin: 0 auto;
-        }
-
-        .caravane-image {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 10px;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-            transition: opacity 0.05s ease;
-        }
-
-        .hotspots-svg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
-
-        .hotspot {
-            cursor: pointer;
-            pointer-events: all;
-            fill: rgba(255, 255, 255, 0.1);
-            transition: transform 0.2s ease, fill 0.2s ease;
-            transform-origin: center;
-        }
-
-        /* Effet de grossissement au survol */
-        .hotspot:hover {
-            transform: scale(1.1);
-            fill: rgba(255, 255, 255, 0.2);
-        }
-
-        .instruction {
-            position: fixed;
-            bottom: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
+        .expo-item {
             background: rgba(255, 255, 255, 0.95);
-            color: #2C1810;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            font-weight: 700;
-            font-size: 1rem;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.5);
-            animation: pulse 2s ease-in-out infinite;
-            z-index: 1000;
+            backdrop-filter: blur(2px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
 
-        @keyframes pulse {
-            0%, 100% { transform: translateX(-50%) scale(1); }
-            50% { transform: translateX(-50%) scale(1.05); }
+        .expo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
         }
 
-        /* ========== MOBILE VERSION ========== */
-        .mobile-view {
-            display: none;
-        }
-
-        .mobile-caravane-wrapper {
-            position: fixed;
-            top: 0;
-            left: 0;
+        .expo-img img {
             width: 100%;
             height: 100%;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            background: #1a1a1a;
-            -webkit-overflow-scrolling: touch;
+            object-fit: cover;
         }
 
-        .mobile-caravane-container {
-            height: 100%;
+        .expo-content {
+            padding: 3rem;
+        }
+
+        .expo-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: var(--rose-spectacle);
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .expo-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.2rem;
+            color: #c2185b;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .expo-description {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .expo-specs {
+            background: var(--creme-vintage);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .spec-item {
             display: flex;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .spec-item:last-child {
+            border: none;
+        }
+
+        .spec-label {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            min-width: 150px;
+        }
+
+        /* Boutons */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
             align-items: center;
-            padding-left: 50vw;
+            gap: 1rem;
+            margin-top: 1rem;
         }
 
-        .mobile-caravane-container::after {
-            content: '';
-            display: block;
-            width: 80vw;
-            height: 1px;
-            flex-shrink: 0;
+        /* ==================== */
+        /* CONTACT CTA */
+        /* ==================== */
+        .contact-cta {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 4rem auto;
         }
 
-        .mobile-caravane-image {
-            height: 60vh;
-            width: auto;
-            display: block;
-            border-radius: 10px;
-            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
-            cursor: pointer;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-touch-callout: none;
-            -webkit-user-select: none;
-            user-select: none;
+        .contact-cta h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
         }
 
-        /* ========== RESPONSIVE ========== */
+        .contact-cta p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-cta a {
+            color: var(--jaune-accent);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .contact-cta a:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== */
+        /* RESPONSIVE */
+        /* ==================== */
         @media (max-width: 968px) {
-            .desktop-view { display: none; }
-            .mobile-view { display: block; }
-            .instruction { display: none; }
+            .expo-item {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
             .navbar-container {
                 flex-direction: column;
+                padding: 0.6rem 1.5rem;
             }
             .nav-left {
                 gap: 1rem;
@@ -321,21 +416,54 @@
             .nav-icons {
                 gap: 1.5rem;
             }
-        }
-
-        @media (max-width: 768px) {
-            .navbar-container {
-                padding: 0.6rem 1.5rem;
-            }
             .logo-wrapper img {
                 height: 45px;
+            }
+            .expos-list {
+                padding: 0 1rem;
+            }
+            .expo-content {
+                padding: 1.5rem;
+            }
+            .expo-title {
+                font-size: 1.8rem;
+            }
+            .contact-cta {
+                margin: 2rem 1rem;
+                padding: 2rem;
+            }
+            .contact-cta h2 {
+                font-size: 1.8rem;
+            }
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-primary {
+                text-align: center;
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .expo-title {
+                font-size: 1.5rem;
+            }
+            .spec-item {
+                flex-direction: column;
+            }
+            .spec-label {
+                margin-bottom: 0.2rem;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- BARRE MARRON -->
+<!-- BARRE MARRON (sans calendrier) -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -349,10 +477,6 @@
             </a>
         </div>
         <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
-                <span>📅</span>
-                <span class="icon-label">Calendrier</span>
-            </a>
             <a href="boutique.html" class="icon-wrapper" title="Boutique">
                 <span>💰</span>
                 <span class="icon-label">Boutique</span>
@@ -365,185 +489,73 @@
     </div>
 </nav>
 
-<!-- ========== DESKTOP VERSION ========== -->
-<div class="desktop-view">
-    <div class="instruction">✨ Survolez les personnages pour les découvrir !</div>
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <h1>🎨 Nos Expositions</h1>
+    <p>Installations interactives pour vos événements</p>
+</div>
 
-    <div class="caravane-wrapper">
-        <div class="caravane-container">
-            <img src="images/caravane-base.png"
-                 alt="Caravane Récré Magic"
-                 class="caravane-image"
-                 id="caravaneImg">
+<!-- EXPOS LIST -->
+<div class="expos-list">
+    <!-- Carte 1 : LA FÉERIE DES MARIONNETTES -->
+    <div class="expo-item">
+        <div class="expo-img"><img src="images/expo-marionnettes.jpg" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-content">
+            <span class="expo-badge">UNIQUE EN FRANCE</span>
+            <h2 class="expo-title">LA FÉERIE DES MARIONNETTES</h2>
+            <p class="expo-description">
+                12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur 
+                appuie sur un simple bouton ! Une exposition interactive de 2 mètres de haut qui 
+                émerveille petits et grands.
+            </p>
+            <div class="expo-specs">
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> H 2m × L 1,90m × P 0,60m (par vitrine)</div>
+                <div class="spec-item"><span class="spec-label">🎭 Composition :</span> 12 vitrines / 56 personnages articulés</div>
+                <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 25m² minimum</div>
+                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Prises 220V (1 par vitrine)</div>
+                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur uniquement, espace couvert</div>
+                <div class="spec-item"><span class="spec-label">⏳ Location :</span> Week-end, semaine, mois (tarifs dégressifs)</div>
+            </div>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
+                <a href="images/expos-fond.png" class="btn-primary" target="_blank">📍 ALLER SUR LA PLACE</a>
+            </div>
+        </div>
+    </div>
 
-            <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
-                <!-- Zone 1: TOTO (YouTube) -->
-                <a href="https://www.youtube.com/@recremagic" target="_blank">
-                    <rect x="250" y="140" width="180" height="380" class="hotspot"
-                          onmouseover="changeImage('caravane-toto.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 2: RIDEAU ROUGE -->
-                <a href="spectacles.html">
-                    <rect x="535" y="275" width="410" height="200" class="hotspot"
-                          onmouseover="changeImage('caravane-rideau.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 3: FLO -->
-                <a href="nos-stars.html">
-                    <rect x="1000" y="180" width="200" height="400" class="hotspot"
-                          onmouseover="changeImage('caravane-flo.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 4: RIDEAU OR -->
-                <a href="nos-expos-familles.html">
-                    <rect x="1240" y="140" width="190" height="400" class="hotspot"
-                          onmouseover="changeImage('caravane-rideau-or.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 5: CALENDRIER 2026 -->
-                <a href="calendrier.html">
-                    <rect x="1610" y="210" width="120" height="100" class="hotspot"
-                          onmouseover="changeImage('caravane-calendrier.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 6: BAPTISTE -->
-                <a href="nos-stars.html">
-                    <rect x="1600" y="360" width="150" height="220" class="hotspot"
-                          onmouseover="changeImage('caravane-baptiste.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 7: GUS -->
-                <a href="nos-stars.html">
-                    <rect x="1800" y="260" width="200" height="420" class="hotspot"
-                          onmouseover="changeImage('caravane-gus.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-
-                <!-- Zone 8: COOKIE -->
-                <a href="nos-stars.html">
-                    <rect x="515" y="480" width="100" height="100" class="hotspot"
-                          onmouseover="changeImage('caravane-cookie.png')" 
-                          onmouseout="changeImage('caravane-base.png')" />
-                </a>
-            </svg>
+    <!-- Carte 2 : LES GÉANTS DU CARNAVAL -->
+    <div class="expo-item">
+        <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-content">
+            <span class="expo-badge">SPECTACULAIRE</span>
+            <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
+            <p class="expo-description">
+                12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
+                spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval. 
+                Parfait pour festivals, fêtes de village et événements extérieurs.
+            </p>
+            <div class="expo-specs">
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> Personnages de 2 à 3 mètres de hauteur</div>
+                <div class="spec-item"><span class="spec-label">🎪 Composition :</span> 12 personnages géants animés</div>
+                <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 40m² minimum</div>
+                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Autonome ou avec alimentation selon configuration</div>
+                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur ou extérieur couvert</div>
+                <div class="spec-item"><span class="spec-label">🛠️ Montage :</span> 2h d'installation</div>
+            </div>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
+            </div>
         </div>
     </div>
 </div>
 
-<!-- ========== MOBILE VERSION ========== -->
-<div class="mobile-view">
-    <div class="mobile-caravane-wrapper" id="mobileWrapper">
-        <div class="mobile-caravane-container">
-            <img src="images/caravane-base.png"
-                 alt="Caravane Récré Magic"
-                 class="mobile-caravane-image"
-                 id="mobileCaravaneImg">
-        </div>
-    </div>
+<!-- CONTACT SECTION -->
+<div class="contact-cta" id="contact">
+    <h2>Intéressé par nos expositions ?</h2>
+    <p>Enrichissez vos événements avec nos installations uniques</p>
+    <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+    <a href="Devis.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;" target="_blank">📩 Demander un devis</a>
 </div>
 
-<script>
-    // ========== DESKTOP: Image switching ==========
-    function changeImage(imageName) {
-        const img = document.getElementById('caravaneImg');
-        if (img) {
-            img.src = 'images/' + imageName;
-        }
-    }
-
-    // Preload desktop images
-    window.addEventListener('load', () => {
-        const imagesToPreload = [
-            'caravane-base.png',
-            'caravane-toto.png',
-            'caravane-rideau.png',
-            'caravane-flo.png',
-            'caravane-rideau-or.png',
-            'caravane-calendrier.png',
-            'caravane-baptiste.png',
-            'caravane-gus.png',
-            'caravane-cookie.png'
-        ];
-
-        imagesToPreload.forEach(src => {
-            const img = new Image();
-            img.src = 'images/' + src;
-        });
-    });
-
-    // ========== MOBILE: Horizontal scroll with zone detection ==========
-    if (window.innerWidth <= 968) {
-        const wrapper = document.getElementById('mobileWrapper');
-        const img = document.getElementById('mobileCaravaneImg');
-
-        if (wrapper && img) {
-            const zones = [
-                { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png', link: 'https://www.youtube.com/@recremagic', external: true },
-                { name: 'cookie', start: 23, end: 29, image: 'caravane-cookie.png', link: 'nos-stars.html', external: false },
-                { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png', link: 'spectacles.html', external: false },
-                { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png', link: 'nos-stars.html', external: false },
-                { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png', link: 'nos-expos-familles.html', external: false },
-                { name: 'calendrier', start: 78, end: 83, image: 'caravane-calendrier.png', link: 'calendrier.html', external: false },
-                { name: 'baptiste', start: 84, end: 90, image: 'caravane-baptiste.png', link: 'nos-stars.html', external: false },
-                { name: 'gus', start: 91, end: 100, image: 'caravane-gus.png', link: 'nos-stars.html', external: false }
-            ];
-
-            let currentZone = null;
-            let currentZoneData = null;
-
-            function checkZone() {
-                const imgRect = img.getBoundingClientRect();
-                const imgWidth = imgRect.width;
-                const screenCenter = window.innerWidth / 2;
-
-                const centerOnImage = screenCenter - imgRect.left;
-                const centerPercent = (centerOnImage / imgWidth) * 100;
-
-                let foundZone = null;
-                for (let zone of zones) {
-                    if (centerPercent >= zone.start && centerPercent <= zone.end) {
-                        foundZone = zone;
-                        break;
-                    }
-                }
-
-                if (foundZone && foundZone.name !== currentZone) {
-                    currentZone = foundZone.name;
-                    currentZoneData = foundZone;
-                    img.src = 'images/' + foundZone.image;
-                } else if (!foundZone && currentZone !== null) {
-                    currentZone = null;
-                    currentZoneData = null;
-                    img.src = 'images/caravane-base.png';
-                }
-            }
-
-            img.addEventListener('click', () => {
-                if (currentZoneData) {
-                    if (currentZoneData.external) {
-                        window.open(currentZoneData.link, '_blank');
-                    } else {
-                        window.location.href = currentZoneData.link;
-                    }
-                }
-            });
-
-            let scrollTimeout;
-            wrapper.addEventListener('scroll', () => {
-                clearTimeout(scrollTimeout);
-                scrollTimeout = setTimeout(checkZone, 50);
-            });
-
-            setTimeout(checkZone, 200);
-        }
-    }
-</script>
 </body>
 </html>
