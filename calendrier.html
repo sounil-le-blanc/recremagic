@@ -68,7 +68,7 @@
         }
 
         /* ==================== */
-        /* NAVBAR (identique aux autres pages) */
+        /* NAVBAR */
         /* ==================== */
         .navbar {
             position: fixed;
@@ -222,11 +222,11 @@
         }
 
         /* ==================== */
-        /* CALENDRIER PERPÉTUEL */
+        /* CALENDRIER */
         /* ==================== */
         .calendar-container {
-            max-width: 900px;
-            width: 90%;
+            max-width: 1000px;
+            width: 95%;
             margin: 2rem auto;
             background: rgba(255, 255, 255, 0.92);
             backdrop-filter: blur(8px);
@@ -234,6 +234,7 @@
             padding: 2rem;
             box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
             border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
         }
 
         .calendar-header {
@@ -322,17 +323,22 @@
         }
 
         .calendar-day {
+            position: relative;
             padding: 0.8rem 0;
             border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.2s;
+            cursor: default;
+            transition: transform 0.2s ease;
             font-weight: 500;
             background: rgba(255, 255, 255, 0.7);
         }
 
+        /* Zoom au survol */
         .calendar-day:hover {
+            transform: scale(1.08);
             background: var(--jaune-accent);
-            transform: scale(1.05);
+            color: var(--text-dark);
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
 
         .today {
@@ -345,9 +351,71 @@
             opacity: 0.4;
         }
 
-        /* ==================== */
-        /* FOOTER (optionnel, mais conservé pour cohérence) */
-        /* ==================== */
+        /* Carte d’édition - gérée en JS (affichage dynamique) */
+        .edit-card {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            background: white;
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--vert-caravane);
+            z-index: 20;
+            text-align: left;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .edit-card.visible {
+            display: block;
+        }
+
+        .edit-card h4 {
+            font-family: 'Fredoka', cursive;
+            color: var(--rose-spectacle);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .edit-card input, .edit-card textarea {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+
+        .edit-card textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .edit-card button {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+            transition: transform 0.1s;
+        }
+
+        .edit-card button:hover {
+            transform: scale(1.02);
+        }
+
+        .edit-card .close-card {
+            background: #aaa;
+        }
+
+        /* Footer */
         .footer {
             background: rgba(44, 24, 16, 0.95);
             color: var(--text-light);
@@ -358,39 +426,16 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            .navbar-container {
-                flex-direction: column;
-                padding: 0.6rem 1.5rem;
-            }
-            .nav-left {
-                gap: 1rem;
-            }
-            .nav-icons {
-                gap: 1.5rem;
-            }
-            .logo-wrapper img {
-                height: 45px;
-            }
-            .calendar-container {
-                padding: 1rem;
-                width: 95%;
-            }
-            .month-year span {
-                font-size: 1.2rem;
-                min-width: 120px;
-            }
-            .weekday, .calendar-day {
-                font-size: 0.7rem;
-                padding: 0.5rem 0;
-            }
-            .nav-btn {
-                width: 32px;
-                height: 32px;
-                font-size: 1rem;
-            }
+            body { padding-top: 70px; }
+            .navbar-container { flex-direction: column; padding: 0.6rem 1.5rem; }
+            .nav-left { gap: 1rem; }
+            .nav-icons { gap: 1.5rem; }
+            .logo-wrapper img { height: 45px; }
+            .calendar-container { padding: 1rem; }
+            .month-year span { font-size: 1.2rem; min-width: 120px; }
+            .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
+            .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
+            .edit-card { width: 220px; top: 100%; }
         }
     </style>
 </head>
@@ -398,7 +443,7 @@
 
 <div class="confetti-container" id="confetti"></div>
 
-<!-- BARRE MARRON (identique aux autres pages) -->
+<!-- BARRE MARRON -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -424,7 +469,7 @@
     </div>
 </nav>
 
-<!-- CALENDRIER PERPÉTUEL -->
+<!-- CALENDRIER -->
 <div class="calendar-container">
     <div class="calendar-header">
         <div class="month-year">
@@ -437,81 +482,184 @@
             <select id="yearSelect"></select>
         </div>
     </div>
-    <div class="calendar-grid" id="calendarGrid">
-        <!-- Les jours de la semaine sont générés en JS, mais on peut les mettre en dur -->
-    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
 </div>
 
-<!-- Footer léger (optionnel) -->
 <div class="footer">
-    <p>Récré Magic • Circus Théâtre Ambulant • Calendrier perpétuel</p>
+    <p>Récré Magic • Circus Théâtre Ambulant • Calendrier perpétuel • Survoler une date pour ajouter spectacle et lieu</p>
 </div>
 
 <script>
     // ==================== //
-    // CALENDRIER PERPÉTUEL
+    // CALENDRIER ET ÉDITION PERSISTANTE
     // ==================== //
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
 
-    // Restreindre l'année entre 2026 et 2028
     if (currentYear < 2026) currentYear = 2026;
     if (currentYear > 2028) currentYear = 2028;
 
     const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
     const weekdays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
+    let eventsData = {};
+    let hideTimeout = null;
+
+    function loadData() {
+        const stored = localStorage.getItem('recremagic_calendar');
+        if (stored) eventsData = JSON.parse(stored);
+    }
+
+    function saveData() {
+        localStorage.setItem('recremagic_calendar', JSON.stringify(eventsData));
+    }
+
+    function getDateKey(year, month, day) {
+        return `${year}-${month+1}-${day}`;
+    }
+
+    function saveEvent(year, month, day, spectacle, lieu) {
+        const key = getDateKey(year, month, day);
+        if (!eventsData[key]) eventsData[key] = {};
+        eventsData[key].spectacle = spectacle;
+        eventsData[key].lieu = lieu;
+        saveData();
+    }
+
+    function loadEvent(year, month, day) {
+        const key = getDateKey(year, month, day);
+        return eventsData[key] || { spectacle: '', lieu: '' };
+    }
+
+    // Gestion des cartes (affichage au survol)
+    let currentOpenCard = null;
+
+    function showCard(card) {
+        if (hideTimeout) clearTimeout(hideTimeout);
+        if (currentOpenCard && currentOpenCard !== card) {
+            currentOpenCard.classList.remove('visible');
+        }
+        card.classList.add('visible');
+        currentOpenCard = card;
+    }
+
+    function scheduleHideCard(card) {
+        hideTimeout = setTimeout(() => {
+            if (card) card.classList.remove('visible');
+            if (currentOpenCard === card) currentOpenCard = null;
+        }, 200);
+    }
+
+    function cancelHide() {
+        if (hideTimeout) clearTimeout(hideTimeout);
+    }
+
+    function attachCardEvents(card, dayDiv) {
+        if (!card) return;
+        // Quand la souris entre dans la carte, on annule la fermeture
+        card.addEventListener('mouseenter', () => cancelHide());
+        card.addEventListener('mouseleave', () => scheduleHideCard(card));
+        
+        // Boutons de la carte
+        const saveBtn = card.querySelector('.save-event-btn');
+        const closeBtn = card.querySelector('.close-card');
+        const spectacleInput = card.querySelector('.edit-spectacle');
+        const lieuTextarea = card.querySelector('.edit-lieu');
+        
+        if (saveBtn) {
+            saveBtn.onclick = (e) => {
+                e.stopPropagation();
+                const year = parseInt(dayDiv.dataset.year);
+                const month = parseInt(dayDiv.dataset.month);
+                const day = parseInt(dayDiv.dataset.day);
+                const spectacle = spectacleInput.value;
+                const lieu = lieuTextarea.value;
+                saveEvent(year, month, day, spectacle, lieu);
+                alert(`✅ Enregistré pour le ${day}/${month+1}/${year}`);
+            };
+        }
+        if (closeBtn) {
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                card.classList.remove('visible');
+                if (currentOpenCard === card) currentOpenCard = null;
+            };
+        }
+    }
+
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-        const startWeekday = firstDayOfMonth.getDay(); // 0 = dimanche, on convertit en lundi = 1
-        let startOffset = startWeekday === 0 ? 6 : startWeekday - 1; // décalage pour commencer lundi
-        
+        let startWeekday = firstDayOfMonth.getDay();
+        let startOffset = startWeekday === 0 ? 6 : startWeekday - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         
-        // Générer les cases
         let calendarHtml = '';
-        
-        // Ajouter les en-têtes des jours
         weekdays.forEach(day => {
             calendarHtml += `<div class="weekday">${day}</div>`;
         });
-        
-        // Cases vides avant le premier jour
         for (let i = 0; i < startOffset; i++) {
             calendarHtml += `<div class="calendar-day other-month"></div>`;
         }
         
-        // Jours du mois
         const today = new Date();
         const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
         
         for (let d = 1; d <= daysInMonth; d++) {
-            let isToday = (isCurrentMonthYear && d === today.getDate());
-            let todayClass = isToday ? 'today' : '';
-            calendarHtml += `<div class="calendar-day ${todayClass}" data-day="${d}">${d}</div>`;
-        }
-        
-        // Compléter pour finir la grille (optionnel, pour avoir toujours 6 lignes)
-        const totalCells = Math.ceil((startOffset + daysInMonth) / 7) * 7;
-        const remaining = totalCells - (startOffset + daysInMonth);
-        for (let i = 0; i < remaining; i++) {
-            calendarHtml += `<div class="calendar-day other-month"></div>`;
+            const isToday = (isCurrentMonthYear && d === today.getDate());
+            const todayClass = isToday ? 'today' : '';
+            const eventData = loadEvent(currentYear, currentMonth, d);
+            
+            calendarHtml += `
+                <div class="calendar-day ${todayClass}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                    ${d}
+                    <div class="edit-card">
+                        <h4>📝 Spectacle / Lieu</h4>
+                        <input type="text" class="edit-spectacle" placeholder="Nom du spectacle" value="${escapeHtml(eventData.spectacle)}">
+                        <textarea class="edit-lieu" placeholder="Lieu (ville, salle...)">${escapeHtml(eventData.lieu)}</textarea>
+                        <button class="save-event-btn">💾 Enregistrer</button>
+                        <button class="close-card">✖ Fermer</button>
+                    </div>
+                </div>
+            `;
         }
         
         document.getElementById('calendarGrid').innerHTML = calendarHtml;
         document.getElementById('monthName').innerText = `${monthNames[currentMonth]} ${currentYear}`;
         
-        // Mettre à jour le select d'année si nécessaire
+        // Synchroniser le select année
         const yearSelect = document.getElementById('yearSelect');
-        if (yearSelect.value != currentYear) {
-            yearSelect.value = currentYear;
-        }
+        if (yearSelect.value != currentYear) yearSelect.value = currentYear;
+        
+        // Attacher les événements de survol et de carte
+        const dayDivs = document.querySelectorAll('.calendar-day[data-day]');
+        dayDivs.forEach(dayDiv => {
+            const card = dayDiv.querySelector('.edit-card');
+            if (!card) return;
+            
+            // Survol de la date : afficher la carte
+            dayDiv.addEventListener('mouseenter', () => {
+                cancelHide();
+                showCard(card);
+            });
+            dayDiv.addEventListener('mouseleave', () => scheduleHideCard(card));
+            
+            attachCardEvents(card, dayDiv);
+        });
     }
-
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
     function populateYearSelect() {
         const yearSelect = document.getElementById('yearSelect');
-        // Plage d'années : 2026 à 2028
         for (let y = 2026; y <= 2028; y++) {
             const option = document.createElement('option');
             option.value = y;
@@ -524,14 +672,14 @@
             renderCalendar();
         });
     }
-
+    
     function changeMonth(delta) {
         let newMonth = currentMonth + delta;
         let newYear = currentYear;
         if (newMonth < 0) {
             newMonth = 11;
             newYear--;
-            if (newYear < 2026) newYear = 2026; // empêcher de sortir de la plage
+            if (newYear < 2026) newYear = 2026;
         } else if (newMonth > 11) {
             newMonth = 0;
             newYear++;
@@ -541,21 +689,16 @@
         currentYear = newYear;
         renderCalendar();
     }
-
+    
     document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
     
-    // Initialisation
-    populateYearSelect();
-    renderCalendar();
-
-    // Confettis (optionnel)
+    // Confettis
     function createConfetti() {
         const container = document.getElementById('confetti');
         if (!container) return;
         const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
-        const confettiCount = 40;
-        for (let i = 0; i < confettiCount; i++) {
+        for (let i = 0; i < 40; i++) {
             const confetti = document.createElement('div');
             confetti.style.position = 'absolute';
             confetti.style.width = Math.random() * 10 + 5 + 'px';
@@ -572,20 +715,14 @@
             container.appendChild(confetti);
         }
         const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
-                    opacity: 0;
-                }
-            }
-        `;
+        style.textContent = `@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
         document.head.appendChild(style);
     }
     
-    window.addEventListener('load', () => {
-        createConfetti();
-    });
+    loadData();
+    populateYearSelect();
+    renderCalendar();
+    window.addEventListener('load', createConfetti);
 </script>
 </body>
 </html>
