@@ -20,6 +20,9 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
+            --bois-clair: #C4A27A;
+            --bois-fonce: #8B5E3C;
+            --bois-tres-fonce: #5C3A1E;
         }
 
         * {
@@ -30,13 +33,11 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            /* Image de fond */
             background-image: url('images/fond-image.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            /* Superposition sombre pour la lisibilité */
             position: relative;
             min-height: 100vh;
             display: flex;
@@ -48,7 +49,7 @@
             padding-top: 80px;
         }
 
-        /* Superposition sombre (optionnelle, pour que le texte ressorte mieux) */
+        /* Superposition sombre pour la lisibilité */
         body::before {
             content: '';
             position: fixed;
@@ -61,7 +62,6 @@
             pointer-events: none;
         }
 
-        /* Tous les éléments principaux au-dessus de la superposition */
         .navbar, .container, .confetti-container {
             z-index: 2;
         }
@@ -70,17 +70,14 @@
         ::-webkit-scrollbar {
             width: 12px;
         }
-
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
-
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
             border-radius: 10px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
         }
@@ -298,6 +295,9 @@
             animation: fadeInUp 1.4s ease-out 0.6s both;
         }
 
+        /* ==================== */
+        /* CADRE BOIS POUR LES CARTES */
+        /* ==================== */
         .choice-card {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(2px);
@@ -306,29 +306,55 @@
             text-align: center;
             text-decoration: none;
             color: var(--text-dark);
-            box-shadow: 0 20px 35px -10px rgba(0, 0, 0, 0.2);
             transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            border: 1px solid rgba(255, 255, 255, 0.5);
             width: 380px;
             min-height: 480px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
+            position: relative;
+            
+            /* Contour bois */
+            border: 8px solid transparent;
+            border-image: repeating-linear-gradient(
+                45deg,
+                var(--bois-clair) 0px,
+                var(--bois-clair) 15px,
+                var(--bois-fonce) 15px,
+                var(--bois-fonce) 30px,
+                var(--bois-tres-fonce) 30px,
+                var(--bois-tres-fonce) 40px,
+                var(--bois-clair) 40px,
+                var(--bois-clair) 55px
+            ) 30 stretch;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Effet bois supplémentaire : coins arrondis et ombre interne */
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 4px;
+            left: 4px;
+            right: 4px;
+            bottom: 4px;
+            border-radius: 24px;
+            pointer-events: none;
+            background: transparent;
+            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
         }
 
         .choice-card.familles {
-            border-top: 6px solid var(--rose-spectacle);
-            box-shadow: 0 20px 35px -12px rgba(236, 64, 122, 0.3);
+            border-top-color: transparent;
         }
 
         .choice-card.pros {
-            border-top: 6px solid var(--vert-caravane);
-            box-shadow: 0 20px 35px -12px rgba(124, 182, 159, 0.3);
+            border-top-color: transparent;
         }
 
         .choice-card:hover {
             transform: translateY(-10px);
-            box-shadow: 0 30px 45px -12px rgba(0, 0, 0, 0.35);
+            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.4), inset 0 1px 4px rgba(255, 255, 255, 0.3);
         }
 
         .choice-icon {
@@ -470,6 +496,9 @@
             .logo-wrapper img {
                 height: 45px;
             }
+            .choice-card {
+                border-width: 6px;
+            }
         }
     </style>
 </head>
@@ -510,6 +539,7 @@
     </div>
 
     <div class="choices-grid">
+        <!-- Familles & Fans (carte à gauche) -->
         <a href="familles.html" class="choice-card familles">
             <div>
                 <div class="choice-icon">🎪</div>
@@ -521,8 +551,10 @@
             <span class="choice-cta">Entrer</span>
         </a>
 
+        <!-- Logo roulotte central (animé) -->
         <img src="images/logo.png" alt="Roulotte Récré Magic" class="center-logo">
 
+        <!-- Prestations (carte à droite) -->
         <a href="pros.html" class="choice-card pros">
             <div>
                 <div class="choice-icon">🤝</div>
