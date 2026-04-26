@@ -30,16 +30,40 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, var(--vert-caravane) 0%, var(--rose-spectacle) 100%);
+            /* Image de fond */
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* Superposition sombre pour la lisibilité */
+            position: relative;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            position: relative;
             overflow-x: hidden;
             padding-top: 80px;
+        }
+
+        /* Superposition sombre (optionnelle, pour que le texte ressorte mieux) */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Tous les éléments principaux au-dessus de la superposition */
+        .navbar, .container, .confetti-container {
+            z-index: 2;
         }
 
         /* Scrollbar personnalisée */
@@ -69,12 +93,11 @@
             width: 100%;
             height: 100%;
             pointer-events: none;
-            z-index: 1;
             overflow: hidden;
         }
 
         /* ==================== */
-        /* NAVBAR (identique aux autres pages) */
+        /* NAVBAR */
         /* ==================== */
         .navbar {
             position: fixed;
@@ -254,7 +277,7 @@
             font-weight: 700;
             color: var(--text-light);
             margin-bottom: 1rem;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
             text-transform: uppercase;
         }
 
@@ -262,6 +285,7 @@
             font-size: clamp(1.1rem, 2.5vw, 1.5rem);
             color: var(--creme-vintage);
             font-weight: 500;
+            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
         }
 
         /* Trois colonnes : carte gauche, logo central, carte droite */
@@ -336,7 +360,7 @@
             color: var(--text-dark);
             margin-bottom: 1.8rem;
             padding: 0 0.5rem;
-            text-align: left;   /* Alignement normal */
+            text-align: left;
         }
 
         .choice-cta {
@@ -396,6 +420,7 @@
             color: var(--text-light);
             font-size: 0.9rem;
             opacity: 0.85;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
             animation: fadeIn 2s ease-out 1s both;
         }
 
@@ -452,16 +477,14 @@
 
 <div class="confetti-container" id="confetti"></div>
 
-<!-- BARRE MARRON (identique pros/spectacles) -->
+<!-- BARRE MARRON -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <!-- Bouton retour -->
             <div class="back-wrapper" onclick="history.back()">
                 <span>← Retour</span>
                 <span class="back-label">Retour</span>
             </div>
-            <!-- Logo avec texte "Accueil" au survol -->
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
                 <span class="logo-label">Accueil</span>
@@ -487,7 +510,6 @@
     </div>
 
     <div class="choices-grid">
-        <!-- Familles & Fans (carte à gauche) -->
         <a href="familles.html" class="choice-card familles">
             <div>
                 <div class="choice-icon">🎪</div>
@@ -499,10 +521,8 @@
             <span class="choice-cta">Entrer</span>
         </a>
 
-        <!-- Logo roulotte central (animé) -->
         <img src="images/logo.png" alt="Roulotte Récré Magic" class="center-logo">
 
-        <!-- Prestations (carte à droite) -->
         <a href="pros.html" class="choice-card pros">
             <div>
                 <div class="choice-icon">🤝</div>
