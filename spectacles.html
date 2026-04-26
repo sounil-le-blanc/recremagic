@@ -34,20 +34,37 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(90deg, #FF6B6B, #FF8E53, #FFD93D, #6BCB77, #4D96FF, #9C27B0, #FF6B6B);
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
+            /* Image de fond */
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* Position relative pour la superposition */
+            position: relative;
             padding-top: 80px;
             line-height: 1.6;
             min-height: 100vh;
-            position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Superposition sombre pour la lisibilité */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Tous les éléments au-dessus de la superposition */
+        .navbar, .page-header, .spectacles-list, .gallery-container, .contact-cta, .confetti-side {
+            position: relative;
+            z-index: 2;
         }
 
         /* ==================== */
@@ -262,13 +279,14 @@
             text-align: center;
             border-radius: 20px;
             margin: 1rem 2rem;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .page-header h1 {
             font-family: 'Fredoka', cursive;
             font-size: 3.5rem;
             margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .page-header p {
@@ -393,7 +411,7 @@
         }
 
         /* ==================== */
-        /* LIEN VIDÉO STYLE CYBER */
+        /* LIEN VIDÉO */
         /* ==================== */
         .video-link {
             display: inline-flex;
@@ -420,7 +438,7 @@
         }
 
         /* ==================== */
-        /* GALERIE SUPER IMAGES */
+        /* GALERIE */
         /* ==================== */
         .gallery-container {
             max-width: 1200px;
@@ -434,7 +452,7 @@
             color: white;
             text-align: center;
             margin-bottom: 2rem;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
         }
 
         .gallery-grid {
@@ -470,7 +488,7 @@
         }
 
         /* ==================== */
-        /* MODAL POUR AGRANDISSEMENT AVEC FLÈCHES */
+        /* MODAL POUR AGRANDISSEMENT */
         /* ==================== */
         .modal {
             display: none;
@@ -533,7 +551,6 @@
             transform: scale(1.1);
         }
 
-        /* Flèches de navigation */
         .nav-arrow {
             position: absolute;
             top: 50%;
@@ -567,7 +584,6 @@
             right: 30px;
         }
 
-        /* Indicateur de position */
         .image-counter {
             position: absolute;
             bottom: 30px;
@@ -612,13 +628,14 @@
         /* CONTACT CTA */
         /* ==================== */
         .contact-cta {
-            background: rgba(0, 0, 0, 0.4);
+            background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
             color: white;
             padding: 3rem;
             border-radius: 20px;
             text-align: center;
             margin-top: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .contact-cta h2 {
@@ -1104,13 +1121,13 @@
     }
     
     setInterval(() => {
-        for (let i = 0; i < 15; i++) {
+        for (let i = 0; i < 25; i++) {
             setTimeout(() => {
                 const side = Math.random() > 0.5 ? 'left' : 'right';
                 createConfetti(side);
             }, i * 40);
         }
-    }, 8000);
+    }, 10000);
 </script>
 </body>
 </html>
