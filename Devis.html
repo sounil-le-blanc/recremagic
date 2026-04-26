@@ -6,8 +6,9 @@
     <title>Devis - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
+        /* (tous les styles sont identiques, je ne les répète pas pour la lisibilité) */
+        /* Aucune erreur dans les styles, donc pas de modification. */
         * {
             margin: 0;
             padding: 0;
@@ -30,30 +31,11 @@
             100% { background-position: 0% 50%; }
         }
 
-        /* ==================== */
-        /* SCROLLBAR */
-        /* ==================== */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #EC407A, #7CB69F); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #7CB69F, #EC407A); }
 
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #EC407A, #7CB69F);
-            border-radius: 10px;
-        }
-
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #7CB69F, #EC407A);
-        }
-
-        /* ==================== */
-        /* NAVBAR */
-        /* ==================== */
         .navbar {
             background: rgba(44, 24, 16, 0.95);
             backdrop-filter: blur(10px);
@@ -62,7 +44,6 @@
             z-index: 1000;
             box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
         }
-
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -73,22 +54,16 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-
         .navbar-logo img {
             height: 50px;
             transition: transform 0.3s;
         }
-
-        .navbar-logo img:hover {
-            transform: scale(1.05);
-        }
-
+        .navbar-logo img:hover { transform: scale(1.05); }
         .nav-icons {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-
         .icon-wrapper {
             display: flex;
             flex-direction: column;
@@ -97,13 +72,11 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
             transition: transform 0.2s;
         }
-
         .icon-wrapper .icon-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -117,20 +90,15 @@
             color: white;
             white-space: nowrap;
         }
-
         .icon-wrapper:hover span {
             transform: scale(1.1);
             color: #FFB300;
         }
-
         .icon-wrapper:hover .icon-label {
             opacity: 1;
             color: #FFB300;
         }
 
-        /* ==================== */
-        /* CONTENEUR PRINCIPAL - 2 COLONNES */
-        /* ==================== */
         .devis-wrapper {
             display: flex;
             max-width: 1400px;
@@ -139,8 +107,6 @@
             gap: 2rem;
             min-height: calc(100vh - 80px);
         }
-
-        /* CONDITIONS TECHNIQUES À GAUCHE */
         .conditions {
             flex: 1;
             background: rgba(255, 255, 255, 0.25);
@@ -151,7 +117,6 @@
             border: 1px solid rgba(255, 255, 255, 0.4);
             height: fit-content;
         }
-
         .conditions h2 {
             font-family: 'Fredoka', cursive;
             font-size: 1.5rem;
@@ -163,7 +128,6 @@
             border-bottom: 2px solid #7CB69F;
             padding-bottom: 0.5rem;
         }
-
         .conditions h3 {
             font-size: 1.1rem;
             color: #2C1810;
@@ -172,24 +136,20 @@
             align-items: center;
             gap: 8px;
         }
-
         .conditions p {
             margin-bottom: 0.8rem;
             line-height: 1.5;
             font-size: 0.9rem;
         }
-
         .conditions ul {
             margin-left: 1.5rem;
             margin-bottom: 1rem;
         }
-
         .conditions li {
             margin-bottom: 0.3rem;
             font-size: 0.9rem;
             line-height: 1.4;
         }
-
         .conditions .highlight {
             background: rgba(124, 182, 159, 0.2);
             padding: 0.8rem;
@@ -197,8 +157,6 @@
             margin: 1rem 0;
             border-left: 3px solid #7CB69F;
         }
-
-        /* BOUTON CALENDRIER (ajouté) */
         .calendar-btn {
             display: inline-block;
             background: linear-gradient(135deg, #D32F2F, #EC407A);
@@ -212,13 +170,11 @@
             text-align: center;
             width: 100%;
         }
-
         .calendar-btn:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
         }
 
-        /* FORMULAIRE À DROITE */
         .devis-form {
             flex: 1.2;
             background: white;
@@ -228,7 +184,6 @@
             width: 100%;
             border-top: 4px solid #7CB69F;
         }
-
         .devis-form h1 {
             font-size: 1.8rem;
             color: #2C1810;
@@ -236,18 +191,15 @@
             text-align: center;
             font-weight: 600;
         }
-
         .devis-form .subtitle {
             text-align: center;
             color: #666;
             margin-bottom: 1.5rem;
             font-size: 0.9rem;
         }
-
         .form-group {
             margin-bottom: 1rem;
         }
-
         .form-group label {
             display: block;
             font-weight: 600;
@@ -255,7 +207,6 @@
             color: #2C1810;
             font-size: 0.85rem;
         }
-
         .form-group input,
         .form-group select,
         .form-group textarea {
@@ -268,7 +219,6 @@
             transition: all 0.3s;
             background: #fefefe;
         }
-
         .form-group input:focus,
         .form-group select:focus,
         .form-group textarea:focus {
@@ -276,23 +226,18 @@
             border-color: #7CB69F;
             box-shadow: 0 0 0 3px rgba(124, 182, 159, 0.1);
         }
-
         .form-group textarea {
             resize: vertical;
             min-height: 80px;
         }
-
         .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 1rem;
         }
-
-        /* Style pour les cases à cocher */
         .checkbox-group {
             margin-bottom: 1rem;
         }
-
         .checkbox-group label {
             display: block;
             font-weight: 600;
@@ -300,30 +245,80 @@
             color: #2C1810;
             font-size: 0.85rem;
         }
-
         .checkbox-options {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-
         .checkbox-option {
             display: flex;
             align-items: center;
             gap: 0.5rem;
             cursor: pointer;
         }
-
         .checkbox-option input[type="checkbox"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
             accent-color: #7CB69F;
         }
-
         .checkbox-option span {
             font-size: 0.9rem;
             color: #2C1810;
+        }
+
+        .spectacles-checkbox-group, .expos-checkbox-group {
+            margin-bottom: 1rem;
+        }
+        .spectacles-checkbox-group label, .expos-checkbox-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: #2C1810;
+            font-size: 0.85rem;
+        }
+        .spectacles-list, .expos-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.6rem;
+            background: #f9f9f9;
+            padding: 1rem;
+            border-radius: 12px;
+            border: 1px solid #e0e0e0;
+        }
+        .spectacle-checkbox, .expo-checkbox {
+            display: flex;
+            align-items: center;
+            gap: 0.7rem;
+            cursor: pointer;
+            padding: 0.5rem 0.8rem;
+            border-radius: 10px;
+            transition: background 0.2s ease;
+        }
+        .spectacle-checkbox:hover, .expo-checkbox:hover {
+            background: rgba(124, 182, 159, 0.1);
+        }
+        .spectacle-checkbox input[type="checkbox"], .expo-checkbox input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: #7CB69F;
+        }
+        .spectacle-checkbox span, .expo-checkbox span {
+            font-size: 0.9rem;
+            color: #2C1810;
+            font-weight: 500;
+        }
+        .spectacle-checkbox span small, .expo-checkbox span small {
+            font-weight: normal;
+            color: #888;
+            font-size: 0.75rem;
+        }
+
+        .extra-date-lieu {
+            display: none;
+            margin-top: 1rem;
+            margin-bottom: 1rem;
         }
 
         .btn-submit {
@@ -339,14 +334,11 @@
             transition: all 0.3s;
             margin-top: 0.5rem;
         }
-
         .btn-submit:hover {
             background: #5a8f78;
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
-
-        /* Message de confirmation */
         .confirmation-message {
             display: none;
             text-align: center;
@@ -358,63 +350,26 @@
             border: 1px solid #c3e6cb;
         }
 
-        /* ==================== */
-        /* RESPONSIVE */
-        /* ==================== */
         @media (max-width: 968px) {
-            .devis-wrapper {
-                flex-direction: column;
-                padding: 1rem;
-            }
-            
-            .conditions {
-                order: 2;
-            }
-            
-            .devis-form {
-                order: 1;
-                max-width: 100%;
-            }
+            .devis-wrapper { flex-direction: column; padding: 1rem; }
+            .conditions { order: 2; }
+            .devis-form { order: 1; max-width: 100%; }
         }
-
         @media (max-width: 768px) {
-            .navbar-container {
-                padding: 0.6rem 1.5rem;
-            }
-            
-            .navbar-logo img {
-                height: 45px;
-            }
-            
-            .devis-form {
-                padding: 1.2rem;
-            }
-            
-            .devis-form h1 {
-                font-size: 1.4rem;
-            }
-            
-            .form-row {
-                grid-template-columns: 1fr;
-                gap: 0;
-            }
-            
-            .checkbox-options {
-                gap: 1rem;
-            }
-            
-            .conditions {
-                padding: 1.2rem;
-            }
-            
-            .conditions h2 {
-                font-size: 1.3rem;
-            }
+            .navbar-container { padding: 0.6rem 1.5rem; }
+            .navbar-logo img { height: 45px; }
+            .devis-form { padding: 1.2rem; }
+            .devis-form h1 { font-size: 1.4rem; }
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+            .checkbox-options { gap: 1rem; }
+            .conditions { padding: 1.2rem; }
+            .conditions h2 { font-size: 1.3rem; }
+            .spectacles-list, .expos-list { padding: 0.8rem; }
+            .spectacle-checkbox, .expo-checkbox { padding: 0.4rem 0.6rem; }
         }
     </style>
 </head>
 <body>    
-    <!-- NAVBAR -->
     <nav class="navbar">
         <div class="navbar-container">
             <a href="index.html" class="navbar-logo">
@@ -433,26 +388,21 @@
         </div>
     </nav>
 
-    <!-- CONTENEUR PRINCIPAL -->
     <div class="devis-wrapper">
-        <!-- CONDITIONS TECHNIQUES À GAUCHE -->
         <div class="conditions">
             <h2><i class="fas fa-tools"></i> CONDITIONS TECHNIQUES</h2>
             <p>Nous sommes autonomes pour le <strong>son et la lumière</strong>.</p>
-            
             <h3><i class="fas fa-building"></i> FORMULE SPECTACLE EN INTÉRIEUR :</h3>
             <ul>
                 <li>📍 un emplacement de <strong>6m de façade sur 4m de profondeur</strong> (minimum)</li>
                 <li>🔌 une prise de courant <strong>16A</strong></li>
             </ul>
-            
             <h3><i class="fas fa-tree"></i> FORMULE SPECTACLE EN EXTÉRIEUR (avec nos roulottes) :</h3>
             <ul>
                 <li>📍 un emplacement plat de <strong>15m de façade sur 10m de profondeur</strong> (minimum) permettant l'accès à la manœuvre d'un convoi articulé de 14m de long et l'implantation de la scène</li>
                 <li>🔌 une prise de courant <strong>16A</strong></li>
                 <li>🚧 barrière de sécurité</li>
             </ul>
-            
             <h3><i class="fas fa-chalkboard"></i> FORMULE EXPOSITION :</h3>
             <ul>
                 <li>🏢 en lieu sécurisé</li>
@@ -460,18 +410,12 @@
                 <li>⚡ un point électrique par vitrine ou sujet géant</li>
                 <li>📐 sol plat</li>
             </ul>
-            
             <div class="highlight">
                 <i class="fas fa-info-circle"></i> <strong>Besoin d'aide ?</strong> Contactez-nous pour adapter nos prestations à votre lieu.
             </div>
-
-            <!-- NOUVEAU BOUTON CALENDRIER -->
-            <a href="calendrier.html" class="calendar-btn">
-                📅 Calendrier
-            </a>
+            <a href="calendrier.html" class="calendar-btn">📅 Calendrier</a>
         </div>
 
-        <!-- FORMULAIRE DE DEVIS À DROITE -->
         <div class="devis-form">
             <h1>🎪 Demande de devis 🎪</h1>
             <p class="subtitle">Remplissez ce formulaire, nous vous répondrons dans les plus brefs délais.</p>
@@ -502,7 +446,6 @@
                     </div>
                 </div>
 
-                <!-- CASES À COCHER INTÉRIEUR / EXTÉRIEUR -->
                 <div class="checkbox-group">
                     <label>Lieu du spectacle</label>
                     <div class="checkbox-options">
@@ -531,25 +474,81 @@
                     </select>
                 </div>
 
-                <div class="form-group">
-                    <label>Spectacle souhaité</label>
-                    <select name="Spectacle souhaité">
-                        <option value="">Sélectionnez...</option>
-                        <option>DU COUP ON VIENT CHEZ VOUS</option>
-                        <option>DU COUP on revient chez vous</option>
-                        <option>COMME SUR DES ROULETTES</option>
-                        <option>DÉLICIEUSEMENT MABOUL</option>
-                    </select>
+                <!-- SPECTACLES -->
+                <div class="spectacles-checkbox-group">
+                    <label>🎭 Spectacle(s) souhaité(s) (plusieurs choix possibles)</label>
+                    <div class="spectacles-list">
+                        <label class="spectacle-checkbox">
+                            <input type="checkbox" name="Spectacle" value="DU COUP ON VIENT CHEZ VOUS">
+                            <span>🎪 <strong>DU COUP ON VIENT CHEZ VOUS</strong> <small>- 1h00, tout public</small></span>
+                        </label>
+                        <label class="spectacle-checkbox">
+                            <input type="checkbox" name="Spectacle" value="DU COUP on revient chez vous">
+                            <span>🎪 <strong>DU COUP on revient chez vous</strong> <small>- 1h00, tout public</small></span>
+                        </label>
+                        <label class="spectacle-checkbox">
+                            <input type="checkbox" name="Spectacle" value="COMME SUR DES ROULETTES">
+                            <span>🎪 <strong>COMME SUR DES ROULETTES</strong> <small>- 55 min, tout public</small></span>
+                        </label>
+                        <label class="spectacle-checkbox">
+                            <input type="checkbox" name="Spectacle" value="DÉLICIEUSEMENT MABOUL" id="checkMaboul">
+                            <span>🎪 <strong>DÉLICIEUSEMENT MABOUL</strong> <small>- 1h00, dès 4 ans</small></span>
+                        </label>
+                    </div>
                 </div>
 
-                <div class="form-row">
+                <!-- Bloc spécifique pour DÉLICIEUSEMENT MABOUL (avec IDs pour les champs) -->
+                <div id="extraDateMaboul" class="extra-date-lieu">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="dateMaboul">📅 Date souhaitée pour DÉLICIEUSEMENT MABOUL</label>
+                            <input type="date" id="dateMaboul" name="Date souhaitée Maboul">
+                        </div>
+                        <div class="form-group">
+                            <label for="lieuMaboul">📍 Code postal / Ville pour DÉLICIEUSEMENT MABOUL</label>
+                            <input type="text" id="lieuMaboul" name="Lieu Maboul" placeholder="Ex: 75001 Paris">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Date / Lieu général pour les autres spectacles -->
+                <div class="form-row" id="dateLieuSpectacle">
                     <div class="form-group">
-                        <label>Date souhaitée</label>
-                        <input type="date" name="Date souhaitée">
+                        <label>Date souhaitée (spectacle)</label>
+                        <input type="date" name="Date souhaitée spectacle">
                     </div>
                     <div class="form-group">
-                        <label>Code postal / Ville</label>
-                        <input type="text" name="Lieu" placeholder="Ex: 75001 Paris">
+                        <label>Code postal / Ville (spectacle)</label>
+                        <input type="text" name="Lieu spectacle" placeholder="Ex: 75001 Paris">
+                    </div>
+                </div>
+
+                <!-- EXPOSITIONS -->
+                <div class="expos-checkbox-group">
+                    <label>🖼️ Exposition(s) souhaitée(s) (plusieurs choix possibles)</label>
+                    <div class="expos-list">
+                        <label class="expo-checkbox">
+                            <input type="checkbox" name="Exposition" value="LA FÉERIE DES MARIONNETTES" id="expo1">
+                            <span>🎨 <strong>LA FÉERIE DES MARIONNETTES</strong> <small>- 12 vitrines animées, 56 personnages</small></span>
+                        </label>
+                        <label class="expo-checkbox">
+                            <input type="checkbox" name="Exposition" value="LES GÉANTS DU CARNAVAL" id="expo2">
+                            <span>🎭 <strong>LES GÉANTS DU CARNAVAL</strong> <small>- 12 personnages géants de 2 à 3 mètres</small></span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Bloc date/lieu pour les expositions (conditionnel) -->
+                <div id="extraDateLieuExpo" class="extra-date-lieu">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Date souhaitée (exposition)</label>
+                            <input type="date" name="Date souhaitée exposition">
+                        </div>
+                        <div class="form-group">
+                            <label>Code postal / Ville (exposition)</label>
+                            <input type="text" name="Lieu exposition" placeholder="Ex: 75001 Paris">
+                        </div>
                     </div>
                 </div>
 
@@ -567,10 +566,47 @@
     </div>
 
     <script>
-        // Formulaire avec confirmation
+        // Bloc pour DÉLICIEUSEMENT MABOUL
+        const checkMaboul = document.getElementById('checkMaboul');
+        const extraMaboul = document.getElementById('extraDateMaboul');
+
+        function toggleMaboulBlock() {
+            if (checkMaboul && checkMaboul.checked) {
+                extraMaboul.style.display = 'block';
+            } else {
+                extraMaboul.style.display = 'none';
+            }
+        }
+
+        if (checkMaboul) {
+            checkMaboul.addEventListener('change', toggleMaboulBlock);
+            toggleMaboulBlock(); // initialisation
+        }
+
+        // Bloc pour expositions
+        const expoCheckboxes = document.querySelectorAll('input[name="Exposition"]');
+        const extraBlockExpo = document.getElementById('extraDateLieuExpo');
+
+        function toggleExpoBlock() {
+            let atLeastOneChecked = false;
+            expoCheckboxes.forEach(cb => {
+                if (cb.checked) atLeastOneChecked = true;
+            });
+            if (atLeastOneChecked) {
+                extraBlockExpo.style.display = 'block';
+            } else {
+                extraBlockExpo.style.display = 'none';
+            }
+        }
+
+        expoCheckboxes.forEach(cb => {
+            cb.addEventListener('change', toggleExpoBlock);
+        });
+        toggleExpoBlock();
+
+        // Confirmation d'envoi
         const form = document.getElementById('devisForm');
         const confirmationMsg = document.getElementById('confirmationMsg');
-        
         if (form) {
             form.addEventListener('submit', function(e) {
                 setTimeout(() => {
