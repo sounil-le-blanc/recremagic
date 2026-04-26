@@ -29,6 +29,7 @@
             border-radius: 30px;
             border: 1px solid #ccc;
             font-family: inherit;
+            font-size: 0.9rem;
         }
         button {
             background: #7CB69F;
@@ -63,7 +64,15 @@
         .date-highlight { background-color: #FFEB3B !important; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         hr { margin: 1.5rem 0; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+        .info-note {
+            font-size: 0.75rem;
+            color: #666;
+            margin-top: -0.3rem;
+            margin-bottom: 0.8rem;
+        }
+        @media (max-width: 600px) { 
+            .form-row { grid-template-columns: 1fr; gap: 0; }
+        }
     </style>
 </head>
 <body>
@@ -93,12 +102,16 @@
                 </div>
                 <div class="form-group">
                     <label>Titre / Nom</label>
-                    <input type="text" id="eventTitle" placeholder="Nom du spectacle ou exposition" required>
+                    <select id="eventTitle" required>
+                        <option value="">-- Sélectionnez un spectacle ou exposition --</option>
+                        <!-- Les options seront remplies par JavaScript -->
+                    </select>
                 </div>
             </div>
 
             <label>Lieu</label>
             <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
+            <div class="info-note">💡 Si le spectacle/exposition n'est pas dans la liste, contactez l'administrateur pour l'ajouter.</div>
 
             <button type="submit">💾 Ajouter cet événement</button>
         </form>
@@ -115,22 +128,78 @@
     const SECRET_CODE = "recremagic";
     const STORAGE_KEY = 'recremagic_calendar';
 
+    // ==================== LISTE DES SPECTACLES ET EXPOSITIONS ====================
+    // Tu peux modifier, ajouter ou enlever des titres ici
+    const SPECTACLES = [
+        "DU COUP ON VIENT CHEZ VOUS",
+        "DU COUP on revient chez vous",
+        "COMME SUR DES ROULETTES",
+        "DÉLICIEUSEMENT MABOUL"
+    ];
+
+    const EXPOSITIONS = [
+        "LA FÉERIE DES MARIONNETTES",
+        "LES GÉANTS DU CARNAVAL"
+    ];
+
+    // Met à jour le menu déroulant en fonction du type sélectionné
+    function updateTitleDropdown() {
+        const type = document.getElementById('eventType').value;
+        const titleSelect = document.getElementById('eventTitle');
+        const selectedValue = titleSelect.value; // pour essayer de conserver la sélection si possible
+        
+        // Vider les options existantes (sauf la première)
+        while (titleSelect.options.length > 1) {
+            titleSelect.remove(1);
+        }
+        
+        // Choisir la bonne liste
+        const titles = (type === 'Spectacle') ? SPECTACLES : EXPOSITIONS;
+        
+        // Ajouter les nouvelles options
+        titles.forEach(title => {
+            const option = document.createElement('option');
+            option.value = title;
+            option.textContent = title;
+            titleSelect.appendChild(option);
+        });
+        
+        // Si l'ancienne valeur existe dans la nouvelle liste, la restaurer
+        let found = false;
+        for (let i = 0; i < titleSelect.options.length; i++) {
+            if (titleSelect.options[i].value === selectedValue) {
+                titleSelect.selectedIndex = i;
+                found = true;
+                break;
+            }
+        }
+        if (!found && titleSelect.options.length > 1) {
+            titleSelect.selectedIndex = 1; // sélectionne le premier élément réel
+        }
+    }
+
+    // ==================== VÉRIFICATION CODE ====================
     document.getElementById('verifyBtn').onclick = () => {
         if (document.getElementById('accessCode').value === SECRET_CODE) {
             document.getElementById('codeSection').style.display = 'none';
             document.getElementById('adminPanel').classList.remove('hidden');
             loadEvents();
+            // Initialiser le menu déroulant
+            updateTitleDropdown();
         } else {
             document.getElementById('codeError').style.display = 'block';
         }
     };
 
-    // Structure : eventsData[dateKey] = [ { type, titre, lieu }, ... ]
+    // Mettre à jour le menu quand le type change
+    document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
+
+    // ==================== GESTION LOCALSTORAGE ====================
     function getEvents() {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (!stored) return {};
         const data = JSON.parse(stored);
-        // Conversion ancien format (objet unique vers tableau)
+        // Convertir ancien format (objet unique) en tableau
         for (let key in data) {
             if (!Array.isArray(data[key])) {
                 const old = data[key];
@@ -205,10 +274,14 @@
         });
     }
 
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
+    }
 
+    // ==================== FORMULAIRE D'AJOUT ====================
     const dateInput = document.getElementById('eventDate');
-    const titleInput = document.getElementById('eventTitle');
+    const titleSelect = document.getElementById('eventTitle');
     const lieuInput = document.getElementById('eventLieu');
     const typeSelect = document.getElementById('eventType');
     const form = document.getElementById('eventForm');
@@ -216,21 +289,34 @@
     form.addEventListener('submit', (e) => {
         e.preventDefault();
         const dateValue = dateInput.value;
-        if (!dateValue) return;
+        if (!dateValue) {
+            alert("Veuillez sélectionner une date");
+            return;
+        }
+        
+        const titre = titleSelect.value;
+        if (!titre) {
+            alert("Veuillez sélectionner un spectacle ou une exposition");
+            return;
+        }
+        
         dateInput.classList.add('date-highlight');
         setTimeout(() => dateInput.classList.remove('date-highlight'), 2000);
+        
         const [year, month, day] = dateValue.split('-');
         const dateKey = `${year}-${parseInt(month)}-${parseInt(day)}`;
         const type = typeSelect.value;
-        const titre = titleInput.value.trim();
-        if (!titre) { alert("Veuillez saisir un titre"); return; }
         const lieu = lieuInput.value.trim();
+        
         addEvent(dateKey, type, titre, lieu);
-        titleInput.value = '';
+        
+        // Réinitialiser seulement le lieu, pas le titre ni la date (pour faciliter la saisie)
         lieuInput.value = '';
+        
         alert(`✅ Événement ajouté au ${dateKey}`);
     });
 
+    // ==================== OUVERTURE DU CALENDRIER PUBLIC ====================
     document.getElementById('openCalendarBtn').onclick = () => window.open('calendrier.html', '_blank');
 </script>
 </body>
