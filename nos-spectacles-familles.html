@@ -8,7 +8,35 @@
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        body { background: #FFF8E1; padding-top: 80px; }
+        body {
+    background-image: url('images/fond-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    position: relative;
+    min-height: 100vh;
+    padding-top: 80px;
+}
+
+/* Superposition sombre */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Tous les éléments principaux au-dessus de la superposition */
+.navbar, .page-hero, .spectacles-container, .footer {
+    position: relative;
+    z-index: 2;
+}
         .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
         .page-hero { background: linear-gradient(135deg, #7CB69F, #2E7D32); color: white; padding: 4rem 2rem; text-align: center; }
         .page-hero h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
