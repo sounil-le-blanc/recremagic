@@ -37,19 +37,36 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb, #f5576c, #4facfe, #00f2fe, #667eea);
-            background-size: 400% 400%;
-            animation: gradientMove 15s ease infinite;
+            /* Image de fond */
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            /* Position relative pour la superposition */
+            position: relative;
             min-height: 100vh;
             padding-top: 80px;
-            position: relative;
             overflow-x: hidden;
         }
 
-        @keyframes gradientMove {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+        /* Superposition sombre pour la lisibilité */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* Tous les éléments au-dessus de la superposition */
+        .navbar, .container, .confetti-container {
+            position: relative;
+            z-index: 2;
         }
 
         /* NAVBAR */
@@ -220,7 +237,7 @@
             text-align: center;
             margin-bottom: 3rem;
             color: white;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
         .welcome-title {
@@ -346,10 +363,11 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.7);
+            color: rgba(255, 255, 255, 0.9);
             font-style: italic;
             font-size: 1rem;
             text-align: center;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
         .prestation-block.left {
@@ -365,8 +383,10 @@
             margin-top: 4rem;
             color: white;
             font-size: 1rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
         .contact-note a { color: var(--jaune-accent); text-decoration: none; font-weight: bold; }
+        .contact-note a:hover { text-decoration: underline; }
 
         @media (max-width: 1000px) {
             .prestation-block {
@@ -397,6 +417,19 @@
             }
             .nav-left {
                 gap: 1rem;
+            }
+            .logo-wrapper img {
+                height: 45px;
+            }
+            .welcome-title {
+                font-size: 2rem;
+            }
+            .container {
+                padding: 1rem;
+            }
+            .choice-card {
+                width: 100%;
+                max-width: 320px;
             }
         }
     </style>
