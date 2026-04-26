@@ -5,111 +5,557 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Expositions - Récré Magic Pro</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background: #f9f9f9; padding-top: 80px; }
-        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
-        .page-header { background: linear-gradient(135deg, #EC407A, #c2185b); color: white; padding: 4rem 2rem; text-align: center; }
-        .page-header h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
-        .back-btn { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; }
-        .back-btn:hover { background: #FFB300; color: #2C1810; }
-        .expos-list { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem; }
-        .expo-item { background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 8px 30px rgba(0,0,0,0.1); display: grid; grid-template-columns: 400px 1fr; }
-        .expo-item:hover { transform: translateY(-5px); box-shadow: 0 15px 50px rgba(0,0,0,0.15); transition: all 0.3s; }
-        .expo-img img { width: 100%; height: 100%; object-fit: cover; }
-        .expo-content { padding: 3rem; }
-        .expo-badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; background: #EC407A; color: white; margin-bottom: 1rem; }
-        .expo-title { font-family: 'Fredoka', cursive; font-size: 2.2rem; color: #c2185b; margin-bottom: 1rem; text-transform: uppercase; }
-        .expo-description { line-height: 1.8; margin-bottom: 2rem; }
-        .expo-specs { background: #FFF8E1; padding: 2rem; border-radius: 15px; margin-bottom: 1.5rem; }
-        .spec-item { display: flex; padding: 0.7rem 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .spec-item:last-child { border: none; }
-        .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; }
-        .contact-cta { background: linear-gradient(135deg, #EC407A, #D32F2F); color: white; padding: 3rem; border-radius: 20px; text-align: center; margin-top: 4rem; }
-        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
-        .contact-cta a { color: #FFB300; text-decoration: none; font-weight: 700; font-size: 1.3rem; }
-        @media (max-width: 968px) { .expo-item { grid-template-columns: 1fr; } }
+        /* ==================== */
+        /* RESET & VARIABLES */
+        /* ==================== */
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
+            --jaune-accent: #FFB300;
+            --creme-vintage: #FFF8E1;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            background-image: url('images/expos-fond.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            animation: subtleZoom 20s infinite alternate ease-in-out;
+        }
+
+        @keyframes subtleZoom {
+            0% {
+                background-size: cover;
+                background-position: center;
+            }
+            100% {
+                background-size: 110%;
+                background-position: 52% 48%;
+            }
+        }
+
+        /* ==================== */
+        /* SCROLLBAR PERSONNALISÉE */
+        /* ==================== */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+        }
+
+        /* ==================== */
+        /* NAVBAR (sans calendrier) */
+        /* ==================== */
+        .navbar {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Bouton retour (page précédente) */
+        .back-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-wrapper span:first-child {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .back-wrapper .back-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .back-wrapper:hover span:first-child {
+            transform: scale(1.05);
+            color: var(--jaune-accent);
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        /* Logo avec texte "Accueil" au survol */
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logo-wrapper img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper span {
+            font-size: 1.3rem;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: var(--jaune-accent);
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        /* ==================== */
+        /* PAGE HEADER */
+        /* ==================== */
+        .page-header {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 4rem 2rem;
+            text-align: center;
+            border-radius: 30px;
+            margin: 1rem;
+        }
+
+        .page-header h1 {
+            font-family: 'Fredoka', cursive;
+            font-size: 3.5rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+        }
+
+        .page-header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+        }
+
+        /* ==================== */
+        /* EXPOS LIST */
+        /* ==================== */
+        .expos-list {
+            max-width: 1200px;
+            margin: 4rem auto;
+            padding: 0 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 3rem;
+        }
+
+        .expo-item {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(2px);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            display: grid;
+            grid-template-columns: 400px 1fr;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .expo-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+        }
+
+        .expo-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .expo-content {
+            padding: 3rem;
+        }
+
+        .expo-badge {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            background: var(--rose-spectacle);
+            color: white;
+            margin-bottom: 1rem;
+        }
+
+        .expo-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.2rem;
+            color: #c2185b;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+        }
+
+        .expo-description {
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+
+        .expo-specs {
+            background: var(--creme-vintage);
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 1.5rem;
+        }
+
+        .spec-item {
+            display: flex;
+            padding: 0.7rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .spec-item:last-child {
+            border: none;
+        }
+
+        .spec-label {
+            font-weight: 700;
+            margin-right: 0.5rem;
+            min-width: 150px;
+        }
+
+        /* Boutons */
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        /* ==================== */
+        /* CONTACT CTA */
+        /* ==================== */
+        .contact-cta {
+            background: rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(4px);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            max-width: 800px;
+            margin: 4rem auto;
+        }
+
+        .contact-cta h2 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .contact-cta p {
+            font-size: 1.1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .contact-cta a {
+            color: var(--jaune-accent);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 1.3rem;
+        }
+
+        .contact-cta a:hover {
+            text-decoration: underline;
+        }
+
+        /* ==================== */
+        /* RESPONSIVE */
+        /* ==================== */
+        @media (max-width: 968px) {
+            .expo-item {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                flex-direction: column;
+                padding: 0.6rem 1.5rem;
+            }
+            .nav-left {
+                gap: 1rem;
+            }
+            .nav-icons {
+                gap: 1.5rem;
+            }
+            .logo-wrapper img {
+                height: 45px;
+            }
+            .expos-list {
+                padding: 0 1rem;
+            }
+            .expo-content {
+                padding: 1.5rem;
+            }
+            .expo-title {
+                font-size: 1.8rem;
+            }
+            .contact-cta {
+                margin: 2rem 1rem;
+                padding: 2rem;
+            }
+            .contact-cta h2 {
+                font-size: 1.8rem;
+            }
+            ::-webkit-scrollbar {
+                width: 8px;
+            }
+            .button-group {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .btn-primary {
+                text-align: center;
+                margin-right: 0;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .expo-title {
+                font-size: 1.5rem;
+            }
+            .spec-item {
+                flex-direction: column;
+            }
+            .spec-label {
+                margin-bottom: 0.2rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a>
-        </div>
-    </nav>
 
-    <div class="page-header">
-        <a href="pros.html" class="back-btn">← Retour Espace Pro</a>
-        <h1>🎨 Nos Expositions</h1>
-        <p>Installations interactives pour vos événements</p>
+<!-- BARRE MARRON (sans calendrier) -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
+            </div>
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
+            </a>
+        </div>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
     </div>
+</nav>
 
-    <div class="expos-list">
-        <div class="expo-item">
-            <div class="expo-img"><img src="images/expo-marionnettes.jpg" alt="Marionnettes"></div>
-            <div class="expo-content">
-                <span class="expo-badge">UNIQUE EN FRANCE</span>
-                <h2 class="expo-title">LA FÉERIE DES MARIONNETTES</h2>
-                <p class="expo-description">
-                    12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur 
-                    appuie sur un simple bouton ! Une exposition interactive de 2 mètres de haut qui 
-                    émerveille petits et grands.
-                </p>
-                <div class="expo-specs">
-                    <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> H 2m × L 1,90m × P 0,60m (par vitrine)</div>
-                    <div class="spec-item"><span class="spec-label">🎭 Composition :</span> 12 vitrines / 56 personnages articulés</div>
-                    <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 25m² minimum</div>
-                    <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Prises 220V (1 par vitrine)</div>
-                    <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur uniquement, espace couvert</div>
-                    <div class="spec-item"><span class="spec-label">⏳ Location :</span> Week-end, semaine, mois (tarifs dégressifs)</div>
-                </div>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+<!-- PAGE HEADER -->
+<div class="page-header">
+    <h1>🎨 Nos Expositions</h1>
+    <p>Installations interactives pour vos événements</p>
+</div>
+
+<!-- EXPOS LIST -->
+<div class="expos-list">
+    <!-- Carte 1 : LA FÉERIE DES MARIONNETTES -->
+    <div class="expo-item">
+        <div class="expo-img"><img src="images/expo-marionnettes.jpg" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-content">
+            <span class="expo-badge">UNIQUE EN FRANCE</span>
+            <h2 class="expo-title">LA FÉERIE DES MARIONNETTES</h2>
+            <p class="expo-description">
+                12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur 
+                appuie sur un simple bouton ! Une exposition interactive de 2 mètres de haut qui 
+                émerveille petits et grands.
+            </p>
+            <div class="expo-specs">
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> H 2m × L 1,90m × P 0,60m (par vitrine)</div>
+                <div class="spec-item"><span class="spec-label">🎭 Composition :</span> 12 vitrines / 56 personnages articulés</div>
+                <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 25m² minimum</div>
+                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Prises 220V (1 par vitrine)</div>
+                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur uniquement, espace couvert</div>
+                <div class="spec-item"><span class="spec-label">⏳ Location :</span> Week-end, semaine, mois (tarifs dégressifs)</div>
             </div>
-        </div>
-
-        <div class="expo-item">
-            <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants"></div>
-            <div class="expo-content">
-                <span class="expo-badge">SPECTACULAIRE</span>
-                <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
-                <p class="expo-description">
-                    12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
-                    spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval. 
-                    Parfait pour festivals, fêtes de village et événements extérieurs.
-                </p>
-                <div class="expo-specs">
-                    <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> Personnages de 2 à 3 mètres de hauteur</div>
-                    <div class="spec-item"><span class="spec-label">🎪 Composition :</span> 12 personnages géants animés</div>
-                    <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 40m² minimum</div>
-                    <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Autonome ou avec alimentation selon configuration</div>
-                    <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur ou extérieur couvert</div>
-                    <div class="spec-item"><span class="spec-label">🛠️ Montage :</span> 2h d'installation</div>
-                </div>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
+                <a href="images/expos-fond.png" class="btn-primary" target="_blank">📍 ALLER SUR LA PLACE</a>
             </div>
-        </div>
-
-        <div class="contact-cta" id="contact">
-            <h2>Intéressé par nos expositions ?</h2>
-            <p>Enrichissez vos événements avec nos installations uniques</p>
-            <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
-                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
-                </div>
-                <div class="footer-links">
-                    <a href="index.html">Accueil</a>
-                    <a href="pros.html">Espace Pro</a>
-                </div>
+    <!-- Carte 2 : LES GÉANTS DU CARNAVAL -->
+    <div class="expo-item">
+        <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-content">
+            <span class="expo-badge">SPECTACULAIRE</span>
+            <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
+            <p class="expo-description">
+                12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
+                spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval. 
+                Parfait pour festivals, fêtes de village et événements extérieurs.
+            </p>
+            <div class="expo-specs">
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> Personnages de 2 à 3 mètres de hauteur</div>
+                <div class="spec-item"><span class="spec-label">🎪 Composition :</span> 12 personnages géants animés</div>
+                <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 40m² minimum</div>
+                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Autonome ou avec alimentation selon configuration</div>
+                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur ou extérieur couvert</div>
+                <div class="spec-item"><span class="spec-label">🛠️ Montage :</span> 2h d'installation</div>
+            </div>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
             </div>
         </div>
-    </footer>
+    </div>
+</div>
+
+<!-- CONTACT SECTION -->
+<div class="contact-cta" id="contact">
+    <h2>Intéressé par nos expositions ?</h2>
+    <p>Enrichissez vos événements avec nos installations uniques</p>
+    <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+    <a href="Devis.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;" target="_blank">📩 Demander un devis</a>
+</div>
+
 </body>
 </html>

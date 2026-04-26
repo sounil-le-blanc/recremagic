@@ -3,131 +3,389 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Stages - Récré Magic Pro</title>
+    <title>Stages - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        body { background: #f9f9f9; padding-top: 80px; }
-        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
-        .page-header { background: linear-gradient(135deg, #FFB300, #f9a825); color: #2C1810; padding: 4rem 2rem; text-align: center; }
-        .page-header h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
-        .back-btn { display: inline-block; background: rgba(44,24,16,0.2); color: #2C1810; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; font-weight: 700; }
-        .back-btn:hover { background: #2C1810; color: white; }
-        .stages-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
-        .stages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 2.5rem; margin-bottom: 3rem; }
-        .stage-card { background: white; padding: 3rem 2rem; border-radius: 20px; text-align: center; box-shadow: 0 8px 30px rgba(0,0,0,0.1); transition: all 0.3s; }
-        .stage-card:hover { transform: translateY(-10px); box-shadow: 0 15px 50px rgba(0,0,0,0.15); }
-        .stage-icon { font-size: 5rem; margin-bottom: 1.5rem; }
-        .stage-title { font-family: 'Fredoka', cursive; font-size: 2rem; color: #FFB300; margin-bottom: 1rem; text-transform: uppercase; }
-        .stage-description { line-height: 1.7; margin-bottom: 1.5rem; }
-        .stage-specs { background: #FFF8E1; padding: 1.5rem; border-radius: 10px; text-align: left; margin-bottom: 1.5rem; }
-        .stage-specs div { padding: 0.5rem 0; }
-        .stage-note { background: linear-gradient(135deg, #7CB69F, #2E7D32); color: white; padding: 3rem; border-radius: 20px; text-align: center; font-size: 1.2rem; }
-        .contact-cta { background: linear-gradient(135deg, #FFB300, #f9a825); color: #2C1810; padding: 3rem; border-radius: 20px; text-align: center; margin-top: 3rem; }
-        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
-        .contact-cta a { color: #2C1810; text-decoration: none; font-weight: 700; font-size: 1.3rem; }
-        @media (max-width: 768px) { .stages-grid { grid-template-columns: 1fr; } }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #7CB69F 0%, #EC407A 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #EC407A, #7CB69F);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7CB69F, #EC407A);
+        }
+
+        /* Confettis */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* NAVBAR (sans calendrier) */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-wrapper span:first-child {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .back-wrapper .back-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .back-wrapper:hover span:first-child {
+            transform: scale(1.05);
+            color: #FFB300;
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logo-wrapper img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper span {
+            font-size: 1.3rem;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: #FFB300;
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        /* Contenu principal */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 3rem 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.6);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .soon-title {
+            font-family: 'Fredoka', cursive;
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #D32F2F, #EC407A, #7CB69F);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            text-shadow: none;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .soon-subtitle {
+            font-size: 1.3rem;
+            color: #2C1810;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: linear-gradient(135deg, #D32F2F, #EC407A);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body {
+                padding-top: 70px;
+            }
+            .navbar-container {
+                flex-direction: column;
+                padding: 0.6rem 1.5rem;
+            }
+            .nav-left {
+                gap: 1rem;
+            }
+            .nav-icons {
+                gap: 1.5rem;
+            }
+            .logo-wrapper img {
+                height: 45px;
+            }
+            .soon-title {
+                font-size: 2.2rem;
+            }
+            .soon-subtitle {
+                font-size: 1rem;
+            }
+            .message-box {
+                padding: 2rem 1.5rem;
+                margin: 0 1rem;
+            }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a>
-        </div>
-    </nav>
 
-    <div class="page-header">
-        <a href="pros.html" class="back-btn">← Retour Espace Pro</a>
-        <h1>🎓 Nos Stages</h1>
-        <p>Ateliers d'initiation aux arts du spectacle</p>
-    </div>
+<div class="confetti-container" id="confetti"></div>
 
-    <div class="stages-container">
-        <div class="stages-grid">
-            <div class="stage-card">
-                <div class="stage-icon">🎭</div>
-                <h2 class="stage-title">Stage Marionnettes</h2>
-                <p class="stage-description">
-                    Initiation à la manipulation de marionnettes à fils et à gaine. Les participants 
-                    créent leur propre personnage et apprennent les bases de la manipulation pour 
-                    réaliser un petit spectacle final.
-                </p>
-                <div class="stage-specs">
-                    <div><strong>⏱️ Durée :</strong> 1 à 5 jours (adaptable)</div>
-                    <div><strong>👥 Public :</strong> Enfants dès 7 ans / Adultes</div>
-                    <div><strong>👨‍👩‍👧 Groupe :</strong> 8 à 15 participants</div>
-                    <div><strong>🎨 Matériel :</strong> Fourni par Récré Magic</div>
-                    <div><strong>📍 Lieu :</strong> Votre structure</div>
-                </div>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
+<!-- BARRE MARRON (sans calendrier) -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
             </div>
-
-            <div class="stage-card">
-                <div class="stage-icon">🤹</div>
-                <h2 class="stage-title">Stage Cirque-Théâtre</h2>
-                <p class="stage-description">
-                    Découverte des arts du cirque et du clown. Jonglerie, équilibre, expression 
-                    corporelle et jeu d'acteur. Apprentissage ludique dans une ambiance conviviale 
-                    et bienveillante.
-                </p>
-                <div class="stage-specs">
-                    <div><strong>⏱️ Durée :</strong> 2 à 5 jours</div>
-                    <div><strong>👥 Public :</strong> Enfants 6-16 ans</div>
-                    <div><strong>👨‍👩‍👧 Groupe :</strong> 10 à 20 participants</div>
-                    <div><strong>🎪 Matériel :</strong> Fourni (balles, foulards, etc.)</div>
-                    <div><strong>📍 Lieu :</strong> Salle ou extérieur</div>
-                </div>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
-            </div>
-
-            <div class="stage-card">
-                <div class="stage-icon">🎨</div>
-                <h2 class="stage-title">Stage Création</h2>
-                <p class="stage-description">
-                    Atelier de construction de marionnettes et personnages. Techniques artisanales, 
-                    recyclage créatif et mise en vie des créations. De l'imagination à la réalisation 
-                    concrète.
-                </p>
-                <div class="stage-specs">
-                    <div><strong>⏱️ Durée :</strong> 2 à 5 jours</div>
-                    <div><strong>👥 Public :</strong> Tout public dès 8 ans</div>
-                    <div><strong>👨‍👩‍👧 Groupe :</strong> 6 à 12 participants</div>
-                    <div><strong>🛠️ Matériel :</strong> Fourni (tissus, bois, etc.)</div>
-                    <div><strong>🎁 Repartez :</strong> Avec votre création</div>
-                </div>
-                <a href="#contact" class="btn btn-primary">Demander un devis</a>
-            </div>
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
+            </a>
         </div>
-
-        <div class="stage-note">
-            <p>
-                💡 <strong>Formules sur-mesure :</strong> Nous adaptons nos stages à vos besoins spécifiques. 
-                Écoles, centres de loisirs, MJC, bibliothèques, festivals... Contactez-nous pour construire 
-                ensemble un programme personnalisé qui correspond à votre projet et à votre budget.
-            </p>
-        </div>
-
-        <div class="contact-cta" id="contact">
-            <h2>Organiser un stage ?</h2>
-            <p>Contactez-nous pour un devis adapté à votre structure</p>
-            <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
         </div>
     </div>
+</nav>
 
-    <footer class="footer">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-brand">
-                    <img src="images/logo.png" alt="Récré Magic" class="footer-logo">
-                    <p>Circus Théâtre Ambulant depuis 60 ans</p>
-                </div>
-                <div class="footer-links">
-                    <a href="index.html">Accueil</a>
-                    <a href="pros.html">Espace Pro</a>
-                </div>
-            </div>
-        </div>
-    </footer>
+<div class="main-content">
+    <div class="message-box">
+        <h1 class="soon-title">Bientôt disponible</h1>
+        <p class="soon-subtitle">De nouveaux stages et ateliers arrivent très bientôt !</p>
+        <a href="pros.html" class="btn-back">← Retour à l'espace Pro</a>
+    </div>
+</div>
+
+<script>
+    function createConfetti() {
+        const container = document.getElementById('confetti');
+        const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+        const confettiCount = 60;
+
+        for (let i = 0; i < confettiCount; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'absolute';
+            confetti.style.width = Math.random() * 12 + 5 + 'px';
+            confetti.style.height = Math.random() * 12 + 5 + 'px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = -20 + 'px';
+            confetti.style.opacity = Math.random() * 0.7 + 0.3;
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+
+            const duration = Math.random() * 4 + 5;
+            const delay = Math.random() * 3;
+
+            confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+
+            container.appendChild(confetti);
+        }
+
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fall {
+                to {
+                    transform: translateY(100vh) rotate(720deg);
+                    opacity: 0;
+                }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+
+    window.addEventListener('load', () => {
+        createConfetti();
+    });
+</script>
 </body>
 </html>

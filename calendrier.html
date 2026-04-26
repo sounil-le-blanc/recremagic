@@ -3,64 +3,726 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendrier - Récré Magic</title>
+    <title>Calendrier perpétuel - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { background: #FFF8E1; padding-top: 80px; }
-        .navbar { transform: translateY(0); background: rgba(44,24,16,0.98); }
-        .page-hero { background: linear-gradient(135deg, #D32F2F, #c2185b); color: white; padding: 4rem 2rem; text-align: center; }
-        .page-hero h1 { font-family: 'Fredoka', cursive; font-size: 3.5rem; margin-bottom: 1rem; }
-        .back-btn { display: inline-block; background: rgba(255,255,255,0.2); color: white; padding: 0.7rem 1.5rem; border-radius: 25px; text-decoration: none; margin-bottom: 2rem; font-weight: 600; }
-        .back-btn:hover { background: #FFB300; color: #2C1810; }
-        .calendrier-container { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; }
-        .calendrier-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 2rem; }
-        .calendrier-card { background: white; border-radius: 20px; padding: 2rem; box-shadow: 0 8px 30px rgba(0,0,0,0.1); border-left: 5px solid #D32F2F; }
-        .calendrier-card h2 { font-family: 'Fredoka', cursive; font-size: 1.8rem; color: #D32F2F; margin-bottom: 1rem; }
-        .calendrier-card ul { list-style: none; }
-        .calendrier-card li { padding: 0.5rem 0; border-bottom: 1px solid #f0f0f0; }
+        /* ==================== */
+        /* RESET & VARIABLES */
+        /* ==================== */
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --rouge-spectacle: #D32F2F;
+            --jaune-accent: #FFB300;
+            --creme-vintage: #FFF8E1;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, var(--vert-caravane) 0%, var(--rose-spectacle) 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding-top: 80px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+        }
+
+        /* Confettis */
+        .confetti-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        /* ==================== */
+        /* NAVBAR */
+        /* ==================== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .back-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-wrapper span:first-child {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .back-wrapper .back-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .back-wrapper:hover span:first-child {
+            transform: scale(1.05);
+            color: var(--jaune-accent);
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logo-wrapper img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper span {
+            font-size: 1.3rem;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: var(--jaune-accent);
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: var(--jaune-accent);
+        }
+
+        /* ==================== */
+        /* CALENDRIER */
+        /* ==================== */
+        .calendar-container {
+            max-width: 1000px;
+            width: 95%;
+            margin: 2rem auto;
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 2rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.6);
+            position: relative;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .month-year {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .month-year span {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            min-width: 150px;
+            text-align: center;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            font-size: 1.2rem;
+        }
+
+        .nav-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .year-selector {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: rgba(0, 0, 0, 0.05);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+        }
+
+        .year-selector label {
+            font-weight: bold;
+            color: var(--text-dark);
+        }
+
+        #yearSelect {
+            padding: 0.4rem 0.8rem;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            background: white;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            text-align: center;
+        }
+
+        .weekday {
+            font-weight: bold;
+            color: var(--rose-spectacle);
+            padding: 0.8rem 0;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 30px;
+            font-size: 0.9rem;
+        }
+
+        .calendar-day {
+            position: relative;
+            padding: 0.8rem 0;
+            border-radius: 30px;
+            cursor: default;
+            transition: transform 0.2s ease;
+            font-weight: 500;
+            background: rgba(255, 255, 255, 0.7);
+        }
+
+        /* Zoom au survol */
+        .calendar-day:hover {
+            transform: scale(1.08);
+            background: var(--jaune-accent);
+            color: var(--text-dark);
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .today {
+            background: var(--rose-spectacle);
+            color: white;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle);
+        }
+
+        .other-month {
+            opacity: 0.4;
+        }
+
+        /* Carte d’édition - gérée en JS (affichage dynamique) */
+        .edit-card {
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 260px;
+            background: white;
+            border-radius: 20px;
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+            border: 2px solid var(--vert-caravane);
+            z-index: 20;
+            text-align: left;
+            margin-top: 0.5rem;
+            display: none;
+        }
+
+        .edit-card.visible {
+            display: block;
+        }
+
+        .edit-card h4 {
+            font-family: 'Fredoka', cursive;
+            color: var(--rose-spectacle);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .edit-card input, .edit-card textarea {
+            width: 100%;
+            margin-bottom: 0.5rem;
+            padding: 0.4rem;
+            border: 1px solid #ccc;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.8rem;
+        }
+
+        .edit-card textarea {
+            resize: vertical;
+            min-height: 50px;
+        }
+
+        .edit-card button {
+            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
+            border: none;
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.7rem;
+            margin-right: 0.5rem;
+            transition: transform 0.1s;
+        }
+
+        .edit-card button:hover {
+            transform: scale(1.02);
+        }
+
+        .edit-card .close-card {
+            background: #aaa;
+        }
+
+        /* Footer */
+        .footer {
+            background: rgba(44, 24, 16, 0.95);
+            color: var(--text-light);
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-top: 70px; }
+            .navbar-container { flex-direction: column; padding: 0.6rem 1.5rem; }
+            .nav-left { gap: 1rem; }
+            .nav-icons { gap: 1.5rem; }
+            .logo-wrapper img { height: 45px; }
+            .calendar-container { padding: 1rem; }
+            .month-year span { font-size: 1.2rem; min-width: 120px; }
+            .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
+            .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
+            .edit-card { width: 220px; top: 100%; }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar"><div class="navbar-container"><a href="index.html" class="navbar-logo"><img src="images/logo.png" alt="Récré Magic" style="height: 50px;"></a></div></nav>
-    <div class="page-hero">
-        <a href="familles.html" class="back-btn">← Retour</a>
-        <h1>📅 Calendrier 2026</h1>
-        <p>Où nous voir cette année ?</p>
-    </div>
-    <div class="calendrier-container">
-        <div class="calendrier-grid">
-            <div class="calendrier-card">
-                <h2>Février 2026</h2>
-                <ul>
-                    <li>8 - Saiguede (31)</li>
-                    <li>25 - St Nicolas de la Grave (82)</li>
-                </ul>
+
+<div class="confetti-container" id="confetti"></div>
+
+<!-- BARRE MARRON -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
             </div>
-            <div class="calendrier-card">
-                <h2>Mai 2026</h2>
-                <ul>
-                    <li>15 - St Denis D'Oléron (17)</li>
-                    <li>16 - St Denis D'Oléron (17)</li>
-                </ul>
-            </div>
-            <div class="calendrier-card">
-                <h2>Octobre 2026</h2>
-                <ul>
-                    <li>3 - Macon (71)</li>
-                    <li>4 - Macon (71)</li>
-                    <li>7 - Martel (46)</li>
-                </ul>
-            </div>
-            <div class="calendrier-card">
-                <h2>Décembre 2026</h2>
-                <ul>
-                    <li>6 - Carmaux (81)</li>
-                </ul>
-            </div>
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
+            </a>
+        </div>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
         </div>
     </div>
-    <footer class="footer"><div class="container"><div class="footer-content"><div class="footer-brand"><img src="images/logo.png" alt="Récré Magic" class="footer-logo"><p>Circus Théâtre Ambulant depuis 60 ans</p></div></div></div></footer>
+</nav>
+
+<!-- CALENDRIER -->
+<div class="calendar-container">
+    <div class="calendar-header">
+        <div class="month-year">
+            <button class="nav-btn" id="prevMonthBtn">←</button>
+            <span id="monthName"></span>
+            <button class="nav-btn" id="nextMonthBtn">→</button>
+        </div>
+        <div class="year-selector">
+            <label for="yearSelect">Année :</label>
+            <select id="yearSelect"></select>
+        </div>
+    </div>
+    <div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<div class="footer">
+    <p>Récré Magic • Circus Théâtre Ambulant • Calendrier perpétuel • Survoler une date pour ajouter spectacle et lieu</p>
+</div>
+
+<script>
+    // ==================== //
+    // CALENDRIER ET ÉDITION PERSISTANTE
+    // ==================== //
+    let currentDate = new Date();
+    let currentMonth = currentDate.getMonth();
+    let currentYear = currentDate.getFullYear();
+
+    if (currentYear < 2026) currentYear = 2026;
+    if (currentYear > 2028) currentYear = 2028;
+
+    const monthNames = ["Janvier", "Février", "Mars", "Avril", "Mai", "Juin", "Juillet", "Août", "Septembre", "Octobre", "Novembre", "Décembre"];
+    const weekdays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
+
+    let eventsData = {};
+    let hideTimeout = null;
+
+    function loadData() {
+        const stored = localStorage.getItem('recremagic_calendar');
+        if (stored) eventsData = JSON.parse(stored);
+    }
+
+    function saveData() {
+        localStorage.setItem('recremagic_calendar', JSON.stringify(eventsData));
+    }
+
+    function getDateKey(year, month, day) {
+        return `${year}-${month+1}-${day}`;
+    }
+
+    function saveEvent(year, month, day, spectacle, lieu) {
+        const key = getDateKey(year, month, day);
+        if (!eventsData[key]) eventsData[key] = {};
+        eventsData[key].spectacle = spectacle;
+        eventsData[key].lieu = lieu;
+        saveData();
+    }
+
+    function loadEvent(year, month, day) {
+        const key = getDateKey(year, month, day);
+        return eventsData[key] || { spectacle: '', lieu: '' };
+    }
+
+    // Gestion des cartes (affichage au survol)
+    let currentOpenCard = null;
+
+    function showCard(card) {
+        if (hideTimeout) clearTimeout(hideTimeout);
+        if (currentOpenCard && currentOpenCard !== card) {
+            currentOpenCard.classList.remove('visible');
+        }
+        card.classList.add('visible');
+        currentOpenCard = card;
+    }
+
+    function scheduleHideCard(card) {
+        hideTimeout = setTimeout(() => {
+            if (card) card.classList.remove('visible');
+            if (currentOpenCard === card) currentOpenCard = null;
+        }, 200);
+    }
+
+    function cancelHide() {
+        if (hideTimeout) clearTimeout(hideTimeout);
+    }
+
+    function attachCardEvents(card, dayDiv) {
+        if (!card) return;
+        // Quand la souris entre dans la carte, on annule la fermeture
+        card.addEventListener('mouseenter', () => cancelHide());
+        card.addEventListener('mouseleave', () => scheduleHideCard(card));
+        
+        // Boutons de la carte
+        const saveBtn = card.querySelector('.save-event-btn');
+        const closeBtn = card.querySelector('.close-card');
+        const spectacleInput = card.querySelector('.edit-spectacle');
+        const lieuTextarea = card.querySelector('.edit-lieu');
+        
+        if (saveBtn) {
+            saveBtn.onclick = (e) => {
+                e.stopPropagation();
+                const year = parseInt(dayDiv.dataset.year);
+                const month = parseInt(dayDiv.dataset.month);
+                const day = parseInt(dayDiv.dataset.day);
+                const spectacle = spectacleInput.value;
+                const lieu = lieuTextarea.value;
+                saveEvent(year, month, day, spectacle, lieu);
+                alert(`✅ Enregistré pour le ${day}/${month+1}/${year}`);
+            };
+        }
+        if (closeBtn) {
+            closeBtn.onclick = (e) => {
+                e.stopPropagation();
+                card.classList.remove('visible');
+                if (currentOpenCard === card) currentOpenCard = null;
+            };
+        }
+    }
+
+    function renderCalendar() {
+        const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
+        let startWeekday = firstDayOfMonth.getDay();
+        let startOffset = startWeekday === 0 ? 6 : startWeekday - 1;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        
+        let calendarHtml = '';
+        weekdays.forEach(day => {
+            calendarHtml += `<div class="weekday">${day}</div>`;
+        });
+        for (let i = 0; i < startOffset; i++) {
+            calendarHtml += `<div class="calendar-day other-month"></div>`;
+        }
+        
+        const today = new Date();
+        const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
+        
+        for (let d = 1; d <= daysInMonth; d++) {
+            const isToday = (isCurrentMonthYear && d === today.getDate());
+            const todayClass = isToday ? 'today' : '';
+            const eventData = loadEvent(currentYear, currentMonth, d);
+            
+            calendarHtml += `
+                <div class="calendar-day ${todayClass}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                    ${d}
+                    <div class="edit-card">
+                        <h4>📝 Spectacle / Lieu</h4>
+                        <input type="text" class="edit-spectacle" placeholder="Nom du spectacle" value="${escapeHtml(eventData.spectacle)}">
+                        <textarea class="edit-lieu" placeholder="Lieu (ville, salle...)">${escapeHtml(eventData.lieu)}</textarea>
+                        <button class="save-event-btn">💾 Enregistrer</button>
+                        <button class="close-card">✖ Fermer</button>
+                    </div>
+                </div>
+            `;
+        }
+        
+        document.getElementById('calendarGrid').innerHTML = calendarHtml;
+        document.getElementById('monthName').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+        
+        // Synchroniser le select année
+        const yearSelect = document.getElementById('yearSelect');
+        if (yearSelect.value != currentYear) yearSelect.value = currentYear;
+        
+        // Attacher les événements de survol et de carte
+        const dayDivs = document.querySelectorAll('.calendar-day[data-day]');
+        dayDivs.forEach(dayDiv => {
+            const card = dayDiv.querySelector('.edit-card');
+            if (!card) return;
+            
+            // Survol de la date : afficher la carte
+            dayDiv.addEventListener('mouseenter', () => {
+                cancelHide();
+                showCard(card);
+            });
+            dayDiv.addEventListener('mouseleave', () => scheduleHideCard(card));
+            
+            attachCardEvents(card, dayDiv);
+        });
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function populateYearSelect() {
+        const yearSelect = document.getElementById('yearSelect');
+        for (let y = 2026; y <= 2028; y++) {
+            const option = document.createElement('option');
+            option.value = y;
+            option.textContent = y;
+            yearSelect.appendChild(option);
+        }
+        yearSelect.value = currentYear;
+        yearSelect.addEventListener('change', (e) => {
+            currentYear = parseInt(e.target.value);
+            renderCalendar();
+        });
+    }
+    
+    function changeMonth(delta) {
+        let newMonth = currentMonth + delta;
+        let newYear = currentYear;
+        if (newMonth < 0) {
+            newMonth = 11;
+            newYear--;
+            if (newYear < 2026) newYear = 2026;
+        } else if (newMonth > 11) {
+            newMonth = 0;
+            newYear++;
+            if (newYear > 2028) newYear = 2028;
+        }
+        currentMonth = newMonth;
+        currentYear = newYear;
+        renderCalendar();
+    }
+    
+    document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
+    document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
+    
+    // Confettis
+    function createConfetti() {
+        const container = document.getElementById('confetti');
+        if (!container) return;
+        const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+        for (let i = 0; i < 40; i++) {
+            const confetti = document.createElement('div');
+            confetti.style.position = 'absolute';
+            confetti.style.width = Math.random() * 10 + 5 + 'px';
+            confetti.style.height = Math.random() * 10 + 5 + 'px';
+            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+            confetti.style.left = Math.random() * 100 + '%';
+            confetti.style.top = -20 + 'px';
+            confetti.style.opacity = Math.random() * 0.7 + 0.3;
+            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+            const duration = Math.random() * 4 + 5;
+            const delay = Math.random() * 3;
+            confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
+            container.appendChild(confetti);
+        }
+        const style = document.createElement('style');
+        style.textContent = `@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+        document.head.appendChild(style);
+    }
+    
+    loadData();
+    populateYearSelect();
+    renderCalendar();
+    window.addEventListener('load', createConfetti);
+</script>
 </body>
 </html>

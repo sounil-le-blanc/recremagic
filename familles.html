@@ -8,7 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        
+
         html, body {
             width: 100%;
             height: 100%;
@@ -16,12 +16,183 @@
             font-family: 'Quicksand', sans-serif;
             background: #1a1a1a;
         }
-        
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #EC407A, #7CB69F);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7CB69F, #EC407A);
+        }
+
+        /* NAVBAR (identique à pros.html) */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(44, 24, 16, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        /* Groupe gauche : bouton retour + logo */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Bouton retour (page précédente) */
+        .back-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+            cursor: pointer;
+        }
+
+        .back-wrapper span:first-child {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: white;
+            transition: transform 0.2s, color 0.2s;
+        }
+
+        .back-wrapper .back-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .back-wrapper:hover span:first-child {
+            transform: scale(1.05);
+            color: #FFB300;
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        /* Logo avec texte "Accueil" au survol */
+        .logo-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .logo-wrapper img {
+            height: 50px;
+            transition: transform 0.2s;
+        }
+
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.2rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+
+        .icon-wrapper span {
+            font-size: 1.3rem;
+            color: white;
+            transition: transform 0.2s;
+        }
+
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.2rem 0.5rem;
+            border-radius: 20px;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+            color: white;
+            white-space: nowrap;
+        }
+
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: #FFB300;
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
         /* ========== DESKTOP VERSION ========== */
         .desktop-view {
             display: block;
         }
-        
+
         .caravane-wrapper {
             position: fixed;
             top: 0;
@@ -33,14 +204,14 @@
             justify-content: center;
             background: linear-gradient(135deg, #2d1b1b 0%, #1a1a1a 100%);
         }
-        
+
         .caravane-container {
             position: relative;
             width: 90%;
             max-width: 1800px;
             margin: 0 auto;
         }
-        
+
         .caravane-image {
             width: 100%;
             height: auto;
@@ -49,7 +220,7 @@
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
             transition: opacity 0.05s ease;
         }
-        
+
         .hotspots-svg {
             position: absolute;
             top: 0;
@@ -58,51 +229,13 @@
             height: 100%;
             pointer-events: none;
         }
-        
+
         .hotspot {
             cursor: pointer;
             pointer-events: all;
             fill: transparent;
         }
-        
-        /* Back button */
-        .back-link {
-            position: fixed;
-            top: 2rem;
-            left: 2rem;
-            background: rgba(255, 255, 255, 0.95);
-            color: #2C1810;
-            padding: 0.8rem 1.5rem;
-            border-radius: 30px;
-            text-decoration: none;
-            font-weight: 700;
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s;
-            z-index: 1000;
-        }
-        
-        .back-link:hover {
-            background: #FFB300;
-            transform: translateY(-3px);
-            box-shadow: 0 12px 35px rgba(0, 0, 0, 0.6);
-        }
-        
-        .logo-header {
-            position: fixed;
-            top: 2rem;
-            left: 50%;
-            transform: translateX(-50%);
-            max-width: 120px;
-            filter: drop-shadow(0 10px 30px rgba(0, 0, 0, 0.8));
-            animation: logoFloat 4s ease-in-out infinite;
-            z-index: 1000;
-        }
-        
-        @keyframes logoFloat {
-            0%, 100% { transform: translateX(-50%) translateY(0); }
-            50% { transform: translateX(-50%) translateY(-10px); }
-        }
-        
+
         .instruction {
             position: fixed;
             bottom: 2rem;
@@ -118,17 +251,17 @@
             animation: pulse 2s ease-in-out infinite;
             z-index: 1000;
         }
-        
+
         @keyframes pulse {
             0%, 100% { transform: translateX(-50%) scale(1); }
             50% { transform: translateX(-50%) scale(1.05); }
         }
-        
+
         /* ========== MOBILE VERSION ========== */
         .mobile-view {
             display: none;
         }
-        
+
         .mobile-caravane-wrapper {
             position: fixed;
             top: 0;
@@ -140,14 +273,14 @@
             background: #1a1a1a;
             -webkit-overflow-scrolling: touch;
         }
-        
+
         .mobile-caravane-container {
             height: 100%;
             display: flex;
             align-items: center;
             padding-left: 50vw;
         }
-        
+
         .mobile-caravane-container::after {
             content: '';
             display: block;
@@ -155,7 +288,7 @@
             height: 1px;
             flex-shrink: 0;
         }
-        
+
         .mobile-caravane-image {
             height: 60vh;
             width: auto;
@@ -168,223 +301,251 @@
             -webkit-user-select: none;
             user-select: none;
         }
-        
+
         /* ========== RESPONSIVE ========== */
         @media (max-width: 968px) {
             .desktop-view { display: none; }
             .mobile-view { display: block; }
-            .logo-header { max-width: 80px; top: 1rem; }
-            .back-link { top: 1rem; left: 1rem; padding: 0.6rem 1rem; font-size: 0.85rem; }
             .instruction { display: none; }
+            .navbar-container {
+                flex-direction: column;
+            }
+            .nav-left {
+                gap: 1rem;
+            }
+            .nav-icons {
+                gap: 1.5rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .navbar-container {
+                padding: 0.6rem 1.5rem;
+            }
+            .logo-wrapper img {
+                height: 45px;
+            }
         }
     </style>
 </head>
 <body>
-    
-    <!-- ========== DESKTOP VERSION ========== -->
-    <div class="desktop-view">
-        <a href="index.html" class="back-link">← Retour</a>
-        <img src="images/logo.png" alt="Récré Magic" class="logo-header">
-        <div class="instruction">✨ Survolez les personnages pour les découvrir !</div>
-        
-        <div class="caravane-wrapper">
-            <div class="caravane-container">
-                <img src="images/caravane-base.png" 
-                     alt="Caravane Récré Magic" 
-                     class="caravane-image" 
-                     id="caravaneImg">
-                
-                <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
-                    
-                    <!-- Zone 1: TOTO -->
-                    <a href="nos-stars.html" 
-                       onmouseover="changeImage('caravane-toto.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="250" y="140" width="180" height="380" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 2: RIDEAU ROUGE -->
-                    <a href="nos-spectacles-familles.html"
-                       onmouseover="changeImage('caravane-rideau.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="535" y="275" width="410" height="200" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 3: FLO -->
-                    <a href="nos-stars.html"
-                       onmouseover="changeImage('caravane-flo.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="1000" y="180" width="200" height="400" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 4: RIDEAU OR -->
-                    <a href="nos-expos-familles.html"
-                       onmouseover="changeImage('caravane-rideau-or.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="1240" y="140" width="190" height="400" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 5: CALENDRIER 2026 -->
-                    <a href="calendrier.html"
-                       onmouseover="changeImage('caravane-calendrier.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="1610" y="210" width="120" height="100" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 6: BAPTISTE -->
-                    <a href="nos-stars.html"
-                       onmouseover="changeImage('caravane-baptiste.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="1600" y="360" width="150" height="220" class="hotspot" />
-                    </a>
-                    
-                    <!-- Zone 7: GUS -->
-                    <a href="nos-stars.html"
-                       onmouseover="changeImage('caravane-gus.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="1800" y="260" width="200" height="420" class="hotspot" />
-                    </a>
 
-                    <!-- Zone 8: COOKIE -->
-                    <a href="nos-stars.html"
-                       onmouseover="changeImage('caravane-cookie.png')" 
-                       onmouseout="changeImage('caravane-base.png')">
-                        <rect x="515" y="480" width="100" height="100" class="hotspot" />
-                    </a>
-                    
-                </svg>
+<!-- BARRE MARRON (identique à pros.html) -->
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <!-- Bouton retour (page précédente) -->
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
             </div>
+
+            <!-- Logo avec texte "Accueil" au survol -->
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
+            </a>
+        </div>
+
+        <div class="nav-icons">
+            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
+                <span>📅</span>
+                <span class="icon-label">Calendrier</span>
+            </a>
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
         </div>
     </div>
-    
-    <!-- ========== MOBILE VERSION ========== -->
-    <div class="mobile-view">
-        <a href="index.html" class="back-link">← Retour</a>
-        <img src="images/logo.png" alt="Récré Magic" class="logo-header">
-        
-        <div class="mobile-caravane-wrapper" id="mobileWrapper">
-            <div class="mobile-caravane-container">
-                <img src="images/caravane-base.png" 
-                     alt="Caravane Récré Magic" 
-                     class="mobile-caravane-image" 
-                     id="mobileCaravaneImg">
-            </div>
+</nav>
+
+<!-- ========== DESKTOP VERSION ========== -->
+<div class="desktop-view">
+    <div class="instruction">✨ Survolez les personnages pour les découvrir !</div>
+
+    <div class="caravane-wrapper">
+        <div class="caravane-container">
+            <img src="images/caravane-base.png"
+                 alt="Caravane Récré Magic"
+                 class="caravane-image"
+                 id="caravaneImg">
+
+            <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Zone 1: TOTO (YouTube) -->
+                <a href="https://www.youtube.com/@recremagic"
+                   target="_blank"
+                   onmouseover="changeImage('caravane-toto.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="250" y="140" width="180" height="380" class="hotspot" />
+                </a>
+
+                <!-- Zone 2: RIDEAU ROUGE -->
+                <a href="spectacles.html"
+                   onmouseover="changeImage('caravane-rideau.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="535" y="275" width="410" height="200" class="hotspot" />
+                </a>
+
+                <!-- Zone 3: FLO -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-flo.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1000" y="180" width="200" height="400" class="hotspot" />
+                </a>
+
+                <!-- Zone 4: RIDEAU OR -->
+                <a href="nos-expos-familles.html"
+                   onmouseover="changeImage('caravane-rideau-or.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1240" y="140" width="190" height="400" class="hotspot" />
+                </a>
+
+                <!-- Zone 5: CALENDRIER 2026 -->
+                <a href="calendrier.html"
+                   onmouseover="changeImage('caravane-calendrier.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1610" y="210" width="120" height="100" class="hotspot" />
+                </a>
+
+                <!-- Zone 6: BAPTISTE -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-baptiste.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1600" y="360" width="150" height="220" class="hotspot" />
+                </a>
+
+                <!-- Zone 7: GUS -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-gus.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="1800" y="260" width="200" height="420" class="hotspot" />
+                </a>
+
+                <!-- Zone 8: COOKIE -->
+                <a href="nos-stars.html"
+                   onmouseover="changeImage('caravane-cookie.png')"
+                   onmouseout="changeImage('caravane-base.png')">
+                    <rect x="515" y="480" width="100" height="100" class="hotspot" />
+                </a>
+
+            </svg>
         </div>
     </div>
-    
-    <script>
-        // ========== DESKTOP: Image switching ==========
-        function changeImage(imageName) {
-            const img = document.getElementById('caravaneImg');
-            if (img) {
-                img.src = 'images/' + imageName;
-            }
+</div>
+
+<!-- ========== MOBILE VERSION ========== -->
+<div class="mobile-view">
+    <div class="mobile-caravane-wrapper" id="mobileWrapper">
+        <div class="mobile-caravane-container">
+            <img src="images/caravane-base.png"
+                 alt="Caravane Récré Magic"
+                 class="mobile-caravane-image"
+                 id="mobileCaravaneImg">
+        </div>
+    </div>
+</div>
+
+<script>
+    // ========== DESKTOP: Image switching ==========
+    function changeImage(imageName) {
+        const img = document.getElementById('caravaneImg');
+        if (img) {
+            img.src = 'images/' + imageName;
         }
-        
-        // Preload desktop images
-        window.addEventListener('load', () => {
-            const imagesToPreload = [
-                'caravane-base.png',
-                'caravane-toto.png',
-                'caravane-rideau.png',
-                'caravane-flo.png',
-                'caravane-rideau-or.png',
-                'caravane-calendrier.png',
-                'caravane-baptiste.png',
-                'caravane-gus.png',
-                'caravane-cookie.png'
-            ];
-            
-            imagesToPreload.forEach(src => {
-                const img = new Image();
-                img.src = 'images/' + src;
-            });
+    }
+
+    // Preload desktop images
+    window.addEventListener('load', () => {
+        const imagesToPreload = [
+            'caravane-base.png',
+            'caravane-toto.png',
+            'caravane-rideau.png',
+            'caravane-flo.png',
+            'caravane-rideau-or.png',
+            'caravane-calendrier.png',
+            'caravane-baptiste.png',
+            'caravane-gus.png',
+            'caravane-cookie.png'
+        ];
+
+        imagesToPreload.forEach(src => {
+            const img = new Image();
+            img.src = 'images/' + src;
         });
-        
-        // ========== MOBILE: Horizontal scroll with zone detection ==========
-        if (window.innerWidth <= 968) {
-            const wrapper = document.getElementById('mobileWrapper');
-            const img = document.getElementById('mobileCaravaneImg');
-            
-            if (wrapper && img) {
-                // Zones (en % de l'image, de gauche à droite)
-                const zones = [
-                    { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png' },
-                    { name: 'cookie', start: 23, end: 29, image: 'caravane-cookie.png' },
-                    { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png' },
-                    { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png' },
-                    { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png' },
-                    { name: 'calendrier', start: 78, end: 83, image: 'caravane-calendrier.png' },
-                    { name: 'baptiste', start: 84, end: 90, image: 'caravane-baptiste.png' },
-                    { name: 'gus', start: 91, end: 100, image: 'caravane-gus.png' }
-                ];
-                
-                let currentZone = null;
-                let currentZoneData = null;
-                
-                function checkZone() {
-                    const imgRect = img.getBoundingClientRect();
-                    const imgWidth = imgRect.width;
-                    const screenCenter = window.innerWidth / 2;
-                    
-                    // Position du centre écran sur l'image
-                    const centerOnImage = screenCenter - imgRect.left;
-                    const centerPercent = (centerOnImage / imgWidth) * 100;
-                    
-                    // Trouver la zone au centre
-                    let foundZone = null;
-                    for (let zone of zones) {
-                        if (centerPercent >= zone.start && centerPercent <= zone.end) {
-                            foundZone = zone;
-                            break;
-                        }
-                    }
-                    
-                    // Changer l'image si nécessaire
-                    if (foundZone && foundZone.name !== currentZone) {
-                        currentZone = foundZone.name;
-                        currentZoneData = foundZone;
-                        img.src = 'images/' + foundZone.image;
-                    } else if (!foundZone && currentZone !== null) {
-                        currentZone = null;
-                        currentZoneData = null;
-                        img.src = 'images/caravane-base.png';
+    });
+
+    // ========== MOBILE: Horizontal scroll with zone detection ==========
+    if (window.innerWidth <= 968) {
+        const wrapper = document.getElementById('mobileWrapper');
+        const img = document.getElementById('mobileCaravaneImg');
+
+        if (wrapper && img) {
+            const zones = [
+                { name: 'toto', start: 12.5, end: 21.5, image: 'caravane-toto.png', link: 'https://www.youtube.com/@recremagic', external: true },
+                { name: 'cookie', start: 23, end: 29, image: 'caravane-cookie.png', link: 'nos-stars.html', external: false },
+                { name: 'rideau', start: 26.75, end: 47.25, image: 'caravane-rideau.png', link: 'spectacles.html', external: false },
+                { name: 'flo', start: 50, end: 60, image: 'caravane-flo.png', link: 'nos-stars.html', external: false },
+                { name: 'rideau-or', start: 62, end: 71.5, image: 'caravane-rideau-or.png', link: 'nos-expos-familles.html', external: false },
+                { name: 'calendrier', start: 78, end: 83, image: 'caravane-calendrier.png', link: 'calendrier.html', external: false },
+                { name: 'baptiste', start: 84, end: 90, image: 'caravane-baptiste.png', link: 'nos-stars.html', external: false },
+                { name: 'gus', start: 91, end: 100, image: 'caravane-gus.png', link: 'nos-stars.html', external: false }
+            ];
+
+            let currentZone = null;
+            let currentZoneData = null;
+
+            function checkZone() {
+                const imgRect = img.getBoundingClientRect();
+                const imgWidth = imgRect.width;
+                const screenCenter = window.innerWidth / 2;
+
+                const centerOnImage = screenCenter - imgRect.left;
+                const centerPercent = (centerOnImage / imgWidth) * 100;
+
+                let foundZone = null;
+                for (let zone of zones) {
+                    if (centerPercent >= zone.start && centerPercent <= zone.end) {
+                        foundZone = zone;
+                        break;
                     }
                 }
-                
-                // Tap sur l'image pour naviguer
-                img.addEventListener('click', () => {
-                    if (currentZoneData) {
-                        // Mapper les zones vers les pages
-                        const zoneLinks = {
-                            'toto': 'nos-stars.html',
-                            'cookie': 'nos-stars.html',
-                            'rideau': 'nos-spectacles-familles.html',
-                            'flo': 'nos-stars.html',
-                            'rideau-or': 'nos-expos-familles.html',
-                            'calendrier': 'calendrier.html',
-                            'baptiste': 'nos-stars.html',
-                            'gus': 'nos-stars.html'
-                        };
-                        
-                        const link = zoneLinks[currentZoneData.name];
-                        if (link) {
-                            window.location.href = link;
-                        }
-                    }
-                });
-                
-                // Écouter le scroll
-                let scrollTimeout;
-                wrapper.addEventListener('scroll', () => {
-                    clearTimeout(scrollTimeout);
-                    scrollTimeout = setTimeout(checkZone, 50);
-                });
-                
-                // Check initial
-                setTimeout(checkZone, 200);
+
+                if (foundZone && foundZone.name !== currentZone) {
+                    currentZone = foundZone.name;
+                    currentZoneData = foundZone;
+                    img.src = 'images/' + foundZone.image;
+                } else if (!foundZone && currentZone !== null) {
+                    currentZone = null;
+                    currentZoneData = null;
+                    img.src = 'images/caravane-base.png';
+                }
             }
+
+            img.addEventListener('click', () => {
+                if (currentZoneData) {
+                    if (currentZoneData.external) {
+                        window.open(currentZoneData.link, '_blank');
+                    } else {
+                        window.location.href = currentZoneData.link;
+                    }
+                }
+            });
+
+            let scrollTimeout;
+            wrapper.addEventListener('scroll', () => {
+                clearTimeout(scrollTimeout);
+                scrollTimeout = setTimeout(checkZone, 50);
+            });
+
+            setTimeout(checkZone, 200);
         }
-    </script>
+    }
+</script>
 </body>
 </html>
