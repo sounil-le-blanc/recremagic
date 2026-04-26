@@ -29,16 +29,36 @@
         }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: #000;
-            background-image: url('images/expos-fond.png');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            min-height: 100vh;
-            animation: subtleZoom 20s infinite alternate ease-in-out;
-        }
+    font-family: 'Quicksand', sans-serif;
+    background-color: #000;
+    background-image: url('images/expos-fond.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    min-height: 100vh;
+    position: relative;
+    animation: subtleZoom 20s infinite alternate ease-in-out;
+}
+
+/* Superposition sombre pour la lisibilité */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.35);
+    z-index: 0;
+    pointer-events: none;
+}
+
+/* Tous les éléments principaux au-dessus de la superposition */
+.navbar, .page-header, .expos-list, .contact-cta {
+    position: relative;
+    z-index: 2;
+}
 
         @keyframes subtleZoom {
             0% {
