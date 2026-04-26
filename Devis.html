@@ -6,9 +6,12 @@
     <title>Devis - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Flatpickr CSS + JS + langue française -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+
     <style>
-        /* (tous les styles sont identiques, je ne les répète pas pour la lisibilité) */
-        /* Aucune erreur dans les styles, donc pas de modification. */
         * {
             margin: 0;
             padding: 0;
@@ -31,10 +34,20 @@
             100% { background-position: 0% 50%; }
         }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #EC407A, #7CB69F); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #7CB69F, #EC407A); }
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #EC407A, #7CB69F);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7CB69F, #EC407A);
+        }
 
         .navbar {
             background: rgba(44, 24, 16, 0.95);
@@ -58,7 +71,9 @@
             height: 50px;
             transition: transform 0.3s;
         }
-        .navbar-logo img:hover { transform: scale(1.05); }
+        .navbar-logo img:hover {
+            transform: scale(1.05);
+        }
         .nav-icons {
             display: flex;
             gap: 2rem;
@@ -267,17 +282,20 @@
             color: #2C1810;
         }
 
-        .spectacles-checkbox-group, .expos-checkbox-group {
+        .spectacles-checkbox-group,
+        .expos-checkbox-group {
             margin-bottom: 1rem;
         }
-        .spectacles-checkbox-group label, .expos-checkbox-group label {
+        .spectacles-checkbox-group label,
+        .expos-checkbox-group label {
             display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: #2C1810;
             font-size: 0.85rem;
         }
-        .spectacles-list, .expos-list {
+        .spectacles-list,
+        .expos-list {
             display: flex;
             flex-direction: column;
             gap: 0.6rem;
@@ -286,7 +304,8 @@
             border-radius: 12px;
             border: 1px solid #e0e0e0;
         }
-        .spectacle-checkbox, .expo-checkbox {
+        .spectacle-checkbox,
+        .expo-checkbox {
             display: flex;
             align-items: center;
             gap: 0.7rem;
@@ -295,21 +314,25 @@
             border-radius: 10px;
             transition: background 0.2s ease;
         }
-        .spectacle-checkbox:hover, .expo-checkbox:hover {
+        .spectacle-checkbox:hover,
+        .expo-checkbox:hover {
             background: rgba(124, 182, 159, 0.1);
         }
-        .spectacle-checkbox input[type="checkbox"], .expo-checkbox input[type="checkbox"] {
+        .spectacle-checkbox input[type="checkbox"],
+        .expo-checkbox input[type="checkbox"] {
             width: 18px;
             height: 18px;
             cursor: pointer;
             accent-color: #7CB69F;
         }
-        .spectacle-checkbox span, .expo-checkbox span {
+        .spectacle-checkbox span,
+        .expo-checkbox span {
             font-size: 0.9rem;
             color: #2C1810;
             font-weight: 500;
         }
-        .spectacle-checkbox span small, .expo-checkbox span small {
+        .spectacle-checkbox span small,
+        .expo-checkbox span small {
             font-weight: normal;
             color: #888;
             font-size: 0.75rem;
@@ -350,13 +373,28 @@
             border: 1px solid #c3e6cb;
         }
 
+        /* ========== DATES DÉSACTIVÉES (RÉSERVÉES) PLUS FONCÉES ========== */
+        .flatpickr-day.disabled,
+        .flatpickr-day.disabled:hover {
+            background-color: #888888 !important;   /* gris bien foncé */
+            color: #2c2c2c !important;
+            text-decoration: line-through;
+            opacity: 0.9;
+            font-weight: bold;
+        }
+
         @media (max-width: 968px) {
-            .devis-wrapper { flex-direction: column; padding: 1rem; }
+            .devis-wrapper {
+                flex-direction: column;
+                padding: 1rem;
+            }
             .conditions { order: 2; }
             .devis-form { order: 1; max-width: 100%; }
         }
         @media (max-width: 768px) {
-            .navbar-container { padding: 0.6rem 1.5rem; }
+            .navbar-container {
+                padding: 0.6rem 1.5rem;
+            }
             .navbar-logo img { height: 45px; }
             .devis-form { padding: 1.2rem; }
             .devis-form h1 { font-size: 1.4rem; }
@@ -497,12 +535,12 @@
                     </div>
                 </div>
 
-                <!-- Bloc spécifique pour DÉLICIEUSEMENT MABOUL (avec IDs pour les champs) -->
+                <!-- Bloc spécifique pour DÉLICIEUSEMENT MABOUL -->
                 <div id="extraDateMaboul" class="extra-date-lieu">
                     <div class="form-row">
                         <div class="form-group">
                             <label for="dateMaboul">📅 Date souhaitée pour DÉLICIEUSEMENT MABOUL</label>
-                            <input type="date" id="dateMaboul" name="Date souhaitée Maboul">
+                            <input type="text" id="dateMaboul" name="Date souhaitée Maboul" placeholder="Sélectionnez une date" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label for="lieuMaboul">📍 Code postal / Ville pour DÉLICIEUSEMENT MABOUL</label>
@@ -515,7 +553,7 @@
                 <div class="form-row" id="dateLieuSpectacle">
                     <div class="form-group">
                         <label>Date souhaitée (spectacle)</label>
-                        <input type="date" name="Date souhaitée spectacle">
+                        <input type="text" name="Date souhaitée spectacle" placeholder="Sélectionnez une date" autocomplete="off">
                     </div>
                     <div class="form-group">
                         <label>Code postal / Ville (spectacle)</label>
@@ -543,7 +581,7 @@
                     <div class="form-row">
                         <div class="form-group">
                             <label>Date souhaitée (exposition)</label>
-                            <input type="date" name="Date souhaitée exposition">
+                            <input type="text" name="Date souhaitée exposition" placeholder="Sélectionnez une date" autocomplete="off">
                         </div>
                         <div class="form-group">
                             <label>Code postal / Ville (exposition)</label>
@@ -566,45 +604,74 @@
     </div>
 
     <script>
-        // Bloc pour DÉLICIEUSEMENT MABOUL
-        const checkMaboul = document.getElementById('checkMaboul');
-        const extraMaboul = document.getElementById('extraDateMaboul');
-
-        function toggleMaboulBlock() {
-            if (checkMaboul && checkMaboul.checked) {
-                extraMaboul.style.display = 'block';
-            } else {
-                extraMaboul.style.display = 'none';
-            }
-        }
-
-        if (checkMaboul) {
-            checkMaboul.addEventListener('change', toggleMaboulBlock);
-            toggleMaboulBlock(); // initialisation
-        }
-
-        // Bloc pour expositions
+        // ==================== GESTION DES EXPOSITIONS (affichage conditionnel) ====================
         const expoCheckboxes = document.querySelectorAll('input[name="Exposition"]');
         const extraBlockExpo = document.getElementById('extraDateLieuExpo');
-
         function toggleExpoBlock() {
             let atLeastOneChecked = false;
-            expoCheckboxes.forEach(cb => {
-                if (cb.checked) atLeastOneChecked = true;
-            });
-            if (atLeastOneChecked) {
-                extraBlockExpo.style.display = 'block';
-            } else {
-                extraBlockExpo.style.display = 'none';
-            }
+            expoCheckboxes.forEach(cb => { if (cb.checked) atLeastOneChecked = true; });
+            if (atLeastOneChecked) extraBlockExpo.style.display = 'block';
+            else extraBlockExpo.style.display = 'none';
         }
-
-        expoCheckboxes.forEach(cb => {
-            cb.addEventListener('change', toggleExpoBlock);
-        });
+        expoCheckboxes.forEach(cb => cb.addEventListener('change', toggleExpoBlock));
         toggleExpoBlock();
 
-        // Confirmation d'envoi
+        // ==================== GESTION DU SPECTACLE MABOUL ====================
+        const checkMaboul = document.getElementById('checkMaboul');
+        const extraMaboul = document.getElementById('extraDateMaboul');
+        function toggleMaboulBlock() {
+            extraMaboul.style.display = checkMaboul.checked ? 'block' : 'none';
+        }
+        if (checkMaboul) {
+            checkMaboul.addEventListener('change', toggleMaboulBlock);
+            toggleMaboulBlock();
+        }
+
+        // ==================== FLATPICKR : DÉSACTIVER LES DATES DÉJÀ PRISES (GRIS FONCÉ) ====================
+        // Récupérer les dates réservées depuis localStorage
+        function getReservedDates() {
+            const stored = localStorage.getItem('recremagic_calendar');
+            if (!stored) return [];
+            const events = JSON.parse(stored);
+            const reserved = [];
+            for (let key in events) {
+                const parts = key.split('-');
+                if (parts.length === 3) {
+                    const year = parts[0];
+                    const month = parts[1].padStart(2, '0');
+                    const day = parts[2].padStart(2, '0');
+                    reserved.push(`${year}-${month}-${day}`);
+                }
+            }
+            return reserved;
+        }
+
+        function applyDatepicker(selector, placeholderText) {
+            const input = document.querySelector(selector);
+            if (!input) return;
+            const disabledDates = getReservedDates();
+            flatpickr(input, {
+                locale: "fr",
+                dateFormat: "Y-m-d",
+                disable: disabledDates,
+                placeholder: placeholderText,
+                allowInput: false,
+                onDayCreate: function(dObj, dStr, fp, dayElem) {
+                    const dateStr = dayElem.dateObj ? flatpickr.formatDate(dayElem.dateObj, "Y-m-d") : null;
+                    if (dateStr && disabledDates.includes(dateStr)) {
+                        dayElem.title = "Date déjà réservée";
+                    }
+                }
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            applyDatepicker('input[name="Date souhaitée spectacle"]', "Sélectionnez une date (indisponible = grisé)");
+            applyDatepicker('input[name="Date souhaitée exposition"]', "Date pour l'exposition");
+            applyDatepicker('input[name="Date souhaitée Maboul"]', "Date pour Délicieusement Maboul");
+        });
+
+        // ==================== FORMULAIRE AVEC CONFIRMATION ====================
         const form = document.getElementById('devisForm');
         const confirmationMsg = document.getElementById('confirmationMsg');
         if (form) {

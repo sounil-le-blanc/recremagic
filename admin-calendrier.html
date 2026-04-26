@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin calendrier - Récré Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #7CB69F, #EC407A);
+            padding: 2rem;
+            margin: 0;
+            min-height: 100vh;
+        }
+        .admin-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 30px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1, h2 { color: #2C1810; text-align: center; }
+        input, textarea, button, select {
+            width: 100%;
+            padding: 0.7rem;
+            margin: 0.5rem 0;
+            border-radius: 30px;
+            border: 1px solid #ccc;
+            font-family: inherit;
+        }
+        button {
+            background: #7CB69F;
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+        }
+        button:hover { background: #5a8f78; }
+        .event-item {
+            background: #f9f9f9;
+            margin: 1rem 0;
+            padding: 0.8rem;
+            border-radius: 20px;
+            border-left: 5px solid #7CB69F;
+        }
+        .event-item strong { font-size: 1.1rem; }
+        .delete-event {
+            background: #D32F2F;
+            width: auto;
+            padding: 0.2rem 0.8rem;
+            margin-left: 1rem;
+        }
+        .code-section {
+            background: #f0f0f0;
+            padding: 1rem;
+            border-radius: 20px;
+            margin-bottom: 2rem;
+        }
+        .hidden { display: none; }
+        .date-field { transition: background 0.3s; }
+        .date-highlight { background-color: #FFEB3B !important; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+        hr { margin: 1.5rem 0; }
+        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+    </style>
+</head>
+<body>
+<div class="admin-container">
+    <h1>🔐 Administration du calendrier</h1>
+
+    <div class="code-section" id="codeSection">
+        <label>Code d'accès :</label>
+        <input type="password" id="accessCode" placeholder="Code secret">
+        <button id="verifyBtn">Vérifier</button>
+        <p id="codeError" style="color:red; display:none;">Code incorrect</p>
+    </div>
+
+    <div id="adminPanel" class="hidden">
+        <h2>➕ Ajouter un événement à une date</h2>
+        <form id="eventForm">
+            <label>Date *</label>
+            <input type="date" id="eventDate" class="date-field" required>
+
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Type</label>
+                    <select id="eventType">
+                        <option value="Spectacle">🎭 Spectacle</option>
+                        <option value="Exposition">🖼️ Exposition</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Titre / Nom</label>
+                    <input type="text" id="eventTitle" placeholder="Nom du spectacle ou exposition" required>
+                </div>
+            </div>
+
+            <label>Lieu</label>
+            <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
+
+            <button type="submit">💾 Ajouter cet événement</button>
+        </form>
+
+        <hr>
+        <h2>📋 Tous les événements par date</h2>
+        <div id="eventsList"></div>
+
+        <button id="openCalendarBtn" style="background: #7CB69F;">📅 Ouvrir le calendrier public</button>
+    </div>
+</div>
+
+<script>
+    const SECRET_CODE = "recremagic";
+    const STORAGE_KEY = 'recremagic_calendar';
+
+    document.getElementById('verifyBtn').onclick = () => {
+        if (document.getElementById('accessCode').value === SECRET_CODE) {
+            document.getElementById('codeSection').style.display = 'none';
+            document.getElementById('adminPanel').classList.remove('hidden');
+            loadEvents();
+        } else {
+            document.getElementById('codeError').style.display = 'block';
+        }
+    };
+
+    // Structure : eventsData[dateKey] = [ { type, titre, lieu }, ... ]
+    function getEvents() {
+        const stored = localStorage.getItem(STORAGE_KEY);
+        if (!stored) return {};
+        const data = JSON.parse(stored);
+        // Conversion ancien format (objet unique vers tableau)
+        for (let key in data) {
+            if (!Array.isArray(data[key])) {
+                const old = data[key];
+                if (old.spectacle !== undefined || old.titre !== undefined) {
+                    const type = old.type || (old.spectacle ? 'Spectacle' : 'Spectacle');
+                    const titre = old.titre || old.spectacle || '';
+                    const lieu = old.lieu || '';
+                    data[key] = [{ type, titre, lieu }];
+                } else {
+                    data[key] = [];
+                }
+            }
+        }
+        return data;
+    }
+
+    function saveEvents(events) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    }
+
+    function addEvent(dateKey, type, titre, lieu) {
+        let events = getEvents();
+        if (!events[dateKey]) events[dateKey] = [];
+        events[dateKey].push({ type, titre, lieu });
+        saveEvents(events);
+        loadEvents();
+    }
+
+    function deleteEventFromDate(dateKey, index) {
+        let events = getEvents();
+        if (events[dateKey] && events[dateKey][index]) {
+            events[dateKey].splice(index, 1);
+            if (events[dateKey].length === 0) delete events[dateKey];
+            saveEvents(events);
+            loadEvents();
+        }
+    }
+
+    function loadEvents() {
+        const events = getEvents();
+        const container = document.getElementById('eventsList');
+        const sortedDates = Object.keys(events).sort();
+        if (sortedDates.length === 0) {
+            container.innerHTML = '<p>Aucun événement.</p>';
+            return;
+        }
+        let html = '';
+        for (let date of sortedDates) {
+            const eventList = events[date];
+            html += `<div style="margin-bottom: 1.5rem; border-bottom: 1px solid #ccc;"><strong style="font-size:1.2rem;">📅 ${date}</strong>`;
+            eventList.forEach((ev, idx) => {
+                const typeIcon = ev.type === 'Spectacle' ? '🎭' : '🖼️';
+                html += `
+                    <div class="event-item">
+                        <div>
+                            ${typeIcon} <strong>${escapeHtml(ev.titre)}</strong><br>
+                            📍 ${escapeHtml(ev.lieu) || '—'}
+                        </div>
+                        <button class="delete-event" data-date="${date}" data-index="${idx}">🗑 Supprimer</button>
+                    </div>
+                `;
+            });
+            html += `</div>`;
+        }
+        container.innerHTML = html;
+        document.querySelectorAll('.delete-event').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const date = btn.getAttribute('data-date');
+                const idx = parseInt(btn.getAttribute('data-index'));
+                if (confirm(`Supprimer cet événement du ${date} ?`)) deleteEventFromDate(date, idx);
+            });
+        });
+    }
+
+    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+
+    const dateInput = document.getElementById('eventDate');
+    const titleInput = document.getElementById('eventTitle');
+    const lieuInput = document.getElementById('eventLieu');
+    const typeSelect = document.getElementById('eventType');
+    const form = document.getElementById('eventForm');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const dateValue = dateInput.value;
+        if (!dateValue) return;
+        dateInput.classList.add('date-highlight');
+        setTimeout(() => dateInput.classList.remove('date-highlight'), 2000);
+        const [year, month, day] = dateValue.split('-');
+        const dateKey = `${year}-${parseInt(month)}-${parseInt(day)}`;
+        const type = typeSelect.value;
+        const titre = titleInput.value.trim();
+        if (!titre) { alert("Veuillez saisir un titre"); return; }
+        const lieu = lieuInput.value.trim();
+        addEvent(dateKey, type, titre, lieu);
+        titleInput.value = '';
+        lieuInput.value = '';
+        alert(`✅ Événement ajouté au ${dateKey}`);
+    });
+
+    document.getElementById('openCalendarBtn').onclick = () => window.open('calendrier.html', '_blank');
+</script>
+</body>
+</html>
