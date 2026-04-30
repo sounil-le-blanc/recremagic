@@ -51,16 +51,14 @@
             overflow: hidden;
         }
 
-        /* NAVBAR */
+        /* NAVBAR TRANSPARENTE */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
         .navbar-container {
             max-width: 1200px;
@@ -90,6 +88,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
         .back-wrapper .back-label {
@@ -124,6 +123,7 @@
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
         .logo-wrapper .logo-label {
             font-size: 0.7rem;
@@ -161,6 +161,7 @@
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
         .icon-wrapper .icon-label {
@@ -359,7 +360,6 @@
             background: #888;
         }
 
-        /* NOUVELLE SECTION LISTE (placée AU-DESSUS du calendrier) */
         .events-summary {
             max-width: 1000px;
             width: 95%;
@@ -473,13 +473,11 @@
     </div>
 </nav>
 
-<!-- SECTION LISTE DÉTAILLÉE (MAINTENANT AU-DESSUS DU CALENDRIER) -->
 <div class="events-summary" id="eventsSummary">
     <h2><i class="fas fa-list"></i> Liste des événements</h2>
     <div id="eventsListContainer"></div>
 </div>
 
-<!-- CALENDRIER -->
 <div class="calendar-container">
     <div class="calendar-header">
         <div class="month-year">
@@ -518,7 +516,6 @@
         const stored = localStorage.getItem('recremagic_calendar');
         if (stored) {
             eventsData = JSON.parse(stored);
-            // Convertir ancien format (objet unique) en tableau
             for (let key in eventsData) {
                 if (!Array.isArray(eventsData[key])) {
                     const old = eventsData[key];
@@ -535,7 +532,7 @@
         } else {
             eventsData = {};
         }
-        renderEventsSummary(); // met à jour la liste au-dessus du calendrier
+        renderEventsSummary();
     }
 
     function getDateKey(year, month, day) {
@@ -619,11 +616,14 @@
         });
     }
 
-    // Fonction qui affiche la liste détaillée des événements (au-dessus du calendrier)
     function renderEventsSummary() {
         const container = document.getElementById('eventsListContainer');
         if (!container) return;
-        const sortedDates = Object.keys(eventsData).sort();
+        const sortedDates = Object.keys(eventsData).sort((a, b) => {
+            const [y1, m1, d1] = a.split('-').map(Number);
+            const [y2, m2, d2] = b.split('-').map(Number);
+            return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
+        });
         if (sortedDates.length === 0) {
             container.innerHTML = '<div class="no-events">Aucun événement programmé pour le moment.</div>';
             return;
@@ -649,7 +649,6 @@
         container.innerHTML = html;
     }
 
-    // Navigation mois/année
     function populateYearSelect() {
         const yearSelect = document.getElementById('yearSelect');
         for (let y = 2026; y <= 2028; y++) {
@@ -675,7 +674,6 @@
     document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
 
-    // Confettis (version auto-nettoyante)
     function createConfetti() {
         const container = document.getElementById('confetti');
         if (!container) return;

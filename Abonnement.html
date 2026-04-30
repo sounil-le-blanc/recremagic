@@ -16,21 +16,10 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -41,30 +30,19 @@
             overflow-x: hidden;
         }
 
-        /* Confettis */
         .confetti-container {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 1;
-            overflow: hidden;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none; z-index: 1; overflow: hidden;
         }
 
-        /* NAVBAR */
+        /* NAVBAR TRANSPARENTE */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            top: 0; left: 0; width: 100%;
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
-
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -75,13 +53,11 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-
         .nav-left {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
-
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -91,14 +67,13 @@
             transition: all 0.2s ease;
             cursor: pointer;
         }
-
         .back-wrapper span:first-child {
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
-
         .back-wrapper .back-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -112,12 +87,10 @@
             color: white;
             white-space: nowrap;
         }
-
         .back-wrapper:hover span:first-child {
             transform: scale(1.05);
             color: var(--jaune-accent);
         }
-
         .back-wrapper:hover .back-label {
             opacity: 1;
             color: var(--jaune-accent);
@@ -131,12 +104,11 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
-
         .logo-wrapper .logo-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -150,22 +122,14 @@
             color: white;
             white-space: nowrap;
         }
-
-        .logo-wrapper:hover img {
-            transform: scale(1.05);
-        }
-
-        .logo-wrapper:hover .logo-label {
-            opacity: 1;
-            color: var(--jaune-accent);
-        }
+        .logo-wrapper:hover img { transform: scale(1.05); }
+        .logo-wrapper:hover .logo-label { opacity: 1; color: var(--jaune-accent); }
 
         .nav-icons {
             display: flex;
             gap: 2rem;
             align-items: center;
         }
-
         .icon-wrapper {
             display: flex;
             flex-direction: column;
@@ -174,13 +138,12 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
-
         .icon-wrapper .icon-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -194,16 +157,8 @@
             color: white;
             white-space: nowrap;
         }
-
-        .icon-wrapper:hover span {
-            transform: scale(1.1);
-            color: var(--jaune-accent);
-        }
-
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            color: var(--jaune-accent);
-        }
+        .icon-wrapper:hover span { transform: scale(1.1); color: var(--jaune-accent); }
+        .icon-wrapper:hover .icon-label { opacity: 1; color: var(--jaune-accent); }
 
         /* ========== TABLEAU COMPLET ========== */
         .container {
@@ -251,50 +206,42 @@
             text-align: center;
             border: 1px solid rgba(0, 0, 0, 0.05);
         }
-
         .pricing-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 20px 35px rgba(0, 0, 0, 0.15);
         }
-
         .pricing-card h3 {
             font-size: 1.8rem;
             margin-bottom: 0.5rem;
             color: var(--text-dark);
         }
-
         .price {
             font-size: 2.8rem;
             font-weight: bold;
             color: var(--rose-spectacle);
             margin: 1rem 0;
         }
-
         .price small {
             font-size: 1rem;
             color: #777;
         }
-
         .features-list {
             list-style: none;
             text-align: left;
             margin: 1.5rem 0;
         }
-
         .features-list li {
             margin: 0.7rem 0;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
-
         .features-list li::before {
             content: "✓";
             color: var(--vert-caravane);
             font-weight: bold;
             font-size: 1.2rem;
         }
-
         .btn-subscribe {
             display: inline-block;
             background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
@@ -306,24 +253,20 @@
             margin-top: 1rem;
             transition: transform 0.2s, box-shadow 0.2s;
         }
-
         .btn-subscribe:hover {
             transform: translateY(-3px);
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
         }
-
         .highlight {
             border: 2px solid var(--jaune-accent);
             background: #fff9e8;
         }
-
         hr {
             margin: 2rem 0;
             border: none;
             height: 2px;
             background: linear-gradient(90deg, transparent, var(--rose-spectacle), var(--vert-caravane), transparent);
         }
-
         .footer-note {
             text-align: center;
             font-size: 0.8rem;
@@ -332,31 +275,17 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            .navbar-container {
-                flex-direction: column;
-            }
-            .nav-left {
-                gap: 1rem;
-            }
-            .nav-icons {
-                gap: 1.5rem;
-            }
-            .container {
-                width: 95%;
-                padding: 1.5rem;
-            }
-            .pricing-card {
-                width: 100%;
-            }
+            body { padding-top: 70px; }
+            .navbar-container { flex-direction: column; }
+            .nav-left { gap: 1rem; }
+            .nav-icons { gap: 1.5rem; }
+            .container { width: 95%; padding: 1.5rem; }
+            .pricing-card { width: 100%; }
         }
     </style>
 </head>
 <body>
 
-<!-- BARRE MARRON -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -381,10 +310,9 @@
 
 <div class="container">
     <h1>🎪 Choisissez votre formule</h1>
-    <p class="subtitle">Soutenez Récré Magic et profitez d’avantages exclusifs</p>
+    <p class="subtitle">Soutenez Récré Magic et profitez d'avantages exclusifs</p>
 
     <div class="pricing-table">
-        <!-- Formule Famille -->
         <div class="pricing-card">
             <h3>🎈 Famille</h3>
             <div class="price">5€ <small>/mois</small></div>
@@ -394,10 +322,9 @@
                 <li>Newsletter privilège</li>
                 <li>Autocollant offert</li>
             </ul>
-            <a href="#" class="btn-subscribe">Je m’abonne</a>
+            <a href="#" class="btn-subscribe">Je m'abonne</a>
         </div>
 
-        <!-- Formule Pro -->
         <div class="pricing-card highlight">
             <h3>🤝 Pro</h3>
             <div class="price">15€ <small>/mois</small></div>
@@ -408,10 +335,9 @@
                 <li>Badge partenaire</li>
                 <li>1 affiche personnalisée/an</li>
             </ul>
-            <a href="#" class="btn-subscribe">Je m’abonne</a>
+            <a href="#" class="btn-subscribe">Je m'abonne</a>
         </div>
 
-        <!-- Formule Premium -->
         <div class="pricing-card">
             <h3>⭐ Premium</h3>
             <div class="price">30€ <small>/mois</small></div>
@@ -422,14 +348,12 @@
                 <li>Goodies exclusifs</li>
                 <li>1 spectacle offert / an</li>
             </ul>
-            <a href="#" class="btn-subscribe">Je m’abonne</a>
+            <a href="#" class="btn-subscribe">Je m'abonne</a>
         </div>
     </div>
 
     <hr>
-    <p class="footer-note">
-        Annulation à tout moment • Paiement sécurisé • Sans engagement
-    </p>
+    <p class="footer-note">Annulation à tout moment • Paiement sécurisé • Sans engagement</p>
 </div>
 
 <script>

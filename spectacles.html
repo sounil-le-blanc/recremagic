@@ -5,13 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Spectacles - Récré Magic Pro</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* ==================== */
-        /* RESET & VARIABLES */
-        /* ==================== */
         :root {
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
@@ -20,10 +17,6 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
-            --bg-light: #f9f9f9;
-            --bois-clair: #C4A27A;
-            --bois-fonce: #8B5E3C;
-            --bois-tres-fonce: #5C3A1E;
         }
 
         * {
@@ -34,13 +27,11 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            /* Image de fond */
             background-image: url('images/fond-image.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            /* Position relative pour la superposition */
             position: relative;
             padding-top: 80px;
             line-height: 1.6;
@@ -48,7 +39,6 @@
             overflow-x: hidden;
         }
 
-        /* Superposition sombre pour la lisibilité */
         body::before {
             content: '';
             position: fixed;
@@ -61,69 +51,34 @@
             pointer-events: none;
         }
 
-        /* Tous les éléments au-dessus de la superposition */
-        .navbar, .page-header, .spectacles-list, .gallery-container, .contact-cta, .confetti-side {
+        .navbar, .page-header, .spectacles-list, .gallery-container, .contact-cta {
             position: relative;
             z-index: 2;
         }
 
-        /* ==================== */
-        /* CONFETTIS SUR LES CÔTÉS */
-        /* ==================== */
-        .confetti-side {
-            position: fixed;
-            top: -50px;
-            z-index: 999;
-            pointer-events: none;
-            font-size: 1.5rem;
-            animation: fall linear infinite;
-            filter: drop-shadow(0 0 5px rgba(0,0,0,0.2));
-        }
-
-        @keyframes fall {
-            0% {
-                transform: translateY(-50px) rotate(0deg);
-                opacity: 1;
-            }
-            100% {
-                transform: translateY(100vh) rotate(360deg);
-                opacity: 0.2;
-            }
-        }
-
-        /* ==================== */
-        /* SCROLLBAR PERSONNALISÉE */
-        /* ==================== */
         ::-webkit-scrollbar {
             width: 12px;
         }
-
         ::-webkit-scrollbar-track {
             background: rgba(0, 0, 0, 0.2);
             border-radius: 10px;
         }
-
         ::-webkit-scrollbar-thumb {
             background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
             border-radius: 10px;
         }
-
         ::-webkit-scrollbar-thumb:hover {
             background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
         }
 
-        /* ==================== */
-        /* NAVBAR (avec bouton retour) */
-        /* ==================== */
+        /* NAVBAR TRANSPARENTE */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-container {
@@ -143,7 +98,6 @@
             gap: 1.5rem;
         }
 
-        /* Bouton retour */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -158,6 +112,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
 
@@ -179,13 +134,11 @@
             transform: scale(1.05);
             color: var(--jaune-accent);
         }
-
         .back-wrapper:hover .back-label {
             opacity: 1;
             color: var(--jaune-accent);
         }
 
-        /* Logo avec texte "Accueil" au survol */
         .logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -198,6 +151,7 @@
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
         .logo-wrapper .logo-label {
@@ -217,7 +171,6 @@
         .logo-wrapper:hover img {
             transform: scale(1.05);
         }
-
         .logo-wrapper:hover .logo-label {
             opacity: 1;
             color: var(--jaune-accent);
@@ -241,6 +194,7 @@
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
 
@@ -262,15 +216,12 @@
             transform: scale(1.1);
             color: var(--jaune-accent);
         }
-
         .icon-wrapper:hover .icon-label {
             opacity: 1;
             color: var(--jaune-accent);
         }
 
-        /* ==================== */
         /* PAGE HEADER */
-        /* ==================== */
         .page-header {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(5px);
@@ -294,9 +245,6 @@
             opacity: 0.95;
         }
 
-        /* ==================== */
-        /* SPECTACLES LIST */
-        /* ==================== */
         .spectacles-list {
             max-width: 1200px;
             margin: 4rem auto;
@@ -306,11 +254,9 @@
             gap: 3rem;
         }
 
-        /* ==================== */
-        /* CADRE BOIS POUR LES CARTES */
-        /* ==================== */
+        /* CARTES SPECTACLE AVEC FOND MARRON CLAIR */
         .spectacle-item {
-            background: rgba(255, 255, 255, 0.95);
+            background: rgba(235, 215, 185, 0.96);   /* même marron clair que index */
             border-radius: 32px;
             overflow: hidden;
             transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
@@ -318,39 +264,36 @@
             grid-template-columns: 500px 1fr;
             backdrop-filter: blur(2px);
             position: relative;
-            
-            /* Contour bois */
-            border: 8px solid transparent;
-            border-image: repeating-linear-gradient(
-                45deg,
-                var(--bois-clair) 0px,
-                var(--bois-clair) 15px,
-                var(--bois-fonce) 15px,
-                var(--bois-fonce) 30px,
-                var(--bois-tres-fonce) 30px,
-                var(--bois-tres-fonce) 40px,
-                var(--bois-clair) 40px,
-                var(--bois-clair) 55px
-            ) 30 stretch;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow:
+                0 0 0 8px #3e2a1a,
+                0 8px 20px rgba(0,0,0,0.5);
         }
 
         .spectacle-item::before {
             content: '';
             position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            bottom: 4px;
-            border-radius: 28px;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.1);
             pointer-events: none;
-            background: transparent;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+            z-index: 1;
+        }
+
+        .spectacle-item::after {
+            content: none;
         }
 
         .spectacle-item:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.4), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+            box-shadow:
+                0 0 0 8px #4a3220,
+                0 12px 28px rgba(0,0,0,0.55);
         }
 
         .spectacle-img {
@@ -394,25 +337,22 @@
         .badge-rouge { background: var(--rouge-spectacle); }
 
         .spectacle-title {
-            font-family: 'Fredoka', cursive;
+            font-family: 'MedievalSharp', cursive;
             font-size: 2rem;
-            color: #1a3a4d;
+            color: #000;
             margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
-        /* ==================== */
-        /* TEXTE JUSTIFIÉ */
-        /* ==================== */
         .spectacle-description {
             line-height: 1.8;
             margin-bottom: 1.5rem;
-            color: #555;
+            color: #2C1810;   /* texte foncé pour lisibilité */
             text-align: justify;
         }
 
-        /* ==================== */
-        /* LIEN VIDÉO */
-        /* ==================== */
         .video-link {
             display: inline-flex;
             align-items: center;
@@ -437,9 +377,6 @@
             font-size: 1.3rem;
         }
 
-        /* ==================== */
-        /* GALERIE */
-        /* ==================== */
         .gallery-container {
             max-width: 1200px;
             margin: 2rem auto;
@@ -487,9 +424,6 @@
             border-color: var(--jaune-accent);
         }
 
-        /* ==================== */
-        /* MODAL POUR AGRANDISSEMENT */
-        /* ==================== */
         .modal {
             display: none;
             position: fixed;
@@ -524,14 +458,8 @@
         }
 
         @keyframes zoomIn {
-            from {
-                transform: scale(0.8);
-                opacity: 0;
-            }
-            to {
-                transform: scale(1);
-                opacity: 1;
-            }
+            from { transform: scale(0.8); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
         }
 
         .close-modal {
@@ -576,13 +504,8 @@
             color: var(--jaune-accent);
         }
 
-        .prev-arrow {
-            left: 30px;
-        }
-
-        .next-arrow {
-            right: 30px;
-        }
+        .prev-arrow { left: 30px; }
+        .next-arrow { right: 30px; }
 
         .image-counter {
             position: absolute;
@@ -598,9 +521,6 @@
             font-family: monospace;
         }
 
-        /* ==================== */
-        /* BUTTONS */
-        /* ==================== */
         .btn {
             display: inline-block;
             padding: 0.8rem 2rem;
@@ -624,9 +544,6 @@
             box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
         }
 
-        /* ==================== */
-        /* CONTACT CTA */
-        /* ==================== */
         .contact-cta {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
@@ -662,27 +579,19 @@
             color: white;
         }
 
-        /* ==================== */
-        /* RESPONSIVE */
-        /* ==================== */
         @media (max-width: 968px) {
             .spectacle-item {
                 grid-template-columns: 1fr;
-                border-width: 6px;
             }
-            
             .spectacle-img {
                 min-height: 250px;
             }
-            
             .page-header h1 {
                 font-size: 2.5rem;
             }
-            
             .page-header {
                 margin: 1rem;
             }
-            
             .navbar-container {
                 flex-direction: column;
             }
@@ -692,73 +601,53 @@
             body {
                 padding-top: 70px;
             }
-            
             .spectacles-list {
                 padding: 0 1rem;
             }
-            
             .spectacle-content {
                 padding: 1.5rem;
             }
-            
             .spectacle-title {
                 font-size: 1.6rem;
             }
-            
             .contact-cta {
                 padding: 2rem;
             }
-            
             .contact-cta h2 {
                 font-size: 1.5rem;
             }
-            
             .gallery-container {
                 padding: 0 1rem;
             }
-            
             .gallery-grid {
                 grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
                 gap: 1.5rem;
             }
-            
             .gallery-title {
                 font-size: 1.5rem;
             }
-            
             .close-modal {
                 top: 15px;
                 right: 20px;
                 font-size: 40px;
             }
-            
             .page-header {
                 margin: 0.5rem;
             }
-            
             .nav-arrow {
                 width: 50px;
                 height: 50px;
                 font-size: 40px;
             }
-            
-            .prev-arrow {
-                left: 10px;
-            }
-            
-            .next-arrow {
-                right: 10px;
-            }
-            
+            .prev-arrow { left: 10px; }
+            .next-arrow { right: 10px; }
             .modal-content {
                 max-width: 90%;
                 max-height: 70%;
             }
-            
             .nav-left {
                 gap: 1rem;
             }
-            
             .nav-icons {
                 gap: 1.5rem;
             }
@@ -768,48 +657,37 @@
             .page-header {
                 padding: 2rem 1rem;
             }
-            
             .page-header h1 {
                 font-size: 1.8rem;
             }
-            
             .spectacle-badge {
                 font-size: 0.7rem;
             }
-            
             .btn-primary {
                 display: block;
                 text-align: center;
             }
-            
             .video-link {
                 display: flex;
                 justify-content: center;
             }
-            
             .gallery-grid {
                 grid-template-columns: 1fr;
             }
-            
             .nav-arrow {
                 width: 40px;
                 height: 40px;
                 font-size: 30px;
-            }
-            
-            .spectacle-item {
-                border-width: 5px;
             }
         }
     </style>
 </head>
 <body>
 
-<!-- BARRE MARRON (avec bouton retour) -->
+<!-- BARRE DE NAVIGATION TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <!-- Bouton retour -->
             <div class="back-wrapper" onclick="history.back()">
                 <span>← Retour</span>
                 <span class="back-label">Retour</span>
@@ -840,7 +718,7 @@
 
 <!-- SPECTACLES LIST -->
 <div class="spectacles-list">
-    <!-- Spectacle 1 - DU COUP ON VIENT CHEZ VOUS -->
+    <!-- Spectacle 1 -->
     <div class="spectacle-item">
         <div class="spectacle-img">
             <img src="images/Ducoup-on-vien-chez-vous.png" alt="Du coup on vient chez vous - Récré Magic">
@@ -862,7 +740,7 @@
         </div>
     </div>
 
-    <!-- Spectacle 2 - DU COUP ON REVIENT CHEZ VOUS -->
+    <!-- Spectacle 2 -->
     <div class="spectacle-item">
         <div class="spectacle-img">
             <img src="images/Ducoup-on-revient-chez-vous.png" alt="Du coup on revient chez vous - Récré Magic">
@@ -884,7 +762,7 @@
         </div>
     </div>
 
-    <!-- Spectacle 3 - COMME SUR DES ROULETTES -->
+    <!-- Spectacle 3 -->
     <div class="spectacle-item">
         <div class="spectacle-img">
             <img src="images/Comme-sur-des-roulette.png" alt="Comme sur des roulettes - Récré Magic">
@@ -905,7 +783,7 @@
         </div>
     </div>
 
-    <!-- Spectacle 4 - DÉLICIEUSEMENT MABOUL -->
+    <!-- Spectacle 4 -->
     <div class="spectacle-item">
         <div class="spectacle-img">
             <img src="images/Delicieusement-Maboul.png" alt="Délicieusement Maboul - Récré Magic">
@@ -927,41 +805,23 @@
     </div>
 </div>
 
-<!-- GALERIE DES SUPER IMAGES -->
+<!-- GALERIE -->
 <div class="gallery-container">
     <h2 class="gallery-title">🚐 Nos voyages 🚐</h2>
     <div class="gallery-grid">
-        <div class="gallery-item" onclick="openGallery(0)">
-            <img src="images/Super-photo.png" alt="Récré Magic - Photo 1">
-        </div>
-        <div class="gallery-item" onclick="openGallery(1)">
-            <img src="images/Super-photo2.png" alt="Récré Magic - Photo 2">
-        </div>
-        <div class="gallery-item" onclick="openGallery(2)">
-            <img src="images/Super-photo3.png" alt="Récré Magic - Photo 3">
-        </div>
-        <div class="gallery-item" onclick="openGallery(3)">
-            <img src="images/Super-photo4.png" alt="Récré Magic - Photo 4">
-        </div>
-        <div class="gallery-item" onclick="openGallery(4)">
-            <img src="images/Super-photo5.png" alt="Récré Magic - Photo 5">
-        </div>
-        <div class="gallery-item" onclick="openGallery(5)">
-            <img src="images/Super-photo6.png" alt="Récré Magic - Photo 6">
-        </div>
-        <div class="gallery-item" onclick="openGallery(6)">
-            <img src="images/Super-photo7.png" alt="Récré Magic - Photo 7">
-        </div>
-        <div class="gallery-item" onclick="openGallery(7)">
-            <img src="images/Super-photo8.png" alt="Récré Magic - Photo 8">
-        </div>
-        <div class="gallery-item" onclick="openGallery(8)">
-            <img src="images/Super-photo9.png" alt="Récré Magic - Photo 9">
-        </div>
+        <div class="gallery-item" onclick="openGallery(0)"><img src="images/Super-photo.png" alt="Récré Magic - Photo 1"></div>
+        <div class="gallery-item" onclick="openGallery(1)"><img src="images/Super-photo2.png" alt="Récré Magic - Photo 2"></div>
+        <div class="gallery-item" onclick="openGallery(2)"><img src="images/Super-photo3.png" alt="Récré Magic - Photo 3"></div>
+        <div class="gallery-item" onclick="openGallery(3)"><img src="images/Super-photo4.png" alt="Récré Magic - Photo 4"></div>
+        <div class="gallery-item" onclick="openGallery(4)"><img src="images/Super-photo5.png" alt="Récré Magic - Photo 5"></div>
+        <div class="gallery-item" onclick="openGallery(5)"><img src="images/Super-photo6.png" alt="Récré Magic - Photo 6"></div>
+        <div class="gallery-item" onclick="openGallery(6)"><img src="images/Super-photo7.png" alt="Récré Magic - Photo 7"></div>
+        <div class="gallery-item" onclick="openGallery(7)"><img src="images/Super-photo8.png" alt="Récré Magic - Photo 8"></div>
+        <div class="gallery-item" onclick="openGallery(8)"><img src="images/Super-photo9.png" alt="Récré Magic - Photo 9"></div>
     </div>
 </div>
 
-<!-- MODAL POUR AGRANDIR L'IMAGE AVEC FLÈCHES -->
+<!-- MODAL -->
 <div id="imageModal" class="modal">
     <span class="close-modal" onclick="closeGallery()">&times;</span>
     <div class="nav-arrow prev-arrow" onclick="prevImage()">❮</div>
@@ -982,11 +842,6 @@
 </div>
 
 <script>
-    // ==================== //
-    // GALERIE AVEC FLÈCHES DE NAVIGATION
-    // ==================== //
-    
-    // Liste de toutes les images de la galerie
     const galleryImages = [
         'images/Super-photo.png',
         'images/Super-photo2.png',
@@ -1023,111 +878,30 @@
     
     function prevImage() {
         currentImageIndex--;
-        if (currentImageIndex < 0) {
-            currentImageIndex = galleryImages.length - 1;
-        }
+        if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
         updateModalImage();
     }
     
     function nextImage() {
         currentImageIndex++;
-        if (currentImageIndex >= galleryImages.length) {
-            currentImageIndex = 0;
-        }
+        if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
         updateModalImage();
     }
     
-    // Fermer avec la touche Echap
     document.addEventListener('keydown', function(e) {
         if (e.key === 'Escape' && modal.classList.contains('active')) {
             closeGallery();
         }
-        // Flèche gauche
         if (e.key === 'ArrowLeft' && modal.classList.contains('active')) {
             prevImage();
         }
-        // Flèche droite
         if (e.key === 'ArrowRight' && modal.classList.contains('active')) {
             nextImage();
         }
     });
     
-    // Empêcher la propagation des clics sur les flèches pour ne pas fermer la modale
-    document.querySelector('.prev-arrow')?.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-    document.querySelector('.next-arrow')?.addEventListener('click', function(e) {
-        e.stopPropagation();
-    });
-    
-    // ==================== //
-    // CONFETTIS UNIQUEMENT SUR LES CÔTÉS
-    // ==================== //
-    
-    const confettiEmojis = [
-        '🎉', '🎊', '🎈', '🎪', '🎭', '🎨', '🎯', '🤡', '🐕', '⭐', '✨', '🌟', 
-        '💫', '⚡', '🌈', '🎵', '🎶', '❤️', '🧡', '💛', '💚', '💙', '💜',
-        '🔴', '🔵', '🟡', '🟢', '🟣', '🟠', '🎀', '🎁', '🏆', '🥳'
-    ];
-    
-    function createConfetti(side) {
-        const confetti = document.createElement('div');
-        confetti.classList.add('confetti-side');
-        
-        const randomEmoji = confettiEmojis[Math.floor(Math.random() * confettiEmojis.length)];
-        confetti.textContent = randomEmoji;
-        
-        let leftPosition;
-        if (side === 'left') {
-            leftPosition = Math.random() * 12;
-        } else {
-            leftPosition = 88 + Math.random() * 12;
-        }
-        confetti.style.left = leftPosition + '%';
-        
-        const randomSize = Math.random() * 1.5 + 0.8;
-        confetti.style.fontSize = randomSize + 'rem';
-        
-        const randomDuration = Math.random() * 8 + 4;
-        confetti.style.animationDuration = randomDuration + 's';
-        
-        const randomDelay = Math.random() * 5;
-        confetti.style.animationDelay = randomDelay + 's';
-        
-        confetti.style.opacity = Math.random() * 0.7 + 0.3;
-        
-        document.body.appendChild(confetti);
-        
-        setTimeout(() => {
-            if (confetti.parentNode) {
-                confetti.remove();
-            }
-        }, randomDuration * 1000);
-    }
-    
-    setInterval(() => {
-        const count = Math.floor(Math.random() * 4) + 2;
-        for (let i = 0; i < count; i++) {
-            const side = Math.random() > 0.5 ? 'left' : 'right';
-            createConfetti(side);
-        }
-    }, 200);
-    
-    for (let i = 0; i < 50; i++) {
-        setTimeout(() => {
-            const side = Math.random() > 0.5 ? 'left' : 'right';
-            createConfetti(side);
-        }, i * 50);
-    }
-    
-    setInterval(() => {
-        for (let i = 0; i < 25; i++) {
-            setTimeout(() => {
-                const side = Math.random() > 0.5 ? 'left' : 'right';
-                createConfetti(side);
-            }, i * 40);
-        }
-    }, 10000);
+    document.querySelector('.prev-arrow')?.addEventListener('click', function(e) { e.stopPropagation(); });
+    document.querySelector('.next-arrow')?.addEventListener('click', function(e) { e.stopPropagation(); });
 </script>
 </body>
 </html>

@@ -4,109 +4,24 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Récré Magic - Bienvenue</title>
-    <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace : Familles & Fans, Prestations.">
-    
-    <link rel="icon" type="image/png" href="images/favicon.png">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    
+    <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --rouge-spectacle: #D32F2F;
-            --jaune-accent: #FFB300;
-            --creme-vintage: #FFF8E1;
-            --text-dark: #2C1810;
-            --text-light: #ffffff;
-            --bois-clair: #C4A27A;
-            --bois-fonce: #8B5E3C;
-            --bois-tres-fonce: #5C3A1E;
-        }
-
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background-image: url('images/fond-image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            position: relative;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            overflow-x: hidden;
-            padding-top: 80px;
-        }
-
-        /* Superposition sombre pour la lisibilité */
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            z-index: 0;
-            pointer-events: none;
-        }
-
-        .navbar, .container, .confetti-container {
-            z-index: 2;
-        }
-
-        /* Scrollbar personnalisée */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
-        }
-
-        /* Confettis */
-        .confetti-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            overflow: hidden;
-        }
-
-        /* ==================== */
-        /* NAVBAR */
-        /* ==================== */
+        /* ----- BARRE DE NAVIGATION (TRANSPARENTE) ----- */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
-
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -117,13 +32,11 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-
         .nav-left {
             display: flex;
             align-items: center;
             gap: 1.5rem;
         }
-
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -133,14 +46,13 @@
             transition: all 0.2s ease;
             cursor: pointer;
         }
-
         .back-wrapper span:first-child {
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
-
         .back-wrapper .back-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -154,15 +66,13 @@
             color: white;
             white-space: nowrap;
         }
-
         .back-wrapper:hover span:first-child {
             transform: scale(1.05);
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
-
         .back-wrapper:hover .back-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         .logo-wrapper {
@@ -173,12 +83,11 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
-
         .logo-wrapper .logo-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -192,14 +101,12 @@
             color: white;
             white-space: nowrap;
         }
-
         .logo-wrapper:hover img {
             transform: scale(1.05);
         }
-
         .logo-wrapper:hover .logo-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         .nav-icons {
@@ -207,7 +114,6 @@
             gap: 2rem;
             align-items: center;
         }
-
         .icon-wrapper {
             display: flex;
             flex-direction: column;
@@ -216,13 +122,12 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
-
         .icon-wrapper .icon-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -236,31 +141,234 @@
             color: white;
             white-space: nowrap;
         }
-
         .icon-wrapper:hover span {
             transform: scale(1.1);
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
-
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
-        /* ==================== */
-        /* CONTENU PRINCIPAL */
-        /* ==================== */
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            padding-top: 140px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .container {
             position: relative;
-            z-index: 10;
+            z-index: 2;
             max-width: 1400px;
             width: 100%;
+            text-align: center;
         }
 
-        .welcome-text {
+        .welcome-text { margin-bottom: 4rem; animation: fadeIn 1s; }
+
+        /* Rouleau de parchemin pour le titre */
+        .parchment-wrapper {
+            display: inline-block;
+            position: relative;
+            background: #f3e3c3;
+            padding: 2rem 3rem 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: 0 0 0 6px #d8b684, 0 0 0 12px #b89a6a, 0 12px 25px rgba(0,0,0,0.6);
+            border-radius: 20px;
+        }
+        .parchment-wrapper::before,
+        .parchment-wrapper::after {
+            content: '';
+            position: absolute;
+            left: 5%;
+            width: 90%;
+            height: 18px;
+            background: linear-gradient(180deg, #6b4e2e, #8b6a4a, #5a3a1e);
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+        }
+        .parchment-wrapper::before { top: -9px; }
+        .parchment-wrapper::after { bottom: -9px; }
+
+        .welcome-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #000;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .welcome-subtitle {
+            font-size: 1.3rem;
+            color: #4A2E1B;
+            font-weight: 600;
+            margin: 0;
+        }
+
+        .choices-grid {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+        }
+
+        /* ========== CARTES AVEC CADRE BOIS SÉRIEUX ========== */
+        .choice-card {
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 48px;
+            padding: 2.5rem 2rem;
             text-align: center;
-            margin-bottom: 4rem;
-            animation: fadeIn 1.2s ease-out 0.3s both;
+            text-decoration: none;
+            color: #2C1810;
+            width: 380px;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            position: relative;
+            transition: all 0.3s ease;
+            margin: 16px;
+            z-index: 1;
+
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow:
+                0 0 0 8px #3e2a1a,
+                0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .choice-card::before,
+        .choice-card::after {
+            content: none;
+        }
+
+        /* Filet intérieur */
+        .choice-card::before {
+            content: '';
+            position: absolute;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border-radius: 40px;
+            border: 1px solid rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+
+        .choice-card:hover {
+            transform: translateY(-10px);
+            box-shadow:
+                0 0 0 8px #4a3220,
+                0 12px 28px rgba(0,0,0,0.55);
+        }
+
+        .choice-icon {
+            font-size: 4.8rem;
+            margin-bottom: 1rem;
+            transition: transform 0.2s;
+        }
+        .choice-card:hover .choice-icon { transform: scale(1.08); }
+
+        /* ========== TITRES DES CARTES : MÊME STYLE QUE LE TITRE PRINCIPAL ========== */
+        .choice-title {
+            font-family: 'MedievalSharp', cursive;   /* même police */
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            color: #000;                              /* même couleur noire */
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2); /* même ombre */
+            letter-spacing: 2px;
+        }
+
+        /* On supprime les couleurs spécifiques */
+        .familles .choice-title,
+        .pros .choice-title {
+            color: #000;
+        }
+
+        .choice-description {
+            font-size: 1rem;
+            line-height: 1.5;
+            margin-bottom: 1.8rem;
+            padding: 0 0.5rem;
+            text-align: left;
+            color: #2C1810;
+        }
+
+        .choice-cta {
+            display: inline-block;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            width: fit-content;
+            margin: 0 auto;
+            transition: all 0.25s;
+        }
+        .familles .choice-cta {
+            background: rgba(236, 64, 122, 0.1);
+            color: #EC407A;
+            border: 1px solid #EC407A;
+        }
+        .pros .choice-cta {
+            background: rgba(124, 182, 159, 0.1);
+            color: #7CB69F;
+            border: 1px solid #7CB69F;
+        }
+        .choice-card:hover .choice-cta {
+            transform: scale(1.02);
+            padding: 0.7rem 1.8rem;
+        }
+        .familles:hover .choice-cta {
+            background: #EC407A;
+            color: white;
+        }
+        .pros:hover .choice-cta {
+            background: #7CB69F;
+            color: white;
+        }
+
+        .center-logo {
+            max-width: 240px;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
+            animation: floatLogo 3s ease-in-out infinite;
+        }
+        @keyframes floatLogo {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+        }
+
+        .footer-note {
+            margin-top: 4rem;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 0.9rem;
         }
 
         @keyframes fadeIn {
@@ -268,245 +376,32 @@
             to { opacity: 1; }
         }
 
-        .welcome-title {
-            font-family: 'Fredoka', cursive;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            font-weight: 700;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-            text-shadow: 3px 3px 10px rgba(0, 0, 0, 0.5);
-            text-transform: uppercase;
-        }
-
-        .welcome-subtitle {
-            font-size: clamp(1.1rem, 2.5vw, 1.5rem);
-            color: var(--creme-vintage);
-            font-weight: 500;
-            text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);
-        }
-
-        /* Trois colonnes : carte gauche, logo central, carte droite */
-        .choices-grid {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            animation: fadeInUp 1.4s ease-out 0.6s both;
-        }
-
-        /* ==================== */
-        /* CADRE BOIS POUR LES CARTES */
-        /* ==================== */
-        .choice-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(2px);
-            border-radius: 32px;
-            padding: 2.5rem 2rem;
-            text-align: center;
-            text-decoration: none;
-            color: var(--text-dark);
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            width: 380px;
-            min-height: 480px;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-            position: relative;
-            
-            /* Contour bois */
-            border: 8px solid transparent;
-            border-image: repeating-linear-gradient(
-                45deg,
-                var(--bois-clair) 0px,
-                var(--bois-clair) 15px,
-                var(--bois-fonce) 15px,
-                var(--bois-fonce) 30px,
-                var(--bois-tres-fonce) 30px,
-                var(--bois-tres-fonce) 40px,
-                var(--bois-clair) 40px,
-                var(--bois-clair) 55px
-            ) 30 stretch;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255, 255, 255, 0.3);
-        }
-        
-        /* Effet bois supplémentaire : coins arrondis et ombre interne */
-        .choice-card::before {
-            content: '';
-            position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            bottom: 4px;
-            border-radius: 24px;
-            pointer-events: none;
-            background: transparent;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .choice-card.familles {
-            border-top-color: transparent;
-        }
-
-        .choice-card.pros {
-            border-top-color: transparent;
-        }
-
-        .choice-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.4), inset 0 1px 4px rgba(255, 255, 255, 0.3);
-        }
-
-        .choice-icon {
-            font-size: 4.5rem;
-            margin-bottom: 1.2rem;
-            display: inline-block;
-            transition: transform 0.2s ease;
-        }
-
-        .choice-card:hover .choice-icon {
-            transform: scale(1.08);
-        }
-
-        .choice-title {
-            font-family: 'Fredoka', cursive;
-            font-size: 2rem;
-            font-weight: 700;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: -0.5px;
-        }
-
-        .familles .choice-title { color: var(--rose-spectacle); }
-        .pros .choice-title { color: var(--vert-caravane); }
-
-        .choice-description {
-            font-size: 1rem;
-            line-height: 1.5;
-            color: var(--text-dark);
-            margin-bottom: 1.8rem;
-            padding: 0 0.5rem;
-            text-align: left;
-        }
-
-        .choice-cta {
-            display: inline-block;
-            padding: 0.7rem 1.5rem;
-            border-radius: 40px;
-            font-weight: 700;
-            font-size: 0.9rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.25s ease;
-            width: fit-content;
-            margin: 0 auto;
-        }
-
-        .familles .choice-cta {
-            background: rgba(236, 64, 122, 0.1);
-            color: var(--rose-spectacle);
-        }
-
-        .pros .choice-cta {
-            background: rgba(124, 182, 159, 0.1);
-            color: var(--vert-caravane);
-        }
-
-        .choice-card:hover .choice-cta {
-            transform: scale(1.02);
-            padding: 0.7rem 1.8rem;
-        }
-
-        .familles:hover .choice-cta {
-            background: var(--rose-spectacle);
-            color: white;
-        }
-
-        .pros:hover .choice-cta {
-            background: var(--vert-caravane);
-            color: white;
-        }
-
-        /* Logo central animé */
-        .center-logo {
-            max-width: 250px;
-            width: 100%;
-            filter: drop-shadow(0 15px 30px rgba(0, 0, 0, 0.3));
-            animation: floatLogo 3s ease-in-out infinite;
-        }
-
-        @keyframes floatLogo {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        .footer-note {
-            text-align: center;
-            margin-top: 5rem;
-            color: var(--text-light);
-            font-size: 0.9rem;
-            opacity: 0.85;
-            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.3);
-            animation: fadeIn 2s ease-out 1s both;
-        }
-
-        /* Responsive */
         @media (max-width: 1100px) {
-            .choice-card {
-                width: 320px;
-                min-height: 440px;
-            }
-            .center-logo {
-                max-width: 200px;
-            }
+            .choice-card { width: 340px; min-height: 480px; border-radius: 42px; margin: 14px; }
+            .choice-title { font-size: 1.9rem; }
+            .center-logo { max-width: 200px; }
+            .parchment-wrapper { padding: 1.5rem 2rem; }
         }
-
         @media (max-width: 900px) {
-            .choices-grid {
-                flex-direction: column;
-                gap: 2rem;
-            }
-            .center-logo {
-                order: 2;
-                margin: 1rem 0;
-                max-width: 180px;
-            }
-            .choice-card.familles {
-                order: 1;
-            }
-            .choice-card.pros {
-                order: 3;
-            }
+            .choices-grid { flex-direction: column; gap: 2rem; }
+            .center-logo { order: 2; margin: 1rem 0; }
+            .choice-card.familles { order: 1; }
+            .choice-card.pros { order: 3; }
+            .navbar-container { flex-direction: column; }
+            .nav-left, .nav-icons { justify-content: center; }
         }
-
         @media (max-width: 768px) {
-            body {
-                padding-top: 70px;
-            }
-            .navbar-container {
-                flex-direction: column;
-                padding: 0.6rem 1.5rem;
-            }
-            .nav-left {
-                gap: 1rem;
-            }
-            .nav-icons {
-                gap: 1.5rem;
-            }
-            .logo-wrapper img {
-                height: 45px;
-            }
-            .choice-card {
-                border-width: 6px;
-            }
+            body { padding-top: 120px; }
+            .choice-card { border-radius: 36px; padding: 1.8rem; margin: 10px; border-width: 4px; }
+            .parchment-wrapper { padding: 1rem 1.5rem; }
+            .welcome-title { font-size: 1.8rem; }
+            .welcome-subtitle { font-size: 1rem; }
         }
     </style>
 </head>
 <body>
 
-<div class="confetti-container" id="confetti"></div>
-
-<!-- BARRE MARRON -->
+<!-- BARRE DE NAVIGATION TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -520,11 +415,11 @@
             </a>
         </div>
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+            <a href="boutique.html" class="icon-wrapper">
                 <span>💰</span>
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+            <a href="Abonnement.html" class="icon-wrapper">
                 <span>🤝</span>
                 <span class="icon-label">Abonnement</span>
             </a>
@@ -534,85 +429,51 @@
 
 <div class="container">
     <div class="welcome-text">
-        <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
-        <p class="welcome-subtitle">Choisissez votre espace</p>
+        <div class="parchment-wrapper">
+            <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
+            <p class="welcome-subtitle">Choisissez votre espace</p>
+        </div>
     </div>
-
     <div class="choices-grid">
-        <!-- Familles & Fans (carte à gauche) -->
+        <!-- Carte Familles -->
         <a href="familles.html" class="choice-card familles">
             <div>
                 <div class="choice-icon">🎪</div>
                 <h2 class="choice-title">Familles<br>& Fans</h2>
-                <p class="choice-description">
-                    Découvrez nos spectacles, nos personnages, nos mini-series, nos contenus exclusifs à travers nos 45 ans.
-                </p>
+                <p class="choice-description">Découvrez nos spectacles, personnages, mini-séries, contenus exclusifs.</p>
             </div>
             <span class="choice-cta">Entrer</span>
         </a>
-
-        <!-- Logo roulotte central (animé) -->
-        <img src="images/logo.png" alt="Roulotte Récré Magic" class="center-logo">
-
-        <!-- Prestations (carte à droite) -->
+        <img src="images/logo.png" class="center-logo" alt="Récré Magic">
+        <!-- Carte Prestations -->
         <a href="pros.html" class="choice-card pros">
             <div>
                 <div class="choice-icon">🤝</div>
                 <h2 class="choice-title">PRESTATIONS</h2>
-                <p class="choice-description">
-                    Vous voulez organiser un événement ? Découvrez nos spectacles et expositions. Demandez un devis personnalisé. Participez à nos stages artistiques.
-                </p>
+                <p class="choice-description">Organisez un événement : spectacles, expositions, devis personnalisé, stages artistiques.</p>
             </div>
             <span class="choice-cta">Accéder</span>
         </a>
     </div>
-
-    <p class="footer-note">
-        Récré Magic • Circus Théâtre Ambulant • Depuis 1964
-    </p>
+    <div class="footer-note">Récré Magic • Circus Théâtre Ambulant • Depuis 1964</div>
 </div>
 
+<!-- Confettis -->
+<div id="confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
 <script>
     function createConfetti() {
-        const container = document.getElementById('confetti');
+        const ctn = document.getElementById('confetti');
         const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
-        const confettiCount = 60;
-
-        for (let i = 0; i < confettiCount; i++) {
-            const confetti = document.createElement('div');
-            confetti.style.position = 'absolute';
-            confetti.style.width = Math.random() * 12 + 5 + 'px';
-            confetti.style.height = Math.random() * 12 + 5 + 'px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.top = -20 + 'px';
-            confetti.style.opacity = Math.random() * 0.7 + 0.3;
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-
-            const duration = Math.random() * 4 + 5;
-            const delay = Math.random() * 3;
-
-            confetti.style.animation = `fall ${duration}s linear ${delay}s infinite`;
-
-            container.appendChild(confetti);
+        for (let i = 0; i < 50; i++) {
+            let d = document.createElement('div');
+            d.style.cssText = `position:absolute; width:${Math.random() * 12 + 5}px; height:${Math.random() * 12 + 5}px; background:${colors[Math.floor(Math.random() * 4)]}; left:${Math.random() * 100}%; top:-20px; opacity:${Math.random() * 0.7 + 0.3}; border-radius:${Math.random() > 0.5 ? '50%' : '0'}; transform:rotate(${Math.random() * 360}deg); animation:fall ${Math.random() * 4 + 5}s linear ${Math.random() * 3}s infinite;`;
+            ctn.appendChild(d);
         }
-
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes fall {
-                to {
-                    transform: translateY(100vh) rotate(720deg);
-                    opacity: 0;
-                }
-            }
-        `;
+        let style = document.createElement('style');
+        style.textContent = '@keyframes fall{to{transform:translateY(100vh) rotate(720deg); opacity:0;}}';
         document.head.appendChild(style);
     }
-
-    window.addEventListener('load', () => {
-        createConfetti();
-    });
+    window.addEventListener('load', createConfetti);
 </script>
 </body>
 </html>
