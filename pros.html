@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Récré Magic - Prestations</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -13,13 +13,9 @@
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
             --text-light: #ffffff;
-            --bois-clair: #C4A27A;
-            --bois-fonce: #8B5E3C;
-            --bois-tres-fonce: #5C3A1E;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* SCROLLBAR */
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -37,20 +33,17 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            /* Image de fond */
             background-image: url('images/fond-image.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            /* Position relative pour la superposition */
             position: relative;
             min-height: 100vh;
             padding-top: 80px;
             overflow-x: hidden;
         }
 
-        /* Superposition sombre pour la lisibilité */
         body::before {
             content: '';
             position: fixed;
@@ -63,22 +56,19 @@
             pointer-events: none;
         }
 
-        /* Tous les éléments au-dessus de la superposition */
-        .navbar, .container, .confetti-container {
+        .navbar, .container {
             position: relative;
             z-index: 2;
         }
 
-        /* NAVBAR */
+        /* NAVBAR TRANSPARENTE (identique à index.html) */
         .navbar {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-container {
@@ -98,7 +88,6 @@
             gap: 1.5rem;
         }
 
-        /* Bouton retour */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -113,6 +102,7 @@
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
 
@@ -132,15 +122,14 @@
 
         .back-wrapper:hover span:first-child {
             transform: scale(1.05);
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         .back-wrapper:hover .back-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
-        /* Logo avec texte "Accueil" au survol */
         .logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -153,6 +142,7 @@
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
         .logo-wrapper .logo-label {
@@ -175,7 +165,7 @@
 
         .logo-wrapper:hover .logo-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         .nav-icons {
@@ -196,6 +186,7 @@
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
 
@@ -215,12 +206,12 @@
 
         .icon-wrapper:hover span {
             transform: scale(1.1);
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         .icon-wrapper:hover .icon-label {
             opacity: 1;
-            color: var(--jaune-accent);
+            color: #FFB300;
         }
 
         /* CONTENEUR PRINCIPAL */
@@ -241,11 +232,12 @@
         }
 
         .welcome-title {
-            font-family: 'Fredoka', cursive;
+            font-family: 'MedievalSharp', cursive;   /* même police que le titre principal */
             font-size: clamp(2.5rem, 6vw, 4rem);
+            color: white;
+            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
         }
 
-        /* LISTE VERTICALE ALTERNÉE */
         .prestations-list {
             display: flex;
             flex-direction: column;
@@ -259,54 +251,52 @@
             flex-wrap: wrap;
         }
 
-        /* ==================== */
-        /* CADRE BOIS POUR LES CARTES */
-        /* ==================== */
+        /* ========== CARTES : MÊME CADRE QUE INDEX.HTML ========== */
         .choice-card {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(2px);
-            border-radius: 32px;
+            background: rgba(235, 215, 185, 0.96);   /* fond clair */
+            border-radius: 48px;
             padding: 2.5rem 2rem;
             text-align: center;
             text-decoration: none;
-            color: var(--text-dark);
+            color: #2C1810;
             transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             width: 380px;
             flex-shrink: 0;
             position: relative;
-            
-            /* Contour bois */
-            border: 8px solid transparent;
-            border-image: repeating-linear-gradient(
-                45deg,
-                var(--bois-clair) 0px,
-                var(--bois-clair) 15px,
-                var(--bois-fonce) 15px,
-                var(--bois-fonce) 30px,
-                var(--bois-tres-fonce) 30px,
-                var(--bois-tres-fonce) 40px,
-                var(--bois-clair) 40px,
-                var(--bois-clair) 55px
-            ) 30 stretch;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+            margin: 16px;
+            z-index: 1;
+
+            /* Contour bois sérieux */
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow:
+                0 0 0 8px #3e2a1a,
+                0 8px 20px rgba(0,0,0,0.5);
         }
 
+        /* Filet intérieur */
         .choice-card::before {
             content: '';
             position: absolute;
-            top: 4px;
-            left: 4px;
-            right: 4px;
-            bottom: 4px;
-            border-radius: 24px;
+            top: 8px;
+            left: 8px;
+            right: 8px;
+            bottom: 8px;
+            border-radius: 40px;
+            border: 1px solid rgba(0,0,0,0.1);
             pointer-events: none;
-            background: transparent;
-            box-shadow: inset 0 0 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .choice-card::after {
+            content: none;
         }
 
         .choice-card:hover {
             transform: translateY(-8px);
-            box-shadow: 0 20px 35px -8px rgba(0, 0, 0, 0.4), inset 0 1px 4px rgba(255, 255, 255, 0.3);
+            box-shadow:
+                0 0 0 8px #4a3220,
+                0 12px 28px rgba(0,0,0,0.55);
         }
 
         .choice-icon {
@@ -314,22 +304,23 @@
             margin-bottom: 1rem;
         }
 
+        /* Titres des cartes : exactement comme le titre principal */
         .choice-title {
-            font-family: 'Fredoka', cursive;
+            font-family: 'MedievalSharp', cursive;
             font-size: 2rem;
             font-weight: 700;
             margin-bottom: 0.8rem;
             text-transform: uppercase;
+            color: #000;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
         }
-
-        .spectacles .choice-title { color: var(--vert-caravane); }
-        .expos .choice-title { color: var(--rose-spectacle); }
-        .stages .choice-title { color: var(--jaune-accent); }
 
         .choice-description {
             font-size: 1rem;
             line-height: 1.4;
             margin-bottom: 1.2rem;
+            color: #2C1810;
         }
 
         .choice-cta {
@@ -342,16 +333,16 @@
             transition: 0.2s;
         }
 
-        .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); }
-        .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); }
-        .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); }
+        /* On garde les couleurs de CTA comme avant, mais on peut unifier si souhaité */
+        .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); border: 1px solid var(--vert-caravane); }
+        .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); border: 1px solid var(--rose-spectacle); }
+        .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); border: 1px solid var(--jaune-accent); }
 
         .choice-card:hover .choice-cta {
             transform: scale(1.02);
             padding: 0.5rem 1.4rem;
         }
 
-        /* CADRE VIDE À CÔTÉ */
         .empty-frame {
             flex: 1;
             background: rgba(255, 255, 255, 0.2);
@@ -406,7 +397,7 @@
                 gap: 1.5rem;
             }
             .choice-card {
-                border-width: 6px;
+                border-width: 4px;
             }
         }
 
@@ -436,11 +427,10 @@
 </head>
 <body>
 
-<!-- BARRE MARRON -->
+<!-- BARRE DE NAVIGATION TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
-            <!-- Bouton retour -->
             <div class="back-wrapper" onclick="history.back()">
                 <span>← Retour</span>
                 <span class="back-label">Retour</span>
@@ -466,12 +456,12 @@
 <div class="container">
     <div class="welcome-text">
         <h1 class="welcome-title">PRESTATIONS</h1>
-        <p>nous engager</p>
+        <p style="color: white; text-shadow: 1px 1px 3px black;">nous engager</p>
     </div>
 
     <div class="prestations-list">
 
-        <!-- Bloc 1 : Spectacles (carte à gauche) -->
+        <!-- Bloc 1 : Spectacles -->
         <div class="prestation-block left">
             <a href="spectacles.html" class="choice-card spectacles">
                 <div class="choice-icon">🎭</div>
@@ -482,7 +472,7 @@
             <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
         </div>
 
-        <!-- Bloc 2 : Expos (carte à droite) -->
+        <!-- Bloc 2 : Expos -->
         <div class="prestation-block right">
             <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
             <a href="expos.html" class="choice-card expos">
@@ -493,7 +483,7 @@
             </a>
         </div>
 
-        <!-- Bloc 3 : Stages (carte à gauche) -->
+        <!-- Bloc 3 : Stages -->
         <div class="prestation-block left">
             <a href="stages.html" class="choice-card stages">
                 <div class="choice-icon">🎓</div>

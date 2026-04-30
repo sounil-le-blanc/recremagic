@@ -3,15 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Expositions - Récré Magic Pro</title>
+    <title>Nos Expositions - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
     <style>
-        /* ==================== */
-        /* RESET & VARIABLES */
-        /* ==================== */
         :root {
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
@@ -29,51 +25,40 @@
         }
 
         body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: #000;
-    background-image: url('images/fond-image.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: fixed;
-    min-height: 100vh;
-    position: relative;
-    animation: subtleZoom 20s infinite alternate ease-in-out;
-}
-
-/* Superposition sombre pour la lisibilité */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.35);
-    z-index: 0;
-    pointer-events: none;
-}
-
-/* Tous les éléments principaux au-dessus de la superposition */
-.navbar, .page-header, .expos-list, .contact-cta {
-    position: relative;
-    z-index: 2;
-}
-
-        @keyframes subtleZoom {
-            0% {
-                background-size: cover;
-                background-position: center;
-            }
-            100% {
-                background-size: 110%;
-                background-position: 52% 48%;
-            }
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            position: relative;
+            animation: subtleZoom 20s infinite alternate ease-in-out;
         }
 
-        /* ==================== */
-        /* SCROLLBAR PERSONNALISÉE */
-        /* ==================== */
+        @keyframes subtleZoom {
+            0% { background-size: cover; background-position: center; }
+            100% { background-size: 110%; background-position: 52% 48%; }
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .navbar, .page-header, .expos-list, .contact-cta {
+            position: relative;
+            z-index: 2;
+        }
+
         ::-webkit-scrollbar {
             width: 12px;
         }
@@ -89,17 +74,14 @@ body::before {
             background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
         }
 
-        /* ==================== */
-        /* NAVBAR (sans calendrier) */
-        /* ==================== */
+        /* NAVBAR TRANSPARENTE */
         .navbar {
-            position: sticky;
+            position: fixed;
             top: 0;
+            left: 0;
             width: 100%;
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
+            background: transparent;
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
         }
 
         .navbar-container {
@@ -119,7 +101,6 @@ body::before {
             gap: 1.5rem;
         }
 
-        /* Bouton retour (page précédente) */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -134,6 +115,7 @@ body::before {
             font-size: 1.1rem;
             font-weight: 600;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
 
@@ -161,7 +143,6 @@ body::before {
             color: var(--jaune-accent);
         }
 
-        /* Logo avec texte "Accueil" au survol */
         .logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -174,6 +155,7 @@ body::before {
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
 
         .logo-wrapper .logo-label {
@@ -217,6 +199,7 @@ body::before {
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
+            text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
 
@@ -244,9 +227,7 @@ body::before {
             color: var(--jaune-accent);
         }
 
-        /* ==================== */
-        /* PAGE HEADER */
-        /* ==================== */
+        /* Reste du style inchangé */
         .page-header {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(4px);
@@ -255,6 +236,7 @@ body::before {
             text-align: center;
             border-radius: 30px;
             margin: 1rem;
+            margin-top: 80px;
         }
 
         .page-header h1 {
@@ -269,9 +251,6 @@ body::before {
             opacity: 0.95;
         }
 
-        /* ==================== */
-        /* EXPOS LIST */
-        /* ==================== */
         .expos-list {
             max-width: 1200px;
             margin: 4rem auto;
@@ -354,7 +333,6 @@ body::before {
             min-width: 150px;
         }
 
-        /* Boutons */
         .btn-primary {
             display: inline-block;
             background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
@@ -380,9 +358,6 @@ body::before {
             margin-top: 1rem;
         }
 
-        /* ==================== */
-        /* CONTACT CTA */
-        /* ==================== */
         .contact-cta {
             background: rgba(0, 0, 0, 0.6);
             backdrop-filter: blur(4px);
@@ -416,20 +391,16 @@ body::before {
             text-decoration: underline;
         }
 
-        /* ==================== */
-        /* RESPONSIVE */
-        /* ==================== */
         @media (max-width: 968px) {
             .expo-item {
                 grid-template-columns: 1fr;
             }
+            .navbar-container {
+                flex-direction: column;
+            }
         }
 
         @media (max-width: 768px) {
-            .navbar-container {
-                flex-direction: column;
-                padding: 0.6rem 1.5rem;
-            }
             .nav-left {
                 gap: 1rem;
             }
@@ -455,35 +426,11 @@ body::before {
             .contact-cta h2 {
                 font-size: 1.8rem;
             }
-            ::-webkit-scrollbar {
-                width: 8px;
-            }
-            .button-group {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            .btn-primary {
-                text-align: center;
-                margin-right: 0;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .expo-title {
-                font-size: 1.5rem;
-            }
-            .spec-item {
-                flex-direction: column;
-            }
-            .spec-label {
-                margin-bottom: 0.2rem;
-            }
         }
     </style>
 </head>
 <body>
 
-<!-- BARRE MARRON (sans calendrier) -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -509,32 +456,25 @@ body::before {
     </div>
 </nav>
 
-<!-- PAGE HEADER -->
 <div class="page-header">
     <h1>🎨 Nos Expositions</h1>
     <p>Installations interactives pour vos événements</p>
 </div>
 
-<!-- EXPOS LIST -->
 <div class="expos-list">
-    <!-- Carte 1 : LA FÉERIE DES MARIONNETTES -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-marionnettes.jpg" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
             <span class="expo-badge">UNIQUE EN FRANCE</span>
             <h2 class="expo-title">LA FÉERIE DES MARIONNETTES</h2>
-            <p class="expo-description">
-                12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur 
-                appuie sur un simple bouton ! Une exposition interactive de 2 mètres de haut qui 
-                émerveille petits et grands.
-            </p>
+            <p class="expo-description">12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur appuie sur un simple bouton !</p>
             <div class="expo-specs">
-                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> H 2m × L 1,90m × P 0,60m (par vitrine)</div>
-                <div class="spec-item"><span class="spec-label">🎭 Composition :</span> 12 vitrines / 56 personnages articulés</div>
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> H 2m × L 1,90m × P 0,60m</div>
+                <div class="spec-item"><span class="spec-label">🎭 Composition :</span> 12 vitrines / 56 personnages</div>
                 <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 25m² minimum</div>
                 <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Prises 220V (1 par vitrine)</div>
-                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur uniquement, espace couvert</div>
-                <div class="spec-item"><span class="spec-label">⏳ Location :</span> Week-end, semaine, mois (tarifs dégressifs)</div>
+                <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur uniquement</div>
+                <div class="spec-item"><span class="spec-label">⏳ Location :</span> Week-end, semaine, mois</div>
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
@@ -543,22 +483,17 @@ body::before {
         </div>
     </div>
 
-    <!-- Carte 2 : LES GÉANTS DU CARNAVAL -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
             <span class="expo-badge">SPECTACULAIRE</span>
             <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
-            <p class="expo-description">
-                12 personnages géants qui s'animent et vous suivent du regard ! Cette exposition 
-                spectaculaire transporte les visiteurs dans l'univers festif et coloré du carnaval. 
-                Parfait pour festivals, fêtes de village et événements extérieurs.
-            </p>
+            <p class="expo-description">12 personnages géants qui s'animent et vous suivent du regard ! Parfait pour festivals et événements extérieurs.</p>
             <div class="expo-specs">
-                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> Personnages de 2 à 3 mètres de hauteur</div>
-                <div class="spec-item"><span class="spec-label">🎪 Composition :</span> 12 personnages géants animés</div>
+                <div class="spec-item"><span class="spec-label">📏 Dimensions :</span> 2 à 3 mètres de hauteur</div>
+                <div class="spec-item"><span class="spec-label">🎪 Composition :</span> 12 personnages géants</div>
                 <div class="spec-item"><span class="spec-label">📍 Espace requis :</span> 40m² minimum</div>
-                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Autonome ou avec alimentation selon configuration</div>
+                <div class="spec-item"><span class="spec-label">⚡ Besoins :</span> Autonome ou selon config</div>
                 <div class="spec-item"><span class="spec-label">🏠 Installation :</span> Intérieur ou extérieur couvert</div>
                 <div class="spec-item"><span class="spec-label">🛠️ Montage :</span> 2h d'installation</div>
             </div>
@@ -569,7 +504,6 @@ body::before {
     </div>
 </div>
 
-<!-- CONTACT SECTION -->
 <div class="contact-cta" id="contact">
     <h2>Intéressé par nos expositions ?</h2>
     <p>Enrichissez vos événements avec nos installations uniques</p>
