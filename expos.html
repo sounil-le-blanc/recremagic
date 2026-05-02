@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Expositions - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
@@ -18,11 +18,7 @@
             --text-light: #ffffff;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -45,10 +41,7 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.35);
             z-index: 0;
             pointer-events: none;
@@ -59,196 +52,168 @@
             z-index: 2;
         }
 
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane));
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         /* NAVBAR TRANSPARENTE */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             background: transparent;
             z-index: 1000;
         }
-
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
             padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
         }
-
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
+        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
         .back-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
         }
-
         .back-wrapper span:first-child {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s, color 0.2s;
+            font-size: 1.1rem; font-weight: 600; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
         }
-
         .back-wrapper .back-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
         }
-
-        .back-wrapper:hover span:first-child {
-            transform: scale(1.05);
-            color: var(--jaune-accent);
-        }
-
-        .back-wrapper:hover .back-label {
-            opacity: 1;
-            color: var(--jaune-accent);
-        }
+        .back-wrapper:hover span:first-child { transform: scale(1.05); color: var(--jaune-accent); }
+        .back-wrapper:hover .back-label { opacity: 1; color: var(--jaune-accent); }
 
         .logo-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
         }
-
         .logo-wrapper img {
-            height: 50px;
-            transition: transform 0.2s;
+            height: 50px; transition: transform 0.2s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
-
         .logo-wrapper .logo-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
         }
+        .logo-wrapper:hover img { transform: scale(1.05); }
+        .logo-wrapper:hover .logo-label { opacity: 1; color: var(--jaune-accent); }
 
-        .logo-wrapper:hover img {
-            transform: scale(1.05);
-        }
-
-        .logo-wrapper:hover .logo-label {
-            opacity: 1;
-            color: var(--jaune-accent);
-        }
-
-        .nav-icons {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
+        .nav-icons { display: flex; gap: 2rem; align-items: center; }
         .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
         }
-
         .icon-wrapper span {
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s;
+            font-size: 1.3rem; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
         }
-
         .icon-wrapper .icon-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
+        .icon-wrapper:hover span { transform: scale(1.1); color: var(--jaune-accent); }
+        .icon-wrapper:hover .icon-label { opacity: 1; color: var(--jaune-accent); }
+
+        /* ========== PARCHEMIN MAGIQUE ========== */
+        .parchment-wrapper {
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
+            padding: 2.5rem 3.5rem;
+            margin: 1rem 3rem 2rem 3rem;
+            border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
+            box-shadow:
+                0 15px 30px rgba(0,0,0,0.6),
+                0 0 0 3px #bfa055,
+                0 0 0 6px #8b6914,
+                inset 0 0 20px rgba(0,0,0,0.4);
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
+                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
+            transform: perspective(700px) rotateX(2deg);
+            animation: floatParchment 6s ease-in-out infinite;
         }
 
-        .icon-wrapper:hover span {
-            transform: scale(1.1);
-            color: var(--jaune-accent);
+        @keyframes floatParchment {
+            0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); }
+            50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); }
         }
 
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            color: var(--jaune-accent);
+        .parchment-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -12px; left: -12px;
+            width: 36px; height: 36px;
+            border-top: 6px solid #d4af37;
+            border-left: 6px solid #d4af37;
+            border-radius: 4px;
+            filter: drop-shadow(0 0 8px gold);
+            z-index: 2;
+        }
+        .parchment-wrapper::after {
+            content: '';
+            position: absolute;
+            bottom: -12px; right: -12px;
+            width: 36px; height: 36px;
+            border-bottom: 6px solid #d4af37;
+            border-right: 6px solid #d4af37;
+            border-radius: 4px;
+            filter: drop-shadow(0 0 8px gold);
+            z-index: 2;
         }
 
-        /* Reste du style inchangé */
+        .inner-parchment {
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px;
+            pointer-events: none;
+        }
+
+        .magic-sparks {
+            position: absolute;
+            top: -5px; right: -10px;
+            font-size: 2rem;
+            opacity: 0.8;
+            animation: sparkle 2s infinite;
+            pointer-events: none;
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
         .page-header {
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(4px);
-            color: white;
-            padding: 4rem 2rem;
             text-align: center;
-            border-radius: 30px;
-            margin: 1rem;
-            margin-top: 80px;
+            margin-top: 2rem;
+            margin-bottom: 3rem;
         }
 
         .page-header h1 {
-            font-family: 'Fredoka', cursive;
-            font-size: 3.5rem;
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 10px rgba(0, 0, 0, 0.5);
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2.5rem, 5vw, 3.5rem);
+            color: #f5d06b;
+            text-transform: uppercase;
+            letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
         }
 
         .page-header p {
-            font-size: 1.2rem;
-            opacity: 0.95;
+            font-size: 1.3rem;
+            color: #3e2723;
+            font-weight: 600;
+            letter-spacing: 2px;
+            margin: 0;
         }
 
         .expos-list {
@@ -260,31 +225,42 @@
             gap: 3rem;
         }
 
+        /* ========== CARTES EXPOSITION (cadre bois sérieux, fond clair) ========== */
         .expo-item {
-            background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(2px);
-            border-radius: 20px;
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 32px;
             overflow: hidden;
-            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
             display: grid;
             grid-template-columns: 400px 1fr;
-            transition: transform 0.3s, box-shadow 0.3s;
+            backdrop-filter: blur(2px);
+            position: relative;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
         }
+
+        .expo-item::before {
+            content: '';
+            position: absolute;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border-radius: 24px;
+            border: 1px solid rgba(0,0,0,0.1);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .expo-item::after { content: none; }
 
         .expo-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 50px rgba(0, 0, 0, 0.3);
+            transform: translateY(-8px);
+            box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
 
-        .expo-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
+        .expo-img img { width: 100%; height: 100%; object-fit: cover; }
 
-        .expo-content {
-            padding: 3rem;
-        }
+        .expo-content { padding: 3rem; }
 
         .expo-badge {
             display: inline-block;
@@ -298,16 +274,19 @@
         }
 
         .expo-title {
-            font-family: 'Fredoka', cursive;
+            font-family: 'MedievalSharp', cursive;
             font-size: 2.2rem;
-            color: #c2185b;
+            color: #000;
             margin-bottom: 1rem;
             text-transform: uppercase;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
         .expo-description {
             line-height: 1.8;
             margin-bottom: 2rem;
+            color: #2C1810;
         }
 
         .expo-specs {
@@ -320,18 +299,11 @@
         .spec-item {
             display: flex;
             padding: 0.7rem 0;
-            border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            color: #2C1810;
         }
-
-        .spec-item:last-child {
-            border: none;
-        }
-
-        .spec-label {
-            font-weight: 700;
-            margin-right: 0.5rem;
-            min-width: 150px;
-        }
+        .spec-item:last-child { border: none; }
+        .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; }
 
         .btn-primary {
             display: inline-block;
@@ -345,10 +317,7 @@
             margin-right: 1rem;
             margin-bottom: 0.5rem;
         }
-
-        .btn-primary:hover {
-            transform: translateY(-3px);
-        }
+        .btn-primary:hover { transform: translateY(-3px); }
 
         .button-group {
             display: flex;
@@ -368,64 +337,32 @@
             max-width: 800px;
             margin: 4rem auto;
         }
-
         .contact-cta h2 {
             font-family: 'Fredoka', cursive;
             font-size: 2.5rem;
             margin-bottom: 1rem;
         }
-
-        .contact-cta p {
-            font-size: 1.1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .contact-cta a {
-            color: var(--jaune-accent);
-            text-decoration: none;
-            font-weight: 700;
-            font-size: 1.3rem;
-        }
-
-        .contact-cta a:hover {
-            text-decoration: underline;
-        }
+        .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.3rem; }
+        .contact-cta a:hover { text-decoration: underline; }
 
         @media (max-width: 968px) {
-            .expo-item {
-                grid-template-columns: 1fr;
-            }
-            .navbar-container {
-                flex-direction: column;
-            }
+            .expo-item { grid-template-columns: 1fr; }
+            .navbar-container { flex-direction: column; }
+            .parchment-wrapper { padding: 2rem 2.5rem; margin: 1rem 1rem 2rem 1rem; }
         }
-
         @media (max-width: 768px) {
-            .nav-left {
-                gap: 1rem;
-            }
-            .nav-icons {
-                gap: 1.5rem;
-            }
-            .logo-wrapper img {
-                height: 45px;
-            }
-            .expos-list {
-                padding: 0 1rem;
-            }
-            .expo-content {
-                padding: 1.5rem;
-            }
-            .expo-title {
-                font-size: 1.8rem;
-            }
-            .contact-cta {
-                margin: 2rem 1rem;
-                padding: 2rem;
-            }
-            .contact-cta h2 {
-                font-size: 1.8rem;
-            }
+            .nav-left { gap: 1rem; }
+            .nav-icons { gap: 1.5rem; }
+            .logo-wrapper img { height: 45px; }
+            .expos-list { padding: 0 1rem; }
+            .expo-content { padding: 1.5rem; }
+            .expo-title { font-size: 1.8rem; }
+            .contact-cta { margin: 2rem 1rem; padding: 2rem; }
+            .contact-cta h2 { font-size: 1.8rem; }
+            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem 1rem 2rem 1rem; }
+            .page-header h1 { font-size: 1.8rem; }
+            .page-header p { font-size: 1rem; }
         }
     </style>
 </head>
@@ -456,12 +393,18 @@
     </div>
 </nav>
 
+<!-- TITRE DANS LE PARCHEMIN MAGIQUE, SANS L'ÉMOJI -->
 <div class="page-header">
-    <h1>🎨 Nos Expositions</h1>
-    <p>Installations interactives pour vos événements</p>
+    <div class="parchment-wrapper">
+        <div class="inner-parchment"></div>
+        <span class="magic-sparks">✨</span>
+        <h1>Nos Expositions</h1>
+        <p>Installations interactives pour vos événements</p>
+    </div>
 </div>
 
 <div class="expos-list">
+    <!-- Carte 1 : LA FÉERIE DES MARIONNETTES -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-marionnettes.jpg" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -478,11 +421,12 @@
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
-                <a href="images/expos-fond.png" class="btn-primary" target="_blank">📍 ALLER SUR LA PLACE</a>
+                <a href="images/expos-fond.png" class="btn-primary" target="_blank">📍 VOIR LES VITRINES</a>
             </div>
         </div>
     </div>
 
+    <!-- Carte 2 : LES GÉANTS DU CARNAVAL -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -499,6 +443,7 @@
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank">📩 Demander un devis</a>
+                <a href="images/expo-geants.jpg" class="btn-primary" target="_blank">👀 VOIR LES GÉANTS</a>
             </div>
         </div>
     </div>
