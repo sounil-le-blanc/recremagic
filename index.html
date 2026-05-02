@@ -13,7 +13,6 @@
             box-sizing: border-box;
         }
 
-        /* ----- BARRE DE NAVIGATION (TRANSPARENTE) ----- */
         .navbar {
             position: fixed;
             top: 0;
@@ -32,123 +31,55 @@
             flex-wrap: wrap;
             gap: 1rem;
         }
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
+        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
         .back-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
         }
         .back-wrapper span:first-child {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s, color 0.2s;
+            font-size: 1.1rem; font-weight: 600; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
         }
         .back-wrapper .back-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
         }
-        .back-wrapper:hover span:first-child {
-            transform: scale(1.05);
-            color: #FFB300;
-        }
-        .back-wrapper:hover .back-label {
-            opacity: 1;
-            color: #FFB300;
-        }
+        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
+        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
 
         .logo-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
         }
         .logo-wrapper img {
-            height: 50px;
-            transition: transform 0.2s;
+            height: 50px; transition: transform 0.2s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
         .logo-wrapper .logo-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
         }
-        .logo-wrapper:hover img {
-            transform: scale(1.05);
-        }
-        .logo-wrapper:hover .logo-label {
-            opacity: 1;
-            color: #FFB300;
-        }
+        .logo-wrapper:hover img { transform: scale(1.05); }
+        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
 
-        .nav-icons {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
+        .nav-icons { display: flex; gap: 2rem; align-items: center; }
         .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
         }
         .icon-wrapper span {
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s;
+            font-size: 1.3rem; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
         }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
         }
-        .icon-wrapper:hover span {
-            transform: scale(1.1);
-            color: #FFB300;
-        }
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            color: #FFB300;
-        }
+        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
+        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -167,10 +98,7 @@
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.45);
             z-index: 0;
             pointer-events: none;
@@ -184,47 +112,97 @@
             text-align: center;
         }
 
-        .welcome-text { margin-bottom: 4rem; animation: fadeIn 1s; }
+        .welcome-text { margin-bottom: 5rem; animation: fadeIn 1.5s; }
 
-        /* Rouleau de parchemin pour le titre */
         .parchment-wrapper {
             display: inline-block;
             position: relative;
-            background: #f3e3c3;
-            padding: 2rem 3rem 1.5rem;
-            margin-bottom: 1rem;
-            box-shadow: 0 0 0 6px #d8b684, 0 0 0 12px #b89a6a, 0 12px 25px rgba(0,0,0,0.6);
-            border-radius: 20px;
+            background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
+            padding: 3rem 4rem;
+            margin: 0 3rem 2rem 3rem;
+            border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
+            box-shadow:
+                0 15px 30px rgba(0,0,0,0.6),
+                0 0 0 3px #bfa055,
+                0 0 0 6px #8b6914,
+                inset 0 0 20px rgba(0,0,0,0.4);
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
+                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
+            transform: perspective(700px) rotateX(2deg);
+            animation: floatParchment 6s ease-in-out infinite;
         }
-        .parchment-wrapper::before,
+
+        @keyframes floatParchment {
+            0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); }
+            50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); }
+        }
+
+        .parchment-wrapper::before {
+            content: '';
+            position: absolute;
+            top: -12px; left: -12px;
+            width: 36px; height: 36px;
+            border-top: 6px solid #d4af37;
+            border-left: 6px solid #d4af37;
+            border-radius: 4px;
+            filter: drop-shadow(0 0 8px gold);
+            z-index: 2;
+        }
         .parchment-wrapper::after {
             content: '';
             position: absolute;
-            left: 5%;
-            width: 90%;
-            height: 18px;
-            background: linear-gradient(180deg, #6b4e2e, #8b6a4a, #5a3a1e);
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+            bottom: -12px; right: -12px;
+            width: 36px; height: 36px;
+            border-bottom: 6px solid #d4af37;
+            border-right: 6px solid #d4af37;
+            border-radius: 4px;
+            filter: drop-shadow(0 0 8px gold);
+            z-index: 2;
         }
-        .parchment-wrapper::before { top: -9px; }
-        .parchment-wrapper::after { bottom: -9px; }
 
+        .inner-parchment {
+            position: absolute;
+            top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px;
+            pointer-events: none;
+        }
+
+        .magic-sparks {
+            position: absolute;
+            top: -5px; right: -10px;
+            font-size: 2rem;
+            opacity: 0.8;
+            animation: sparkle 2s infinite;
+            pointer-events: none;
+        }
+        @keyframes sparkle {
+            0%, 100% { opacity: 0.4; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* Titre en doré clair */
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: #000;
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            color: #f5d06b;               /* doré clair lumineux */
             text-transform: uppercase;
-            letter-spacing: 2px;
+            letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
+            position: relative;
         }
 
         .welcome-subtitle {
-            font-size: 1.3rem;
-            color: #4A2E1B;
+            font-size: 1.4rem;
+            color: #3e2723;
             font-weight: 600;
             margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .choices-grid {
@@ -235,7 +213,6 @@
             flex-wrap: wrap;
         }
 
-        /* ========== CARTES AVEC CADRE BOIS SÉRIEUX ========== */
         .choice-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
@@ -252,28 +229,19 @@
             transition: all 0.3s ease;
             margin: 16px;
             z-index: 1;
-
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow:
-                0 0 0 8px #3e2a1a,
-                0 8px 20px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
         }
 
         .choice-card::before,
-        .choice-card::after {
-            content: none;
-        }
+        .choice-card::after { content: none; }
 
-        /* Filet intérieur */
         .choice-card::before {
             content: '';
             position: absolute;
-            top: 8px;
-            left: 8px;
-            right: 8px;
-            bottom: 8px;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
             border-radius: 40px;
             border: 1px solid rgba(0,0,0,0.1);
             pointer-events: none;
@@ -281,34 +249,21 @@
 
         .choice-card:hover {
             transform: translateY(-10px);
-            box-shadow:
-                0 0 0 8px #4a3220,
-                0 12px 28px rgba(0,0,0,0.55);
+            box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
 
-        .choice-icon {
-            font-size: 4.8rem;
-            margin-bottom: 1rem;
-            transition: transform 0.2s;
-        }
+        .choice-icon { font-size: 4.8rem; margin-bottom: 1rem; transition: transform 0.2s; }
         .choice-card:hover .choice-icon { transform: scale(1.08); }
 
-        /* ========== TITRES DES CARTES : MÊME STYLE QUE LE TITRE PRINCIPAL ========== */
         .choice-title {
-            font-family: 'MedievalSharp', cursive;   /* même police */
+            font-family: 'MedievalSharp', cursive;
             font-size: 2.2rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-transform: uppercase;
-            color: #000;                              /* même couleur noire */
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2); /* même ombre */
-            letter-spacing: 2px;
-        }
-
-        /* On supprime les couleurs spécifiques */
-        .familles .choice-title,
-        .pros .choice-title {
             color: #000;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            letter-spacing: 2px;
         }
 
         .choice-description {
@@ -345,14 +300,8 @@
             transform: scale(1.02);
             padding: 0.7rem 1.8rem;
         }
-        .familles:hover .choice-cta {
-            background: #EC407A;
-            color: white;
-        }
-        .pros:hover .choice-cta {
-            background: #7CB69F;
-            color: white;
-        }
+        .familles:hover .choice-cta { background: #EC407A; color: white; }
+        .pros:hover .choice-cta { background: #7CB69F; color: white; }
 
         .center-logo {
             max-width: 240px;
@@ -380,7 +329,7 @@
             .choice-card { width: 340px; min-height: 480px; border-radius: 42px; margin: 14px; }
             .choice-title { font-size: 1.9rem; }
             .center-logo { max-width: 200px; }
-            .parchment-wrapper { padding: 1.5rem 2rem; }
+            .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 1rem 1rem 1rem; }
         }
         @media (max-width: 900px) {
             .choices-grid { flex-direction: column; gap: 2rem; }
@@ -393,7 +342,7 @@
         @media (max-width: 768px) {
             body { padding-top: 120px; }
             .choice-card { border-radius: 36px; padding: 1.8rem; margin: 10px; border-width: 4px; }
-            .parchment-wrapper { padding: 1rem 1.5rem; }
+            .parchment-wrapper { padding: 1.5rem 2rem; }
             .welcome-title { font-size: 1.8rem; }
             .welcome-subtitle { font-size: 1rem; }
         }
@@ -401,7 +350,6 @@
 </head>
 <body>
 
-<!-- BARRE DE NAVIGATION TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -415,14 +363,8 @@
             </a>
         </div>
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper">
-                <span>💰</span>
-                <span class="icon-label">Boutique</span>
-            </a>
-            <a href="Abonnement.html" class="icon-wrapper">
-                <span>🤝</span>
-                <span class="icon-label">Abonnement</span>
-            </a>
+            <a href="boutique.html" class="icon-wrapper"><span>💰</span><span class="icon-label">Boutique</span></a>
+            <a href="Abonnement.html" class="icon-wrapper"><span>🤝</span><span class="icon-label">Abonnement</span></a>
         </div>
     </div>
 </nav>
@@ -430,12 +372,13 @@
 <div class="container">
     <div class="welcome-text">
         <div class="parchment-wrapper">
+            <div class="inner-parchment"></div>
+            <span class="magic-sparks">✨</span>
             <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
             <p class="welcome-subtitle">Choisissez votre espace</p>
         </div>
     </div>
     <div class="choices-grid">
-        <!-- Carte Familles -->
         <a href="familles.html" class="choice-card familles">
             <div>
                 <div class="choice-icon">🎪</div>
@@ -445,7 +388,6 @@
             <span class="choice-cta">Entrer</span>
         </a>
         <img src="images/logo.png" class="center-logo" alt="Récré Magic">
-        <!-- Carte Prestations -->
         <a href="pros.html" class="choice-card pros">
             <div>
                 <div class="choice-icon">🤝</div>
@@ -458,7 +400,6 @@
     <div class="footer-note">Récré Magic • Circus Théâtre Ambulant • Depuis 1964</div>
 </div>
 
-<!-- Confettis -->
 <div id="confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
 <script>
     function createConfetti() {
