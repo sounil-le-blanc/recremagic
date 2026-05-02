@@ -43,10 +43,7 @@
             pointer-events: none;
         }
 
-        .navbar, .container {
-            position: relative;
-            z-index: 2;
-        }
+        .navbar, .container { position: relative; z-index: 2; }
 
         /* NAVBAR TRANSPARENTE */
         .navbar {
@@ -59,11 +56,8 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
         }
         .nav-left { display: flex; align-items: center; gap: 1.5rem; }
         .back-wrapper {
@@ -209,13 +203,14 @@
             position: relative;
         }
 
+        /* Sous-titre doré, identique au titre */
         .welcome-subtitle {
             font-size: 1.4rem;
-            color: #3e2723;
+            color: #f5d06b;
             font-weight: 600;
             margin: 0;
             letter-spacing: 2px;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
         }
 
         /* ========== PRESTATIONS LIST ========== */
@@ -383,7 +378,6 @@
 
 <div class="container">
     <div class="welcome-text">
-        <!-- Parchemin magique contenant le titre -->
         <div class="parchment-wrapper">
             <div class="inner-parchment"></div>
             <span class="magic-sparks">✨</span>
