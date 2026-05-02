@@ -121,7 +121,7 @@
 
         .welcome-text { text-align: center; margin-bottom: 4rem; }
 
-        /* ========== PARCHEMIN MAGIQUE (identique à index.html) ========== */
+        /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
             display: inline-block;
             position: relative;
@@ -195,7 +195,7 @@
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
             font-size: clamp(2.5rem, 6vw, 4rem);
-            color: #f5d06b;               /* doré clair */
+            color: #f5d06b;
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
@@ -203,7 +203,6 @@
             position: relative;
         }
 
-        /* Sous-titre doré, identique au titre */
         .welcome-subtitle {
             font-size: 1.4rem;
             color: #f5d06b;
@@ -294,27 +293,23 @@
         .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); border: 1px solid var(--rose-spectacle); }
         .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); border: 1px solid var(--jaune-accent); }
 
-        .choice-card:hover .choice-cta {
-            transform: scale(1.02);
-            padding: 0.5rem 1.4rem;
-        }
+        .choice-card:hover .choice-cta { transform: scale(1.02); padding: 0.5rem 1.4rem; }
 
-        .empty-frame {
+        /* Texte d'information élégant (sans cadre) */
+        .info-text {
             flex: 1;
-            background: rgba(255, 255, 255, 0.2);
-            backdrop-filter: blur(4px);
-            border: 2px dashed rgba(255, 255, 255, 0.6);
-            border-radius: 24px;
             padding: 2rem;
             min-height: 220px;
             display: flex;
             align-items: center;
             justify-content: center;
-            color: rgba(255, 255, 255, 0.9);
+            color: #ffffff;
             font-style: italic;
-            font-size: 1rem;
+            font-size: 1.3rem;
             text-align: center;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+            background: transparent;
+            border: none;
         }
 
         .prestation-block.left { justify-content: flex-start; }
@@ -333,7 +328,7 @@
         @media (max-width: 1000px) {
             .prestation-block { flex-direction: column; align-items: center; text-align: center; }
             .prestation-block.left, .prestation-block.right { justify-content: center; }
-            .empty-frame { width: 100%; min-height: 150px; }
+            .info-text { width: 100%; min-height: 150px; }
             .nav-icons { gap: 1.5rem; }
             .choice-card { border-width: 4px; }
         }
@@ -346,6 +341,7 @@
             .container { padding: 1rem; }
             .choice-card { width: 100%; max-width: 320px; }
             .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 1rem 1rem 1rem; }
+            .info-text { font-size: 1.1rem; }
         }
     </style>
 </head>
@@ -387,6 +383,7 @@
     </div>
 
     <div class="prestations-list">
+        <!-- Bloc 1 : Spectacles -->
         <div class="prestation-block left">
             <a href="spectacles.html" class="choice-card spectacles">
                 <div class="choice-icon">🎭</div>
@@ -394,11 +391,12 @@
                 <p class="choice-description">Cirque, théâtre, marionnettes, magie.</p>
                 <span class="choice-cta">Découvrir →</span>
             </a>
-            <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
+            <div class="info-text">Découvrez notre catalogue avec différentes formules : spectacles uniques à thème ou en séries.</div>
         </div>
 
+        <!-- Bloc 2 : Expos -->
         <div class="prestation-block right">
-            <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
+            <div class="info-text">Découvrez nos deux expositions itinérantes et choisissez vos formules.</div>
             <a href="expos.html" class="choice-card expos">
                 <div class="choice-icon">🎨</div>
                 <h2 class="choice-title">Nos Expos</h2>
@@ -407,6 +405,7 @@
             </a>
         </div>
 
+        <!-- Bloc 3 : Stages -->
         <div class="prestation-block left">
             <a href="stages.html" class="choice-card stages">
                 <div class="choice-icon">🎓</div>
@@ -414,7 +413,7 @@
                 <p class="choice-description">Initiation aux arts du spectacle.</p>
                 <span class="choice-cta">Découvrir →</span>
             </a>
-            <div class="empty-frame">📝 Espace réservé<br>(texte à venir)</div>
+            <div class="info-text">Venez participer à nos ateliers de créations et stages d’apprentissage. Découvrez et perfectionnez avec nous vos savoir-faire et compétences dans l’art du spectacle vivant.</div>
         </div>
     </div>
 
