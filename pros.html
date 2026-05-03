@@ -264,9 +264,9 @@
             transform: translateY(-8px);
             box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
-
-        .choice-icon { font-size: 4rem; margin-bottom: 1rem; }
-
+.choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
+.choice-icon img { height: 160px; width: auto; }
+.choice-card:hover .choice-icon { transform: scale(1.08); }
         .choice-title {
             font-family: 'MedievalSharp', cursive;
             font-size: 2rem;
@@ -390,7 +390,8 @@
     <div class="prestations-list">
         <div class="prestation-block left">
             <a href="spectacles.html" class="choice-card spectacles">
-                <div class="choice-icon">🎭</div>
+               
+<div class="choice-icon"><img src="images/icone-spectacles.png" alt="Spectacles"></div>
                 <h2 class="choice-title">Nos Spectacles</h2>
                 <p class="choice-description">Cirque, théâtre, marionnettes, magie.</p>
                 <span class="choice-cta">Découvrir →</span>
@@ -401,7 +402,8 @@
         <div class="prestation-block right">
             <div class="info-text">Découvrez nos deux expositions itinérantes et choisissez vos formules.</div>
             <a href="expos.html" class="choice-card expos">
-                <div class="choice-icon">🎨</div>
+
+<div class="choice-icon"><img src="images/icone-expos.png" alt="Expos"></div>
                 <h2 class="choice-title">Nos Expos</h2>
                 <p class="choice-description">Expositions immersives et ludiques.</p>
                 <span class="choice-cta">Découvrir →</span>
@@ -410,7 +412,8 @@
 
         <div class="prestation-block left">
             <a href="stages.html" class="choice-card stages">
-                <div class="choice-icon">🎓</div>
+
+<div class="choice-icon"><img src="images/icone-stages.png" alt="Stages"></div>
                 <h2 class="choice-title">Nos Stages</h2>
                 <p class="choice-description">Initiation aux arts du spectacle.</p>
                 <span class="choice-cta">Découvrir →</span>
