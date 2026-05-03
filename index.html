@@ -20,14 +20,13 @@
             height: 55px;
         }
         .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
+            width: 100%;
+            height: 100%;
+            padding: 0 1rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: nowrap;
-            height: 100%;
             position: relative;
         }
 
@@ -36,13 +35,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 40px;
-            height: 40px;
+            width: 38px;
+            height: 38px;
             border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s ease;
@@ -53,7 +52,6 @@
             background: rgba(255,255,255,0.2);
             border-color: #FFB300;
             color: #FFB300;
-            transform: scale(1.1);
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
 
@@ -61,14 +59,14 @@
         .logo-wrapper {
             position: absolute;
             left: 50%;
-            top: 50%;
-            transform: translate(-50%, -30%);
+            top: 55%;
+            transform: translate(-50%, -50%);
             text-decoration: none;
             z-index: 3;
             transition: all 0.25s ease;
         }
         .logo-wrapper img {
-            height: 85px;
+            height: 80px;
             transition: transform 0.25s;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
         }
@@ -77,10 +75,10 @@
             filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
 
-        /* Icônes droite — jamais en deuxième ligne */
+        /* Icônes droite */
         .nav-icons {
             display: flex;
-            gap: 1.5rem;
+            gap: 1.2rem;
             align-items: center;
             flex-shrink: 0;
             flex-wrap: nowrap;
@@ -90,18 +88,18 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 0.15rem;
+            gap: 0.1rem;
             text-decoration: none;
             transition: all 0.2s ease;
         }
         .icon-wrapper .icon-emoji {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: white;
             text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
         .icon-wrapper .icon-label {
-            font-size: 0.65rem;
+            font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -121,12 +119,11 @@
             background-size: cover;
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            padding-top: 130px;
+            padding-top: 120px;
+            padding-bottom: 2rem;
             position: relative;
+            display: flex;
+            justify-content: center;
         }
 
         body::before {
@@ -138,15 +135,22 @@
             pointer-events: none;
         }
 
-        .container { position: relative; z-index: 2; max-width: 1400px; width: 100%; text-align: center; }
-        .welcome-text { margin-bottom: 5rem; animation: fadeIn 1.5s; }
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 1400px;
+            width: 100%;
+            text-align: center;
+            padding: 0 1rem;
+        }
+        .welcome-text { margin-bottom: 4rem; animation: fadeIn 1.5s; }
 
         .parchment-wrapper {
             display: inline-block;
             position: relative;
             background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
-            padding: 3rem 4rem;
-            margin: 0 3rem 2rem 3rem;
+            padding: 2.5rem 3rem;
+            margin: 0 auto 2rem auto;
             border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
             box-shadow:
                 0 15px 30px rgba(0,0,0,0.6),
@@ -213,7 +217,7 @@
 
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-size: clamp(2rem, 5vw, 4rem);
             color: #f5d06b;
             text-transform: uppercase;
             letter-spacing: 4px;
@@ -227,7 +231,7 @@
         }
 
         .welcome-subtitle {
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             color: #f5d06b;
             font-weight: 600;
             margin: 0;
@@ -239,25 +243,25 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            gap: 3rem;
+            gap: 2rem;
             flex-wrap: wrap;
         }
 
         .choice-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
-            padding: 2.5rem 2rem;
+            padding: 2rem 1.5rem;
             text-align: center;
             text-decoration: none;
             color: #2C1810;
-            width: 380px;
-            min-height: 500px;
+            width: 340px;
+            min-height: 480px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             position: relative;
             transition: all 0.3s ease;
-            margin: 16px;
+            margin: 10px;
             z-index: 1;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
@@ -280,12 +284,12 @@
         }
 
         .choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
-        .choice-icon img { height: 160px; width: auto; }
+        .choice-icon img { height: 140px; width: auto; }
         .choice-card:hover .choice-icon { transform: scale(1.08); }
 
         .choice-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2.2rem;
+            font-size: 2rem;
             font-weight: 700;
             margin-bottom: 1rem;
             text-transform: uppercase;
@@ -295,41 +299,44 @@
         }
 
         .choice-description {
-            font-size: 1rem;
+            font-size: 0.95rem;
             line-height: 1.5;
-            margin-bottom: 1.8rem;
-            padding: 0 0.5rem;
-            text-align: left;
+            margin-bottom: 1.5rem;
+            padding: 0 0.3rem;
+            text-align: center;
             color: #2C1810;
         }
 
-        /* Boutons "Découvrir" (marron sur fond beige, rouge au survol) */
         .choice-cta {
             display: inline-block;
-            padding: 0.6rem 1.6rem;
-            border-radius: 40px;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            transition: all 0.3s ease;
             width: fit-content;
             margin: 0 auto;
-            background: rgba(235, 215, 185, 1);
-            color: #4a2e1a;
-            border: 2px solid #7a5c3e;
-            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
+            transition: all 0.25s;
         }
-
+        .familles .choice-cta {
+            background: rgba(236, 64, 122, 0.1);
+            color: #EC407A;
+            border: 1px solid #EC407A;
+        }
+        .pros .choice-cta {
+            background: rgba(124, 182, 159, 0.1);
+            color: #7CB69F;
+            border: 1px solid #7CB69F;
+        }
         .choice-card:hover .choice-cta {
-            background: #D32F2F;      /* rouge Récré Magic */
-            color: #ffffff;
-            border-color: #b71c1c;
-            box-shadow: 0 5px 14px rgba(211, 47, 47, 0.5);
+            transform: scale(1.02);
+            padding: 0.7rem 1.8rem;
         }
+        .familles:hover .choice-cta { background: #EC407A; color: white; }
+        .pros:hover .choice-cta { background: #7CB69F; color: white; }
 
         .center-logo {
-            max-width: 240px;
+            max-width: 200px;
             filter: drop-shadow(0 15px 25px rgba(0,0,0,0.4));
             animation: floatLogo 3s ease-in-out infinite;
         }
@@ -339,7 +346,7 @@
         }
 
         .footer-note {
-            margin-top: 4rem;
+            margin-top: 3rem;
             color: white;
             text-shadow: 1px 1px 2px black;
             font-size: 0.9rem;
@@ -347,30 +354,28 @@
 
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        @media (max-width: 1100px) {
-            .choice-card { width: 340px; min-height: 480px; border-radius: 42px; margin: 14px; }
-            .choice-title { font-size: 1.9rem; }
-            .center-logo { max-width: 200px; }
-            .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 1rem 1rem 1rem; }
-        }
         @media (max-width: 900px) {
-            .choices-grid { flex-direction: column; gap: 2rem; }
-            .center-logo { order: 2; margin: 1rem 0; }
+            .choices-grid { flex-direction: column; gap: 1.5rem; }
+            .center-logo { order: 2; margin: 0.5rem 0; max-width: 160px; }
             .choice-card.familles { order: 1; }
             .choice-card.pros { order: 3; }
+            .choice-card { width: 90%; max-width: 360px; min-height: auto; }
+            .parchment-wrapper { padding: 1.8rem 1.5rem; margin: 0 auto 1.5rem auto; }
         }
-        @media (max-width: 768px) {
-            body { padding-top: 110px; }
+
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
             .navbar { height: 48px; }
-            .navbar-container { padding: 0 1rem; }
-            .logo-wrapper img { height: 65px; }
-            .icon-wrapper .icon-emoji { font-size: 1.2rem; }
-            .icon-wrapper .icon-label { font-size: 0.55rem; }
-            .nav-icons { gap: 0.8rem; }
-            .back-arrow { width: 34px; height: 34px; font-size: 1.1rem; }
-            .choice-card { border-radius: 36px; padding: 1.8rem; margin: 10px; border-width: 4px; }
-            .parchment-wrapper { padding: 1.5rem 2rem; }
-            .welcome-title { font-size: 1.8rem; }
+            .navbar-container { padding: 0 0.8rem; }
+            .logo-wrapper img { height: 60px; }
+            .icon-wrapper .icon-emoji { font-size: 1.1rem; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
+            .choice-icon img { height: 110px; }
+            .choice-title { font-size: 1.5rem; }
+            .welcome-title { font-size: 1.6rem; }
             .welcome-subtitle { font-size: 1rem; }
         }
     </style>
@@ -379,15 +384,12 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <!-- Flèche retour à gauche -->
         <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
 
-        <!-- Logo centré qui déborde -->
         <a href="index.html" class="logo-wrapper">
             <img src="images/logo.png" alt="Récré Magic">
         </a>
 
-        <!-- Icônes droite -->
         <div class="nav-icons">
             <a href="boutique.html" class="icon-wrapper">
                 <span class="icon-emoji">💰</span>
@@ -413,22 +415,20 @@
     <div class="choices-grid">
         <a href="familles.html" class="choice-card familles">
             <div>
-                <div class="choice-icon"><img src="images/icone-chapiteau.png" alt="Chapiteau" style="height: 160px; width: auto;"></div>
-                
+                <div class="choice-icon"><img src="images/icone-chapiteau.png" alt="Chapiteau"></div>
                 <h2 class="choice-title">Familles<br>& Fans</h2>
                 <p class="choice-description">Découvrez nos spectacles, personnages, mini-séries, contenus exclusifs.</p>
             </div>
-            <span class="choice-cta">Découvrir</span>
+            <span class="choice-cta">Entrer</span>
         </a>
         <img src="images/logo.png" class="center-logo" alt="Récré Magic">
         <a href="pros.html" class="choice-card pros">
             <div>
-                <div class="choice-icon"><img src="images/icone-mains.png" alt="Prestations" style="height: 160px; width: auto;"></div>
-                
+                <div class="choice-icon"><img src="images/icone-mains.png" alt="Prestations"></div>
                 <h2 class="choice-title">PRESTATIONS</h2>
                 <p class="choice-description">Organisez un événement : spectacles, expositions, devis personnalisé, stages artistiques.</p>
             </div>
-            <span class="choice-cta">Découvrir</span>
+            <span class="choice-cta">Accéder</span>
         </a>
     </div>
     <div class="footer-note">Récré Magic • Circus Théâtre Ambulant • Depuis 1964</div>
