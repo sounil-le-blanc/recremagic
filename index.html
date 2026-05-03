@@ -9,66 +9,112 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .navbar-container {
-            max-width: 1200px; margin: 0 auto; padding: 0.8rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 1rem;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.6rem 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
         }
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .back-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
-        }
-        .back-wrapper span:first-child {
-            font-size: 1.1rem; font-weight: 600; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
-        }
-        .back-wrapper .back-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
-        }
-        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
-        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
 
+        /* Logo Accueil — plus gros, centré */
         .logo-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
         }
         .logo-wrapper img {
-            height: 50px; transition: transform 0.2s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            height: 58px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.7));
         }
         .logo-wrapper .logo-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #f5d06b;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.3);
+            letter-spacing: 1px;
+            white-space: nowrap;
         }
-        .logo-wrapper:hover img { transform: scale(1.05); }
-        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
+        .logo-wrapper:hover img { transform: scale(1.08); }
+        .logo-wrapper:hover .logo-label { color: #FFB300; }
 
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
-        .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+        /* Icônes droite — jamais en deuxième ligne */
+        .nav-icons {
+            display: flex;
+            gap: 1.5rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
         }
-        .icon-wrapper span {
-            font-size: 1.3rem; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.15rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .icon-wrapper .icon-emoji {
+            font-size: 1.4rem;
+            color: white;
+            text-shadow: 1px 1px 3px black;
+            transition: transform 0.2s, color 0.2s;
         }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-size: 0.65rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
+        .icon-wrapper:hover .icon-emoji {
+            transform: scale(1.15);
+            color: #FFB300;
+        }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
+        /* Flèche retour stylée — à droite des icônes */
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.3rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            transform: translateX(-3px);
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -80,7 +126,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            padding-top: 140px;
+            padding-top: 120px;
             position: relative;
         }
 
@@ -166,7 +212,6 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
-        /* Titre avec ombre verte claire */
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
             font-size: clamp(2.5rem, 5vw, 4rem);
@@ -221,9 +266,6 @@
             box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
         }
 
-        .choice-card::before,
-        .choice-card::after { content: none; }
-
         .choice-card::before {
             content: '';
             position: absolute;
@@ -238,9 +280,9 @@
             box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
 
-.choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
-.choice-icon img { height: 160px; width: auto; }
-.choice-card:hover .choice-icon { transform: scale(1.08); }
+        .choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
+        .choice-icon img { height: 160px; width: auto; }
+        .choice-card:hover .choice-icon { transform: scale(1.08); }
 
         .choice-title {
             font-family: 'MedievalSharp', cursive;
@@ -320,11 +362,16 @@
             .center-logo { order: 2; margin: 1rem 0; }
             .choice-card.familles { order: 1; }
             .choice-card.pros { order: 3; }
-            .navbar-container { flex-direction: column; }
-            .nav-left, .nav-icons { justify-content: center; }
         }
         @media (max-width: 768px) {
-            body { padding-top: 120px; }
+            body { padding-top: 100px; }
+            .navbar-container { padding: 0.5rem 1rem; }
+            .logo-wrapper img { height: 42px; }
+            .logo-wrapper .logo-label { font-size: 1.1rem; }
+            .icon-wrapper .icon-emoji { font-size: 1.2rem; }
+            .icon-wrapper .icon-label { font-size: 0.55rem; }
+            .nav-icons { gap: 0.8rem; }
+            .back-arrow { width: 34px; height: 34px; font-size: 1.1rem; }
             .choice-card { border-radius: 36px; padding: 1.8rem; margin: 10px; border-width: 4px; }
             .parchment-wrapper { padding: 1.5rem 2rem; }
             .welcome-title { font-size: 1.8rem; }
@@ -336,19 +383,23 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="nav-left">
-            <div class="back-wrapper" onclick="history.back()">
-                <span>← Retour</span>
-                <span class="back-label">Retour</span>
-            </div>
-            <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.png" alt="Récré Magic">
-                <span class="logo-label">Accueil</span>
-            </a>
-        </div>
+        <!-- Logo Accueil centré/gauche, plus gros -->
+        <a href="index.html" class="logo-wrapper">
+            <img src="images/logo.png" alt="Récré Magic">
+            <span class="logo-label">Accueil</span>
+        </a>
+
+        <!-- Icônes + flèche retour à droite, jamais en deuxième ligne -->
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper"><span>💰</span><span class="icon-label">Boutique</span></a>
-            <a href="Abonnement.html" class="icon-wrapper"><span>🤝</span><span class="icon-label">Abonnement</span></a>
+            <a href="boutique.html" class="icon-wrapper">
+                <span class="icon-emoji">💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <span class="icon-emoji">🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
     </div>
 </nav>
@@ -365,8 +416,7 @@
     <div class="choices-grid">
         <a href="familles.html" class="choice-card familles">
             <div>
-
-<div class="choice-icon"><img src="images/icone-chapiteau.png" alt="Chapiteau" style="height: 160px; width: auto;"></div>
+                <div class="choice-icon"><img src="images/icone-chapiteau.png" alt="Chapiteau"></div>
                 <h2 class="choice-title">Familles<br>& Fans</h2>
                 <p class="choice-description">Découvrez nos spectacles, personnages, mini-séries, contenus exclusifs.</p>
             </div>
@@ -375,8 +425,7 @@
         <img src="images/logo.png" class="center-logo" alt="Récré Magic">
         <a href="pros.html" class="choice-card pros">
             <div>
-
-<div class="choice-icon"><img src="images/icone-mains.png" alt="Prestations" style="height: 160px; width: auto;"></div>
+                <div class="choice-icon"><img src="images/icone-mains.png" alt="Prestations"></div>
                 <h2 class="choice-title">PRESTATIONS</h2>
                 <p class="choice-description">Organisez un événement : spectacles, expositions, devis personnalisé, stages artistiques.</p>
             </div>
