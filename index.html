@@ -311,33 +311,30 @@
             color: #2C1810;
         }
 
+        /* Boutons "DÉCOUVRIR" : marron sur fond beige, rouge au survol */
         .choice-cta {
             display: inline-block;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
+            padding: 0.6rem 1.6rem;
+            border-radius: 40px;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.95rem;
             text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
             width: fit-content;
             margin: 0 auto;
-            transition: all 0.25s;
+            background: rgba(235, 215, 185, 1);
+            color: #4a2e1a;
+            border: 2px solid #7a5c3e;
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
-        .familles .choice-cta {
-            background: rgba(236, 64, 122, 0.1);
-            color: #EC407A;
-            border: 1px solid #EC407A;
-        }
-        .pros .choice-cta {
-            background: rgba(124, 182, 159, 0.1);
-            color: #7CB69F;
-            border: 1px solid #7CB69F;
-        }
+
         .choice-card:hover .choice-cta {
-            transform: scale(1.02);
-            padding: 0.7rem 1.8rem;
+            background: #D32F2F;
+            color: #ffffff;
+            border-color: #b71c1c;
+            box-shadow: 0 5px 14px rgba(211, 47, 47, 0.5);
         }
-        .familles:hover .choice-cta { background: #EC407A; color: white; }
-        .pros:hover .choice-cta { background: #7CB69F; color: white; }
 
         .center-logo {
             max-width: 200px;
@@ -427,7 +424,7 @@
                 <h2 class="choice-title">Familles<br>& Fans</h2>
                 <p class="choice-description">Découvrez nos spectacles, personnages, mini-séries, contenus exclusifs.</p>
             </div>
-            <span class="choice-cta">Entrer</span>
+            <span class="choice-cta">Découvrir</span>
         </a>
         <img src="images/logo.png" class="center-logo" alt="Récré Magic">
         <a href="pros.html" class="choice-card pros">
@@ -436,7 +433,7 @@
                 <h2 class="choice-title">PRESTATIONS</h2>
                 <p class="choice-description">Organisez un événement : spectacles, expositions, devis personnalisé, stages artistiques.</p>
             </div>
-            <span class="choice-cta">Accéder</span>
+            <span class="choice-cta">Découvrir</span>
         </a>
     </div>
     <div class="footer-note">Récré Magic • Circus Théâtre Ambulant • Depuis 1964</div>
