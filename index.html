@@ -166,6 +166,7 @@
             50% { opacity: 1; transform: scale(1.2); }
         }
 
+        /* Titre avec ombre verte claire */
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
             font-size: clamp(2.5rem, 5vw, 4rem);
@@ -173,14 +174,17 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
+            text-shadow: 
+                2px 2px 0 #3e6b3a,
+                -1px -1px 0 #3e6b3a,
+                0 0 8px #66bb6a,
+                0 0 15px #a5d6a7;
             position: relative;
         }
 
-        /* Sous-titre doré lui aussi */
         .welcome-subtitle {
             font-size: 1.4rem;
-            color: #f5d06b;               /* même couleur que le titre */
+            color: #f5d06b;
             font-weight: 600;
             margin: 0;
             letter-spacing: 2px;
@@ -234,9 +238,8 @@
             box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
 
-        .choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
-.choice-icon img { height: 200px; width: auto; }
-.choice-card:hover .choice-icon { transform: scale(1.08); }
+        .choice-icon { font-size: 4.8rem; margin-bottom: 1rem; transition: transform 0.2s; }
+        .choice-card:hover .choice-icon { transform: scale(1.08); }
 
         .choice-title {
             font-family: 'MedievalSharp', cursive;
@@ -361,10 +364,7 @@
     <div class="choices-grid">
         <a href="familles.html" class="choice-card familles">
             <div>
-                <!-- Carte <Famil></Famil>les & Fans -->
-<div class="choice-icon">
-    <img src="images/icone-chapiteau.png" alt="Chapiteau" style="height: 160px; width: auto;">
-</div>
+                <div class="choice-icon">🎪</div>
                 <h2 class="choice-title">Familles<br>& Fans</h2>
                 <p class="choice-description">Découvrez nos spectacles, personnages, mini-séries, contenus exclusifs.</p>
             </div>
@@ -373,10 +373,7 @@
         <img src="images/logo.png" class="center-logo" alt="Récré Magic">
         <a href="pros.html" class="choice-card pros">
             <div>
-                <!-- Carte Prestations -->
-<div class="choice-icon">
-    <img src="images/icone-mains.png" alt="Prestations" style="height: 160px; width: auto;">
-</div>
+                <div class="choice-icon">🤝</div>
                 <h2 class="choice-title">PRESTATIONS</h2>
                 <p class="choice-description">Organisez un événement : spectacles, expositions, devis personnalisé, stages artistiques.</p>
             </div>

@@ -17,6 +17,7 @@
             position: relative;
         }
 
+        /* Image de fond */
         body {
             background-image: url('images/fond-image.jpg');
             background-size: cover;
@@ -25,28 +26,53 @@
             background-attachment: fixed;
         }
 
+        /* Superposition sombre */
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.4);
             z-index: 0;
             pointer-events: none;
         }
 
-        .navbar { z-index: 1000; }
-        .desktop-view, .mobile-view, .instruction { position: relative; z-index: 2; }
+        /* Navbar au-dessus de tout */
+        .navbar {
+            z-index: 1000;
+        }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #EC407A, #7CB69F); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #7CB69F, #EC407A); }
+        /* Les vues desktop et mobile au-dessus de la superposition */
+        .desktop-view, .mobile-view, .instruction {
+            position: relative;
+            z-index: 2;
+        }
+
+        /* SCROLLBAR */
+        ::-webkit-scrollbar {
+            width: 12px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(135deg, #EC407A, #7CB69F);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(135deg, #7CB69F, #EC407A);
+        }
 
         /* NAVBAR TRANSPARENTE */
         .navbar {
             position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: transparent;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: transparent;  /* plus de fond marron */
             z-index: 1000;
         }
 
@@ -61,7 +87,14 @@
             gap: 1rem;
         }
 
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+        /* Groupe gauche : bouton retour + logo */
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        /* Bouton retour (page précédente) */
         .back-wrapper {
             display: flex;
             flex-direction: column;
@@ -71,6 +104,7 @@
             transition: all 0.2s ease;
             cursor: pointer;
         }
+
         .back-wrapper span:first-child {
             font-size: 1.1rem;
             font-weight: 600;
@@ -78,6 +112,7 @@
             text-shadow: 1px 1px 3px black;
             transition: transform 0.2s, color 0.2s;
         }
+
         .back-wrapper .back-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -91,9 +126,18 @@
             color: white;
             white-space: nowrap;
         }
-        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
-        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
 
+        .back-wrapper:hover span:first-child {
+            transform: scale(1.05);
+            color: #FFB300;
+        }
+
+        .back-wrapper:hover .back-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        /* Logo avec texte "Accueil" au survol */
         .logo-wrapper {
             display: flex;
             flex-direction: column;
@@ -102,11 +146,13 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
+
         .logo-wrapper img {
             height: 50px;
             transition: transform 0.2s;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
         }
+
         .logo-wrapper .logo-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -120,10 +166,22 @@
             color: white;
             white-space: nowrap;
         }
-        .logo-wrapper:hover img { transform: scale(1.05); }
-        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
 
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .logo-wrapper:hover img {
+            transform: scale(1.05);
+        }
+
+        .logo-wrapper:hover .logo-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        .nav-icons {
+            display: flex;
+            gap: 2rem;
+            align-items: center;
+        }
+
         .icon-wrapper {
             display: flex;
             flex-direction: column;
@@ -132,12 +190,14 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
+
         .icon-wrapper span {
             font-size: 1.3rem;
             color: white;
             text-shadow: 1px 1px 3px black;
             transition: transform 0.2s;
         }
+
         .icon-wrapper .icon-label {
             font-size: 0.7rem;
             font-weight: 600;
@@ -151,17 +211,28 @@
             color: white;
             white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
 
-        /* ========== DESKTOP VERSION (plein écran) ========== */
-        .desktop-view { display: block; }
+        .icon-wrapper:hover span {
+            transform: scale(1.1);
+            color: #FFB300;
+        }
+
+        .icon-wrapper:hover .icon-label {
+            opacity: 1;
+            color: #FFB300;
+        }
+
+        /* ========== DESKTOP VERSION ========== */
+        .desktop-view {
+            display: block;
+        }
 
         .caravane-wrapper {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -170,20 +241,24 @@
 
         .caravane-container {
             position: relative;
-            width: 100%;
-            height: 100%;
+            width: 90%;
+            max-width: 1800px;
+            margin: 0 auto;
         }
 
         .caravane-image {
             width: 100%;
-            height: 100%;
-            object-fit: cover;   /* pleine toile, même si l'image est rognée */
+            height: auto;
             display: block;
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
+            transition: opacity 0.05s ease;
         }
 
         .hotspots-svg {
             position: absolute;
-            top: 0; left: 0;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             pointer-events: none;
@@ -216,14 +291,17 @@
             50% { transform: translateX(-50%) scale(1.05); }
         }
 
-        /* ========== MOBILE VERSION (plein écran) ========== */
-        .mobile-view { display: none; }
+        /* ========== MOBILE VERSION ========== */
+        .mobile-view {
+            display: none;
+        }
 
         .mobile-caravane-wrapper {
             position: fixed;
-            top: 0; left: 0;
-            width: 100vw;
-            height: 100vh;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             overflow-x: scroll;
             overflow-y: hidden;
             background: rgba(0, 0, 0, 0.3);
@@ -246,9 +324,11 @@
         }
 
         .mobile-caravane-image {
-            height: 100vh;      /* occupe toute la hauteur */
+            height: 60vh;
             width: auto;
             display: block;
+            border-radius: 10px;
+            box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
             cursor: pointer;
             -webkit-tap-highlight-color: transparent;
             -webkit-touch-callout: none;
@@ -256,23 +336,35 @@
             user-select: none;
         }
 
+        /* ========== RESPONSIVE ========== */
         @media (max-width: 968px) {
             .desktop-view { display: none; }
             .mobile-view { display: block; }
             .instruction { display: none; }
-            .navbar-container { flex-direction: column; }
-            .nav-left { gap: 1rem; }
-            .nav-icons { gap: 1.5rem; }
+            .navbar-container {
+                flex-direction: column;
+            }
+            .nav-left {
+                gap: 1rem;
+            }
+            .nav-icons {
+                gap: 1.5rem;
+            }
         }
 
         @media (max-width: 768px) {
-            .navbar-container { padding: 0.6rem 1.5rem; }
-            .logo-wrapper img { height: 45px; }
+            .navbar-container {
+                padding: 0.6rem 1.5rem;
+            }
+            .logo-wrapper img {
+                height: 45px;
+            }
         }
     </style>
 </head>
 <body>
 
+<!-- NAVBAR TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -285,6 +377,7 @@
                 <span class="logo-label">Accueil</span>
             </a>
         </div>
+
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
                 <span>📅</span>
@@ -302,7 +395,7 @@
     </div>
 </nav>
 
-<!-- DESKTOP -->
+<!-- ========== DESKTOP VERSION ========== -->
 <div class="desktop-view">
     <div class="instruction">✨ Survolez les personnages pour les découvrir !</div>
 
@@ -314,53 +407,70 @@
                  id="caravaneImg">
 
             <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
+
+                <!-- Zone 1: TOTO (YouTube) -->
                 <a href="https://www.youtube.com/@recremagic"
                    target="_blank"
                    onmouseover="changeImage('caravane-toto.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="250" y="140" width="180" height="380" class="hotspot" />
                 </a>
+
+                <!-- Zone 2: RIDEAU ROUGE -->
                 <a href="spectacles.html"
                    onmouseover="changeImage('caravane-rideau.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="535" y="275" width="410" height="200" class="hotspot" />
                 </a>
+
+                <!-- Zone 3: FLO -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-flo.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1000" y="180" width="200" height="400" class="hotspot" />
                 </a>
+
+                <!-- Zone 4: RIDEAU OR -->
                 <a href="nos-expos-familles.html"
                    onmouseover="changeImage('caravane-rideau-or.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1240" y="140" width="190" height="400" class="hotspot" />
                 </a>
+
+                <!-- Zone 5: CALENDRIER 2026 -->
                 <a href="calendrier.html"
                    onmouseover="changeImage('caravane-calendrier.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1610" y="210" width="120" height="100" class="hotspot" />
                 </a>
+
+                <!-- Zone 6: BAPTISTE -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-baptiste.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1600" y="360" width="150" height="220" class="hotspot" />
                 </a>
+
+                <!-- Zone 7: GUS -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-gus.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1800" y="260" width="200" height="420" class="hotspot" />
                 </a>
+
+                <!-- Zone 8: COOKIE -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-cookie.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="515" y="480" width="100" height="100" class="hotspot" />
                 </a>
+
             </svg>
         </div>
     </div>
 </div>
 
-<!-- MOBILE -->
+<!-- ========== MOBILE VERSION ========== -->
 <div class="mobile-view">
     <div class="mobile-caravane-wrapper" id="mobileWrapper">
         <div class="mobile-caravane-container">
@@ -373,23 +483,35 @@
 </div>
 
 <script>
+    // ========== DESKTOP: Image switching ==========
     function changeImage(imageName) {
         const img = document.getElementById('caravaneImg');
-        if (img) { img.src = 'images/' + imageName; }
+        if (img) {
+            img.src = 'images/' + imageName;
+        }
     }
 
+    // Preload desktop images
     window.addEventListener('load', () => {
         const imagesToPreload = [
-            'caravane-base.png','caravane-toto.png','caravane-rideau.png',
-            'caravane-flo.png','caravane-rideau-or.png','caravane-calendrier.png',
-            'caravane-baptiste.png','caravane-gus.png','caravane-cookie.png'
+            'caravane-base.png',
+            'caravane-toto.png',
+            'caravane-rideau.png',
+            'caravane-flo.png',
+            'caravane-rideau-or.png',
+            'caravane-calendrier.png',
+            'caravane-baptiste.png',
+            'caravane-gus.png',
+            'caravane-cookie.png'
         ];
+
         imagesToPreload.forEach(src => {
             const img = new Image();
             img.src = 'images/' + src;
         });
     });
 
+    // ========== MOBILE: Horizontal scroll with zone detection ==========
     if (window.innerWidth <= 968) {
         const wrapper = document.getElementById('mobileWrapper');
         const img = document.getElementById('mobileCaravaneImg');
@@ -413,13 +535,15 @@
                 const imgRect = img.getBoundingClientRect();
                 const imgWidth = imgRect.width;
                 const screenCenter = window.innerWidth / 2;
+
                 const centerOnImage = screenCenter - imgRect.left;
                 const centerPercent = (centerOnImage / imgWidth) * 100;
 
                 let foundZone = null;
                 for (let zone of zones) {
                     if (centerPercent >= zone.start && centerPercent <= zone.end) {
-                        foundZone = zone; break;
+                        foundZone = zone;
+                        break;
                     }
                 }
 

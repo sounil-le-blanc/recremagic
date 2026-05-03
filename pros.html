@@ -199,7 +199,12 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
+            /* Ombre verte plus claire autour des lettres */
+            text-shadow: 
+                2px 2px 0 #3e6b3a,        /* vert plus clair */
+                -1px -1px 0 #3e6b3a,
+                0 0 8px #66bb6a,         /* halo vert moyen */
+                0 0 15px #a5d6a7;        /* halo très clair */
             position: relative;
         }
 
@@ -303,9 +308,9 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            color: #ffffff;
+            color: #f5d06b;
             font-style: italic;
-            font-size: 1.3rem;
+            font-size: 1.6rem;
             text-align: center;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
             background: transparent;
@@ -383,7 +388,6 @@
     </div>
 
     <div class="prestations-list">
-        <!-- Bloc 1 : Spectacles -->
         <div class="prestation-block left">
             <a href="spectacles.html" class="choice-card spectacles">
                 <div class="choice-icon">🎭</div>
@@ -394,7 +398,6 @@
             <div class="info-text">Découvrez notre catalogue avec différentes formules : spectacles uniques à thème ou en séries.</div>
         </div>
 
-        <!-- Bloc 2 : Expos -->
         <div class="prestation-block right">
             <div class="info-text">Découvrez nos deux expositions itinérantes et choisissez vos formules.</div>
             <a href="expos.html" class="choice-card expos">
@@ -405,7 +408,6 @@
             </a>
         </div>
 
-        <!-- Bloc 3 : Stages -->
         <div class="prestation-block left">
             <a href="stages.html" class="choice-card stages">
                 <div class="choice-icon">🎓</div>
