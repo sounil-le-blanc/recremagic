@@ -22,57 +22,61 @@
         .navbar-container {
             width: 100%;
             height: 100%;
-            padding: 0 1rem;
+            padding: 0 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: nowrap;
-            position: relative;
         }
 
-        /* Flèche retour à gauche */
+        /* Groupe gauche : flèche + logo */
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+
+        /* Logo qui déborde de la navbar */
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 80px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 15px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+
+        /* Flèche retour à droite du logo */
         .back-arrow {
             display: flex;
             align-items: center;
             justify-content: center;
-            width: 38px;
-            height: 38px;
+            width: 36px;
+            height: 36px;
             border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s ease;
             flex-shrink: 0;
-            z-index: 2;
         }
         .back-arrow:hover {
             background: rgba(255,255,255,0.2);
             border-color: #FFB300;
             color: #FFB300;
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-
-        /* Logo qui déborde de la navbar */
-        .logo-wrapper {
-            position: absolute;
-            left: 50%;
-            top: 55%;
-            transform: translate(-50%, -50%);
-            text-decoration: none;
-            z-index: 3;
-            transition: all 0.25s ease;
-        }
-        .logo-wrapper img {
-            height: 80px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-        }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
 
         /* Icônes droite */
@@ -367,11 +371,12 @@
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
-            .logo-wrapper img { height: 60px; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 60px; margin-top: 10px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             .icon-wrapper .icon-emoji { font-size: 1.1rem; }
             .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
             .choice-icon img { height: 110px; }
             .choice-title { font-size: 1.5rem; }
@@ -384,12 +389,15 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        <!-- Groupe gauche : flèche + logo -->
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        </div>
 
-        <a href="index.html" class="logo-wrapper">
-            <img src="images/logo.png" alt="Récré Magic">
-        </a>
-
+        <!-- Icônes droite -->
         <div class="nav-icons">
             <a href="boutique.html" class="icon-wrapper">
                 <span class="icon-emoji">💰</span>
