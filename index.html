@@ -111,12 +111,16 @@
             transition: color 0.2s;
             white-space: nowrap;
         }
-        .icon-wrapper:hover .icon-emoji {
-            transform: scale(1.15);
-            color: #FFB300;
-        }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
-
+.nav-icon-img {
+    height: 42px;
+    width: auto;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+    transition: transform 0.2s;
+}
+.icon-wrapper:hover .nav-icon-img {
+    transform: scale(1.15);
+}
+.icon-wrapper:hover .icon-label { color: #FFB300; }
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.jpg');
@@ -395,16 +399,16 @@
         </div>
 
         <!-- Icônes droite -->
-        <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper">
-                <span class="icon-emoji">💰</span>
-                <span class="icon-label">Boutique</span>
-            </a>
-            <a href="Abonnement.html" class="icon-wrapper">
-                <span class="icon-emoji">🤝</span>
-                <span class="icon-label">Abonnement</span>
-            </a>
-        </div>
+<div class="nav-icons">
+    <a href="boutique.html" class="icon-wrapper">
+        <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+        <span class="icon-label">Boutique</span>
+    </a>
+    <a href="Abonnement.html" class="icon-wrapper">
+        <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+        <span class="icon-label">Abonnement</span>
+    </a>
+</div>
     </div>
 </nav>
 
