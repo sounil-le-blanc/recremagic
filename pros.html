@@ -278,22 +278,26 @@
             letter-spacing: 2px;
         }
 
-        .choice-description {
-            font-size: 1rem;
-            line-height: 1.4;
-            margin-bottom: 1.2rem;
-            color: #2C1810;
-        }
+.choice-description {
+    font-size: 1.15rem;
+    font-weight: 600;
+    line-height: 1.6;
+    margin-bottom: 1.2rem;
+    color: #1a0f08;
+}
 
-        .choice-cta {
-            display: inline-block;
-            background: rgba(0,0,0,0.05);
-            padding: 0.5rem 1.2rem;
-            border-radius: 40px;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: 0.2s;
-        }
+.choice-cta {
+    display: inline-block;
+    background: rgba(0,0,0,0.05);
+    padding: 0.6rem 1.4rem;
+    border-radius: 40px;
+    font-weight: 700;
+    font-size: 1rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: 0.2s;
+}
+
         .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); border: 1px solid var(--vert-caravane); }
         .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); border: 1px solid var(--rose-spectacle); }
         .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); border: 1px solid var(--jaune-accent); }
@@ -301,21 +305,23 @@
         .choice-card:hover .choice-cta { transform: scale(1.02); padding: 0.5rem 1.4rem; }
 
         /* Texte d'information élégant (sans cadre) */
-        .info-text {
-            flex: 1;
-            padding: 2rem;
-            min-height: 220px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #f5d06b;
-            font-style: italic;
-            font-size: 1.6rem;
-            text-align: center;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
-            background: transparent;
-            border: none;
-        }
+
+.info-text {
+    flex: 1;
+    padding: 2rem;
+    min-height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff3c4;
+    font-weight: 700;
+    font-size: 1.5rem;
+    text-align: center;
+    text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.5);
+    background: transparent;
+    border: none;
+    letter-spacing: 0.5px;
+}
 
         .prestation-block.left { justify-content: flex-start; }
         .prestation-block.right { justify-content: flex-end; }
