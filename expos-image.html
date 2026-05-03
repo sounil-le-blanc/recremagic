@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exposition - Récré Magic</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding-top: 80px;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* NAVBAR TRANSPARENTE */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: transparent;
+            z-index: 1000;
+        }
+        .navbar-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0.8rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+        }
+        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
+        .back-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
+        }
+        .back-wrapper span:first-child {
+            font-size: 1.1rem; font-weight: 600; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
+        }
+        .back-wrapper .back-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
+        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
+        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
+
+        .logo-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
+        }
+        .logo-wrapper img {
+            height: 50px; transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+        }
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
+        .logo-wrapper:hover img { transform: scale(1.05); }
+        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
+
+        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .icon-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
+        }
+        .icon-wrapper span {
+            font-size: 1.3rem; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
+        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
+        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
+
+        @media (max-width: 768px) {
+            .navbar-container { flex-direction: column; padding: 0.6rem 1.5rem; }
+            .logo-wrapper img { height: 45px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left">
+            <div class="back-wrapper" onclick="history.back()">
+                <span>← Retour</span>
+                <span class="back-label">Retour</span>
+            </div>
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+                <span class="logo-label">Accueil</span>
+            </a>
+        </div>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+                <span>💰</span>
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+                <span>🤝</span>
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+</body>
+</html>
