@@ -306,7 +306,7 @@
         .spec-item:last-child { border: none; }
         .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; }
 
-        /* ========== BOUTONS VERTS ========== */
+        /* BOUTONS VERTS dans les cartes */
         .btn-primary {
             display: inline-block;
             background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
@@ -323,6 +323,23 @@
         .btn-primary:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        }
+
+        /* BOUTON ROUGE pour la section contact uniquement */
+        .btn-contact {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
         }
 
         .button-group {
@@ -454,7 +471,7 @@
     <h2>Intéressé par nos expositions ?</h2>
     <p>Enrichissez vos événements avec nos installations uniques</p>
     <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
-    <a href="Devis.html" class="btn-primary" style="display: inline-block; margin-top: 1rem;" target="_blank">📩 Demander un devis</a>
+    <a href="Devis.html" class="btn-contact" style="display: inline-block; margin-top: 1rem;" target="_blank">📩 Demander un devis</a>
 </div>
 
 </body>
