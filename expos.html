@@ -16,6 +16,8 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
+            --vert-ombre: #3e6b3a;
+            --vert-lumiere: #66bb6a;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -205,15 +207,9 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            /* Même ombrage vert que PRESTATIONS et Nos Spectacles */
-            text-shadow: 
-                2px 2px 0 #3e6b3a,
-                -1px -1px 0 #3e6b3a,
-                0 0 8px #66bb6a,
-                0 0 15px #a5d6a7;
+            text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
         }
 
-        /* Sous-titre doré */
         .page-header p {
             font-size: 1.3rem;
             color: #f5d06b;
@@ -232,7 +228,6 @@
             gap: 3rem;
         }
 
-        /* ========== CARTES EXPOSITION (cadre bois sérieux, fond clair) ========== */
         .expo-item {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 32px;
@@ -257,7 +252,6 @@
             pointer-events: none;
             z-index: 1;
         }
-
         .expo-item::after { content: none; }
 
         .expo-item:hover {
@@ -312,19 +306,24 @@
         .spec-item:last-child { border: none; }
         .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; }
 
+        /* ========== BOUTONS VERTS ========== */
         .btn-primary {
             display: inline-block;
-            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
             color: white;
             padding: 0.8rem 2rem;
             border-radius: 50px;
             text-decoration: none;
             font-weight: bold;
-            transition: transform 0.2s;
+            transition: transform 0.2s, box-shadow 0.2s;
             margin-right: 1rem;
             margin-bottom: 0.5rem;
+            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
         }
-        .btn-primary:hover { transform: translateY(-3px); }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        }
 
         .button-group {
             display: flex;
@@ -344,11 +343,7 @@
             max-width: 800px;
             margin: 4rem auto;
         }
-        .contact-cta h2 {
-            font-family: 'Fredoka', cursive;
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-        }
+        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
         .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.3rem; }
         .contact-cta a:hover { text-decoration: underline; }
@@ -400,7 +395,6 @@
     </div>
 </nav>
 
-<!-- TITRE AVEC OMBRAGE VERT -->
 <div class="page-header">
     <div class="parchment-wrapper">
         <div class="inner-parchment"></div>
