@@ -205,10 +205,15 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
+            /* Même ombrage vert que PRESTATIONS et Nos Spectacles */
+            text-shadow: 
+                2px 2px 0 #3e6b3a,
+                -1px -1px 0 #3e6b3a,
+                0 0 8px #66bb6a,
+                0 0 15px #a5d6a7;
         }
 
-        /* Sous-titre doré, identique au titre */
+        /* Sous-titre doré */
         .page-header p {
             font-size: 1.3rem;
             color: #f5d06b;
@@ -395,7 +400,7 @@
     </div>
 </nav>
 
-<!-- TITRE DANS LE PARCHEMIN MAGIQUE, SANS L'ÉMOJI -->
+<!-- TITRE AVEC OMBRAGE VERT -->
 <div class="page-header">
     <div class="parchment-wrapper">
         <div class="inner-parchment"></div>
