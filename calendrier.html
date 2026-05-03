@@ -54,7 +54,7 @@
             pointer-events: none; z-index: 1; overflow: hidden;
         }
 
-        .navbar, .page-header, .calendar-container, .events-summary, .footer {
+        .navbar, .page-header, .calendar-container, .events-summary, .contact-cta, .footer {
             position: relative;
             z-index: 2;
         }
@@ -204,18 +204,13 @@
             color: #f5d06b;
             text-transform: uppercase;
             letter-spacing: 4px;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 15px rgba(255,215,0,0.3);
-        }
-
-        /* Sous-titre doré, assorti au titre */
-        .page-header p {
-            font-size: 1.3rem;
-            color: #f5d06b;
-            font-weight: 600;
-            letter-spacing: 2px;
-            margin: 0;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
+            margin-bottom: 0;
+            /* Même ombrage vert que PRESTATIONS */
+            text-shadow: 
+                2px 2px 0 #3e6b3a,
+                -1px -1px 0 #3e6b3a,
+                0 0 8px #66bb6a,
+                0 0 15px #a5d6a7;
         }
 
         /* CALENDRIER & RÉSUMÉ : fond beige + contour bois sérieux */
@@ -306,7 +301,33 @@
         .event-lieu { color: var(--text-dark); opacity: 0.7; }
         .no-events { text-align: center; padding: 2rem; color: #888; font-style: italic; }
 
-        .footer { background: rgba(44, 24, 16, 0.95); color: var(--text-light); padding: 2rem; margin-top: 2rem; text-align: center; font-size: 0.8rem; }
+        /* SECTION CONTACT */
+        .contact-cta {
+            background: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            color: white;
+            padding: 3rem;
+            border-radius: 20px;
+            text-align: center;
+            margin-top: 2rem;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            max-width: 1000px;
+            width: 95%;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
+        .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
+        .contact-cta a:hover { text-decoration: underline; color: white; }
+
+        .footer {
+            background: rgba(44, 24, 16, 0.95);
+            color: var(--text-light);
+            padding: 2rem;
+            margin-top: 2rem;
+            text-align: center;
+            font-size: 0.8rem;
+        }
 
         @media (max-width: 768px) {
             body { padding-top: 70px; }
@@ -314,7 +335,7 @@
             .nav-left { gap: 1rem; }
             .nav-icons { gap: 1.5rem; }
             .logo-wrapper img { height: 45px; }
-            .calendar-container, .events-summary { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
+            .calendar-container, .events-summary, .contact-cta { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
             .month-year span { font-size: 1.2rem; min-width: 120px; }
             .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
             .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
@@ -322,7 +343,8 @@
             .event-row { flex-direction: column; align-items: flex-start; }
             .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem 1rem 2rem 1rem; }
             .page-header h1 { font-size: 2rem; }
-            .page-header p { font-size: 1rem; }
+            .contact-cta p { font-size: 0.9rem; }
+            .contact-cta a { font-size: 1rem; }
         }
     </style>
 </head>
@@ -377,6 +399,13 @@
         </div>
     </div>
     <div class="calendar-grid" id="calendarGrid"></div>
+</div>
+
+<div class="contact-cta" id="contact">
+    <p>Contactez-nous pour un devis gratuit et personnalisé</p>
+    <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
+        📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+    <a href="Devis.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;" target="_blank">📩 Demander un devis</a>
 </div>
 
 <div class="footer">
