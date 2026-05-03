@@ -32,6 +32,7 @@
             background-attachment: fixed;
             min-height: 100vh;
             position: relative;
+            padding-top: 120px;
             animation: subtleZoom 20s infinite alternate ease-in-out;
         }
 
@@ -49,79 +50,114 @@
             pointer-events: none;
         }
 
-        .navbar, .page-header, .expos-list, .contact-cta {
-            position: relative;
-            z-index: 2;
-        }
-
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
-        /* NAVBAR TRANSPARENTE */
+        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
         }
         .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 1rem;
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
         }
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .back-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
         }
-        .back-wrapper span:first-child {
-            font-size: 1.1rem; font-weight: 600; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
-        }
-        .back-wrapper .back-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
-        }
-        .back-wrapper:hover span:first-child { transform: scale(1.05); color: var(--jaune-accent); }
-        .back-wrapper:hover .back-label { opacity: 1; color: var(--jaune-accent); }
-
         .logo-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
         }
         .logo-wrapper img {
-            height: 50px; transition: transform 0.2s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
         }
-        .logo-wrapper .logo-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
-        .logo-wrapper:hover img { transform: scale(1.05); }
-        .logo-wrapper:hover .logo-label { opacity: 1; color: var(--jaune-accent); }
-
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
         .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
-        .icon-wrapper span {
-            font-size: 1.3rem; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
         }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: var(--jaune-accent); }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: var(--jaune-accent); }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
+        .page-header, .expos-list, .contact-cta {
+            position: relative;
+            z-index: 2;
+        }
 
         /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
@@ -129,7 +165,7 @@
             position: relative;
             background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
             padding: 2.5rem 3.5rem;
-            margin: 1rem 3rem 2rem 3rem;
+            margin: 1rem auto 2rem auto;
             border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
             box-shadow:
                 0 15px 30px rgba(0,0,0,0.6),
@@ -252,7 +288,6 @@
             pointer-events: none;
             z-index: 1;
         }
-        .expo-item::after { content: none; }
 
         .expo-item:hover {
             transform: translateY(-8px);
@@ -306,7 +341,6 @@
         .spec-item:last-child { border: none; }
         .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; }
 
-        /* BOUTONS VERTS dans les cartes */
         .btn-primary {
             display: inline-block;
             background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
@@ -325,7 +359,6 @@
             box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
         }
 
-        /* BOUTON ROUGE pour la section contact uniquement */
         .btn-contact {
             display: inline-block;
             background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
@@ -367,19 +400,24 @@
 
         @media (max-width: 968px) {
             .expo-item { grid-template-columns: 1fr; }
-            .navbar-container { flex-direction: column; }
-            .parchment-wrapper { padding: 2rem 2.5rem; margin: 1rem 1rem 2rem 1rem; }
         }
-        @media (max-width: 768px) {
-            .nav-left { gap: 1rem; }
-            .nav-icons { gap: 1.5rem; }
-            .logo-wrapper img { height: 45px; }
+
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
             .expos-list { padding: 0 1rem; }
             .expo-content { padding: 1.5rem; }
             .expo-title { font-size: 1.8rem; }
             .contact-cta { margin: 2rem 1rem; padding: 2rem; }
             .contact-cta h2 { font-size: 1.8rem; }
-            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem 1rem 2rem 1rem; }
+            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
             .page-header h1 { font-size: 1.8rem; }
             .page-header p { font-size: 1rem; }
         }
@@ -389,23 +427,20 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="nav-left">
-            <div class="back-wrapper" onclick="history.back()">
-                <span>← Retour</span>
-                <span class="back-label">Retour</span>
-            </div>
+        <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
-                <span class="logo-label">Accueil</span>
             </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
+
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper" title="Boutique">
-                <span>💰</span>
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
-                <span>🤝</span>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
         </div>
@@ -422,7 +457,6 @@
 </div>
 
 <div class="expos-list">
-    <!-- Carte 1 : LA FÉERIE DES MARIONNETTES -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-marionnettes.png" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -444,7 +478,6 @@
         </div>
     </div>
 
-    <!-- Carte 2 : LES GÉANTS DU CARNAVAL -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
