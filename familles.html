@@ -17,7 +17,6 @@
             position: relative;
         }
 
-        /* Image de fond */
         body {
             background-image: url('images/fond-image.jpg');
             background-size: cover;
@@ -26,7 +25,6 @@
             background-attachment: fixed;
         }
 
-        /* Superposition sombre */
         body::before {
             content: '';
             position: fixed;
@@ -39,193 +37,117 @@
             pointer-events: none;
         }
 
-        /* Navbar au-dessus de tout */
-        .navbar {
-            z-index: 1000;
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #EC407A, #7CB69F); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #7CB69F, #EC407A); }
 
-        /* Les vues desktop et mobile au-dessus de la superposition */
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
+        }
+        .navbar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
         .desktop-view, .mobile-view, .instruction {
             position: relative;
             z-index: 2;
         }
 
-        /* SCROLLBAR */
-        ::-webkit-scrollbar {
-            width: 12px;
-        }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb {
-            background: linear-gradient(135deg, #EC407A, #7CB69F);
-            border-radius: 10px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-            background: linear-gradient(135deg, #7CB69F, #EC407A);
-        }
-
-        /* NAVBAR TRANSPARENTE */
-        .navbar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            background: transparent;  /* plus de fond marron */
-            z-index: 1000;
-        }
-
-        .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        /* Groupe gauche : bouton retour + logo */
-        .nav-left {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        /* Bouton retour (page précédente) */
-        .back-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-            cursor: pointer;
-        }
-
-        .back-wrapper span:first-child {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s, color 0.2s;
-        }
-
-        .back-wrapper .back-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
-        }
-
-        .back-wrapper:hover span:first-child {
-            transform: scale(1.05);
-            color: #FFB300;
-        }
-
-        .back-wrapper:hover .back-label {
-            opacity: 1;
-            color: #FFB300;
-        }
-
-        /* Logo avec texte "Accueil" au survol */
-        .logo-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .logo-wrapper img {
-            height: 50px;
-            transition: transform 0.2s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-        }
-
-        .logo-wrapper .logo-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
-        }
-
-        .logo-wrapper:hover img {
-            transform: scale(1.05);
-        }
-
-        .logo-wrapper:hover .logo-label {
-            opacity: 1;
-            color: #FFB300;
-        }
-
-        .nav-icons {
-            display: flex;
-            gap: 2rem;
-            align-items: center;
-        }
-
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.2rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-
-        .icon-wrapper span {
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s;
-        }
-
-        .icon-wrapper .icon-label {
-            font-size: 0.7rem;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.2rem 0.5rem;
-            border-radius: 20px;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-            color: white;
-            white-space: nowrap;
-        }
-
-        .icon-wrapper:hover span {
-            transform: scale(1.1);
-            color: #FFB300;
-        }
-
-        .icon-wrapper:hover .icon-label {
-            opacity: 1;
-            color: #FFB300;
-        }
-
         /* ========== DESKTOP VERSION ========== */
-        .desktop-view {
-            display: block;
-        }
+        .desktop-view { display: block; }
 
         .caravane-wrapper {
             position: fixed;
@@ -292,9 +214,7 @@
         }
 
         /* ========== MOBILE VERSION ========== */
-        .mobile-view {
-            display: none;
-        }
+        .mobile-view { display: none; }
 
         .mobile-caravane-wrapper {
             position: fixed;
@@ -336,59 +256,42 @@
             user-select: none;
         }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 968px) {
             .desktop-view { display: none; }
             .mobile-view { display: block; }
             .instruction { display: none; }
-            .navbar-container {
-                flex-direction: column;
-            }
-            .nav-left {
-                gap: 1rem;
-            }
-            .nav-icons {
-                gap: 1.5rem;
-            }
         }
 
-        @media (max-width: 768px) {
-            .navbar-container {
-                padding: 0.6rem 1.5rem;
-            }
-            .logo-wrapper img {
-                height: 45px;
-            }
+        @media (max-width: 600px) {
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
         }
     </style>
 </head>
 <body>
 
-<!-- NAVBAR TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="nav-left">
-            <div class="back-wrapper" onclick="history.back()">
-                <span>← Retour</span>
-                <span class="back-label">Retour</span>
-            </div>
+        <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
-                <span class="logo-label">Accueil</span>
             </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
 
         <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper" title="Calendrier">
-                <span>📅</span>
-                <span class="icon-label">Calendrier</span>
-            </a>
-            <a href="boutique.html" class="icon-wrapper" title="Boutique">
-                <span>💰</span>
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
-                <span>🤝</span>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
         </div>
@@ -408,7 +311,6 @@
 
             <svg class="hotspots-svg" viewBox="0 0 2000 660" preserveAspectRatio="xMidYMid meet">
 
-                <!-- Zone 1: TOTO (YouTube) -->
                 <a href="https://www.youtube.com/@recremagic"
                    target="_blank"
                    onmouseover="changeImage('caravane-toto.png')"
@@ -416,49 +318,42 @@
                     <rect x="250" y="140" width="180" height="380" class="hotspot" />
                 </a>
 
-                <!-- Zone 2: RIDEAU ROUGE -->
                 <a href="spectacles.html"
                    onmouseover="changeImage('caravane-rideau.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="535" y="275" width="410" height="200" class="hotspot" />
                 </a>
 
-                <!-- Zone 3: FLO -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-flo.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1000" y="180" width="200" height="400" class="hotspot" />
                 </a>
 
-                <!-- Zone 4: RIDEAU OR -->
                 <a href="nos-expos-familles.html"
                    onmouseover="changeImage('caravane-rideau-or.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1240" y="140" width="190" height="400" class="hotspot" />
                 </a>
 
-                <!-- Zone 5: CALENDRIER 2026 -->
                 <a href="calendrier.html"
                    onmouseover="changeImage('caravane-calendrier.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1610" y="210" width="120" height="100" class="hotspot" />
                 </a>
 
-                <!-- Zone 6: BAPTISTE -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-baptiste.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1600" y="360" width="150" height="220" class="hotspot" />
                 </a>
 
-                <!-- Zone 7: GUS -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-gus.png')"
                    onmouseout="changeImage('caravane-base.png')">
                     <rect x="1800" y="260" width="200" height="420" class="hotspot" />
                 </a>
 
-                <!-- Zone 8: COOKIE -->
                 <a href="nos-stars.html"
                    onmouseover="changeImage('caravane-cookie.png')"
                    onmouseout="changeImage('caravane-base.png')">
@@ -483,35 +378,20 @@
 </div>
 
 <script>
-    // ========== DESKTOP: Image switching ==========
     function changeImage(imageName) {
         const img = document.getElementById('caravaneImg');
-        if (img) {
-            img.src = 'images/' + imageName;
-        }
+        if (img) img.src = 'images/' + imageName;
     }
 
-    // Preload desktop images
     window.addEventListener('load', () => {
         const imagesToPreload = [
-            'caravane-base.png',
-            'caravane-toto.png',
-            'caravane-rideau.png',
-            'caravane-flo.png',
-            'caravane-rideau-or.png',
-            'caravane-calendrier.png',
-            'caravane-baptiste.png',
-            'caravane-gus.png',
-            'caravane-cookie.png'
+            'caravane-base.png', 'caravane-toto.png', 'caravane-rideau.png',
+            'caravane-flo.png', 'caravane-rideau-or.png', 'caravane-calendrier.png',
+            'caravane-baptiste.png', 'caravane-gus.png', 'caravane-cookie.png'
         ];
-
-        imagesToPreload.forEach(src => {
-            const img = new Image();
-            img.src = 'images/' + src;
-        });
+        imagesToPreload.forEach(src => { const img = new Image(); img.src = 'images/' + src; });
     });
 
-    // ========== MOBILE: Horizontal scroll with zone detection ==========
     if (window.innerWidth <= 968) {
         const wrapper = document.getElementById('mobileWrapper');
         const img = document.getElementById('mobileCaravaneImg');
@@ -535,10 +415,8 @@
                 const imgRect = img.getBoundingClientRect();
                 const imgWidth = imgRect.width;
                 const screenCenter = window.innerWidth / 2;
-
                 const centerOnImage = screenCenter - imgRect.left;
                 const centerPercent = (centerOnImage / imgWidth) * 100;
-
                 let foundZone = null;
                 for (let zone of zones) {
                     if (centerPercent >= zone.start && centerPercent <= zone.end) {
@@ -546,7 +424,6 @@
                         break;
                     }
                 }
-
                 if (foundZone && foundZone.name !== currentZone) {
                     currentZone = foundZone.name;
                     currentZoneData = foundZone;
@@ -560,11 +437,8 @@
 
             img.addEventListener('click', () => {
                 if (currentZoneData) {
-                    if (currentZoneData.external) {
-                        window.open(currentZoneData.link, '_blank');
-                    } else {
-                        window.location.href = currentZoneData.link;
-                    }
+                    if (currentZoneData.external) window.open(currentZoneData.link, '_blank');
+                    else window.location.href = currentZoneData.link;
                 }
             });
 
@@ -573,7 +447,6 @@
                 clearTimeout(scrollTimeout);
                 scrollTimeout = setTimeout(checkZone, 50);
             });
-
             setTimeout(checkZone, 200);
         }
     }
