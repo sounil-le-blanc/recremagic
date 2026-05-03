@@ -119,7 +119,7 @@
             z-index: 10;
         }
 
-        .welcome-text { text-align: center; margin-bottom: 4rem; }
+        .welcome-text { text-align: center; margin-bottom: 3rem; }
 
         /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
@@ -199,12 +199,11 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            /* Ombre verte plus claire autour des lettres */
             text-shadow: 
-                2px 2px 0 #3e6b3a,        /* vert plus clair */
+                2px 2px 0 #3e6b3a,
                 -1px -1px 0 #3e6b3a,
-                0 0 8px #66bb6a,         /* halo vert moyen */
-                0 0 15px #a5d6a7;        /* halo très clair */
+                0 0 8px #66bb6a,
+                0 0 15px #a5d6a7;
             position: relative;
         }
 
@@ -217,17 +216,12 @@
             text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
         }
 
-        /* ========== PRESTATIONS LIST ========== */
-        .prestations-list {
+        /* ========== 3 CARTES CÔTE À CÔTE ========== */
+        .prestations-grid {
             display: flex;
-            flex-direction: column;
-            gap: 3rem;
-        }
-
-        .prestation-block {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
+            justify-content: center;
+            align-items: stretch;
+            gap: 2rem;
             flex-wrap: wrap;
         }
 
@@ -249,6 +243,9 @@
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
             box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
         .choice-card::before {
@@ -264,67 +261,64 @@
             transform: translateY(-8px);
             box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
         }
-.choice-icon { margin-bottom: 1rem; transition: transform 0.2s; }
-.choice-icon img { height: 160px; width: auto; }
-.choice-card:hover .choice-icon { transform: scale(1.08); }
+
+        .card-content {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .choice-icon { margin-bottom: 0.5rem; transition: transform 0.2s; }
+        .choice-icon img { height: 140px; width: auto; }
+        .choice-card:hover .choice-icon { transform: scale(1.08); }
+
         .choice-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2rem;
+            font-size: 1.8rem;
             font-weight: 700;
-            margin-bottom: 0.8rem;
+            margin-bottom: 0.3rem;
             text-transform: uppercase;
             color: #000;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
             letter-spacing: 2px;
         }
 
-.choice-description {
-    font-size: 1.15rem;
-    font-weight: 600;
-    line-height: 1.6;
-    margin-bottom: 1.2rem;
-    color: #1a0f08;
-}
+        .choice-short {
+            font-size: 1rem;
+            font-weight: 700;
+            color: #2C1810;
+            margin-bottom: 0.8rem;
+        }
 
-.choice-cta {
-    display: inline-block;
-    background: rgba(0,0,0,0.05);
-    padding: 0.6rem 1.4rem;
-    border-radius: 40px;
-    font-weight: 700;
-    font-size: 1rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    transition: 0.2s;
-}
+        .choice-description {
+            font-size: 1.05rem;
+            font-weight: 600;
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            color: #1a0f08;
+            padding: 0 0.5rem;
+        }
 
+        .choice-cta {
+            display: inline-block;
+            background: rgba(0,0,0,0.05);
+            padding: 0.6rem 1.4rem;
+            border-radius: 40px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            transition: 0.2s;
+            margin-top: auto;
+        }
         .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); border: 1px solid var(--vert-caravane); }
         .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); border: 1px solid var(--rose-spectacle); }
         .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); border: 1px solid var(--jaune-accent); }
 
-        .choice-card:hover .choice-cta { transform: scale(1.02); padding: 0.5rem 1.4rem; }
-
-        /* Texte d'information élégant (sans cadre) */
-
-.info-text {
-    flex: 1;
-    padding: 2rem;
-    min-height: 220px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #fff3c4;
-    font-weight: 700;
-    font-size: 1.5rem;
-    text-align: center;
-    text-shadow: 3px 3px 6px rgba(0,0,0,0.9), 0 0 20px rgba(0,0,0,0.5);
-    background: transparent;
-    border: none;
-    letter-spacing: 0.5px;
-}
-
-        .prestation-block.left { justify-content: flex-start; }
-        .prestation-block.right { justify-content: flex-end; }
+        .choice-card:hover .choice-cta { transform: scale(1.02); padding: 0.6rem 1.6rem; }
 
         .contact-note {
             text-align: center;
@@ -336,10 +330,14 @@
         .contact-note a { color: var(--jaune-accent); text-decoration: none; font-weight: bold; }
         .contact-note a:hover { text-decoration: underline; }
 
-        @media (max-width: 1000px) {
-            .prestation-block { flex-direction: column; align-items: center; text-align: center; }
-            .prestation-block.left, .prestation-block.right { justify-content: center; }
-            .info-text { width: 100%; min-height: 150px; }
+        @media (max-width: 1100px) {
+            .prestations-grid { gap: 1rem; }
+            .choice-card { width: 320px; padding: 2rem 1.5rem; }
+        }
+
+        @media (max-width: 900px) {
+            .prestations-grid { flex-direction: column; align-items: center; }
+            .choice-card { width: 100%; max-width: 400px; }
             .nav-icons { gap: 1.5rem; }
             .choice-card { border-width: 4px; }
         }
@@ -352,7 +350,7 @@
             .container { padding: 1rem; }
             .choice-card { width: 100%; max-width: 320px; }
             .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 1rem 1rem 1rem; }
-            .info-text { font-size: 1.1rem; }
+            .choice-icon img { height: 110px; }
         }
     </style>
 </head>
@@ -393,39 +391,41 @@
         </div>
     </div>
 
-    <div class="prestations-list">
-        <div class="prestation-block left">
-            <a href="spectacles.html" class="choice-card spectacles">
-               
-<div class="choice-icon"><img src="images/icone-spectacles.png" alt="Spectacles"></div>
+    <div class="prestations-grid">
+
+        <!-- CARTE SPECTACLES -->
+        <a href="spectacles.html" class="choice-card spectacles">
+            <div class="card-content">
+                <div class="choice-icon"><img src="images/icone-spectacles.png" alt="Spectacles"></div>
                 <h2 class="choice-title">Nos Spectacles</h2>
-                <p class="choice-description">Cirque, théâtre, marionnettes, magie.</p>
-                <span class="choice-cta">Découvrir →</span>
-            </a>
-            <div class="info-text">Découvrez notre catalogue avec différentes formules : spectacles uniques à thème ou en séries.</div>
-        </div>
+                <p class="choice-short">Cirque, théâtre, marionnettes, magie.</p>
+                <p class="choice-description">Découvrez notre catalogue avec différentes formules : spectacles uniques à thème ou en séries.</p>
+            </div>
+            <span class="choice-cta">Découvrir →</span>
+        </a>
 
-        <div class="prestation-block right">
-            <div class="info-text">Découvrez nos deux expositions itinérantes et choisissez vos formules.</div>
-            <a href="expos.html" class="choice-card expos">
-
-<div class="choice-icon"><img src="images/icone-expos.png" alt="Expos"></div>
+        <!-- CARTE EXPOS -->
+        <a href="expos.html" class="choice-card expos">
+            <div class="card-content">
+                <div class="choice-icon"><img src="images/icone-expos.png" alt="Expos"></div>
                 <h2 class="choice-title">Nos Expos</h2>
-                <p class="choice-description">Expositions immersives et ludiques.</p>
-                <span class="choice-cta">Découvrir →</span>
-            </a>
-        </div>
+                <p class="choice-short">Expositions immersives et ludiques.</p>
+                <p class="choice-description">Découvrez nos deux expositions itinérantes et choisissez vos formules.</p>
+            </div>
+            <span class="choice-cta">Découvrir →</span>
+        </a>
 
-        <div class="prestation-block left">
-            <a href="stages.html" class="choice-card stages">
-
-<div class="choice-icon"><img src="images/icone-stages.png" alt="Stages"></div>
+        <!-- CARTE STAGES -->
+        <a href="stages.html" class="choice-card stages">
+            <div class="card-content">
+                <div class="choice-icon"><img src="images/icone-stages.png" alt="Stages"></div>
                 <h2 class="choice-title">Nos Stages</h2>
-                <p class="choice-description">Initiation aux arts du spectacle.</p>
-                <span class="choice-cta">Découvrir →</span>
-            </a>
-            <div class="info-text">Venez participer à nos ateliers de créations et stages d’apprentissage. Découvrez et perfectionnez avec nous vos savoir-faire et compétences dans l’art du spectacle vivant.</div>
-        </div>
+                <p class="choice-short">Initiation aux arts du spectacle.</p>
+                <p class="choice-description">Venez participer à nos ateliers de créations et stages d'apprentissage. Découvrez et perfectionnez avec nous vos savoir-faire et compétences dans l'art du spectacle vivant.</p>
+            </div>
+            <span class="choice-cta">Découvrir →</span>
+        </a>
+
     </div>
 
     <p class="contact-note">
