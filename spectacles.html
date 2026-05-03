@@ -16,6 +16,8 @@
             --creme-vintage: #FFF8E1;
             --text-dark: #2C1810;
             --text-light: #ffffff;
+            --vert-ombre: #3e6b3a;    /* vert foncé roulotte */
+            --vert-lumiere: #66bb6a;   /* vert clair reflet */
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -201,15 +203,9 @@
             text-transform: uppercase;
             letter-spacing: 4px;
             margin-bottom: 0.5rem;
-            /* Même ombrage vert que PRESTATIONS */
-            text-shadow: 
-                2px 2px 0 #3e6b3a,
-                -1px -1px 0 #3e6b3a,
-                0 0 8px #66bb6a,
-                0 0 15px #a5d6a7;
+            text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
         }
 
-        /* Sous-titre doré */
         .page-header p {
             font-size: 1.3rem;
             color: #f5d06b;
@@ -228,7 +224,6 @@
             gap: 3rem;
         }
 
-        /* ========== CARTES SPECTACLE (cadre bois sérieux, fond clair) ========== */
         .spectacle-item {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 32px;
@@ -253,7 +248,6 @@
             pointer-events: none;
             z-index: 1;
         }
-
         .spectacle-item::after { content: none; }
 
         .spectacle-item:hover {
@@ -264,9 +258,9 @@
         .spectacle-img {
             height: 100%;
             min-height: 350px;
-            background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle));
             display: flex; align-items: center; justify-content: center;
             overflow: hidden;
+            background: linear-gradient(135deg, #5a8f4a, #8bc34a); /* fond vert assorti */
         }
 
         .spectacle-img img {
@@ -303,21 +297,38 @@
             color: #2C1810; text-align: justify;
         }
 
+        /* ========== BOUTONS VERTS (devis + bande-annonce) ========== */
         .video-link {
             display: inline-flex; align-items: center; gap: 10px;
-            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
             color: white; padding: 12px 25px;
             border-radius: 50px; text-decoration: none; font-weight: 700;
             margin-bottom: 1.5rem; transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
         }
 
         .video-link:hover {
             transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
+            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
         }
 
         .video-link i { font-size: 1.3rem; }
+
+        .btn {
+            display: inline-block; padding: 0.8rem 2rem;
+            border-radius: 50px; text-decoration: none; font-weight: 700;
+            transition: all 0.3s; cursor: pointer; border: none; font-family: inherit;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
+            color: white;
+            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        }
 
         .gallery-container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
 
@@ -339,7 +350,8 @@
         .gallery-item img {
             width: 100%; height: 250px; object-fit: cover;
             border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            transition: all 0.3s; border: 3px solid rgba(255, 255, 255, 0.5);
+            border: 3px solid rgba(255, 255, 255, 0.5);
+            transition: all 0.3s;
         }
 
         .gallery-item img:hover {
@@ -353,9 +365,7 @@
             background: rgba(0, 0, 0, 0.95); z-index: 2000;
             justify-content: center; align-items: center; backdrop-filter: blur(5px);
         }
-
         .modal.active { display: flex; animation: fadeIn 0.3s ease; }
-
         @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
         .modal-content {
@@ -363,7 +373,6 @@
             border-radius: 10px; box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
             animation: zoomIn 0.3s ease;
         }
-
         @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
         .close-modal {
@@ -393,25 +402,12 @@
             z-index: 2002; font-family: monospace;
         }
 
-        .btn {
-            display: inline-block; padding: 0.8rem 2rem;
-            border-radius: 50px; text-decoration: none; font-weight: 700;
-            transition: all 0.3s; cursor: pointer; border: none; font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
-            color: white; box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
-        }
-        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4); }
-
         .contact-cta {
             background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
             color: white; padding: 3rem; border-radius: 20px;
             text-align: center; margin-top: 2rem;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
-
         .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2rem; margin-bottom: 1rem; }
         .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
@@ -485,7 +481,6 @@
     </div>
 </nav>
 
-<!-- TITRE AVEC OMBRAGE VERT -->
 <div class="page-header">
     <div class="parchment-wrapper">
         <div class="inner-parchment"></div>
