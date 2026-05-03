@@ -286,12 +286,15 @@
             letter-spacing: 2px;
         }
 
+        /* Sous-titres colorés selon la carte */
         .choice-short {
             font-size: 1rem;
             font-weight: 700;
-            color: #2C1810;
             margin-bottom: 0.8rem;
         }
+        .spectacles .choice-short { color: var(--vert-caravane); }
+        .expos .choice-short { color: var(--rose-spectacle); }
+        .stages .choice-short { color: var(--jaune-accent); }
 
         .choice-description {
             font-size: 1.05rem;
@@ -302,23 +305,30 @@
             padding: 0 0.5rem;
         }
 
+        /* Boutons style bois */
         .choice-cta {
             display: inline-block;
-            background: rgba(0,0,0,0.05);
-            padding: 0.6rem 1.4rem;
-            border-radius: 40px;
+            padding: 0.6rem 1.6rem;
+            border-radius: 12px;
             font-weight: 700;
             font-size: 0.95rem;
             text-transform: uppercase;
             letter-spacing: 1px;
             transition: 0.2s;
             margin-top: auto;
+            background: linear-gradient(180deg, #8B6B4A 0%, #6B4F35 50%, #5A3E28 100%);
+            color: #f5e6d3;
+            border: 2px solid #4a3220;
+            text-shadow: 1px 1px 0px rgba(0,0,0,0.4);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.3);
         }
-        .spectacles .choice-cta { color: var(--vert-caravane); background: rgba(124,182,159,0.1); border: 1px solid var(--vert-caravane); }
-        .expos .choice-cta { color: var(--rose-spectacle); background: rgba(236,64,122,0.1); border: 1px solid var(--rose-spectacle); }
-        .stages .choice-cta { color: var(--jaune-accent); background: rgba(255,179,0,0.1); border: 1px solid var(--jaune-accent); }
 
-        .choice-card:hover .choice-cta { transform: scale(1.02); padding: 0.6rem 1.6rem; }
+        .choice-card:hover .choice-cta {
+            background: linear-gradient(180deg, #9B7B5A 0%, #7B5A3F 50%, #6B4E35 100%);
+            color: #fff;
+            border-color: #5a3e2a;
+            box-shadow: 0 5px 14px rgba(0,0,0,0.4);
+        }
 
         .contact-note {
             text-align: center;
