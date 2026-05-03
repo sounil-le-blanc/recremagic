@@ -17,42 +17,65 @@
             backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
         }
         .navbar-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 0.6rem 2rem;
+            padding: 0 2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: nowrap;
+            height: 100%;
+            position: relative;
         }
 
-        /* Logo Accueil — plus gros, centré */
-        .logo-wrapper {
+        /* Flèche retour à gauche */
+        .back-arrow {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.3rem;
             text-decoration: none;
+            cursor: pointer;
             transition: all 0.25s ease;
             flex-shrink: 0;
+            z-index: 2;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            transform: scale(1.1);
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+
+        /* Logo qui déborde de la navbar */
+        .logo-wrapper {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translate(-50%, -30%);
+            text-decoration: none;
+            z-index: 3;
+            transition: all 0.25s ease;
         }
         .logo-wrapper img {
-            height: 58px;
+            height: 85px;
             transition: transform 0.25s;
-            filter: drop-shadow(0 3px 8px rgba(0,0,0,0.7));
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
         }
-        .logo-wrapper .logo-label {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: #f5d06b;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.3);
-            letter-spacing: 1px;
-            white-space: nowrap;
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
-        .logo-wrapper:hover img { transform: scale(1.08); }
-        .logo-wrapper:hover .logo-label { color: #FFB300; }
 
         /* Icônes droite — jamais en deuxième ligne */
         .nav-icons {
@@ -61,6 +84,7 @@
             align-items: center;
             flex-shrink: 0;
             flex-wrap: nowrap;
+            z-index: 2;
         }
         .icon-wrapper {
             display: flex;
@@ -91,31 +115,6 @@
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* Flèche retour stylée — à droite des icônes */
-        .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.3rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
-        }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            transform: translateX(-3px);
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.jpg');
@@ -126,7 +125,7 @@
             align-items: center;
             justify-content: center;
             padding: 2rem;
-            padding-top: 120px;
+            padding-top: 130px;
             position: relative;
         }
 
@@ -361,10 +360,10 @@
             .choice-card.pros { order: 3; }
         }
         @media (max-width: 768px) {
-            body { padding-top: 100px; }
-            .navbar-container { padding: 0.5rem 1rem; }
-            .logo-wrapper img { height: 42px; }
-            .logo-wrapper .logo-label { font-size: 1.1rem; }
+            body { padding-top: 110px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 1rem; }
+            .logo-wrapper img { height: 65px; }
             .icon-wrapper .icon-emoji { font-size: 1.2rem; }
             .icon-wrapper .icon-label { font-size: 0.55rem; }
             .nav-icons { gap: 0.8rem; }
@@ -380,13 +379,15 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <!-- Logo Accueil centré/gauche, plus gros -->
+        <!-- Flèche retour à gauche -->
+        <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+
+        <!-- Logo centré qui déborde -->
         <a href="index.html" class="logo-wrapper">
             <img src="images/logo.png" alt="Récré Magic">
-            <span class="logo-label">Accueil</span>
         </a>
 
-        <!-- Icônes + flèche retour à droite, jamais en deuxième ligne -->
+        <!-- Icônes droite -->
         <div class="nav-icons">
             <a href="boutique.html" class="icon-wrapper">
                 <span class="icon-emoji">💰</span>
@@ -396,7 +397,6 @@
                 <span class="icon-emoji">🤝</span>
                 <span class="icon-label">Abonnement</span>
             </a>
-            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
     </div>
 </nav>
