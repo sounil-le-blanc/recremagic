@@ -23,23 +23,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Quicksand', sans-serif;
-            background-color: #000;
-            background-image: url('images/fond-image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
-            min-height: 100vh;
-            position: relative;
-            padding-top: 120px;
-            animation: subtleZoom 20s infinite alternate ease-in-out;
-        }
-
-        @keyframes subtleZoom {
-            0% { background-size: cover; background-position: center; }
-            100% { background-size: 110%; background-position: 52% 48%; }
-        }
+    font-family: 'Quicksand', sans-serif;
+    background-color: #000;
+    background-image: url('images/fond-image.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-attachment: scroll;
+    min-height: 100vh;
+    position: relative;
+    padding-top: 120px;
+}
 
         body::before {
             content: '';
