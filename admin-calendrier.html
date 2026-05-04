@@ -108,6 +108,7 @@
         <div id="eventsList"></div>
 
         <button id="openCalendarBtn" style="background: #7CB69F;">📅 Ouvrir le calendrier public</button>
+        <button id="openInscriptionBtn" style="background: #EC407A; margin-top: 0.8rem;">📝 Inscription</button>
     </div>
 </div>
 
@@ -115,7 +116,6 @@
     const SECRET_CODE = "recremagic";
     const STORAGE_KEY = 'recremagic_calendar';
 
-    // Liste des spectacles et expositions
     const SPECTACLES = [
         "DU COUP ON VIENT CHEZ VOUS",
         "DU COUP on revient chez vous",
@@ -208,7 +208,7 @@
             const eventList = events[date];
             html += `<div style="margin-bottom: 1.5rem; border-bottom: 1px solid #ccc;"><strong>📅 ${date}</strong>`;
             eventList.forEach((ev, idx) => {
-                const typeIcon = ev.type === 'Spectacle' ? '🎭' : '🖼️';
+                const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
                 html += `
                     <div class="event-item">
                         <div>${typeIcon} <strong>${escapeHtml(ev.titre)}</strong><br>📍 ${escapeHtml(ev.lieu) || '—'}</div>
@@ -249,6 +249,7 @@
     });
 
     document.getElementById('openCalendarBtn').onclick = () => window.open('calendrier.html', '_blank');
+    document.getElementById('openInscriptionBtn').onclick = () => window.open('inscription.html', '_blank');
 </script>
 </body>
 </html>
