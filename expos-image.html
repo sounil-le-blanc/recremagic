@@ -7,36 +7,86 @@
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --jaune-accent: #FFB300;
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+        }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== FOND FIXE ===== */
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #000;
-            background-image: url('images/fond-image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
             min-height: 100vh;
-            position: relative;
-            padding-top: 120px;
+            min-height: 100dvh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            user-select: none;
+            -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: -2;
+        }
+
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: -1;
             pointer-events: none;
+        }
+
+        @supports (-webkit-touch-callout: none) {
+            body {
+                height: -webkit-fill-available;
+            }
+            body::before,
+            body::after {
+                height: -webkit-fill-available;
+            }
         }
 
         /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
-            top: 0; left: 0; width: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             height: 55px;
@@ -128,285 +178,760 @@
             transition: color 0.2s;
             white-space: nowrap;
         }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
-
-        /* ========== CONTENU ========== */
-        .gallery-container {
-            position: relative;
-            z-index: 2;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem 3rem;
+        .icon-wrapper:hover .icon-label {
+            color: #FFB300;
         }
 
+        /* ===== TITRE ===== */
         .gallery-title {
+            position: fixed;
+            top: 70px;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 30;
             text-align: center;
-            margin-bottom: 2rem;
+            pointer-events: none;
         }
 
         .gallery-title h1 {
             font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2rem, 5vw, 3rem);
+            font-size: clamp(1.5rem, 4vw, 2.5rem);
             color: #f5d06b;
             text-transform: uppercase;
             letter-spacing: 3px;
             text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
+            margin: 0;
+            line-height: 1.2;
         }
 
         .gallery-title p {
-            font-size: 1.2rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
             color: #f5d06b;
             font-weight: 600;
             letter-spacing: 2px;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.6);
-            margin-top: 0.5rem;
+            margin-top: 0.3rem;
         }
 
-        /* ========== GALERIE ========== */
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-        }
-
-        .gallery-item {
+        /* ===== CAROUSEL CONTAINER ===== */
+        .carousel-wrapper {
             position: relative;
+            width: 100%;
+            height: 80vh;
+            height: 80dvh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            perspective: 2000px;
+            z-index: 10;
+            margin-top: 60px;
+        }
+
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            cursor: grab;
+            transition: cursor 0.3s;
+        }
+
+        .carousel-container:active {
+            cursor: grabbing;
+        }
+
+        .carousel-container.dragging {
+            cursor: grabbing;
+        }
+
+        /* ===== CARTES EN PAYSAGE ===== */
+        .card {
+            position: absolute;
+            width: min(75vw, 650px);
+            height: min(42vw, 370px);
+            max-width: 650px;
+            max-height: 370px;
             border-radius: 20px;
             overflow: hidden;
-            cursor: pointer;
-            border: 4px solid #7a5c3e;
-            outline: 3px solid #5a3e2a;
-            outline-offset: 3px;
-            box-shadow: 0 0 0 6px #3e2a1a, 0 6px 16px rgba(0,0,0,0.5);
-            transition: all 0.3s ease;
-            aspect-ratio: 4/3;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
+            will-change: transform;
+            backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
+            background: #1a1a1a;
+            border: 3px solid rgba(255, 255, 255, 0.1);
         }
 
-        .gallery-item:hover {
-            transform: translateY(-6px);
-            box-shadow: 0 0 0 6px #4a3220, 0 10px 24px rgba(0,0,0,0.6);
-        }
-
-        .gallery-item img {
+        .card img {
             width: 100%;
             height: 100%;
             object-fit: cover;
             display: block;
-            transition: transform 0.3s ease;
+            pointer-events: none;
+            -webkit-user-drag: none;
         }
 
-        .gallery-item:hover img {
-            transform: scale(1.05);
-        }
-
-        /* ========== LIGHTBOX ========== */
-        .lightbox {
-            display: none;
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.9);
-            z-index: 2000;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer;
-        }
-        .lightbox.active {
-            display: flex;
-        }
-        .lightbox img {
-            max-width: 90%;
-            max-height: 90%;
-            border-radius: 16px;
-            border: 4px solid #d4af37;
-            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
-            object-fit: contain;
-        }
-        .lightbox-close {
+        .card::after {
+            content: '';
             position: absolute;
-            top: 20px; right: 30px;
-            font-size: 2.5rem;
-            color: white;
-            cursor: pointer;
-            z-index: 2001;
-            transition: color 0.2s;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(
+                135deg, 
+                rgba(255,255,255,0.12) 0%, 
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.15) 100%
+            );
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
         }
-        .lightbox-close:hover {
-            color: #FFB300;
+
+        .card.center-card::after {
+            opacity: 1;
         }
-        .lightbox-prev, .lightbox-next {
+
+        .card.center-card {
+            box-shadow: 
+                0 35px 100px rgba(255, 179, 0, 0.2), 
+                0 20px 60px rgba(0, 0, 0, 0.7),
+                0 0 0 3px rgba(255, 179, 0, 0.4);
+            border: 3px solid rgba(255, 179, 0, 0.5);
+            transform-origin: center center;
+        }
+
+        /* ===== FLÈCHES DE NAVIGATION ===== */
+        .nav-arrow {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            font-size: 3rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            font-size: 1.8rem;
             cursor: pointer;
-            z-index: 2001;
-            padding: 1rem;
-            transition: color 0.2s;
-            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            z-index: 20;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            -webkit-tap-highlight-color: transparent;
         }
-        .lightbox-prev { left: 20px; }
-        .lightbox-next { right: 20px; }
-        .lightbox-prev:hover, .lightbox-next:hover {
-            color: #FFB300;
+
+        .nav-arrow:hover {
+            background: rgba(255, 179, 0, 0.25);
+            border-color: var(--jaune-accent);
+            color: var(--jaune-accent);
+            box-shadow: 0 0 30px rgba(255, 179, 0, 0.5), 0 10px 30px rgba(0,0,0,0.3);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-arrow:active {
+            transform: translateY(-50%) scale(0.9);
+        }
+
+        .arrow-left {
+            left: 20px;
+        }
+
+        .arrow-right {
+            right: 20px;
+        }
+
+        /* ===== COUNTER ===== */
+        .carousel-info {
+            position: fixed;
+            bottom: 50px;
+            bottom: max(50px, env(safe-area-inset-bottom));
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 18px;
+            z-index: 20;
+        }
+
+        .counter {
+            color: white;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* ===== INDICATEURS ===== */
+        .dots-ring {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90vw;
+            padding: 0 20px;
+        }
+
+        .dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.25);
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            position: relative;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        .dot::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.4s;
+        }
+
+        .dot.active {
+            background: var(--jaune-accent);
+            border-color: var(--jaune-accent);
+            box-shadow: 0 0 20px rgba(255, 179, 0, 0.6);
+            transform: scale(1.3);
+        }
+
+        .dot.active::before {
+            border-color: rgba(255, 179, 0, 0.5);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        .dot:hover {
+            background: rgba(255, 179, 0, 0.6);
+            transform: scale(1.2);
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1024px) {
+            .card {
+                width: min(70vw, 500px);
+                height: min(40vw, 280px);
+                border-radius: 16px;
+            }
+
+            .gallery-title {
+                top: 65px;
+            }
         }
 
         @media (max-width: 768px) {
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-                gap: 1rem;
+            .navbar {
+                height: 48px;
             }
-            .lightbox-prev, .lightbox-next {
-                font-size: 2rem;
-                padding: 0.5rem;
+
+            .navbar-container {
+                padding: 0 0.8rem;
             }
-            .lightbox-prev { left: 5px; }
-            .lightbox-next { right: 5px; }
+
+            .nav-left-group {
+                gap: 0.4rem;
+            }
+
+            .logo-wrapper img {
+                height: 80px;
+                margin-top: 30px;
+            }
+
+            .back-arrow {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .nav-icon-img {
+                height: 26px;
+            }
+
+            .icon-wrapper .icon-label {
+                font-size: 0.5rem;
+            }
+
+            .nav-icons {
+                gap: 0.7rem;
+            }
+
+            .gallery-title {
+                top: 55px;
+            }
+
+            .gallery-title h1 {
+                font-size: 1.3rem;
+                letter-spacing: 2px;
+            }
+
+            .gallery-title p {
+                font-size: 0.75rem;
+                letter-spacing: 1px;
+            }
+
+            .carousel-wrapper {
+                height: 60vh;
+                height: 60dvh;
+                margin-top: 50px;
+            }
+
+            .card {
+                width: min(80vw, 400px);
+                height: min(48vw, 240px);
+                border-radius: 14px;
+            }
+
+            .nav-arrow {
+                width: 45px;
+                height: 45px;
+                font-size: 1.4rem;
+                background: rgba(255, 255, 255, 0.15);
+            }
+
+            .arrow-left {
+                left: 8px;
+            }
+
+            .arrow-right {
+                right: 8px;
+            }
+
+            .counter {
+                font-size: 0.9rem;
+                padding: 0.4rem 1.2rem;
+            }
+
+            .carousel-info {
+                bottom: 35px;
+                bottom: max(35px, env(safe-area-inset-bottom));
+                gap: 12px;
+            }
+
+            .dots-ring {
+                gap: 8px;
+            }
+
+            .dot {
+                width: 8px;
+                height: 8px;
+            }
+
+            .dot::before {
+                width: 14px;
+                height: 14px;
+                top: -3px;
+                left: -3px;
+            }
         }
 
-        @media (max-width: 600px) {
-            body { padding-top: 100px; }
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
-            .nav-icons { gap: 0.7rem; }
-            .gallery-grid {
-                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-                gap: 0.8rem;
+        @media (max-width: 480px) {
+            .gallery-title {
+                top: 50px;
             }
-            .gallery-item {
-                border-radius: 14px;
-                border-width: 3px;
-                outline-width: 2px;
-                outline-offset: 2px;
-                box-shadow: 0 0 0 4px #3e2a1a, 0 4px 10px rgba(0,0,0,0.5);
+
+            .gallery-title h1 {
+                font-size: 1.1rem;
+            }
+
+            .gallery-title p {
+                font-size: 0.7rem;
+            }
+
+            .carousel-wrapper {
+                height: 50vh;
+                height: 50dvh;
+                margin-top: 40px;
+            }
+
+            .card {
+                width: min(85vw, 300px);
+                height: min(52vw, 180px);
+                border-radius: 12px;
+            }
+
+            .nav-arrow {
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
+
+            .carousel-info {
+                bottom: 25px;
+                bottom: max(25px, env(safe-area-inset-bottom));
+                gap: 10px;
             }
         }
     </style>
 </head>
 <body>
 
-<nav class="navbar">
-    <div class="navbar-container">
-        <div class="nav-left-group">
-            <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.png" alt="Récré Magic">
-            </a>
-            <a href="expos.html" class="back-arrow" title="Retour">←</a>
-        </div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="nav-left-group">
+                <a href="index.html" class="logo-wrapper">
+                    <img src="images/logo.png" alt="Récré Magic">
+                </a>
+                <a href="expos.html" class="back-arrow" title="Retour">←</a>
+            </div>
 
-        <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper">
-                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
-                <span class="icon-label">Boutique</span>
-            </a>
-            <a href="Abonnement.html" class="icon-wrapper">
-                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
-                <span class="icon-label">Abonnement</span>
-            </a>
+            <div class="nav-icons">
+                <a href="boutique.html" class="icon-wrapper">
+                    <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                    <span class="icon-label">Boutique</span>
+                </a>
+                <a href="Abonnement.html" class="icon-wrapper">
+                    <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                    <span class="icon-label">Abonnement</span>
+                </a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="gallery-container">
+    <!-- TITRE -->
     <div class="gallery-title">
         <h1>Galerie photos</h1>
         <p>Découvrez notre exposition en images</p>
     </div>
 
-    <!-- GALERIE : 12 images PNG -->
-    <div class="gallery-grid">
-        <div class="gallery-item"><img src="images/expo-01.png" alt="Photo 1"></div>
-        <div class="gallery-item"><img src="images/expo-02.png" alt="Photo 2"></div>
-        <div class="gallery-item"><img src="images/expo-03.png" alt="Photo 3"></div>
-        <div class="gallery-item"><img src="images/expo-04.png" alt="Photo 4"></div>
-        <div class="gallery-item"><img src="images/expo-05.png" alt="Photo 5"></div>
-        <div class="gallery-item"><img src="images/expo-06.png" alt="Photo 6"></div>
-        <div class="gallery-item"><img src="images/expo-07.png" alt="Photo 7"></div>
-        <div class="gallery-item"><img src="images/expo-08.png" alt="Photo 8"></div>
-        <div class="gallery-item"><img src="images/expo-09.png" alt="Photo 9"></div>
-        <div class="gallery-item"><img src="images/expo-10.png" alt="Photo 10"></div>
-        <div class="gallery-item"><img src="images/expo-11.png" alt="Photo 11"></div>
-        <div class="gallery-item"><img src="images/expo-12.png" alt="Photo 12"></div>
+    <!-- CAROUSEL -->
+    <div class="carousel-wrapper">
+        <div class="carousel-container" id="carouselContainer"></div>
+
+        <button class="nav-arrow arrow-left" id="prevBtn" title="Précédent">‹</button>
+        <button class="nav-arrow arrow-right" id="nextBtn" title="Suivant">›</button>
     </div>
-</div>
 
-<!-- LIGHTBOX -->
-<div class="lightbox" id="lightbox">
-    <span class="lightbox-close">&times;</span>
-    <span class="lightbox-prev">&#10094;</span>
-    <span class="lightbox-next">&#10095;</span>
-    <img src="" alt="Lightbox" id="lightbox-img">
-</div>
+    <!-- Info en bas -->
+    <div class="carousel-info">
+        <div class="counter" id="photoCounter">1 / 12</div>
+        <div class="dots-ring" id="dotsContainer"></div>
+    </div>
 
-<script>
-    const lightbox = document.getElementById('lightbox');
-    const lightboxImg = document.getElementById('lightbox-img');
-    const galleryItems = document.querySelectorAll('.gallery-item img');
-    const closeBtn = document.querySelector('.lightbox-close');
-    const prevBtn = document.querySelector('.lightbox-prev');
-    const nextBtn = document.querySelector('.lightbox-next');
+    <script>
+        const photos = [
+            'images/expo-01.png',
+            'images/expo-02.png',
+            'images/expo-03.png',
+            'images/expo-04.png',
+            'images/expo-05.png',
+            'images/expo-06.png',
+            'images/expo-07.png',
+            'images/expo-08.png',
+            'images/expo-09.png',
+            'images/expo-10.png',
+            'images/expo-11.png',
+            'images/expo-12.png'
+        ];
 
-    let currentIndex = 0;
-    const images = Array.from(galleryItems).map(item => item.src);
+        let currentIndex = 0;
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let dragDistance = 0;
 
-    // Ouvrir lightbox
-    galleryItems.forEach((item, index) => {
-        item.parentElement.addEventListener('click', () => {
+        const carouselContainer = document.getElementById('carouselContainer');
+        const photoCounter = document.getElementById('photoCounter');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        function createCards() {
+            carouselContainer.innerHTML = '';
+            photos.forEach((src, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.setAttribute('data-index', index);
+                
+                const img = document.createElement('img');
+                img.src = src;
+                img.alt = `Exposition - Photo ${index + 1}`;
+                img.draggable = false;
+                
+                card.appendChild(img);
+                carouselContainer.appendChild(card);
+            });
+        }
+
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            photos.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        function positionCards(animate = true) {
+            const cards = document.querySelectorAll('.card');
+            const totalCards = cards.length;
+            
+            cards.forEach((card, index) => {
+                if (!animate) {
+                    card.style.transition = 'none';
+                } else {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                }
+
+                let offset = index - currentIndex;
+                
+                if (offset > totalCards / 2) offset -= totalCards;
+                if (offset < -totalCards / 2) offset += totalCards;
+
+                const absOffset = Math.abs(offset);
+                
+                // Paramètres optimisés pour le format paysage
+                const translateX = offset * 75;
+                const scale = 1 - absOffset * 0.1;
+                const translateZ = -absOffset * 200;
+                const rotateY = offset * 10;
+                const opacity = 1 - absOffset * 0.35;
+                const zIndex = 10 - absOffset;
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 4}px)` : 'none';
+
+                card.style.transform = `
+                    translateX(${translateX}%) 
+                    scale(${Math.max(scale, 0.6)}) 
+                    translateZ(${translateZ}px) 
+                    rotateY(${rotateY}deg)
+                `;
+                card.style.opacity = Math.max(opacity, 0.2);
+                card.style.zIndex = zIndex;
+                card.style.filter = blur;
+                card.style.pointerEvents = absOffset === 0 ? 'auto' : 'none';
+
+                if (absOffset === 0) {
+                    card.classList.add('center-card');
+                } else {
+                    card.classList.remove('center-card');
+                }
+            });
+
+            if (!animate) {
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                    });
+                }, 50);
+            }
+        }
+
+        function updateUI(index) {
             currentIndex = index;
-            showImage();
-            lightbox.classList.add('active');
-            document.body.style.overflow = 'hidden';
+            
+            photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+
+            positionCards();
+        }
+
+        function goToSlide(index) {
+            if (index === currentIndex) return;
+            if (index < 0 || index >= photos.length) return;
+            updateUI(index);
+        }
+
+        function nextSlide() {
+            const newIndex = (currentIndex + 1) % photos.length;
+            updateUI(newIndex);
+        }
+
+        function prevSlide() {
+            const newIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateUI(newIndex);
+        }
+
+        function getPositionX(event) {
+            return event.type.includes('mouse') 
+                ? event.pageX 
+                : event.touches[0].clientX;
+        }
+
+        function touchStart(event) {
+            if (event.target.closest('.nav-arrow') || event.target.closest('.dot')) return;
+            
+            isDragging = true;
+            startPos = getPositionX(event);
+            dragDistance = 0;
+            
+            carouselContainer.classList.add('dragging');
+            
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transition = 'none';
+            });
+        }
+
+        function touchMove(event) {
+            if (!isDragging) return;
+            
+            const currentPosition = getPositionX(event);
+            currentTranslate = prevTranslate + currentPosition - startPos;
+            dragDistance = Math.abs(currentPosition - startPos);
+            
+            const cards = document.querySelectorAll('.card');
+            const dragOffset = (currentPosition - startPos) / carouselContainer.offsetWidth * 100;
+            
+            cards.forEach((card, index) => {
+                let offset = index - currentIndex;
+                const totalCards = cards.length;
+                
+                if (offset > totalCards / 2) offset -= totalCards;
+                if (offset < -totalCards / 2) offset += totalCards;
+                
+                const translateX = offset * 75 + dragOffset;
+                const absOffset = Math.abs(offset + dragOffset / 75);
+                const scale = 1 - absOffset * 0.1;
+                const translateZ = -absOffset * 200;
+                const rotateY = (offset + dragOffset / 75) * 10;
+                const opacity = 1 - absOffset * 0.35;
+                const zIndex = 10 - Math.floor(absOffset);
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 4}px)` : 'none';
+
+                card.style.transform = `
+                    translateX(${translateX}%) 
+                    scale(${Math.max(scale, 0.6)}) 
+                    translateZ(${translateZ}px) 
+                    rotateY(${rotateY}deg)
+                `;
+                card.style.opacity = Math.max(opacity, 0.2);
+                card.style.zIndex = zIndex;
+                card.style.filter = blur;
+            });
+        }
+
+        function touchEnd() {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            carouselContainer.classList.remove('dragging');
+            
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+            });
+            
+            const threshold = carouselContainer.offsetWidth * 0.25;
+            
+            if (dragDistance > threshold) {
+                if (currentTranslate - prevTranslate < 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            } else {
+                positionCards();
+            }
+            
+            prevTranslate = 0;
+            currentTranslate = 0;
+            dragDistance = 0;
+        }
+
+        document.getElementById('nextBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextSlide();
         });
-    });
 
-    // Fermer lightbox
-    function closeLightbox() {
-        lightbox.classList.remove('active');
-        document.body.style.overflow = '';
-    }
+        document.getElementById('prevBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevSlide();
+        });
 
-    closeBtn.addEventListener('click', closeLightbox);
-    lightbox.addEventListener('click', (e) => {
-        if (e.target === lightbox) closeLightbox();
-    });
+        carouselContainer.addEventListener('mousedown', touchStart);
+        carouselContainer.addEventListener('mousemove', touchMove);
+        carouselContainer.addEventListener('mouseup', touchEnd);
+        carouselContainer.addEventListener('mouseleave', touchEnd);
+        
+        carouselContainer.addEventListener('touchstart', touchStart, { passive: false });
+        carouselContainer.addEventListener('touchmove', touchMove, { passive: false });
+        carouselContainer.addEventListener('touchend', touchEnd);
 
-    // Navigation
-    function showImage() {
-        lightboxImg.src = images[currentIndex];
-    }
+        carouselContainer.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+            }
+        }, { passive: false });
 
-    prevBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        currentIndex = (currentIndex - 1 + images.length) % images.length;
-        showImage();
-    });
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
 
-    nextBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        currentIndex = (currentIndex + 1) % images.length;
-        showImage();
-    });
-
-    // Navigation clavier
-    document.addEventListener('keydown', (e) => {
-        if (!lightbox.classList.contains('active')) return;
-        if (e.key === 'Escape') closeLightbox();
-        if (e.key === 'ArrowLeft') {
-            currentIndex = (currentIndex - 1 + images.length) % images.length;
-            showImage();
+        function handleImageError(imgElement, index) {
+            console.error(`Image introuvable : ${photos[index]}`);
+            imgElement.src = 'data:image/svg+xml,' + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="650" height="370" fill="%232a2a2a">
+                    <rect width="650" height="370"/>
+                    <text x="325" y="185" text-anchor="middle" fill="white" font-size="20" font-family="sans-serif">Image non trouvée</text>
+                    <text x="325" y="215" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">Photo ${index + 1}</text>
+                </svg>
+            `);
         }
-        if (e.key === 'ArrowRight') {
-            currentIndex = (currentIndex + 1) % images.length;
-            showImage();
+
+        function preloadImages() {
+            photos.forEach((src, index) => {
+                const img = new Image();
+                img.onerror = () => console.warn(`Image non trouvée : ${src}`);
+                img.src = src;
+            });
         }
-    });
-</script>
+
+        function init() {
+            createCards();
+            createDots();
+            
+            document.querySelectorAll('.card img').forEach((img, index) => {
+                img.addEventListener('error', () => handleImageError(img, index));
+            });
+            
+            positionCards(false);
+
+            photoCounter.textContent = `1 / ${photos.length}`;
+            
+            preloadImages();
+        }
+
+        init();
+    </script>
 
 </body>
 </html>
