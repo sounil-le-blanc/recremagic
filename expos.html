@@ -6,7 +6,6 @@
     <title>Nos Expositions - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -22,35 +21,33 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ========== BACKGROUND HARMONISÉ ========== */
         body {
             font-family: 'Quicksand', sans-serif;
+            background-color: #000;
             background-image: url('images/fond-image.jpg');
             background-size: cover;
-            background-attachment: fixed; /* L'image reste fixe pendant le scroll comme sur le code 1 */
             background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
             min-height: 100vh;
-            padding-top: 120px;
-            padding-bottom: 2rem;
             position: relative;
+            padding-top: 120px;
         }
 
-        /* Overlay sombre pour la lisibilité */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45); /* Même opacité que le code 1 */
+            background: rgba(0, 0, 0, 0.35);
             z-index: 0;
             pointer-events: none;
         }
 
-        /* Scrollbar stylisée */
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
-        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -89,6 +86,7 @@
         }
         .logo-wrapper:hover img {
             transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
         .back-arrow {
             display: flex;
@@ -110,6 +108,7 @@
             background: rgba(255,255,255,0.2);
             border-color: #FFB300;
             color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
         .nav-icons {
             display: flex;
@@ -143,16 +142,15 @@
             letter-spacing: 1px;
             color: rgba(255,255,255,0.7);
             transition: color 0.2s;
+            white-space: nowrap;
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* Conteneurs z-index pour passer au dessus de l'overlay */
         .page-header, .expos-list, .contact-cta {
             position: relative;
             z-index: 2;
         }
 
-        /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
             display: inline-block;
             position: relative;
@@ -248,7 +246,6 @@
             text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
         }
 
-        /* ========== LISTE DES EXPOS ========== */
         .expos-list {
             max-width: 1200px;
             margin: 4rem auto;
@@ -289,7 +286,8 @@
         }
 
         .expo-img img { width: 100%; height: 100%; object-fit: cover; }
-        .expo-content { padding: 3rem; position: relative; z-index: 2;}
+
+        .expo-content { padding: 3rem; }
 
         .expo-badge {
             display: inline-block;
@@ -330,18 +328,44 @@
             padding: 0.7rem 0;
             border-bottom: 1px solid rgba(0,0,0,0.05);
             color: #2C1810;
-            align-items: center;
         }
         .spec-item:last-child { border: none; }
-        .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; display: flex; align-items: center;}
+        .spec-label { font-weight: 700; margin-right: 0.5rem; min-width: 150px; color: #2C1810; }
 
-        .spec-icon {
-            width: 24px;
-            height: 24px;
-            margin-right: 8px;
+        .btn-primary {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-right: 1rem;
+            margin-bottom: 0.5rem;
+            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
         }
 
-        /* ========== BOUTONS ========== */
+        .btn-contact {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
+            color: white;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
+        }
+        .btn-contact:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.4);
+        }
+
         .button-group {
             display: flex;
             flex-wrap: wrap;
@@ -350,77 +374,58 @@
             margin-top: 1rem;
         }
 
-        .btn-primary {
-            display: inline-flex;
-            align-items: center;
-            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
-            color: white;
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            filter: brightness(1.1);
-            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        .spec-icon {
+            width: 40px;
+            height: 40px;
+            vertical-align: middle;
+            margin-right: 4px;
         }
 
         .btn-icon {
             width: 18px;
             height: 18px;
-            margin-right: 10px;
+            vertical-align: middle;
+            margin-right: 6px;
             filter: brightness(0) invert(1);
         }
 
         .contact-cta {
             background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(8px);
+            backdrop-filter: blur(4px);
             color: white;
             padding: 3rem;
-            border-radius: 40px;
+            border-radius: 20px;
             text-align: center;
             max-width: 800px;
             margin: 4rem auto;
-            border: 2px solid rgba(255,255,255,0.1);
         }
-        .contact-cta h2 { font-family: 'MedievalSharp', cursive; font-size: 2.5rem; margin-bottom: 1rem; color: var(--jaune-accent); }
+        .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2.5rem; margin-bottom: 1rem; }
         .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
-        .contact-cta a.contact-link { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.3rem; }
-        
-        .btn-contact {
-            display: inline-block;
-            background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(211, 47, 47, 0.3);
-            margin-top: 1rem;
-        }
-        .btn-contact:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(211, 47, 47, 0.5);
-        }
+        .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.3rem; }
+        .contact-cta a:hover { text-decoration: underline; }
 
-        /* ========== RESPONSIVE ========== */
         @media (max-width: 968px) {
             .expo-item { grid-template-columns: 1fr; }
-            .expo-img { height: 300px; }
         }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .page-header h1 { font-size: 1.8rem; }
-            .expo-title { font-size: 1.6rem; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .expos-list { padding: 0 1rem; }
             .expo-content { padding: 1.5rem; }
-            .spec-label { min-width: 120px; font-size: 0.9rem; }
+            .expo-title { font-size: 1.8rem; }
+            .contact-cta { margin: 2rem 1rem; padding: 2rem; }
+            .contact-cta h2 { font-size: 1.8rem; }
+            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
+            .page-header h1 { font-size: 1.8rem; }
+            .page-header p { font-size: 1rem; }
         }
     </style>
 </head>
@@ -458,6 +463,8 @@
 </div>
 
 <div class="expos-list">
+
+    <!-- CARTE 1 : MARIONNETTES -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-marionnettes.png" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -468,7 +475,9 @@
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> H 2m × L 1,90m × P 0,60m</div>
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 vitrines / 56 personnages</div>
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 25m² minimum</div>
-                <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Prises 220V</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Prises 220V (1 par vitrine)</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur uniquement</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-duree.png" alt="" class="spec-icon"> Location :</span> Week-end, semaine, mois</div>
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
@@ -477,6 +486,7 @@
         </div>
     </div>
 
+    <!-- CARTE 2 : GÉANTS -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -487,7 +497,9 @@
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> 2 à 3 mètres de hauteur</div>
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 personnages géants</div>
                 <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 40m² minimum</div>
-                <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur ou extérieur</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Autonome ou selon config</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur ou extérieur couvert</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-montage.png" alt="" class="spec-icon"> Montage :</span> 2h d'installation</div>
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
@@ -495,13 +507,22 @@
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="contact-cta" id="contact">
     <h2>Intéressé par nos expositions ?</h2>
     <p>Enrichissez vos événements avec nos installations uniques</p>
-    <p>📞 <a href="tel:+33671525089" class="contact-link">06 71 52 50 89</a> • 📧 <a href="mailto:recremagic@wanadoo.fr" class="contact-link">recremagic@wanadoo.fr</a></p>
-    <a href="Devis.html" class="btn-contact" target="_blank">📩 Demander un devis</a>
+    <p>
+        <img src="images/icone-telephone.png" alt="" class="spec-icon" style="width:24px;height:24px;">
+        <a href="tel:+33671525089">06 71 52 50 89</a>
+        &nbsp;•&nbsp;
+        <img src="images/icone-email.png" alt="" class="spec-icon" style="width:24px;height:24px;">
+        <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
+    </p>
+    <a href="Devis.html" class="btn-contact" style="display:inline-block;margin-top:1rem;" target="_blank">
+        <img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis
+    </a>
 </div>
 
 </body>
