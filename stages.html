@@ -3,21 +3,23 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Les Géants du Carnaval - Récré Magic</title>
+    <title>Abonnement - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --jaune-accent: #FFB300;
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
         }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -31,17 +33,15 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            overflow: hidden;
             position: relative;
+            overflow-x: hidden;
+            padding-top: 120px;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0, 0, 0, 0.45);
             z-index: 0;
             pointer-events: none;
@@ -50,9 +50,7 @@
         /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
+            top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
             z-index: 1000;
@@ -146,406 +144,116 @@
             transition: color 0.2s;
             white-space: nowrap;
         }
-        .icon-wrapper:hover .icon-label {
-            color: #FFB300;
-        }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* ===== COUNTER ===== */
-        .counter {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            letter-spacing: 1px;
-            z-index: 50;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* ===== ZONE PRINCIPALE ===== */
-        .gallery-container {
+        /* CONTENU PRINCIPAL */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
             width: 100%;
-            height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            z-index: 10;
         }
 
-        .main-image {
-            max-width: 85%;
-            max-height: 70vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s ease, opacity 0.4s ease;
-            cursor: default;
+        .message-box {
+            background: rgba(235, 215, 185, 0.96);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 3rem 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
         }
 
-        .main-image.sliding-left {
-            transform: translateX(-40px);
-            opacity: 0.3;
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        .main-image.sliding-right {
-            transform: translateX(40px);
-            opacity: 0.3;
+        .soon-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2C1810;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
-        /* ===== FLÈCHES DE NAVIGATION ===== */
-        .nav-arrow {
-            position: absolute;
-            top: 50%;
-            transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.25);
+        .soon-subtitle {
+            font-size: 1.3rem;
+            color: #2C1810;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: linear-gradient(135deg, #D32F2F, #EC407A);
             color: white;
-            width: 70px;
-            height: 70px;
-            border-radius: 50%;
-            font-size: 2rem;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            transition: all 0.3s ease;
-            z-index: 10;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
         }
 
-        .nav-arrow:hover {
-            background: rgba(255, 179, 0, 0.2);
-            border-color: var(--jaune-accent);
-            color: var(--jaune-accent);
-            box-shadow: 0 0 25px rgba(255, 179, 0, 0.4);
-            transform: translateY(-50%) scale(1.1);
-        }
-
-        .nav-arrow:active {
-            transform: translateY(-50%) scale(0.95);
-        }
-
-        .arrow-left {
-            left: 30px;
-        }
-
-        .arrow-right {
-            right: 30px;
-        }
-
-        /* ===== INDICATEURS DE POINTS ===== */
-        .dots-container {
-            display: flex;
-            gap: 10px;
-            z-index: 20;
-            padding-bottom: 2rem;
-            position: relative;
-            margin-top: -50px;
-            flex-wrap: wrap;
-            justify-content: center;
-            max-width: 90%;
-        }
-
-        .dot {
-            width: 12px;
-            height: 12px;
-            border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
-        }
-
-        .dot.active {
-            background: var(--jaune-accent);
-            border-color: var(--jaune-accent);
-            box-shadow: 0 0 15px rgba(255, 179, 0, 0.6);
-            transform: scale(1.3);
-        }
-
-        .dot:hover {
-            background: rgba(255, 179, 0, 0.5);
-            transform: scale(1.2);
-        }
-
-        /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 80px;
-            }
-
-            .navbar {
-                height: 48px;
-            }
-
-            .navbar-container {
-                padding: 0 0.8rem;
-            }
-
-            .nav-left-group {
-                gap: 0.4rem;
-            }
-
-            .logo-wrapper img {
-                height: 80px;
-                margin-top: 30px;
-            }
-
-            .back-arrow {
-                width: 32px;
-                height: 32px;
-                font-size: 1rem;
-            }
-
-            .nav-icon-img {
-                height: 26px;
-            }
-
-            .icon-wrapper .icon-label {
-                font-size: 0.5rem;
-            }
-
-            .nav-icons {
-                gap: 0.7rem;
-            }
-
-            .counter {
-                top: 65px;
-                font-size: 0.9rem;
-                padding: 0.4rem 1rem;
-            }
-
-            .nav-arrow {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
-            }
-
-            .arrow-left {
-                left: 10px;
-            }
-
-            .arrow-right {
-                right: 10px;
-            }
-
-            .main-image {
-                max-width: 90%;
-                max-height: 60vh;
-            }
-
-            .dots-container {
-                gap: 8px;
-                margin-top: -40px;
-            }
-
-            .dot {
-                width: 10px;
-                height: 10px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .dots-container {
-                gap: 6px;
-                padding: 0 10px;
-            }
-
-            .dot {
-                width: 8px;
-                height: 8px;
-            }
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .soon-title { font-size: 2.2rem; }
+            .soon-subtitle { font-size: 1rem; }
+            .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
         }
     </style>
 </head>
 <body>
 
-    <!-- NAVBAR -->
-    <nav class="navbar">
-        <div class="navbar-container">
-            <div class="nav-left-group">
-                <a href="index.html" class="logo-wrapper">
-                    <img src="images/logo.png" alt="Récré Magic">
-                </a>
-                <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
-            </div>
-
-            <div class="nav-icons">
-                <a href="boutique.html" class="icon-wrapper">
-                    <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
-                    <span class="icon-label">Boutique</span>
-                </a>
-                <a href="Abonnement.html" class="icon-wrapper">
-                    <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
-                    <span class="icon-label">Abonnement</span>
-                </a>
-            </div>
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-    </nav>
 
-    <!-- Compteur -->
-    <div class="counter" id="photoCounter">1 / 12</div>
-
-    <!-- Image principale -->
-    <div class="gallery-container">
-        <img src="images/geant1.jpg" alt="Géant du Carnaval" class="main-image" id="mainImage">
-
-        <!-- Flèche gauche -->
-        <button class="nav-arrow arrow-left" id="prevBtn" title="Photo précédente">‹</button>
-
-        <!-- Flèche droite -->
-        <button class="nav-arrow arrow-right" id="nextBtn" title="Photo suivante">›</button>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
     </div>
+</nav>
 
-    <!-- Indicateurs -->
-    <div class="dots-container" id="dotsContainer">
-        <!-- Généré dynamiquement par JavaScript -->
+<div class="main-content">
+    <div class="message-box">
+        <h1 class="soon-title">Bientôt disponible</h1>
+        <p class="soon-subtitle">Les stages arrivent très bientôt !</p>
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
     </div>
-
-    <script>
-        // Liste des 12 photos (à toi de mettre les bons noms de fichiers)
-        const photos = [
-            'images/geant1.jpg',
-            'images/geant2.jpg',
-            'images/geant3.jpg',
-            'images/geant4.jpg',
-            'images/geant5.jpg',
-            'images/geant6.jpg',
-            'images/geant7.jpg',
-            'images/geant8.jpg',
-            'images/geant9.jpg',
-            'images/geant10.jpg',
-            'images/geant11.jpg',
-            'images/geant12.jpg'
-        ];
-
-        let currentIndex = 0;
-        const mainImage = document.getElementById('mainImage');
-        const photoCounter = document.getElementById('photoCounter');
-        const dotsContainer = document.getElementById('dotsContainer');
-
-        // Générer les points dynamiquement
-        function createDots() {
-            dotsContainer.innerHTML = '';
-            photos.forEach((_, index) => {
-                const dot = document.createElement('span');
-                dot.classList.add('dot');
-                if (index === 0) dot.classList.add('active');
-                dot.setAttribute('data-index', index);
-                dot.addEventListener('click', () => {
-                    const newIndex = parseInt(dot.getAttribute('data-index'));
-                    const direction = newIndex > currentIndex ? 'right' : 'left';
-                    updateGallery(newIndex, direction);
-                });
-                dotsContainer.appendChild(dot);
-            });
-        }
-
-        createDots();
-
-        // Mettre à jour l'affichage
-        function updateGallery(index, direction = null) {
-            if (index < 0 || index >= photos.length) return;
-
-            // Animation de glissement
-            if (direction === 'left') {
-                mainImage.classList.add('sliding-right');
-            } else if (direction === 'right') {
-                mainImage.classList.add('sliding-left');
-            }
-
-            setTimeout(() => {
-                currentIndex = index;
-                mainImage.src = photos[currentIndex];
-                mainImage.alt = `Géant du Carnaval - Photo ${currentIndex + 1}`;
-                photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
-
-                // Mettre à jour les points
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentIndex);
-                });
-
-                // Retirer l'animation
-                mainImage.classList.remove('sliding-left', 'sliding-right');
-            }, 200);
-        }
-
-        // Photo suivante
-        document.getElementById('nextBtn').addEventListener('click', () => {
-            const newIndex = (currentIndex + 1) % photos.length;
-            updateGallery(newIndex, 'right');
-        });
-
-        // Photo précédente
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-            updateGallery(newIndex, 'left');
-        });
-
-        // Navigation au clavier (flèches gauche/droite)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                const newIndex = (currentIndex + 1) % photos.length;
-                updateGallery(newIndex, 'right');
-            } else if (e.key === 'ArrowLeft') {
-                const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-                updateGallery(newIndex, 'left');
-            }
-        });
-
-        // Gestion tactile (swipe)
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold) {
-                // Swipe gauche -> photo suivante
-                const newIndex = (currentIndex + 1) % photos.length;
-                updateGallery(newIndex, 'right');
-            }
-            if (touchEndX > touchStartX + swipeThreshold) {
-                // Swipe droite -> photo précédente
-                const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-                updateGallery(newIndex, 'left');
-            }
-        }
-
-        // Gestion des erreurs d'image
-        mainImage.addEventListener('error', () => {
-            mainImage.style.display = 'none';
-            photoCounter.textContent = 'Image non trouvée';
-            console.error(`Image introuvable : ${photos[currentIndex]}`);
-        });
-
-        // Préchargement des images pour plus de fluidité
-        function preloadImages() {
-            photos.forEach(src => {
-                const img = new Image();
-                img.src = src;
-            });
-        }
-
-        preloadImages();
-    </script>
+</div>
 
 </body>
 </html>
