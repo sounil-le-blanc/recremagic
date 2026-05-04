@@ -11,8 +11,6 @@
             --jaune-accent: #FFB300;
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
-            --card-width: 350px;
-            --card-height: 500px;
         }
 
         * {
@@ -25,13 +23,13 @@
         body {
             font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
-            min-height: 100dvh; /* Pour mobile moderne */
+            min-height: 100dvh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            position: fixed; /* Important : fixe le body */
+            position: fixed;
             top: 0;
             left: 0;
             width: 100%;
@@ -42,7 +40,6 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* Fond en pseudo-élément */
         body::before {
             content: '';
             position: fixed;
@@ -56,10 +53,8 @@
             background-position: center center;
             background-repeat: no-repeat;
             z-index: -2;
-            /* Pas de background-attachment: fixed sur mobile */
         }
 
-        /* Overlay sombre */
         body::after {
             content: '';
             position: fixed;
@@ -73,7 +68,6 @@
             pointer-events: none;
         }
 
-        /* Correction pour iOS */
         @supports (-webkit-touch-callout: none) {
             body {
                 height: -webkit-fill-available;
@@ -249,7 +243,6 @@
             -webkit-user-drag: none;
         }
 
-        /* Effet de reflet subtil */
         .card::after {
             content: '';
             position: absolute;
@@ -325,7 +318,7 @@
             right: 20px;
         }
 
-        /* ===== COUNTER & TITLE ===== */
+        /* ===== COUNTER ===== */
         .carousel-info {
             position: fixed;
             bottom: 50px;
@@ -410,34 +403,12 @@
             transform: scale(1.2);
         }
 
-        /* ===== TITRE DE LA PHOTO ===== */
-        .photo-title {
-            color: white;
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.8rem;
-            text-shadow: 0 0 20px rgba(0,0,0,0.8);
-            opacity: 0;
-            transform: translateY(10px);
-            transition: all 0.5s ease;
-            text-align: center;
-            letter-spacing: 1px;
-        }
-
-        .photo-title.visible {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .card {
                 width: min(50vw, 280px);
                 height: min(72vw, 400px);
                 border-radius: 20px;
-            }
-
-            .photo-title {
-                font-size: 1.5rem;
             }
         }
 
@@ -504,10 +475,6 @@
                 right: 8px;
             }
 
-            .photo-title {
-                font-size: 1.3rem;
-            }
-
             .counter {
                 font-size: 0.9rem;
                 padding: 0.4rem 1.2rem;
@@ -554,10 +521,6 @@
                 font-size: 1.2rem;
             }
 
-            .photo-title {
-                font-size: 1.1rem;
-            }
-
             .carousel-info {
                 bottom: 25px;
                 bottom: max(25px, env(safe-area-inset-bottom));
@@ -593,37 +556,32 @@
 
     <!-- CAROUSEL -->
     <div class="carousel-wrapper">
-        <div class="carousel-container" id="carouselContainer">
-            <!-- Les cartes seront générées dynamiquement -->
-        </div>
+        <div class="carousel-container" id="carouselContainer"></div>
 
-        <!-- Flèches -->
         <button class="nav-arrow arrow-left" id="prevBtn" title="Précédent">‹</button>
         <button class="nav-arrow arrow-right" id="nextBtn" title="Suivant">›</button>
     </div>
 
     <!-- Info en bas -->
     <div class="carousel-info">
-        <div class="photo-title" id="photoTitle">Le Roi du Carnaval</div>
         <div class="counter" id="photoCounter">1 / 12</div>
         <div class="dots-ring" id="dotsContainer"></div>
     </div>
 
     <script>
-        // ========== LISTE DES PHOTOS ==========
         const photos = [
-            { src: 'images/geant1.jpg', title: 'Le Roi du Carnaval' },
-            { src: 'images/geant2.jpg', title: 'La Reine des Fêtes' },
-            { src: 'images/geant3.jpg', title: 'Le Géant Masqué' },
-            { src: 'images/geant4.jpg', title: 'Le Gardien des Traditions' },
-            { src: 'images/geant5.jpg', title: 'La Déesse du Carnaval' },
-            { src: 'images/geant6.jpg', title: 'Le Colosse Joyeux' },
-            { src: 'images/geant7.jpg', title: 'Le Prince du Défilé' },
-            { src: 'images/geant8.jpg', title: 'L\'Esprit de la Fête' },
-            { src: 'images/geant9.jpg', title: 'Le Mage du Carnaval' },
-            { src: 'images/geant10.jpg', title: 'La Muse Enchantée' },
-            { src: 'images/geant11.jpg', title: 'Le Guerrier Doré' },
-            { src: 'images/geant12.jpg', title: 'L\'Étoile du Carnaval' }
+            'images/geant1.jpg',
+            'images/geant2.jpg',
+            'images/geant3.jpg',
+            'images/geant4.jpg',
+            'images/geant5.jpg',
+            'images/geant6.jpg',
+            'images/geant7.jpg',
+            'images/geant8.jpg',
+            'images/geant9.jpg',
+            'images/geant10.jpg',
+            'images/geant11.jpg',
+            'images/geant12.jpg'
         ];
 
         let currentIndex = 0;
@@ -635,20 +593,18 @@
 
         const carouselContainer = document.getElementById('carouselContainer');
         const photoCounter = document.getElementById('photoCounter');
-        const photoTitle = document.getElementById('photoTitle');
         const dotsContainer = document.getElementById('dotsContainer');
 
-        // ========== CRÉER LES CARTES ==========
         function createCards() {
             carouselContainer.innerHTML = '';
-            photos.forEach((photo, index) => {
+            photos.forEach((src, index) => {
                 const card = document.createElement('div');
                 card.classList.add('card');
                 card.setAttribute('data-index', index);
                 
                 const img = document.createElement('img');
-                img.src = photo.src;
-                img.alt = photo.title;
+                img.src = src;
+                img.alt = `Géant du Carnaval - Photo ${index + 1}`;
                 img.draggable = false;
                 
                 card.appendChild(img);
@@ -656,7 +612,6 @@
             });
         }
 
-        // ========== CRÉER LES POINTS ==========
         function createDots() {
             dotsContainer.innerHTML = '';
             photos.forEach((_, index) => {
@@ -672,7 +627,6 @@
             });
         }
 
-        // ========== POSITIONNER LES CARTES EN 3D (PORTRAIT) ==========
         function positionCards(animate = true) {
             const cards = document.querySelectorAll('.card');
             const totalCards = cards.length;
@@ -726,17 +680,10 @@
             }
         }
 
-        // ========== METTRE À JOUR L'AFFICHAGE ==========
         function updateUI(index) {
             currentIndex = index;
             
             photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
-            
-            photoTitle.textContent = photos[currentIndex].title;
-            photoTitle.classList.remove('visible');
-            setTimeout(() => {
-                photoTitle.classList.add('visible');
-            }, 200);
 
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, i) => {
@@ -746,26 +693,22 @@
             positionCards();
         }
 
-        // ========== ALLER À UNE SLIDE ==========
         function goToSlide(index) {
             if (index === currentIndex) return;
             if (index < 0 || index >= photos.length) return;
             updateUI(index);
         }
 
-        // ========== SLIDE SUIVANTE ==========
         function nextSlide() {
             const newIndex = (currentIndex + 1) % photos.length;
             updateUI(newIndex);
         }
 
-        // ========== SLIDE PRÉCÉDENTE ==========
         function prevSlide() {
             const newIndex = (currentIndex - 1 + photos.length) % photos.length;
             updateUI(newIndex);
         }
 
-        // ========== GESTION TACTILE & SOURIS ==========
         function getPositionX(event) {
             return event.type.includes('mouse') 
                 ? event.pageX 
@@ -851,7 +794,6 @@
             dragDistance = 0;
         }
 
-        // ========== ÉVÉNEMENTS ==========
         document.getElementById('nextBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             nextSlide();
@@ -885,28 +827,25 @@
             }
         });
 
-        // ========== GESTION DES ERREURS D'IMAGE ==========
         function handleImageError(imgElement, index) {
-            console.error(`Image introuvable : ${photos[index].src}`);
+            console.error(`Image introuvable : ${photos[index]}`);
             imgElement.src = 'data:image/svg+xml,' + encodeURIComponent(`
                 <svg xmlns="http://www.w3.org/2000/svg" width="320" height="460" fill="%232a2a2a">
                     <rect width="320" height="460"/>
                     <text x="160" y="230" text-anchor="middle" fill="white" font-size="18" font-family="sans-serif">Image non trouvée</text>
-                    <text x="160" y="260" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">${photos[index].title}</text>
+                    <text x="160" y="260" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">Photo ${index + 1}</text>
                 </svg>
             `);
         }
 
-        // ========== PRÉCHARGEMENT DES IMAGES ==========
         function preloadImages() {
-            photos.forEach((photo, index) => {
+            photos.forEach((src, index) => {
                 const img = new Image();
-                img.onerror = () => console.warn(`Image non trouvée : ${photo.src}`);
-                img.src = photo.src;
+                img.onerror = () => console.warn(`Image non trouvée : ${src}`);
+                img.src = src;
             });
         }
 
-        // ========== INITIALISATION ==========
         function init() {
             createCards();
             createDots();
@@ -916,10 +855,6 @@
             });
             
             positionCards(false);
-            
-            setTimeout(() => {
-                photoTitle.classList.add('visible');
-            }, 300);
 
             photoCounter.textContent = `1 / ${photos.length}`;
             
