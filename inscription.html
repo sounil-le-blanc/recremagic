@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* TES STYLES RESTENT IDENTIQUES - garde ton CSS existant ici */
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { font-family: 'Quicksand', sans-serif; background-image: url('images/fond-image.jpg'); background-size: cover; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; padding-top: 100px; position: relative; }
         body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.45); z-index: 0; pointer-events: none; }
@@ -93,54 +92,24 @@
 </div>
 
 <script>
-    // ========== CONFIGURATION SUPABASE ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-
-    // ⭐ UNE SEULE déclaration - c'est la BONNE version ⭐
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    console.log('✅ Supabase prêt');
-
     const form = document.getElementById('signup-form');
     const msg = document.getElementById('message');
-
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
-
         msg.textContent = 'Inscription en cours...';
         msg.className = '';
-
         try {
-            const { data, error } = await supabase.auth.signUp({
-                email,
-                password,
-                options: { emailRedirectTo: 'https://recremagic.vercel.app/connexion.html' }
-            });
-
-            if (error) {
-                msg.textContent = '❌ ' + error.message;
-                msg.className = 'error';
-            } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-                msg.textContent = '❌ Cet email est déjà utilisé.';
-                msg.className = 'error';
-            } else if (data.user && data.session === null) {
-                msg.textContent = '✅ Email de confirmation envoyé ! Vérifie tes spams.';
-                msg.className = 'success';
-                form.reset();
-            } else {
-                await supabase.from('clients').insert([{ id: data.user.id, email: email }]);
-                msg.textContent = '✅ Inscription réussie ! Bienvenue !';
-                msg.className = 'success';
-                form.reset();
-            }
-        } catch (err) {
-            msg.textContent = '❌ Erreur réseau. Vérifie ta connexion.';
-            msg.className = 'error';
-        }
+            const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://recremagic.vercel.app/connexion.html' } });
+            if (error) { msg.textContent = '❌ ' + error.message; msg.className = 'error'; }
+            else if (data.user && data.user.identities && data.user.identities.length === 0) { msg.textContent = '❌ Cet email est déjà utilisé.'; msg.className = 'error'; }
+            else if (data.user && data.session === null) { msg.textContent = '✅ Email de confirmation envoyé ! Vérifie tes spams.'; msg.className = 'success'; form.reset(); }
+            else { await supabase.from('clients').insert([{ id: data.user.id, email: email }]); msg.textContent = '✅ Inscription réussie !'; msg.className = 'success'; form.reset(); }
+        } catch (err) { msg.textContent = '❌ Erreur réseau.'; msg.className = 'error'; }
     });
 </script>
 </body>
