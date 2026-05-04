@@ -23,17 +23,17 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-    font-family: 'Quicksand', sans-serif;
-    background-color: #000;
-    background-image: url('images/fond-image.jpg');
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-attachment: scroll;
-    min-height: 100vh;
-    position: relative;
-    padding-top: 120px;
-}
+            font-family: 'Quicksand', sans-serif;
+            background-color: #000;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            min-height: 100vh;
+            position: relative;
+            padding-top: 120px;
+        }
 
         body::before {
             content: '';
@@ -378,18 +378,18 @@
         }
 
         .spec-icon {
-    width: 40px;
-    height: 40px;
-    vertical-align: middle;
-    margin-right: 4px;
-}
+            width: 40px;
+            height: 40px;
+            vertical-align: middle;
+            margin-right: 4px;
+        }
 
-.btn-icon {
-    width: 18px;
-    height: 18px;
-    vertical-align: middle;
-    margin-right: 6px;
-    filter: brightness(0) invert(1); /* Rend l'icône blanche pour les boutons */
+        .btn-icon {
+            width: 18px;
+            height: 18px;
+            vertical-align: middle;
+            margin-right: 6px;
+            filter: brightness(0) invert(1);
         }
 
         .contact-cta {
@@ -409,12 +409,15 @@
 
         @media (max-width: 968px) {
             .expo-item { grid-template-columns: 1fr; }
-            background-size: 100% auto;
-            background-attachment: scroll;
         }
 
         @media (max-width: 600px) {
-            body { padding-top: 100px; }
+            body {
+                padding-top: 100px;
+                background-size: cover;
+                background-position: center;
+                background-attachment: scroll;
+            }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
             .nav-left-group { gap: 0.4rem; }
@@ -475,40 +478,38 @@
             <h2 class="expo-title">LA FÉERIE DES MARIONNETTES</h2>
             <p class="expo-description">12 vitrines animées et sonorisées où 56 personnages prennent vie dès que le spectateur appuie sur un simple bouton !</p>
             <div class="expo-specs">
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> H 2m × L 1,90m × P 0,60m</div>
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 vitrines / 56 personnages</div>
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 25m² minimum</div>
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Prises 220V (1 par vitrine)</div>
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur uniquement</div>
-    <div class="spec-item"><span class="spec-label"><img src="images/icone-duree.png" alt="" class="spec-icon"> Location :</span> Week-end, semaine, mois</div>
-</div>
-<div class="button-group">
-    <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
-    <a href="expos-image.html" class="btn-primary" target="_blank"><img src="images/icone-photos.png" alt="" class="btn-icon"> VOIR LES PHOTOS</a>
-</div>
-</div>
-</div>
-
-<div class="expo-item">
-    <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
-    <div class="expo-content">
-        <span class="expo-badge">SPECTACULAIRE</span>
-        <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
-        <p class="expo-description">12 personnages géants qui s'animent et vous suivent du regard ! Parfait pour festivals et événements extérieurs.</p>
-        <div class="expo-specs">
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> 2 à 3 mètres de hauteur</div>
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 personnages géants</div>
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 40m² minimum</div>
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Autonome ou selon config</div>
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur ou extérieur couvert</div>
-            <div class="spec-item"><span class="spec-label"><img src="images/icone-montage.png" alt="" class="spec-icon"> Montage :</span> 2h d'installation</div>
-        </div>
-        <div class="button-group">
-            <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
-            <a href="images/expo-geants.jpg" class="btn-primary" target="_blank"><img src="images/icone-voir.png" alt="" class="btn-icon"> VOIR LES GÉANTS</a>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> H 2m × L 1,90m × P 0,60m</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 vitrines / 56 personnages</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 25m² minimum</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Prises 220V (1 par vitrine)</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur uniquement</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-duree.png" alt="" class="spec-icon"> Location :</span> Week-end, semaine, mois</div>
+            </div>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
+                <a href="expos-image.html" class="btn-primary" target="_blank"><img src="images/icone-photos.png" alt="" class="btn-icon"> VOIR LES PHOTOS</a>
+            </div>
         </div>
     </div>
-                                                                                     </div>
+
+    <div class="expo-item">
+        <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-content">
+            <span class="expo-badge">SPECTACULAIRE</span>
+            <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
+            <p class="expo-description">12 personnages géants qui s'animent et vous suivent du regard ! Parfait pour festivals et événements extérieurs.</p>
+            <div class="expo-specs">
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-dimensions.png" alt="" class="spec-icon"> Dimensions :</span> 2 à 3 mètres de hauteur</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-spectacles.png" alt="" class="spec-icon"> Composition :</span> 12 personnages géants</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-espace.png" alt="" class="spec-icon"> Espace requis :</span> 40m² minimum</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-electrique.png" alt="" class="spec-icon"> Besoins :</span> Autonome ou selon config</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-chapiteau.png" alt="" class="spec-icon"> Installation :</span> Intérieur ou extérieur couvert</div>
+                <div class="spec-item"><span class="spec-label"><img src="images/icone-montage.png" alt="" class="spec-icon"> Montage :</span> 2h d'installation</div>
+            </div>
+            <div class="button-group">
+                <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.png" alt="" class="btn-icon"> Demander un devis</a>
+                <a href="images/expo-geants.jpg" class="btn-primary" target="_blank"><img src="images/icone-voir.png" alt="" class="btn-icon"> VOIR LES GÉANTS</a>
+            </div>
         </div>
     </div>
 </div>
