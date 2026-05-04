@@ -21,24 +21,28 @@
             box-sizing: border-box;
         }
 
+        /* ===== FOND FIXE QUI NE BOUGE PAS ===== */
         body {
             font-family: 'Quicksand', sans-serif;
-            background-image: url('images/fond-image.jpg');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
             min-height: 100vh;
+            min-height: 100dvh; /* Pour mobile moderne */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
-            position: relative;
+            position: fixed; /* Important : fixe le body */
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
             user-select: none;
             -webkit-user-select: none;
+            -webkit-tap-highlight-color: transparent;
         }
 
+        /* Fond en pseudo-élément */
         body::before {
             content: '';
             position: fixed;
@@ -46,9 +50,38 @@
             left: 0;
             width: 100%;
             height: 100%;
+            height: 100dvh;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            z-index: -2;
+            /* Pas de background-attachment: fixed sur mobile */
+        }
+
+        /* Overlay sombre */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            height: 100dvh;
             background: rgba(0, 0, 0, 0.5);
-            z-index: 0;
+            z-index: -1;
             pointer-events: none;
+        }
+
+        /* Correction pour iOS */
+        @supports (-webkit-touch-callout: none) {
+            body {
+                height: -webkit-fill-available;
+            }
+            body::before,
+            body::after {
+                height: -webkit-fill-available;
+            }
         }
 
         /* ========== NAVBAR ========== */
@@ -59,6 +92,7 @@
             width: 100%;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             z-index: 1000;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             height: 55px;
@@ -159,6 +193,7 @@
             position: relative;
             width: 100%;
             height: 80vh;
+            height: 80dvh;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -200,6 +235,7 @@
             box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
             will-change: transform;
             backface-visibility: hidden;
+            -webkit-backface-visibility: hidden;
             background: #1a1a1a;
             border: 3px solid rgba(255, 255, 255, 0.1);
         }
@@ -210,6 +246,7 @@
             object-fit: cover;
             display: block;
             pointer-events: none;
+            -webkit-user-drag: none;
         }
 
         /* Effet de reflet subtil */
@@ -251,6 +288,7 @@
             transform: translateY(-50%);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(15px);
+            -webkit-backdrop-filter: blur(15px);
             border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
             width: 60px;
@@ -264,6 +302,7 @@
             transition: all 0.3s ease;
             z-index: 20;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            -webkit-tap-highlight-color: transparent;
         }
 
         .nav-arrow:hover {
@@ -290,6 +329,7 @@
         .carousel-info {
             position: fixed;
             bottom: 50px;
+            bottom: max(50px, env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
@@ -308,6 +348,7 @@
             border-radius: 50px;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
@@ -331,6 +372,7 @@
             transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             border: 2px solid rgba(255, 255, 255, 0.1);
             position: relative;
+            -webkit-tap-highlight-color: transparent;
         }
 
         .dot::before {
@@ -437,6 +479,7 @@
 
             .carousel-wrapper {
                 height: 65vh;
+                height: 65dvh;
                 margin-top: 40px;
             }
 
@@ -472,6 +515,7 @@
 
             .carousel-info {
                 bottom: 35px;
+                bottom: max(35px, env(safe-area-inset-bottom));
                 gap: 12px;
             }
 
@@ -495,6 +539,7 @@
         @media (max-width: 480px) {
             .carousel-wrapper {
                 height: 55vh;
+                height: 55dvh;
             }
 
             .card {
@@ -515,6 +560,7 @@
 
             .carousel-info {
                 bottom: 25px;
+                bottom: max(25px, env(safe-area-inset-bottom));
                 gap: 10px;
             }
         }
@@ -638,20 +684,17 @@
                     card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
                 }
 
-                // Calculer la position relative
                 let offset = index - currentIndex;
                 
-                // Gestion du défilement circulaire
                 if (offset > totalCards / 2) offset -= totalCards;
                 if (offset < -totalCards / 2) offset += totalCards;
 
                 const absOffset = Math.abs(offset);
                 
-                // Ajusté pour le format portrait
-                const translateX = offset * 70; // Décalage horizontal en %
-                const scale = 1 - absOffset * 0.12; // Réduction de taille plus subtile
-                const translateZ = -absOffset * 250; // Profondeur 3D réduite
-                const rotateY = offset * 12; // Rotation plus légère
+                const translateX = offset * 70;
+                const scale = 1 - absOffset * 0.12;
+                const translateZ = -absOffset * 250;
+                const rotateY = offset * 12;
                 const opacity = 1 - absOffset * 0.3;
                 const zIndex = 10 - absOffset;
                 const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 5}px)` : 'none';
@@ -667,7 +710,6 @@
                 card.style.filter = blur;
                 card.style.pointerEvents = absOffset === 0 ? 'auto' : 'none';
 
-                // Marquer la carte centrale
                 if (absOffset === 0) {
                     card.classList.add('center-card');
                 } else {
@@ -675,7 +717,6 @@
                 }
             });
 
-            // Forcer une transition après le positionnement sans animation
             if (!animate) {
                 setTimeout(() => {
                     cards.forEach(card => {
@@ -689,23 +730,19 @@
         function updateUI(index) {
             currentIndex = index;
             
-            // Compteur
             photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
             
-            // Titre avec animation
             photoTitle.textContent = photos[currentIndex].title;
             photoTitle.classList.remove('visible');
             setTimeout(() => {
                 photoTitle.classList.add('visible');
             }, 200);
 
-            // Points
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, i) => {
                 dot.classList.toggle('active', i === currentIndex);
             });
 
-            // Repositionner les cartes
             positionCards();
         }
 
@@ -744,7 +781,6 @@
             
             carouselContainer.classList.add('dragging');
             
-            // Désactiver les transitions pendant le drag
             document.querySelectorAll('.card').forEach(card => {
                 card.style.transition = 'none';
             });
@@ -757,7 +793,6 @@
             currentTranslate = prevTranslate + currentPosition - startPos;
             dragDistance = Math.abs(currentPosition - startPos);
             
-            // Appliquer un décalage proportionnel aux cartes
             const cards = document.querySelectorAll('.card');
             const dragOffset = (currentPosition - startPos) / carouselContainer.offsetWidth * 100;
             
@@ -795,12 +830,10 @@
             isDragging = false;
             carouselContainer.classList.remove('dragging');
             
-            // Restaurer les transitions
             document.querySelectorAll('.card').forEach(card => {
                 card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
             });
             
-            // Seuil de déclenchement (30% de la largeur d'une carte)
             const threshold = carouselContainer.offsetWidth * 0.25;
             
             if (dragDistance > threshold) {
@@ -810,7 +843,6 @@
                     prevSlide();
                 }
             } else {
-                // Retour à la position initiale
                 positionCards();
             }
             
@@ -820,7 +852,6 @@
         }
 
         // ========== ÉVÉNEMENTS ==========
-        // Boutons flèches
         document.getElementById('nextBtn').addEventListener('click', (e) => {
             e.stopPropagation();
             nextSlide();
@@ -831,7 +862,6 @@
             prevSlide();
         });
 
-        // Événements tactiles
         carouselContainer.addEventListener('mousedown', touchStart);
         carouselContainer.addEventListener('mousemove', touchMove);
         carouselContainer.addEventListener('mouseup', touchEnd);
@@ -841,14 +871,12 @@
         carouselContainer.addEventListener('touchmove', touchMove, { passive: false });
         carouselContainer.addEventListener('touchend', touchEnd);
 
-        // Empêcher le défilement de la page pendant le swipe
         carouselContainer.addEventListener('touchmove', (e) => {
             if (isDragging) {
                 e.preventDefault();
             }
         }, { passive: false });
 
-        // Navigation au clavier
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') {
                 nextSlide();
@@ -883,23 +911,18 @@
             createCards();
             createDots();
             
-            // Ajouter les gestionnaires d'erreur aux images
             document.querySelectorAll('.card img').forEach((img, index) => {
                 img.addEventListener('error', () => handleImageError(img, index));
             });
             
-            // Position initiale sans animation
             positionCards(false);
             
-            // Afficher le premier titre
             setTimeout(() => {
                 photoTitle.classList.add('visible');
             }, 300);
 
-            // Mettre à jour le compteur
             photoCounter.textContent = `1 / ${photos.length}`;
             
-            // Précharger les images
             preloadImages();
         }
 
