@@ -21,27 +21,30 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        /* ============ BACKGROUND HARMONISÉ (STYLE CODE 1) ============ */
         body {
             font-family: 'Quicksand', sans-serif;
-            background-color: #000;
             background-image: url('images/fond-image.jpg');
             background-size: cover;
             background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: scroll;
+            background-attachment: fixed; /* Rend le fond fixe comme sur l'accueil */
             min-height: 100vh;
             position: relative;
             padding-top: 120px;
+            padding-bottom: 2rem;
         }
 
+        /* Overlay sombre identique au code 1 */
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.35);
+            background: rgba(0, 0, 0, 0.45);
             z-index: 0;
             pointer-events: none;
         }
+
+        /* ============================================================= */
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
@@ -464,7 +467,6 @@
 
 <div class="expos-list">
 
-    <!-- CARTE 1 : MARIONNETTES -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-marionnettes.png" alt="Marionnettes" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
@@ -486,7 +488,6 @@
         </div>
     </div>
 
-    <!-- CARTE 2 : GÉANTS -->
     <div class="expo-item">
         <div class="expo-img"><img src="images/expo-geants.jpg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
