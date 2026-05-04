@@ -12,57 +12,144 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         body {
             font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
-            background: linear-gradient(270deg, #e8f4f0, #d4e8e8, #c5dde0, #b8d4d4);
-            background-size: 400% 400%;
-            animation: gradientMove 12s ease infinite;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
             position: relative;
             overflow-x: hidden;
+            padding-top: 120px;
         }
-        @keyframes gradientMove { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, #EC407A, #7CB69F); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, #7CB69F, #EC407A); }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
 
+        /* ========== NAVBAR ========== */
         .navbar {
-            background: rgba(44, 24, 16, 0.95);
-            backdrop-filter: blur(10px);
             position: fixed;
             top: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 1000;
-            box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
         }
         .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
+            justify-content: space-between;
+            flex-wrap: nowrap;
         }
-        .navbar-logo img { height: 50px; transition: transform 0.3s; }
-        .navbar-logo img:hover { transform: scale(1.05); }
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
         .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
-        .icon-wrapper span { font-size: 1.3rem; color: white; transition: transform 0.2s; }
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
+        }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0, 0, 0, 0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
 
         .devis-wrapper {
             display: flex;
@@ -71,6 +158,9 @@
             padding: 2rem;
             gap: 2rem;
             min-height: calc(100vh - 80px);
+            position: relative;
+            z-index: 10;
+            width: 100%;
         }
         .conditions {
             flex: 1;
@@ -146,8 +236,6 @@
             .devis-form { order: 1; max-width: 100%; }
         }
         @media (max-width: 768px) {
-            .navbar-container { padding: 0.6rem 1.5rem; }
-            .navbar-logo img { height: 45px; }
             .devis-form { padding: 1.2rem; }
             .devis-form h1 { font-size: 1.4rem; }
             .form-row { grid-template-columns: 1fr; gap: 0; }
@@ -157,20 +245,42 @@
             .spectacles-list, .expos-list { padding: 0.8rem; }
             .spectacle-checkbox, .expo-checkbox { padding: 0.4rem 0.6rem; }
         }
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+        }
     </style>
 </head>
 <body>
-    <nav class="navbar">
-        <div class="navbar-container">
-            <a href="index.html" class="navbar-logo">
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
             </a>
-            <div class="nav-icons">
-                <a href="boutique.html" class="icon-wrapper" title="Boutique"><span>💰</span><span class="icon-label">Boutique</span></a>
-                <a href="Abonnement.html" class="icon-wrapper" title="Abonnement"><span>🤝</span><span class="icon-label">Abonnement</span></a>
-            </div>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-    </nav>
+
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
+    </div>
+</nav>
 
     <div class="devis-wrapper">
         <div class="conditions">
@@ -402,4 +512,4 @@
         }
     </script>
 </body>
-</html>
+    </html>
