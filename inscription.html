@@ -8,7 +8,6 @@
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
-        /* [Ton code CSS reste exactement le même] */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -196,7 +195,10 @@
         }
         .switch-link a:hover { text-decoration: underline; }
 
-        /* ...et tout le reste de ton style existant... */
+        @media (max-width: 768px) {
+            .form-card { padding: 1.5rem; border-radius: 36px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -243,13 +245,18 @@
 </div>
 
 <script>
-    // ========== CONFIGURATION SUPABASE ==========
+    // =============================================
+    // 🔗 CONFIGURATION SUPABASE (CLÉS PUBLIQUES)
+    // =============================================
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_gwuNIL4CgVYGOa5lAc46_g_xWRBQxHB';
 
+    // Initialisation du client Supabase
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========== FORMULAIRE D'INSCRIPTION ==========
+    // =============================================
+    // 📝 FORMULAIRE D'INSCRIPTION
+    // =============================================
     const form = document.getElementById('signup-form');
     const msg = document.getElementById('message');
 
@@ -258,37 +265,43 @@
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        msg.textContent = 'Inscription en cours...';
+        msg.textContent = '⏳ Inscription en cours...';
         msg.className = '';
 
-        // Inscription via Supabase Auth AVEC REDIRECTION PERSONNALISÉE
+        // Appel à l'API Supabase pour créer un compte
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                emailRedirectTo: 'https://recremagic.vercel.app/bienvenue.html' // ← AJOUT ICI
+                // URL de redirection après confirmation de l'email
+                emailRedirectTo: 'https://recremagic.vercel.app/bienvenue.html'
             }
         });
 
         if (error) {
-            msg.textContent = 'Erreur : ' + error.message;
+            // Affichage de l'erreur (email déjà utilisé, mot de passe trop court, etc.)
+            msg.textContent = '❌ Erreur : ' + error.message;
             msg.className = 'error';
         } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-            msg.textContent = 'Cet email est déjà utilisé. Essayez de vous connecter.';
+            // L'utilisateur existe déjà
+            msg.textContent = '⚠️ Cet email est déjà utilisé. Essayez de vous connecter.';
             msg.className = 'error';
         } else {
-            // ➕ Ajouter le client dans la table (si la table 'clients' existe)
+            // ✅ Succès !
+            msg.textContent = '✅ Inscription réussie ! Vérifiez votre boîte mail (et les spams).';
+            msg.className = 'success';
+            form.reset();
+
+            // ➕ Ajoute automatiquement l'utilisateur dans la table "clients"
             const { error: dbError } = await supabase
                 .from('clients')
                 .insert([{ id: data.user.id, email: email }]);
 
             if (dbError) {
-                console.error("Erreur ajout client (table probablement pas encore créée) :", dbError);
+                console.error("⚠️ Erreur lors de l'ajout dans la table clients :", dbError.message);
+            } else {
+                console.log("✅ Utilisateur ajouté à la table clients.");
             }
-
-            msg.textContent = '✅ Inscription réussie ! Vérifiez votre boîte mail.';
-            msg.className = 'success';
-            form.reset();
         }
     });
 </script>
