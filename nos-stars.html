@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nos Stars - Récré Magic</title>
+    <title>Abonnement - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
@@ -28,13 +28,235 @@
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            position: relative;
             min-height: 100vh;
-            padding-top: 120px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow-x: hidden;
+            padding-top: 120px;
         }
 
         body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
+        }
+        .navbar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
+        /* CONTENU PRINCIPAL */
+        .main-content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 2rem;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .message-box {
+            background: rgba(235, 215, 185, 0.96);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
+            padding: 3rem 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(50px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .soon-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3.5rem;
+            font-weight: 800;
+            color: #2C1810;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .soon-subtitle {
+            font-size: 1.3rem;
+            color: #2C1810;
+            margin-bottom: 2rem;
+        }
+
+        .btn-back {
+            display: inline-block;
+            background: linear-gradient(135deg, #D32F2F, #EC407A);
+            color: white;
+            padding: 0.9rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+            margin-top: 1rem;
+        }
+        .btn-back:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .soon-title { font-size: 2.2rem; }
+            .soon-subtitle { font-size: 1rem; }
+            .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        </div>
+
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="main-content">
+    <div class="message-box">
+        <h1 class="soon-title">Bientôt disponible</h1>
+        <p class="soon-subtitle">Les stages arrivent très bientôt !</p>
+        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    </div>
+</div>
+
+</body>
+</html>        body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
