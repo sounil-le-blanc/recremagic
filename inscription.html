@@ -263,12 +263,12 @@
         msg.textContent = 'Inscription en cours...';
         msg.className = '';
 
-        // Inscription via Supabase Auth avec redirection vers le nouveau domaine
+        // Inscription via Supabase Auth avec redirection vers connexion.html
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                emailRedirectTo: 'https://recremagic.com/bienvenue.html'  // ← DOMAINE OFFICIEL
+                emailRedirectTo: 'https://recremagic.vercel.app/connexion.html'
             }
         });
 
