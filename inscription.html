@@ -249,13 +249,11 @@
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
 
-    // Initialisation du client Supabase
+    // UNE SEULE DÉCLARATION - PAS DE DOUBLON
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Vérification que Supabase est bien chargé
     console.log('✅ Supabase initialisé avec succès');
 
-    // ==================== FORMULAIRE D'INSCRIPTION ====================
     const form = document.getElementById('signup-form');
     const msg = document.getElementById('message');
 
@@ -265,7 +263,6 @@
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        // Réinitialisation du message
         msg.textContent = 'Inscription en cours...';
         msg.className = '';
 
@@ -278,26 +275,21 @@
                 }
             });
 
-            // Gestion des erreurs
             if (error) {
                 console.error('Erreur Supabase:', error);
                 msg.textContent = '❌ ' + error.message;
                 msg.className = 'error';
             } 
-            // Cas où l'email est déjà utilisé
             else if (data.user && data.user.identities && data.user.identities.length === 0) {
                 msg.textContent = '❌ Cet email est déjà utilisé.';
                 msg.className = 'error';
             } 
-            // Cas où l'utilisateur a besoin de confirmer son email
             else if (data.user && data.session === null) {
                 msg.textContent = '✅ Un email de confirmation vous a été envoyé ! Vérifiez vos spams.';
                 msg.className = 'success';
                 form.reset();
             }
-            // Inscription réussie sans confirmation (email déjà activé)
             else {
-                // Tentative d'insertion dans la table clients
                 try {
                     const { error: dbError } = await supabase
                         .from('clients')
@@ -315,7 +307,6 @@
                 form.reset();
             }
         } catch (err) {
-            // Capture d'erreurs imprévues
             console.error('Erreur inattendue:', err);
             msg.textContent = '❌ Une erreur inattendue est survenue. Vérifie ta connexion internet.';
             msg.className = 'error';
