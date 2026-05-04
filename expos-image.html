@@ -28,7 +28,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: center;
+            justify-content: flex-start;
             overflow: hidden;
             position: fixed;
             top: 0;
@@ -39,6 +39,7 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
+            padding-top: 180px;
         }
 
         body::before {
@@ -183,72 +184,64 @@
             color: #FFB300;
         }
 
-        /* ===== BOÎTE TITRE STYLE "BIENTÔT DISPONIBLE" ===== */
-        .title-box {
-            position: fixed;
-            top: 85px;
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 30;
+        /* ===== TITRE STYLE MÉDIÉVAL DORÉ ===== */
+        .gallery-title {
             text-align: center;
-            background: rgba(235, 215, 185, 0.96);
-            backdrop-filter: blur(8px);
-            -webkit-backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 1.2rem 2.5rem;
-            border: 5px solid #7a5c3e;
-            outline: 4px solid #5a3e2a;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 40px -10px rgba(0, 0, 0, 0.4);
+            margin-bottom: 1.5rem;
+            z-index: 30;
+            position: relative;
             animation: fadeInDown 0.8s ease-out;
-            pointer-events: none;
-            max-width: 90vw;
         }
 
         @keyframes fadeInDown {
             from {
                 opacity: 0;
-                transform: translateX(-50%) translateY(-30px);
+                transform: translateY(-30px);
             }
             to {
                 opacity: 1;
-                transform: translateX(-50%) translateY(0);
+                transform: translateY(0);
             }
         }
 
-        .title-box h1 {
+        .gallery-title h1 {
             font-family: 'MedievalSharp', cursive;
-            font-size: clamp(1.8rem, 4vw, 2.8rem);
-            font-weight: 800;
-            color: #2C1810;
-            margin-bottom: 0.3rem;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            font-size: clamp(2rem, 5vw, 3.5rem);
+            color: #f5d06b;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 
+                2px 2px 0 #3e6b3a, 
+                -1px -1px 0 #3e6b3a, 
+                0 0 8px #66bb6a, 
+                0 0 15px #a5d6a7,
+                0 0 25px rgba(245, 208, 107, 0.5);
+            margin: 0;
             line-height: 1.2;
-            white-space: nowrap;
         }
 
-        .title-box p {
-            font-size: clamp(0.9rem, 2vw, 1.2rem);
-            color: #2C1810;
+        .gallery-title p {
+            font-size: clamp(1rem, 2.5vw, 1.3rem);
+            color: #f5d06b;
             font-weight: 600;
-            margin: 0;
-            letter-spacing: 1px;
-            white-space: nowrap;
+            letter-spacing: 2px;
+            text-shadow: 
+                2px 2px 0px rgba(0,0,0,0.6),
+                0 0 10px rgba(245, 208, 107, 0.4);
+            margin-top: 0.5rem;
         }
 
         /* ===== CAROUSEL CONTAINER ===== */
         .carousel-wrapper {
             position: relative;
             width: 100%;
-            height: 80vh;
-            height: 80dvh;
+            flex: 1;
             display: flex;
             align-items: center;
             justify-content: center;
             perspective: 2000px;
             z-index: 10;
-            margin-top: 60px;
+            min-height: 0;
         }
 
         .carousel-container {
@@ -322,10 +315,10 @@
 
         .card.center-card {
             box-shadow: 
-                0 35px 100px rgba(255, 179, 0, 0.2), 
+                0 35px 100px rgba(245, 208, 107, 0.25), 
                 0 20px 60px rgba(0, 0, 0, 0.7),
-                0 0 0 3px rgba(255, 179, 0, 0.4);
-            border: 3px solid rgba(255, 179, 0, 0.5);
+                0 0 0 3px rgba(245, 208, 107, 0.5);
+            border: 3px solid rgba(245, 208, 107, 0.6);
             transform-origin: center center;
         }
 
@@ -460,20 +453,22 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
+            body {
+                padding-top: 160px;
+            }
+
             .card {
                 width: min(68vw, 500px);
                 height: min(38vw, 280px);
                 border-radius: 16px;
             }
-
-            .title-box {
-                top: 75px;
-                padding: 1rem 2rem;
-                border-radius: 50px;
-            }
         }
 
         @media (max-width: 768px) {
+            body {
+                padding-top: 140px;
+            }
+
             .navbar {
                 height: 48px;
             }
@@ -509,29 +504,18 @@
                 gap: 0.7rem;
             }
 
-            .title-box {
-                top: 60px;
-                padding: 0.8rem 1.5rem;
-                border-radius: 40px;
-                border: 4px solid #7a5c3e;
-                outline: 3px solid #5a3e2a;
-                outline-offset: 3px;
-                box-shadow: 0 0 0 6px #3e2a1a, 0 10px 30px -8px rgba(0, 0, 0, 0.4);
+            .gallery-title {
+                margin-bottom: 1rem;
             }
 
-            .title-box h1 {
-                font-size: 1.4rem;
-                letter-spacing: 1.5px;
+            .gallery-title h1 {
+                font-size: 1.6rem;
+                letter-spacing: 2px;
             }
 
-            .title-box p {
-                font-size: 0.8rem;
-            }
-
-            .carousel-wrapper {
-                height: 60vh;
-                height: 60dvh;
-                margin-top: 40px;
+            .gallery-title p {
+                font-size: 0.9rem;
+                letter-spacing: 1px;
             }
 
             .card {
@@ -584,29 +568,22 @@
         }
 
         @media (max-width: 480px) {
-            .title-box {
-                top: 55px;
-                padding: 0.6rem 1.2rem;
-                border-radius: 35px;
-                border: 3px solid #7a5c3e;
-                outline: 2px solid #5a3e2a;
-                outline-offset: 2px;
-                box-shadow: 0 0 0 5px #3e2a1a, 0 8px 20px -6px rgba(0, 0, 0, 0.4);
+            body {
+                padding-top: 120px;
             }
 
-            .title-box h1 {
-                font-size: 1.2rem;
+            .gallery-title {
+                margin-bottom: 0.8rem;
+            }
+
+            .gallery-title h1 {
+                font-size: 1.3rem;
+                letter-spacing: 1.5px;
+            }
+
+            .gallery-title p {
+                font-size: 0.75rem;
                 letter-spacing: 1px;
-            }
-
-            .title-box p {
-                font-size: 0.7rem;
-            }
-
-            .carousel-wrapper {
-                height: 50vh;
-                height: 50dvh;
-                margin-top: 30px;
             }
 
             .card {
@@ -654,8 +631,8 @@
         </div>
     </nav>
 
-    <!-- BOÎTE TITRE -->
-    <div class="title-box">
+    <!-- TITRE -->
+    <div class="gallery-title">
         <h1>Galerie photos</h1>
         <p>Découvrez notre exposition en images</p>
     </div>
