@@ -11,19 +11,15 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
+            background-color: #000;
             background-image: url('images/fond-image.jpg');
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            background-attachment: fixed;
+            background-attachment: scroll;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             position: relative;
-            overflow-x: hidden;
-            padding-top: 80px;
+            padding-top: 120px;
         }
 
         body::before {
@@ -35,73 +31,261 @@
             pointer-events: none;
         }
 
-        /* NAVBAR TRANSPARENTE */
+        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
         }
         .navbar-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0.8rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 1rem;
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
         }
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .back-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
         }
-        .back-wrapper span:first-child {
-            font-size: 1.1rem; font-weight: 600; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
-        }
-        .back-wrapper .back-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
-        }
-        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
-        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
-
         .logo-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
         }
         .logo-wrapper img {
-            height: 50px; transition: transform 0.2s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
         }
-        .logo-wrapper .logo-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
-        .logo-wrapper:hover img { transform: scale(1.05); }
-        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
-
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
         .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
-        .icon-wrapper span {
-            font-size: 1.3rem; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
         }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
+        /* ========== CONTENU ========== */
+        .gallery-container {
+            position: relative;
+            z-index: 2;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem 3rem;
+        }
+
+        .gallery-title {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .gallery-title h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2rem, 5vw, 3rem);
+            color: #f5d06b;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
+        }
+
+        .gallery-title p {
+            font-size: 1.2rem;
+            color: #f5d06b;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6);
+            margin-top: 0.5rem;
+        }
+
+        /* ========== GALERIE ========== */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .gallery-item {
+            position: relative;
+            border-radius: 20px;
+            overflow: hidden;
+            cursor: pointer;
+            border: 4px solid #7a5c3e;
+            outline: 3px solid #5a3e2a;
+            outline-offset: 3px;
+            box-shadow: 0 0 0 6px #3e2a1a, 0 6px 16px rgba(0,0,0,0.5);
+            transition: all 0.3s ease;
+            aspect-ratio: 4/3;
+        }
+
+        .gallery-item:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 0 0 6px #4a3220, 0 10px 24px rgba(0,0,0,0.6);
+        }
+
+        .gallery-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            transition: transform 0.3s ease;
+        }
+
+        .gallery-item:hover img {
+            transform: scale(1.05);
+        }
+
+        /* ========== LIGHTBOX ========== */
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        .lightbox.active {
+            display: flex;
+        }
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 16px;
+            border: 4px solid #d4af37;
+            box-shadow: 0 0 40px rgba(212, 175, 55, 0.4);
+            object-fit: contain;
+        }
+        .lightbox-close {
+            position: absolute;
+            top: 20px; right: 30px;
+            font-size: 2.5rem;
+            color: white;
+            cursor: pointer;
+            z-index: 2001;
+            transition: color 0.2s;
+        }
+        .lightbox-close:hover {
+            color: #FFB300;
+        }
+        .lightbox-prev, .lightbox-next {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 3rem;
+            color: white;
+            cursor: pointer;
+            z-index: 2001;
+            padding: 1rem;
+            transition: color 0.2s;
+            user-select: none;
+        }
+        .lightbox-prev { left: 20px; }
+        .lightbox-next { right: 20px; }
+        .lightbox-prev:hover, .lightbox-next:hover {
+            color: #FFB300;
+        }
 
         @media (max-width: 768px) {
-            .navbar-container { flex-direction: column; padding: 0.6rem 1.5rem; }
-            .logo-wrapper img { height: 45px; }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+            .lightbox-prev, .lightbox-next {
+                font-size: 2rem;
+                padding: 0.5rem;
+            }
+            .lightbox-prev { left: 5px; }
+            .lightbox-next { right: 5px; }
+        }
+
+        @media (max-width: 600px) {
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+                gap: 0.8rem;
+            }
+            .gallery-item {
+                border-radius: 14px;
+                border-width: 3px;
+                outline-width: 2px;
+                outline-offset: 2px;
+                box-shadow: 0 0 0 4px #3e2a1a, 0 4px 10px rgba(0,0,0,0.5);
+            }
         }
     </style>
 </head>
@@ -109,28 +293,122 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="nav-left">
-            <div class="back-wrapper" onclick="history.back()">
-                <span>← Retour</span>
-                <span class="back-label">Retour</span>
-            </div>
+        <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
-                <span class="logo-label">Accueil</span>
             </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
+
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper" title="Boutique">
-                <span>💰</span>
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
-                <span>🤝</span>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
         </div>
     </div>
 </nav>
+
+<div class="gallery-container">
+    <div class="gallery-title">
+        <h1>Galerie photos</h1>
+        <p>Découvrez notre exposition en images</p>
+    </div>
+
+    <!-- GALERIE : 14 images -->
+    <div class="gallery-grid">
+        <div class="gallery-item"><img src="images/expo/expo-01.jpg" alt="Photo 1"></div>
+        <div class="gallery-item"><img src="images/expo/expo-02.jpg" alt="Photo 2"></div>
+        <div class="gallery-item"><img src="images/expo/expo-03.jpg" alt="Photo 3"></div>
+        <div class="gallery-item"><img src="images/expo/expo-04.jpg" alt="Photo 4"></div>
+        <div class="gallery-item"><img src="images/expo/expo-05.jpg" alt="Photo 5"></div>
+        <div class="gallery-item"><img src="images/expo/expo-06.jpg" alt="Photo 6"></div>
+        <div class="gallery-item"><img src="images/expo/expo-07.jpg" alt="Photo 7"></div>
+        <div class="gallery-item"><img src="images/expo/expo-08.jpg" alt="Photo 8"></div>
+        <div class="gallery-item"><img src="images/expo/expo-09.jpg" alt="Photo 9"></div>
+        <div class="gallery-item"><img src="images/expo/expo-10.jpg" alt="Photo 10"></div>
+        <div class="gallery-item"><img src="images/expo/expo-11.jpg" alt="Photo 11"></div>
+        <div class="gallery-item"><img src="images/expo/expo-12.jpg" alt="Photo 12"></div>
+        <div class="gallery-item"><img src="images/expo/expo-13.jpg" alt="Photo 13"></div>
+        <div class="gallery-item"><img src="images/expo/expo-14.jpg" alt="Photo 14"></div>
+    </div>
+</div>
+
+<!-- LIGHTBOX -->
+<div class="lightbox" id="lightbox">
+    <span class="lightbox-close">&times;</span>
+    <span class="lightbox-prev">&#10094;</span>
+    <span class="lightbox-next">&#10095;</span>
+    <img src="" alt="Lightbox" id="lightbox-img">
+</div>
+
+<script>
+    const lightbox = document.getElementById('lightbox');
+    const lightboxImg = document.getElementById('lightbox-img');
+    const galleryItems = document.querySelectorAll('.gallery-item img');
+    const closeBtn = document.querySelector('.lightbox-close');
+    const prevBtn = document.querySelector('.lightbox-prev');
+    const nextBtn = document.querySelector('.lightbox-next');
+
+    let currentIndex = 0;
+    const images = Array.from(galleryItems).map(item => item.src);
+
+    // Ouvrir lightbox
+    galleryItems.forEach((item, index) => {
+        item.parentElement.addEventListener('click', () => {
+            currentIndex = index;
+            showImage();
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        });
+    });
+
+    // Fermer lightbox
+    function closeLightbox() {
+        lightbox.classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    closeBtn.addEventListener('click', closeLightbox);
+    lightbox.addEventListener('click', (e) => {
+        if (e.target === lightbox) closeLightbox();
+    });
+
+    // Navigation
+    function showImage() {
+        lightboxImg.src = images[currentIndex];
+    }
+
+    prevBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex - 1 + images.length) % images.length;
+        showImage();
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        currentIndex = (currentIndex + 1) % images.length;
+        showImage();
+    });
+
+    // Navigation clavier
+    document.addEventListener('keydown', (e) => {
+        if (!lightbox.classList.contains('active')) return;
+        if (e.key === 'Escape') closeLightbox();
+        if (e.key === 'ArrowLeft') {
+            currentIndex = (currentIndex - 1 + images.length) % images.length;
+            showImage();
+        }
+        if (e.key === 'ArrowRight') {
+            currentIndex = (currentIndex + 1) % images.length;
+            showImage();
+        }
+    });
+</script>
 
 </body>
 </html>
