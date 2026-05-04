@@ -11,6 +11,8 @@
             --jaune-accent: #FFB300;
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
+            --card-width: 500px;
+            --card-height: 350px;
         }
 
         * {
@@ -33,6 +35,8 @@
             justify-content: center;
             overflow: hidden;
             position: relative;
+            user-select: none;
+            -webkit-user-select: none;
         }
 
         body::before {
@@ -42,7 +46,7 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 0;
             pointer-events: none;
         }
@@ -150,53 +154,80 @@
             color: #FFB300;
         }
 
-        /* ===== COUNTER ===== */
-        .counter {
-            position: fixed;
-            top: 80px;
-            left: 50%;
-            transform: translateX(-50%);
-            color: white;
-            font-size: 1.1rem;
-            font-weight: 600;
-            background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1.5rem;
-            border-radius: 50px;
-            letter-spacing: 1px;
-            z-index: 50;
-            backdrop-filter: blur(5px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        /* ===== ZONE PRINCIPALE ===== */
-        .gallery-container {
+        /* ===== CAROUSEL CONTAINER ===== */
+        .carousel-wrapper {
+            position: relative;
             width: 100%;
-            height: 100vh;
+            height: 70vh;
             display: flex;
             align-items: center;
             justify-content: center;
-            position: relative;
+            perspective: 2000px;
             z-index: 10;
+            margin-top: 40px;
         }
 
-        .main-image {
-            max-width: 85%;
-            max-height: 70vh;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 0 60px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
-            transition: transform 0.5s ease, opacity 0.4s ease;
-            cursor: default;
+        .carousel-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transform-style: preserve-3d;
+            cursor: grab;
+            transition: cursor 0.3s;
         }
 
-        .main-image.sliding-left {
-            transform: translateX(-40px);
-            opacity: 0.3;
+        .carousel-container:active {
+            cursor: grabbing;
         }
 
-        .main-image.sliding-right {
-            transform: translateX(40px);
-            opacity: 0.3;
+        .carousel-container.dragging {
+            cursor: grabbing;
+        }
+
+        .card {
+            position: absolute;
+            width: min(80vw, 600px);
+            height: min(50vw, 400px);
+            max-width: 90%;
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            will-change: transform;
+            backface-visibility: hidden;
+        }
+
+        .card img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            display: block;
+            pointer-events: none;
+        }
+
+        .card::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30%;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.3s;
+            pointer-events: none;
+        }
+
+        .card.center-card::after {
+            opacity: 0;
+        }
+
+        .card.center-card {
+            box-shadow: 0 30px 80px rgba(255, 179, 0, 0.3), 0 20px 60px rgba(0, 0, 0, 0.6);
+            border: 3px solid rgba(255, 179, 0, 0.4);
         }
 
         /* ===== FLÈCHES DE NAVIGATION ===== */
@@ -204,84 +235,165 @@
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
-            background: rgba(255, 255, 255, 0.08);
-            backdrop-filter: blur(10px);
-            border: 2px solid rgba(255, 255, 255, 0.25);
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(15px);
+            border: 2px solid rgba(255, 255, 255, 0.3);
             color: white;
-            width: 70px;
-            height: 70px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
-            font-size: 2rem;
+            font-size: 1.8rem;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
             transition: all 0.3s ease;
-            z-index: 10;
+            z-index: 20;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
         .nav-arrow:hover {
-            background: rgba(255, 179, 0, 0.2);
+            background: rgba(255, 179, 0, 0.25);
             border-color: var(--jaune-accent);
             color: var(--jaune-accent);
-            box-shadow: 0 0 25px rgba(255, 179, 0, 0.4);
+            box-shadow: 0 0 30px rgba(255, 179, 0, 0.5), 0 10px 30px rgba(0,0,0,0.3);
             transform: translateY(-50%) scale(1.1);
         }
 
         .nav-arrow:active {
-            transform: translateY(-50%) scale(0.95);
+            transform: translateY(-50%) scale(0.9);
         }
 
         .arrow-left {
-            left: 30px;
+            left: 20px;
         }
 
         .arrow-right {
-            right: 30px;
+            right: 20px;
         }
 
-        /* ===== INDICATEURS DE POINTS ===== */
-        .dots-container {
+        /* ===== COUNTER & TITLE ===== */
+        .carousel-info {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            z-index: 20;
+        }
+
+        .counter {
+            color: white;
+            font-size: 1.2rem;
+            font-weight: 600;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 0.6rem 1.8rem;
+            border-radius: 50px;
+            letter-spacing: 2px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        /* ===== INDICATEURS CIRCULAIRES ===== */
+        .dots-ring {
             display: flex;
             gap: 10px;
-            z-index: 20;
-            padding-bottom: 2rem;
-            position: relative;
-            margin-top: -50px;
             flex-wrap: wrap;
             justify-content: center;
-            max-width: 90%;
+            max-width: 90vw;
+            padding: 0 20px;
         }
 
         .dot {
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            background: rgba(255, 255, 255, 0.3);
+            background: rgba(255, 255, 255, 0.25);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
             border: 2px solid rgba(255, 255, 255, 0.1);
-            flex-shrink: 0;
+            position: relative;
+        }
+
+        .dot::before {
+            content: '';
+            position: absolute;
+            top: -4px;
+            left: -4px;
+            width: 18px;
+            height: 18px;
+            border-radius: 50%;
+            border: 2px solid transparent;
+            transition: all 0.4s;
         }
 
         .dot.active {
             background: var(--jaune-accent);
             border-color: var(--jaune-accent);
-            box-shadow: 0 0 15px rgba(255, 179, 0, 0.6);
+            box-shadow: 0 0 20px rgba(255, 179, 0, 0.6);
             transform: scale(1.3);
         }
 
+        .dot.active::before {
+            border-color: rgba(255, 179, 0, 0.5);
+            animation: pulse-ring 2s infinite;
+        }
+
+        @keyframes pulse-ring {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
         .dot:hover {
-            background: rgba(255, 179, 0, 0.5);
+            background: rgba(255, 179, 0, 0.6);
             transform: scale(1.2);
         }
 
+        /* ===== TITRE DE LA PHOTO (optionnel) ===== */
+        .photo-title {
+            color: white;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.5rem;
+            text-shadow: 0 0 20px rgba(0,0,0,0.8);
+            opacity: 0;
+            transform: translateY(10px);
+            transition: all 0.5s ease;
+            text-align: center;
+        }
+
+        .photo-title.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 768px) {
-            body {
-                padding-top: 80px;
+        @media (max-width: 1024px) {
+            .card {
+                width: 75vw;
+                height: 42vw;
             }
 
+            .nav-arrow {
+                width: 50px;
+                height: 50px;
+                font-size: 1.5rem;
+            }
+
+            .arrow-left {
+                left: 10px;
+            }
+
+            .arrow-right {
+                right: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
             .navbar {
                 height: 48px;
             }
@@ -317,51 +429,72 @@
                 gap: 0.7rem;
             }
 
-            .counter {
-                top: 65px;
-                font-size: 0.9rem;
-                padding: 0.4rem 1rem;
+            .carousel-wrapper {
+                height: 55vh;
+            }
+
+            .card {
+                width: 85vw;
+                height: 55vw;
+                border-radius: 15px;
             }
 
             .nav-arrow {
-                width: 50px;
-                height: 50px;
-                font-size: 1.5rem;
+                width: 40px;
+                height: 40px;
+                font-size: 1.2rem;
+                background: rgba(255, 255, 255, 0.15);
             }
 
             .arrow-left {
-                left: 10px;
+                left: 5px;
             }
 
             .arrow-right {
-                right: 10px;
+                right: 5px;
             }
 
-            .main-image {
-                max-width: 90%;
-                max-height: 60vh;
+            .counter {
+                font-size: 1rem;
+                padding: 0.5rem 1.2rem;
             }
 
-            .dots-container {
+            .carousel-info {
+                bottom: 40px;
+                gap: 15px;
+            }
+
+            .dots-ring {
                 gap: 8px;
-                margin-top: -40px;
-            }
-
-            .dot {
-                width: 10px;
-                height: 10px;
-            }
-        }
-
-        @media (max-width: 400px) {
-            .dots-container {
-                gap: 6px;
-                padding: 0 10px;
             }
 
             .dot {
                 width: 8px;
                 height: 8px;
+            }
+
+            .dot::before {
+                width: 14px;
+                height: 14px;
+                top: -3px;
+                left: -3px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .card {
+                width: 90vw;
+                height: 60vw;
+            }
+
+            .carousel-wrapper {
+                height: 45vh;
+            }
+
+            .nav-arrow {
+                width: 36px;
+                height: 36px;
+                font-size: 1rem;
             }
         }
     </style>
@@ -391,48 +524,73 @@
         </div>
     </nav>
 
-    <!-- Compteur -->
-    <div class="counter" id="photoCounter">1 / 12</div>
+    <!-- CAROUSEL -->
+    <div class="carousel-wrapper">
+        <div class="carousel-container" id="carouselContainer">
+            <!-- Les cartes seront générées dynamiquement -->
+        </div>
 
-    <!-- Image principale -->
-    <div class="gallery-container">
-        <img src="images/geant1.jpg" alt="Géant du Carnaval" class="main-image" id="mainImage">
-
-        <!-- Flèche gauche -->
-        <button class="nav-arrow arrow-left" id="prevBtn" title="Photo précédente">‹</button>
-
-        <!-- Flèche droite -->
-        <button class="nav-arrow arrow-right" id="nextBtn" title="Photo suivante">›</button>
+        <!-- Flèches -->
+        <button class="nav-arrow arrow-left" id="prevBtn" title="Précédent">‹</button>
+        <button class="nav-arrow arrow-right" id="nextBtn" title="Suivant">›</button>
     </div>
 
-    <!-- Indicateurs -->
-    <div class="dots-container" id="dotsContainer">
-        <!-- Généré dynamiquement par JavaScript -->
+    <!-- Info en bas -->
+    <div class="carousel-info">
+        <div class="photo-title" id="photoTitle">Géant du Carnaval</div>
+        <div class="counter" id="photoCounter">1 / 12</div>
+        <div class="dots-ring" id="dotsContainer"></div>
     </div>
 
     <script>
-        // Liste des 12 photos (à toi de mettre les bons noms de fichiers)
+        // ========== LISTE DES PHOTOS ==========
         const photos = [
-            'images/geant1.jpg',
-            'images/geant2.jpg',
-            'images/geant3.jpg',
-            'images/geant4.jpg',
-            'images/geant5.jpg',
-            'images/geant6.jpg',
-            'images/geant7.jpg',
-            'images/geant8.jpg',
-            'images/geant9.jpg',
-            'images/geant10.jpg',
-            'images/geant11.jpg',
-            'images/geant12.jpg'
+            { src: 'images/geant1.jpg', title: 'Le Roi du Carnaval' },
+            { src: 'images/geant2.jpg', title: 'La Reine des Fêtes' },
+            { src: 'images/geant3.jpg', title: 'Le Géant Masqué' },
+            { src: 'images/geant4.jpg', title: 'Le Gardien des Traditions' },
+            { src: 'images/geant5.jpg', title: 'La Déesse du Carnaval' },
+            { src: 'images/geant6.jpg', title: 'Le Colosse Joyeux' },
+            { src: 'images/geant7.jpg', title: 'Le Prince du Défilé' },
+            { src: 'images/geant8.jpg', title: 'L\'Esprit de la Fête' },
+            { src: 'images/geant9.jpg', title: 'Le Mage du Carnaval' },
+            { src: 'images/geant10.jpg', title: 'La Muse Enchantée' },
+            { src: 'images/geant11.jpg', title: 'Le Guerrier Doré' },
+            { src: 'images/geant12.jpg', title: 'L\'Étoile du Carnaval' }
         ];
 
         let currentIndex = 0;
-        const mainImage = document.getElementById('mainImage');
+        let isDragging = false;
+        let startPos = 0;
+        let currentTranslate = 0;
+        let prevTranslate = 0;
+        let animationID = 0;
+        let dragDistance = 0;
+
+        const carouselContainer = document.getElementById('carouselContainer');
         const photoCounter = document.getElementById('photoCounter');
+        const photoTitle = document.getElementById('photoTitle');
         const dotsContainer = document.getElementById('dotsContainer');
 
-        // Générer les points dynamiquement
+        // ========== CRÉER LES CARTES ==========
+        function createCards() {
+            carouselContainer.innerHTML = '';
+            photos.forEach((photo, index) => {
+                const card = document.createElement('div');
+                card.classList.add('card');
+                card.setAttribute('data-index', index);
+                
+                const img = document.createElement('img');
+                img.src = photo.src;
+                img.alt = photo.title;
+                img.draggable = false;
+                
+                card.appendChild(img);
+                carouselContainer.appendChild(card);
+            });
+        }
+
+        // ========== CRÉER LES POINTS ==========
         function createDots() {
             dotsContainer.innerHTML = '';
             photos.forEach((_, index) => {
@@ -440,111 +598,286 @@
                 dot.classList.add('dot');
                 if (index === 0) dot.classList.add('active');
                 dot.setAttribute('data-index', index);
-                dot.addEventListener('click', () => {
-                    const newIndex = parseInt(dot.getAttribute('data-index'));
-                    const direction = newIndex > currentIndex ? 'right' : 'left';
-                    updateGallery(newIndex, direction);
+                dot.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    goToSlide(index);
                 });
                 dotsContainer.appendChild(dot);
             });
         }
 
-        createDots();
+        // ========== POSITIONNER LES CARTES EN 3D ==========
+        function positionCards(animate = true) {
+            const cards = document.querySelectorAll('.card');
+            const totalCards = cards.length;
+            
+            cards.forEach((card, index) => {
+                if (!animate) {
+                    card.style.transition = 'none';
+                } else {
+                    card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                }
 
-        // Mettre à jour l'affichage
-        function updateGallery(index, direction = null) {
-            if (index < 0 || index >= photos.length) return;
+                // Calculer la position relative
+                let offset = index - currentIndex;
+                
+                // Gestion du défilement circulaire
+                if (offset > totalCards / 2) offset -= totalCards;
+                if (offset < -totalCards / 2) offset += totalCards;
 
-            // Animation de glissement
-            if (direction === 'left') {
-                mainImage.classList.add('sliding-right');
-            } else if (direction === 'right') {
-                mainImage.classList.add('sliding-left');
+                const absOffset = Math.abs(offset);
+                
+                // Style MacOS : les cartes décalées sont plus petites, translatées et moins opaques
+                const translateX = offset * 65; // Décalage horizontal en %
+                const scale = 1 - absOffset * 0.15; // Réduction de taille
+                const translateZ = -absOffset * 300; // Profondeur 3D
+                const rotateY = offset * 15; // Rotation 3D
+                const opacity = 1 - absOffset * 0.35;
+                const zIndex = 10 - absOffset;
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 3}px)` : 'none';
+
+                card.style.transform = `
+                    translateX(${translateX}%) 
+                    scale(${Math.max(scale, 0.5)}) 
+                    translateZ(${translateZ}px) 
+                    rotateY(${rotateY}deg)
+                `;
+                card.style.opacity = Math.max(opacity, 0.3);
+                card.style.zIndex = zIndex;
+                card.style.filter = blur;
+                card.style.pointerEvents = absOffset === 0 ? 'auto' : 'none';
+
+                // Marquer la carte centrale
+                if (absOffset === 0) {
+                    card.classList.add('center-card');
+                } else {
+                    card.classList.remove('center-card');
+                }
+            });
+
+            // Forcer une transition après le positionnement sans animation
+            if (!animate) {
+                setTimeout(() => {
+                    cards.forEach(card => {
+                        card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+                    });
+                }, 50);
             }
+        }
 
+        // ========== METTRE À JOUR L'AFFICHAGE ==========
+        function updateUI(index) {
+            currentIndex = index;
+            
+            // Compteur
+            photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+            
+            // Titre avec animation
+            photoTitle.textContent = photos[currentIndex].title;
+            photoTitle.classList.remove('visible');
             setTimeout(() => {
-                currentIndex = index;
-                mainImage.src = photos[currentIndex];
-                mainImage.alt = `Géant du Carnaval - Photo ${currentIndex + 1}`;
-                photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
-
-                // Mettre à jour les points
-                const dots = document.querySelectorAll('.dot');
-                dots.forEach((dot, i) => {
-                    dot.classList.toggle('active', i === currentIndex);
-                });
-
-                // Retirer l'animation
-                mainImage.classList.remove('sliding-left', 'sliding-right');
+                photoTitle.classList.add('visible');
             }, 200);
+
+            // Points
+            const dots = document.querySelectorAll('.dot');
+            dots.forEach((dot, i) => {
+                dot.classList.toggle('active', i === currentIndex);
+            });
+
+            // Repositionner les cartes
+            positionCards();
         }
 
-        // Photo suivante
-        document.getElementById('nextBtn').addEventListener('click', () => {
+        // ========== ALLER À UNE SLIDE ==========
+        function goToSlide(index) {
+            if (index === currentIndex) return;
+            if (index < 0 || index >= photos.length) return;
+            updateUI(index);
+        }
+
+        // ========== SLIDE SUIVANTE ==========
+        function nextSlide() {
             const newIndex = (currentIndex + 1) % photos.length;
-            updateGallery(newIndex, 'right');
-        });
-
-        // Photo précédente
-        document.getElementById('prevBtn').addEventListener('click', () => {
-            const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-            updateGallery(newIndex, 'left');
-        });
-
-        // Navigation au clavier (flèches gauche/droite)
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight') {
-                const newIndex = (currentIndex + 1) % photos.length;
-                updateGallery(newIndex, 'right');
-            } else if (e.key === 'ArrowLeft') {
-                const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-                updateGallery(newIndex, 'left');
-            }
-        });
-
-        // Gestion tactile (swipe)
-        let touchStartX = 0;
-        let touchEndX = 0;
-
-        document.addEventListener('touchstart', (e) => {
-            touchStartX = e.changedTouches[0].screenX;
-        });
-
-        document.addEventListener('touchend', (e) => {
-            touchEndX = e.changedTouches[0].screenX;
-            handleSwipe();
-        });
-
-        function handleSwipe() {
-            const swipeThreshold = 50;
-            if (touchEndX < touchStartX - swipeThreshold) {
-                // Swipe gauche -> photo suivante
-                const newIndex = (currentIndex + 1) % photos.length;
-                updateGallery(newIndex, 'right');
-            }
-            if (touchEndX > touchStartX + swipeThreshold) {
-                // Swipe droite -> photo précédente
-                const newIndex = (currentIndex - 1 + photos.length) % photos.length;
-                updateGallery(newIndex, 'left');
-            }
+            updateUI(newIndex);
         }
 
-        // Gestion des erreurs d'image
-        mainImage.addEventListener('error', () => {
-            mainImage.style.display = 'none';
-            photoCounter.textContent = 'Image non trouvée';
-            console.error(`Image introuvable : ${photos[currentIndex]}`);
-        });
+        // ========== SLIDE PRÉCÉDENTE ==========
+        function prevSlide() {
+            const newIndex = (currentIndex - 1 + photos.length) % photos.length;
+            updateUI(newIndex);
+        }
 
-        // Préchargement des images pour plus de fluidité
-        function preloadImages() {
-            photos.forEach(src => {
-                const img = new Image();
-                img.src = src;
+        // ========== GESTION TACTILE & SOURIS ==========
+        function getPositionX(event) {
+            return event.type.includes('mouse') 
+                ? event.pageX 
+                : event.touches[0].clientX;
+        }
+
+        function touchStart(event) {
+            if (event.target.closest('.nav-arrow') || event.target.closest('.dot')) return;
+            
+            isDragging = true;
+            startPos = getPositionX(event);
+            dragDistance = 0;
+            
+            carouselContainer.classList.add('dragging');
+            
+            // Désactiver les transitions pendant le drag
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transition = 'none';
             });
         }
 
-        preloadImages();
+        function touchMove(event) {
+            if (!isDragging) return;
+            
+            const currentPosition = getPositionX(event);
+            currentTranslate = prevTranslate + currentPosition - startPos;
+            dragDistance = Math.abs(currentPosition - startPos);
+            
+            // Appliquer un décalage proportionnel aux cartes
+            const cards = document.querySelectorAll('.card');
+            const dragOffset = (currentPosition - startPos) / carouselContainer.offsetWidth * 100;
+            
+            cards.forEach((card, index) => {
+                let offset = index - currentIndex;
+                const totalCards = cards.length;
+                
+                if (offset > totalCards / 2) offset -= totalCards;
+                if (offset < -totalCards / 2) offset += totalCards;
+                
+                const translateX = offset * 65 + dragOffset;
+                const absOffset = Math.abs(offset + dragOffset / 65);
+                const scale = 1 - absOffset * 0.15;
+                const translateZ = -absOffset * 300;
+                const rotateY = (offset + dragOffset / 65) * 15;
+                const opacity = 1 - absOffset * 0.35;
+                const zIndex = 10 - Math.floor(absOffset);
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 3}px)` : 'none';
+
+                card.style.transform = `
+                    translateX(${translateX}%) 
+                    scale(${Math.max(scale, 0.5)}) 
+                    translateZ(${translateZ}px) 
+                    rotateY(${rotateY}deg)
+                `;
+                card.style.opacity = Math.max(opacity, 0.3);
+                card.style.zIndex = zIndex;
+                card.style.filter = blur;
+            });
+        }
+
+        function touchEnd() {
+            if (!isDragging) return;
+            
+            isDragging = false;
+            carouselContainer.classList.remove('dragging');
+            
+            // Restaurer les transitions
+            document.querySelectorAll('.card').forEach(card => {
+                card.style.transition = 'all 0.6s cubic-bezier(0.23, 1, 0.32, 1)';
+            });
+            
+            // Seuil de déclenchement (30% de la largeur d'une carte)
+            const threshold = carouselContainer.offsetWidth * 0.3;
+            
+            if (dragDistance > threshold) {
+                if (currentTranslate - prevTranslate < 0) {
+                    nextSlide();
+                } else {
+                    prevSlide();
+                }
+            } else {
+                // Retour à la position initiale
+                positionCards();
+            }
+            
+            prevTranslate = 0;
+            currentTranslate = 0;
+            dragDistance = 0;
+        }
+
+        // ========== ÉVÉNEMENTS ==========
+        // Boutons flèches
+        document.getElementById('nextBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            nextSlide();
+        });
+
+        document.getElementById('prevBtn').addEventListener('click', (e) => {
+            e.stopPropagation();
+            prevSlide();
+        });
+
+        // Événements tactiles
+        carouselContainer.addEventListener('mousedown', touchStart);
+        carouselContainer.addEventListener('mousemove', touchMove);
+        carouselContainer.addEventListener('mouseup', touchEnd);
+        carouselContainer.addEventListener('mouseleave', touchEnd);
+        
+        carouselContainer.addEventListener('touchstart', touchStart, { passive: false });
+        carouselContainer.addEventListener('touchmove', touchMove, { passive: false });
+        carouselContainer.addEventListener('touchend', touchEnd);
+
+        // Empêcher le défilement de la page pendant le swipe
+        carouselContainer.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                e.preventDefault();
+            }
+        }, { passive: false });
+
+        // Navigation au clavier
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+
+        // ========== GESTION DES ERREURS D'IMAGE ==========
+        function handleImageError(imgElement, index) {
+            console.error(`Image introuvable : ${photos[index].src}`);
+            imgElement.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" fill="%23333"><rect width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">Image non trouvée</text></svg>';
+        }
+
+        // ========== PRÉCHARGEMENT DES IMAGES ==========
+        function preloadImages() {
+            photos.forEach((photo, index) => {
+                const img = new Image();
+                img.onerror = () => handleImageError(img, index);
+                img.src = photo.src;
+            });
+        }
+
+        // ========== INITIALISATION ==========
+        function init() {
+            createCards();
+            createDots();
+            
+            // Ajouter les gestionnaires d'erreur aux images
+            document.querySelectorAll('.card img').forEach((img, index) => {
+                img.addEventListener('error', () => handleImageError(img, index));
+            });
+            
+            // Position initiale sans animation
+            positionCards(false);
+            
+            // Afficher le premier titre
+            setTimeout(() => {
+                photoTitle.classList.add('visible');
+            }, 300);
+
+            // Mettre à jour le compteur
+            photoCounter.textContent = `1 / ${photos.length}`;
+            
+            // Précharger les images
+            preloadImages();
+        }
+
+        init();
     </script>
 
 </body>
