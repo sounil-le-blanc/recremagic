@@ -245,18 +245,13 @@
 </div>
 
 <script>
-    // =============================================
-    // 🔗 CONFIGURATION SUPABASE (CLÉS PUBLIQUES)
-    // =============================================
+    // ========== CONFIGURATION SUPABASE (clés publiques) ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'sb_publishable_gwuNIL4CgVYGOa5lAc46_g_xWRBQxHB';
 
-    // Initialisation du client Supabase
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // =============================================
-    // 📝 FORMULAIRE D'INSCRIPTION
-    // =============================================
+    // ========== FORMULAIRE D'INSCRIPTION ==========
     const form = document.getElementById('signup-form');
     const msg = document.getElementById('message');
 
@@ -265,43 +260,37 @@
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        msg.textContent = '⏳ Inscription en cours...';
+        msg.textContent = 'Inscription en cours...';
         msg.className = '';
 
-        // Appel à l'API Supabase pour créer un compte
+        // Inscription via Supabase Auth avec redirection vers le nouveau domaine
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
             options: {
-                // URL de redirection après confirmation de l'email
-                emailRedirectTo: 'https://recremagic.vercel.app/bienvenue.html'
+                emailRedirectTo: 'https://recremagic.com/bienvenue.html'  // ← DOMAINE OFFICIEL
             }
         });
 
         if (error) {
-            // Affichage de l'erreur (email déjà utilisé, mot de passe trop court, etc.)
-            msg.textContent = '❌ Erreur : ' + error.message;
+            msg.textContent = 'Erreur : ' + error.message;
             msg.className = 'error';
         } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-            // L'utilisateur existe déjà
-            msg.textContent = '⚠️ Cet email est déjà utilisé. Essayez de vous connecter.';
+            msg.textContent = 'Cet email est déjà utilisé. Essayez de vous connecter.';
             msg.className = 'error';
         } else {
-            // ✅ Succès !
-            msg.textContent = '✅ Inscription réussie ! Vérifiez votre boîte mail (et les spams).';
-            msg.className = 'success';
-            form.reset();
-
-            // ➕ Ajoute automatiquement l'utilisateur dans la table "clients"
+            // ➕ Ajouter le client dans la table (si la table 'clients' existe)
             const { error: dbError } = await supabase
                 .from('clients')
                 .insert([{ id: data.user.id, email: email }]);
 
             if (dbError) {
-                console.error("⚠️ Erreur lors de l'ajout dans la table clients :", dbError.message);
-            } else {
-                console.log("✅ Utilisateur ajouté à la table clients.");
+                console.error("Erreur ajout client :", dbError);
             }
+
+            msg.textContent = '✅ Inscription réussie ! Vérifiez votre boîte mail.';
+            msg.className = 'success';
+            form.reset();
         }
     });
 </script>
