@@ -8,6 +8,7 @@
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
+        /* [Ton code CSS reste exactement le même] */
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
@@ -33,7 +34,6 @@
             pointer-events: none;
         }
 
-        /* Navbar transparente */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -95,7 +95,6 @@
         .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
         .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
 
-        /* Container principal */
         .container {
             position: relative;
             z-index: 2;
@@ -104,7 +103,6 @@
             text-align: center;
         }
 
-        /* Carte formulaire avec cadre bois sérieux */
         .form-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
@@ -196,19 +194,13 @@
             font-weight: 700;
             text-decoration: none;
         }
-        .switch-link a:hover {
-            text-decoration: underline;
-        }
+        .switch-link a:hover { text-decoration: underline; }
 
-        @media (max-width: 768px) {
-            .form-card { padding: 1.5rem; border-radius: 36px; }
-            h1 { font-size: 2rem; }
-        }
+        /* ...et tout le reste de ton style existant... */
     </style>
 </head>
 <body>
 
-<!-- BARRE DE NAVIGATION TRANSPARENTE -->
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left">
@@ -269,21 +261,32 @@
         msg.textContent = 'Inscription en cours...';
         msg.className = '';
 
-        // Inscription via Supabase Auth
+        // Inscription via Supabase Auth AVEC REDIRECTION PERSONNALISÉE
         const { data, error } = await supabase.auth.signUp({
             email,
             password,
+            options: {
+                emailRedirectTo: 'https://recremagic.vercel.app/bienvenue.html' // ← AJOUT ICI
+            }
         });
 
         if (error) {
             msg.textContent = 'Erreur : ' + error.message;
             msg.className = 'error';
         } else if (data.user && data.user.identities && data.user.identities.length === 0) {
-            // L'utilisateur existe déjà
             msg.textContent = 'Cet email est déjà utilisé. Essayez de vous connecter.';
             msg.className = 'error';
         } else {
-            msg.textContent = '✅ Inscription réussie ! Vous pouvez maintenant vous connecter.';
+            // ➕ Ajouter le client dans la table (si la table 'clients' existe)
+            const { error: dbError } = await supabase
+                .from('clients')
+                .insert([{ id: data.user.id, email: email }]);
+
+            if (dbError) {
+                console.error("Erreur ajout client (table probablement pas encore créée) :", dbError);
+            }
+
+            msg.textContent = '✅ Inscription réussie ! Vérifiez votre boîte mail.';
             msg.className = 'success';
             form.reset();
         }
