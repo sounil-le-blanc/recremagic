@@ -11,8 +11,8 @@
             --jaune-accent: #FFB300;
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
-            --card-width: 500px;
-            --card-height: 350px;
+            --card-width: 350px;
+            --card-height: 500px;
         }
 
         * {
@@ -158,13 +158,13 @@
         .carousel-wrapper {
             position: relative;
             width: 100%;
-            height: 70vh;
+            height: 80vh;
             display: flex;
             align-items: center;
             justify-content: center;
             perspective: 2000px;
             z-index: 10;
-            margin-top: 40px;
+            margin-top: 50px;
         }
 
         .carousel-container {
@@ -187,17 +187,21 @@
             cursor: grabbing;
         }
 
+        /* ===== CARTES EN PORTRAIT ===== */
         .card {
             position: absolute;
-            width: min(80vw, 600px);
-            height: min(50vw, 400px);
-            max-width: 90%;
-            border-radius: 20px;
+            width: min(55vw, 320px);
+            height: min(78vw, 460px);
+            max-width: 320px;
+            max-height: 460px;
+            border-radius: 24px;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 25px 80px rgba(0, 0, 0, 0.6);
             will-change: transform;
             backface-visibility: hidden;
+            background: #1a1a1a;
+            border: 3px solid rgba(255, 255, 255, 0.1);
         }
 
         .card img {
@@ -208,26 +212,36 @@
             pointer-events: none;
         }
 
+        /* Effet de reflet subtil */
         .card::after {
             content: '';
             position: absolute;
-            bottom: 0;
+            top: 0;
             left: 0;
             width: 100%;
-            height: 30%;
-            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            height: 100%;
+            background: linear-gradient(
+                135deg, 
+                rgba(255,255,255,0.15) 0%, 
+                rgba(255,255,255,0) 50%,
+                rgba(0,0,0,0.2) 100%
+            );
             opacity: 0;
             transition: opacity 0.3s;
             pointer-events: none;
         }
 
         .card.center-card::after {
-            opacity: 0;
+            opacity: 1;
         }
 
         .card.center-card {
-            box-shadow: 0 30px 80px rgba(255, 179, 0, 0.3), 0 20px 60px rgba(0, 0, 0, 0.6);
-            border: 3px solid rgba(255, 179, 0, 0.4);
+            box-shadow: 
+                0 35px 100px rgba(255, 179, 0, 0.25), 
+                0 20px 60px rgba(0, 0, 0, 0.7),
+                0 0 0 3px rgba(255, 179, 0, 0.5);
+            border: 3px solid rgba(255, 179, 0, 0.6);
+            transform-origin: center center;
         }
 
         /* ===== FLÈCHES DE NAVIGATION ===== */
@@ -275,22 +289,22 @@
         /* ===== COUNTER & TITLE ===== */
         .carousel-info {
             position: fixed;
-            bottom: 60px;
+            bottom: 50px;
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 20px;
+            gap: 18px;
             z-index: 20;
         }
 
         .counter {
             color: white;
-            font-size: 1.2rem;
+            font-size: 1.1rem;
             font-weight: 600;
             background: rgba(0, 0, 0, 0.6);
-            padding: 0.6rem 1.8rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 50px;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
@@ -298,7 +312,7 @@
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
         }
 
-        /* ===== INDICATEURS CIRCULAIRES ===== */
+        /* ===== INDICATEURS ===== */
         .dots-ring {
             display: flex;
             gap: 10px;
@@ -354,16 +368,17 @@
             transform: scale(1.2);
         }
 
-        /* ===== TITRE DE LA PHOTO (optionnel) ===== */
+        /* ===== TITRE DE LA PHOTO ===== */
         .photo-title {
             color: white;
             font-family: 'MedievalSharp', cursive;
-            font-size: 1.5rem;
+            font-size: 1.8rem;
             text-shadow: 0 0 20px rgba(0,0,0,0.8);
             opacity: 0;
             transform: translateY(10px);
             transition: all 0.5s ease;
             text-align: center;
+            letter-spacing: 1px;
         }
 
         .photo-title.visible {
@@ -374,22 +389,13 @@
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
             .card {
-                width: 75vw;
-                height: 42vw;
+                width: min(50vw, 280px);
+                height: min(72vw, 400px);
+                border-radius: 20px;
             }
 
-            .nav-arrow {
-                width: 50px;
-                height: 50px;
+            .photo-title {
                 font-size: 1.5rem;
-            }
-
-            .arrow-left {
-                left: 10px;
-            }
-
-            .arrow-right {
-                right: 10px;
             }
         }
 
@@ -430,38 +436,43 @@
             }
 
             .carousel-wrapper {
-                height: 55vh;
+                height: 65vh;
+                margin-top: 40px;
             }
 
             .card {
-                width: 85vw;
-                height: 55vw;
-                border-radius: 15px;
+                width: min(55vw, 240px);
+                height: min(80vw, 350px);
+                border-radius: 18px;
             }
 
             .nav-arrow {
-                width: 40px;
-                height: 40px;
-                font-size: 1.2rem;
+                width: 45px;
+                height: 45px;
+                font-size: 1.4rem;
                 background: rgba(255, 255, 255, 0.15);
             }
 
             .arrow-left {
-                left: 5px;
+                left: 8px;
             }
 
             .arrow-right {
-                right: 5px;
+                right: 8px;
+            }
+
+            .photo-title {
+                font-size: 1.3rem;
             }
 
             .counter {
-                font-size: 1rem;
-                padding: 0.5rem 1.2rem;
+                font-size: 0.9rem;
+                padding: 0.4rem 1.2rem;
             }
 
             .carousel-info {
-                bottom: 40px;
-                gap: 15px;
+                bottom: 35px;
+                gap: 12px;
             }
 
             .dots-ring {
@@ -482,19 +493,29 @@
         }
 
         @media (max-width: 480px) {
-            .card {
-                width: 90vw;
-                height: 60vw;
+            .carousel-wrapper {
+                height: 55vh;
             }
 
-            .carousel-wrapper {
-                height: 45vh;
+            .card {
+                width: min(60vw, 200px);
+                height: min(85vw, 300px);
+                border-radius: 16px;
             }
 
             .nav-arrow {
-                width: 36px;
-                height: 36px;
-                font-size: 1rem;
+                width: 38px;
+                height: 38px;
+                font-size: 1.2rem;
+            }
+
+            .photo-title {
+                font-size: 1.1rem;
+            }
+
+            .carousel-info {
+                bottom: 25px;
+                gap: 10px;
             }
         }
     </style>
@@ -537,7 +558,7 @@
 
     <!-- Info en bas -->
     <div class="carousel-info">
-        <div class="photo-title" id="photoTitle">Géant du Carnaval</div>
+        <div class="photo-title" id="photoTitle">Le Roi du Carnaval</div>
         <div class="counter" id="photoCounter">1 / 12</div>
         <div class="dots-ring" id="dotsContainer"></div>
     </div>
@@ -564,7 +585,6 @@
         let startPos = 0;
         let currentTranslate = 0;
         let prevTranslate = 0;
-        let animationID = 0;
         let dragDistance = 0;
 
         const carouselContainer = document.getElementById('carouselContainer');
@@ -606,7 +626,7 @@
             });
         }
 
-        // ========== POSITIONNER LES CARTES EN 3D ==========
+        // ========== POSITIONNER LES CARTES EN 3D (PORTRAIT) ==========
         function positionCards(animate = true) {
             const cards = document.querySelectorAll('.card');
             const totalCards = cards.length;
@@ -627,22 +647,22 @@
 
                 const absOffset = Math.abs(offset);
                 
-                // Style MacOS : les cartes décalées sont plus petites, translatées et moins opaques
-                const translateX = offset * 65; // Décalage horizontal en %
-                const scale = 1 - absOffset * 0.15; // Réduction de taille
-                const translateZ = -absOffset * 300; // Profondeur 3D
-                const rotateY = offset * 15; // Rotation 3D
-                const opacity = 1 - absOffset * 0.35;
+                // Ajusté pour le format portrait
+                const translateX = offset * 70; // Décalage horizontal en %
+                const scale = 1 - absOffset * 0.12; // Réduction de taille plus subtile
+                const translateZ = -absOffset * 250; // Profondeur 3D réduite
+                const rotateY = offset * 12; // Rotation plus légère
+                const opacity = 1 - absOffset * 0.3;
                 const zIndex = 10 - absOffset;
-                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 3}px)` : 'none';
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 5}px)` : 'none';
 
                 card.style.transform = `
                     translateX(${translateX}%) 
-                    scale(${Math.max(scale, 0.5)}) 
+                    scale(${Math.max(scale, 0.6)}) 
                     translateZ(${translateZ}px) 
                     rotateY(${rotateY}deg)
                 `;
-                card.style.opacity = Math.max(opacity, 0.3);
+                card.style.opacity = Math.max(opacity, 0.25);
                 card.style.zIndex = zIndex;
                 card.style.filter = blur;
                 card.style.pointerEvents = absOffset === 0 ? 'auto' : 'none';
@@ -748,22 +768,22 @@
                 if (offset > totalCards / 2) offset -= totalCards;
                 if (offset < -totalCards / 2) offset += totalCards;
                 
-                const translateX = offset * 65 + dragOffset;
-                const absOffset = Math.abs(offset + dragOffset / 65);
-                const scale = 1 - absOffset * 0.15;
-                const translateZ = -absOffset * 300;
-                const rotateY = (offset + dragOffset / 65) * 15;
-                const opacity = 1 - absOffset * 0.35;
+                const translateX = offset * 70 + dragOffset;
+                const absOffset = Math.abs(offset + dragOffset / 70);
+                const scale = 1 - absOffset * 0.12;
+                const translateZ = -absOffset * 250;
+                const rotateY = (offset + dragOffset / 70) * 12;
+                const opacity = 1 - absOffset * 0.3;
                 const zIndex = 10 - Math.floor(absOffset);
-                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 3}px)` : 'none';
+                const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 5}px)` : 'none';
 
                 card.style.transform = `
                     translateX(${translateX}%) 
-                    scale(${Math.max(scale, 0.5)}) 
+                    scale(${Math.max(scale, 0.6)}) 
                     translateZ(${translateZ}px) 
                     rotateY(${rotateY}deg)
                 `;
-                card.style.opacity = Math.max(opacity, 0.3);
+                card.style.opacity = Math.max(opacity, 0.25);
                 card.style.zIndex = zIndex;
                 card.style.filter = blur;
             });
@@ -781,7 +801,7 @@
             });
             
             // Seuil de déclenchement (30% de la largeur d'une carte)
-            const threshold = carouselContainer.offsetWidth * 0.3;
+            const threshold = carouselContainer.offsetWidth * 0.25;
             
             if (dragDistance > threshold) {
                 if (currentTranslate - prevTranslate < 0) {
@@ -840,14 +860,20 @@
         // ========== GESTION DES ERREURS D'IMAGE ==========
         function handleImageError(imgElement, index) {
             console.error(`Image introuvable : ${photos[index].src}`);
-            imgElement.src = 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="400" height="300" fill="%23333"><rect width="400" height="300"/><text x="200" y="150" text-anchor="middle" fill="white" font-size="20">Image non trouvée</text></svg>';
+            imgElement.src = 'data:image/svg+xml,' + encodeURIComponent(`
+                <svg xmlns="http://www.w3.org/2000/svg" width="320" height="460" fill="%232a2a2a">
+                    <rect width="320" height="460"/>
+                    <text x="160" y="230" text-anchor="middle" fill="white" font-size="18" font-family="sans-serif">Image non trouvée</text>
+                    <text x="160" y="260" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">${photos[index].title}</text>
+                </svg>
+            `);
         }
 
         // ========== PRÉCHARGEMENT DES IMAGES ==========
         function preloadImages() {
             photos.forEach((photo, index) => {
                 const img = new Image();
-                img.onerror = () => handleImageError(img, index);
+                img.onerror = () => console.warn(`Image non trouvée : ${photo.src}`);
                 img.src = photo.src;
             });
         }
