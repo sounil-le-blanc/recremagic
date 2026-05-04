@@ -9,43 +9,196 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { font-family: 'Quicksand', sans-serif; background-image: url('images/fond-image.jpg'); background-size: cover; background-attachment: fixed; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 2rem; padding-top: 100px; position: relative; }
-        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.45); z-index: 0; pointer-events: none; }
-        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: transparent; z-index: 1000; }
-        .navbar-container { max-width: 1200px; margin: 0 auto; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            padding-top: 100px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: transparent;
+            z-index: 1000;
+        }
+        .navbar-container {
+            max-width: 1200px; margin: 0 auto; padding: 0.8rem 2rem;
+            display: flex; justify-content: space-between; align-items: center;
+            flex-wrap: wrap; gap: 1rem;
+        }
         .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .back-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; text-decoration: none; cursor: pointer; transition: all 0.2s ease; }
-        .back-wrapper span:first-child { font-size: 1.1rem; font-weight: 600; color: white; text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s; }
-        .back-wrapper .back-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px; opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap; }
+        .back-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
+        }
+        .back-wrapper span:first-child {
+            font-size: 1.1rem; font-weight: 600; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
+        }
+        .back-wrapper .back-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
         .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
         .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
-        .logo-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; text-decoration: none; transition: all 0.2s ease; }
-        .logo-wrapper img { height: 50px; transition: transform 0.2s; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
-        .logo-wrapper .logo-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px; opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap; }
+
+        .logo-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
+        }
+        .logo-wrapper img {
+            height: 50px; transition: transform 0.2s;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+        }
+        .logo-wrapper .logo-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
         .logo-wrapper:hover img { transform: scale(1.05); }
         .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
+
         .nav-icons { display: flex; gap: 2rem; align-items: center; }
-        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.2rem; text-decoration: none; transition: all 0.2s ease; }
-        .icon-wrapper span { font-size: 1.3rem; color: white; text-shadow: 1px 1px 3px black; transition: transform 0.2s; }
-        .icon-wrapper .icon-label { font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px; background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px; opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap; }
+        .icon-wrapper {
+            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
+            text-decoration: none; transition: all 0.2s ease;
+        }
+        .icon-wrapper span {
+            font-size: 1.3rem; color: white;
+            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
+            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
+            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        }
         .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
         .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
-        .container { position: relative; z-index: 2; max-width: 500px; width: 100%; text-align: center; }
-        .form-card { background: rgba(235, 215, 185, 0.96); border-radius: 48px; padding: 2.5rem 2rem; text-align: center; color: #2C1810; position: relative; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5); }
-        .form-card::before { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border-radius: 40px; border: 1px solid rgba(0,0,0,0.1); pointer-events: none; }
-        h1 { font-family: 'MedievalSharp', cursive; font-size: 2.5rem; color: #000; margin-bottom: 0.5rem; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
-        .subtitle { font-size: 1rem; color: #4A2E1B; margin-bottom: 1.5rem; }
-        input { width: 100%; padding: 0.8rem 1rem; margin-bottom: 1rem; border: 2px solid #7a5c3e; border-radius: 30px; font-family: 'Quicksand', sans-serif; font-size: 1rem; background: #fff; transition: 0.2s; }
-        input:focus { outline: none; border-color: #5a3e2a; box-shadow: 0 0 0 3px rgba(122,92,62,0.2); }
-        button { width: 100%; padding: 0.8rem; background: linear-gradient(135deg, #7CB69F, #5a8f78); color: white; border: none; border-radius: 30px; font-family: 'Fredoka', cursive; font-size: 1.2rem; font-weight: 700; cursor: pointer; transition: 0.3s; margin-top: 0.5rem; }
-        button:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.3); }
-        #message { margin-top: 1rem; font-weight: 600; font-size: 0.9rem; color: #2C1810; }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .form-card {
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 48px;
+            padding: 2.5rem 2rem;
+            text-align: center;
+            color: #2C1810;
+            position: relative;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+        }
+        .form-card::before {
+            content: '';
+            position: absolute;
+            top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border-radius: 40px;
+            border: 1px solid rgba(0,0,0,0.1);
+            pointer-events: none;
+        }
+
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            color: #000;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: #4A2E1B;
+            margin-bottom: 1.5rem;
+        }
+
+        input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            border: 2px solid #7a5c3e;
+            border-radius: 30px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            background: #fff;
+            transition: 0.2s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #5a3e2a;
+            box-shadow: 0 0 0 3px rgba(122,92,62,0.2);
+        }
+
+        button {
+            width: 100%;
+            padding: 0.8rem;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-family: 'Fredoka', cursive;
+            font-size: 1.2rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 0.5rem;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+
+        #message {
+            margin-top: 1rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #2C1810;
+        }
+
         .success { color: #2E7D32 !important; }
         .error { color: #D32F2F !important; }
-        .switch-link { margin-top: 1.5rem; font-size: 0.9rem; color: #4A2E1B; }
-        .switch-link a { color: #D32F2F; font-weight: 700; text-decoration: none; }
+
+        .switch-link {
+            margin-top: 1.5rem;
+            font-size: 0.9rem;
+            color: #4A2E1B;
+        }
+        .switch-link a {
+            color: #D32F2F;
+            font-weight: 700;
+            text-decoration: none;
+        }
         .switch-link a:hover { text-decoration: underline; }
-        @media (max-width: 768px) { .form-card { padding: 1.5rem; border-radius: 36px; } h1 { font-size: 2rem; } }
+
+        @media (max-width: 768px) {
+            .form-card { padding: 1.5rem; border-radius: 36px; }
+            h1 { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
@@ -92,24 +245,44 @@
 </div>
 
 <script>
+    // ========== UNE SEULE DECLARATION ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ========== CODE DU FORMULAIRE ==========
     const form = document.getElementById('signup-form');
     const msg = document.getElementById('message');
+
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
+
         msg.textContent = 'Inscription en cours...';
         msg.className = '';
-        try {
-            const { data, error } = await supabase.auth.signUp({ email, password, options: { emailRedirectTo: 'https://recremagic.vercel.app/connexion.html' } });
-            if (error) { msg.textContent = '❌ ' + error.message; msg.className = 'error'; }
-            else if (data.user && data.user.identities && data.user.identities.length === 0) { msg.textContent = '❌ Cet email est déjà utilisé.'; msg.className = 'error'; }
-            else if (data.user && data.session === null) { msg.textContent = '✅ Email de confirmation envoyé ! Vérifie tes spams.'; msg.className = 'success'; form.reset(); }
-            else { await supabase.from('clients').insert([{ id: data.user.id, email: email }]); msg.textContent = '✅ Inscription réussie !'; msg.className = 'success'; form.reset(); }
-        } catch (err) { msg.textContent = '❌ Erreur réseau.'; msg.className = 'error'; }
+
+        const { data, error } = await supabase.auth.signUp({
+            email,
+            password,
+            options: {
+                emailRedirectTo: 'https://recremagic.vercel.app/connexion.html'
+            }
+        });
+
+        if (error) {
+            msg.textContent = '❌ ' + error.message;
+            msg.className = 'error';
+        } else if (data.user && data.session === null) {
+            msg.textContent = '✅ Email de confirmation envoyé ! Vérifie vos spams.';
+            msg.className = 'success';
+            form.reset();
+        } else {
+            msg.textContent = '✅ Inscription réussie ! Bienvenue !';
+            msg.className = 'success';
+            form.reset();
+        }
     });
 </script>
 </body>
