@@ -9,6 +9,8 @@
     <style>
         :root {
             --jaune-accent: #FFB300;
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
         }
 
         * {
@@ -19,60 +21,151 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background: #1a1a1a;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            position: relative;
         }
 
-        /* ===== BARRE DU HAUT ===== */
-        .top-bar {
+        body::before {
+            content: '';
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
-            padding: 1rem 2rem;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
+        }
+        .navbar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
-            z-index: 100;
-            background: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(10px);
+            flex-wrap: nowrap;
         }
-
-        .back-btn {
+        .nav-left-group {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
-            color: white;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .logo-wrapper {
             text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .icon-wrapper:hover .icon-label {
+            color: #FFB300;
+        }
+
+        /* ===== COUNTER ===== */
+        .counter {
+            position: fixed;
+            top: 80px;
+            left: 50%;
+            transform: translateX(-50%);
+            color: white;
             font-size: 1.1rem;
             font-weight: 600;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 0.6rem 1.2rem;
-            border-radius: 50px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            transition: all 0.3s ease;
-        }
-
-        .back-btn:hover {
-            background: rgba(255, 255, 255, 0.2);
-            border-color: var(--jaune-accent);
-            color: var(--jaune-accent);
-            box-shadow: 0 0 15px rgba(255, 179, 0, 0.3);
-        }
-
-        .counter {
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
             background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1.2rem;
+            padding: 0.5rem 1.5rem;
             border-radius: 50px;
             letter-spacing: 1px;
+            z-index: 50;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
         }
 
         /* ===== ZONE PRINCIPALE ===== */
@@ -83,11 +176,12 @@
             align-items: center;
             justify-content: center;
             position: relative;
+            z-index: 10;
         }
 
         .main-image {
-            max-width: 90%;
-            max-height: 80vh;
+            max-width: 85%;
+            max-height: 70vh;
             object-fit: contain;
             border-radius: 12px;
             box-shadow: 0 0 60px rgba(255, 215, 0, 0.2), 0 10px 30px rgba(0, 0, 0, 0.5);
@@ -149,20 +243,25 @@
         /* ===== INDICATEURS DE POINTS ===== */
         .dots-container {
             display: flex;
-            gap: 12px;
-            margin-top: -60px;
-            z-index: 10;
+            gap: 10px;
+            z-index: 20;
             padding-bottom: 2rem;
+            position: relative;
+            margin-top: -50px;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
         }
 
         .dot {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.3);
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid rgba(255, 255, 255, 0.1);
+            flex-shrink: 0;
         }
 
         .dot.active {
@@ -179,6 +278,51 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
+            body {
+                padding-top: 80px;
+            }
+
+            .navbar {
+                height: 48px;
+            }
+
+            .navbar-container {
+                padding: 0 0.8rem;
+            }
+
+            .nav-left-group {
+                gap: 0.4rem;
+            }
+
+            .logo-wrapper img {
+                height: 80px;
+                margin-top: 30px;
+            }
+
+            .back-arrow {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+
+            .nav-icon-img {
+                height: 26px;
+            }
+
+            .icon-wrapper .icon-label {
+                font-size: 0.5rem;
+            }
+
+            .nav-icons {
+                gap: 0.7rem;
+            }
+
+            .counter {
+                top: 65px;
+                font-size: 0.9rem;
+                padding: 0.4rem 1rem;
+            }
+
             .nav-arrow {
                 width: 50px;
                 height: 50px;
@@ -193,29 +337,62 @@
                 right: 10px;
             }
 
-            .top-bar {
-                padding: 0.8rem 1rem;
+            .main-image {
+                max-width: 90%;
+                max-height: 60vh;
             }
 
-            .back-btn {
-                font-size: 0.9rem;
-                padding: 0.5rem 1rem;
+            .dots-container {
+                gap: 8px;
+                margin-top: -40px;
             }
 
-            .counter {
-                font-size: 0.85rem;
-                padding: 0.4rem 0.8rem;
+            .dot {
+                width: 10px;
+                height: 10px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .dots-container {
+                gap: 6px;
+                padding: 0 10px;
+            }
+
+            .dot {
+                width: 8px;
+                height: 8px;
             }
         }
     </style>
 </head>
 <body>
 
-    <!-- Barre du haut -->
-    <div class="top-bar">
-        <a href="expos.html" class="back-btn">← Retour aux expositions</a>
-        <span class="counter" id="photoCounter">1 / 2</span>
-    </div>
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <div class="navbar-container">
+            <div class="nav-left-group">
+                <a href="index.html" class="logo-wrapper">
+                    <img src="images/logo.png" alt="Récré Magic">
+                </a>
+                <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+            </div>
+
+            <div class="nav-icons">
+                <a href="boutique.html" class="icon-wrapper">
+                    <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                    <span class="icon-label">Boutique</span>
+                </a>
+                <a href="Abonnement.html" class="icon-wrapper">
+                    <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                    <span class="icon-label">Abonnement</span>
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Compteur -->
+    <div class="counter" id="photoCounter">1 / 12</div>
 
     <!-- Image principale -->
     <div class="gallery-container">
@@ -229,22 +406,50 @@
     </div>
 
     <!-- Indicateurs -->
-    <div class="dots-container">
-        <span class="dot active" data-index="0"></span>
-        <span class="dot" data-index="1"></span>
+    <div class="dots-container" id="dotsContainer">
+        <!-- Généré dynamiquement par JavaScript -->
     </div>
 
     <script>
-        // Liste des photos (vous pouvez en ajouter d'autres ici)
+        // Liste des 12 photos (à toi de mettre les bons noms de fichiers)
         const photos = [
             'images/geant1.jpg',
-            'images/geant2.jpg'
+            'images/geant2.jpg',
+            'images/geant3.jpg',
+            'images/geant4.jpg',
+            'images/geant5.jpg',
+            'images/geant6.jpg',
+            'images/geant7.jpg',
+            'images/geant8.jpg',
+            'images/geant9.jpg',
+            'images/geant10.jpg',
+            'images/geant11.jpg',
+            'images/geant12.jpg'
         ];
 
         let currentIndex = 0;
         const mainImage = document.getElementById('mainImage');
         const photoCounter = document.getElementById('photoCounter');
-        const dots = document.querySelectorAll('.dot');
+        const dotsContainer = document.getElementById('dotsContainer');
+
+        // Générer les points dynamiquement
+        function createDots() {
+            dotsContainer.innerHTML = '';
+            photos.forEach((_, index) => {
+                const dot = document.createElement('span');
+                dot.classList.add('dot');
+                if (index === 0) dot.classList.add('active');
+                dot.setAttribute('data-index', index);
+                dot.addEventListener('click', () => {
+                    const newIndex = parseInt(dot.getAttribute('data-index'));
+                    const direction = newIndex > currentIndex ? 'right' : 'left';
+                    updateGallery(newIndex, direction);
+                });
+                dotsContainer.appendChild(dot);
+            });
+        }
+
+        createDots();
 
         // Mettre à jour l'affichage
         function updateGallery(index, direction = null) {
@@ -264,6 +469,7 @@
                 photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
 
                 // Mettre à jour les points
+                const dots = document.querySelectorAll('.dot');
                 dots.forEach((dot, i) => {
                     dot.classList.toggle('active', i === currentIndex);
                 });
@@ -285,15 +491,6 @@
             updateGallery(newIndex, 'left');
         });
 
-        // Cliquer sur les points
-        dots.forEach(dot => {
-            dot.addEventListener('click', () => {
-                const newIndex = parseInt(dot.getAttribute('data-index'));
-                const direction = newIndex > currentIndex ? 'right' : 'left';
-                updateGallery(newIndex, direction);
-            });
-        });
-
         // Navigation au clavier (flèches gauche/droite)
         document.addEventListener('keydown', (e) => {
             if (e.key === 'ArrowRight') {
@@ -305,12 +502,49 @@
             }
         });
 
+        // Gestion tactile (swipe)
+        let touchStartX = 0;
+        let touchEndX = 0;
+
+        document.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].screenX;
+        });
+
+        document.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].screenX;
+            handleSwipe();
+        });
+
+        function handleSwipe() {
+            const swipeThreshold = 50;
+            if (touchEndX < touchStartX - swipeThreshold) {
+                // Swipe gauche -> photo suivante
+                const newIndex = (currentIndex + 1) % photos.length;
+                updateGallery(newIndex, 'right');
+            }
+            if (touchEndX > touchStartX + swipeThreshold) {
+                // Swipe droite -> photo précédente
+                const newIndex = (currentIndex - 1 + photos.length) % photos.length;
+                updateGallery(newIndex, 'left');
+            }
+        }
+
         // Gestion des erreurs d'image
         mainImage.addEventListener('error', () => {
             mainImage.style.display = 'none';
             photoCounter.textContent = 'Image non trouvée';
             console.error(`Image introuvable : ${photos[currentIndex]}`);
         });
+
+        // Préchargement des images pour plus de fluidité
+        function preloadImages() {
+            photos.forEach(src => {
+                const img = new Image();
+                img.src = src;
+            });
+        }
+
+        preloadImages();
     </script>
 
 </body>
