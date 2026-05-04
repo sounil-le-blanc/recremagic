@@ -6,20 +6,59 @@
     <title>Admin calendrier - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
+
         body {
             font-family: 'Quicksand', sans-serif;
-            background: linear-gradient(135deg, #7CB69F, #EC407A);
-            padding: 2rem;
-            margin: 0;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem;
         }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
         .admin-container {
             max-width: 800px;
             margin: 0 auto;
-            background: white;
-            border-radius: 30px;
+            background: rgba(235, 215, 185, 0.96);
+            backdrop-filter: blur(8px);
+            border-radius: 60px;
             padding: 2rem;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 10;
+            width: 100%;
         }
         h1, h2 { color: #2C1810; text-align: center; }
         input, textarea, button, select {
@@ -27,8 +66,9 @@
             padding: 0.7rem;
             margin: 0.5rem 0;
             border-radius: 30px;
-            border: 1px solid #ccc;
+            border: 1.5px solid #c4a882;
             font-family: inherit;
+            background: #fefefe;
         }
         button {
             background: #7CB69F;
@@ -39,7 +79,7 @@
         }
         button:hover { background: #5a8f78; }
         .event-item {
-            background: #f9f9f9;
+            background: rgba(255, 255, 255, 0.6);
             margin: 1rem 0;
             padding: 0.8rem;
             border-radius: 20px;
@@ -52,10 +92,11 @@
             margin-top: 0.5rem;
         }
         .code-section {
-            background: #f0f0f0;
+            background: rgba(255, 255, 255, 0.5);
             padding: 1rem;
             border-radius: 20px;
             margin-bottom: 2rem;
+            border: 1px solid #c4a882;
         }
         .hidden { display: none; }
         .date-field { transition: background 0.3s; }
