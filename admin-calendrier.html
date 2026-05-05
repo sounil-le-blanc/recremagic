@@ -61,7 +61,7 @@
 
         .admin-header {
             display: flex;
-            justify-content: space-between;
+            justify-content: center;
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
@@ -235,7 +235,6 @@
 <div class="admin-wrapper">
     <div class="card admin-header">
         <h1>🎪 Admin Calendrier</h1>
-        <button class="btn btn-danger" id="clearAllBtn" style="width:auto;">🗑 Tout effacer</button>
     </div>
 
     <!-- Carte 1 : Calendrier de visualisation -->
@@ -334,7 +333,7 @@
     let eventsData = {}; 
     let editingEventId = null;
     let selectedDates = new Set();
-    let selectionAnchor = null;
+    let selectionAnchor = null; // Pour stocker la première date cliquée en mode période
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
@@ -356,6 +355,26 @@
         });
         renderMainCalendar();
         renderSelectionCalendar();
+    }
+
+    // Vérifie si un spectacle du groupe "DU COUP" existe déjà à cette date
+    function hasDuCoupOnDate(dateKey, excludePeriodId = null) {
+        const events = eventsData[dateKey] || [];
+        return events.some(ev => {
+            if (excludePeriodId && ev.period_id === excludePeriodId) return false;
+            return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || 
+                   ev.titre === "DU COUP on revient chez vous" || 
+                   ev.titre === "COMME SUR DES ROULETTES";
+        });
+    }
+
+    // Vérifie si DÉLICIEUSEMENT MABOUL existe déjà à cette date
+    function hasMaboulOnDate(dateKey, excludePeriodId = null) {
+        const events = eventsData[dateKey] || [];
+        return events.some(ev => {
+            if (excludePeriodId && ev.period_id === excludePeriodId) return false;
+            return ev.titre === "DÉLICIEUSEMENT MABOUL";
+        });
     }
 
     // --- CALENDRIER PRINCIPAL (visualisation) ---
@@ -431,29 +450,24 @@
 
     function handleSelectionClick(event, dateKey) {
         if (currentMode === 'single') {
-            // Mode date unique : un seul clic sélectionne/déselectionne
+            // Mode date unique : un seul clic sélectionne la date
             selectedDates = new Set([dateKey]);
-            selectionAnchor = dateKey;
+            selectionAnchor = null;
         } else {
             // Mode période
-            if (event.shiftKey && selectionAnchor) {
-                // Shift+Click : sélectionner une plage
-                const dates = getDatesBetween(selectionAnchor, dateKey);
-                // Appliquer les filtres de jours de la semaine
+            if (selectionAnchor === null) {
+                // Premier clic : on définit l'ancre
+                selectionAnchor = dateKey;
+                selectedDates = new Set([dateKey]);
+            } else {
+                // Deuxième clic : on crée la plage entre l'ancre et la date cliquée
+                const allDates = getDatesBetween(selectionAnchor, dateKey);
                 const activeDays = getActiveWeekdays();
-                selectedDates = new Set(dates.filter(d => {
+                selectedDates = new Set(allDates.filter(d => {
                     const day = new Date(d + 'T00:00:00').getDay();
                     return activeDays.includes(day);
                 }));
-            } else {
-                // Clic simple : début de la plage
-                if (selectedDates.size === 1 && selectedDates.has(dateKey)) {
-                    // Re-clic sur la même date : on applique la plage avec les jours cochés
-                    applyPeriodRange();
-                    return;
-                }
-                selectedDates = new Set([dateKey]);
-                selectionAnchor = dateKey;
+                selectionAnchor = null; // On réinitialise pour la prochaine sélection
             }
         }
         renderSelectionCalendar();
@@ -478,21 +492,6 @@
         return Array.from(document.querySelectorAll('.weekday-filter:checked')).map(c => parseInt(c.value));
     }
 
-    function applyPeriodRange() {
-        if (selectedDates.size !== 1) return;
-        const anchorKey = Array.from(selectedDates)[0];
-        const endKey = prompt("Entrez la date de fin (YYYY-MM-DD) :", anchorKey);
-        if (!endKey) return;
-        
-        const allDates = getDatesBetween(anchorKey, endKey);
-        const activeDays = getActiveWeekdays();
-        selectedDates = new Set(allDates.filter(d => {
-            const day = new Date(d + 'T00:00:00').getDay();
-            return activeDays.includes(day);
-        }));
-        renderSelectionCalendar();
-    }
-
     function updateSelectedDatesInfo() {
         const info = document.getElementById('selectedDatesInfo');
         const text = document.getElementById('selectedDatesText');
@@ -507,7 +506,7 @@
         if (sorted.length === 1) {
             text.textContent = `1 date : ${formatDate(sorted[0])}`;
         } else {
-            text.textContent = `${sorted.length} dates sélectionnées`;
+            text.textContent = `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
         }
         
         document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
@@ -522,7 +521,7 @@
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    // --- SOUMISSION ---
+    // --- SOUMISSION AVEC VÉRIFICATION DES CONFLITS ---
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -531,15 +530,36 @@
             return;
         }
         
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.textContent = '⏳ Enregistrement...';
-
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
         const lieu = document.getElementById('eventLieu').value.trim();
         
-        const periodId = selectedDates.size > 1 ? 'p_' + Date.now() : null;
+        if (!titre) {
+            alert('⚠️ Veuillez sélectionner un titre.');
+            return;
+        }
+        
+        // Vérification des conflits
         const sortedDates = Array.from(selectedDates).sort();
+        const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"].includes(titre);
+        const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
+        
+        // Vérifier les conflits
+        for (const dateKey of sortedDates) {
+            if (isDuCoup && hasDuCoupOnDate(dateKey)) {
+                alert(`⚠️ Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}. Impossible d'en mettre deux le même jour.`);
+                return;
+            }
+            if (isMaboul && hasMaboulOnDate(dateKey)) {
+                alert(`⚠️ "DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.`);
+                return;
+            }
+        }
+        
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.textContent = '⏳ Enregistrement...';
+        
+        const periodId = sortedDates.length > 1 ? 'p_' + Date.now() : null;
         
         const toInsert = sortedDates.map(dateKey => ({ 
             id: crypto.randomUUID(), 
@@ -644,7 +664,7 @@
         document.getElementById('modePeriod').classList.toggle('active', m === 'period');
         document.getElementById('periodWeekdays').classList.toggle('hidden', m !== 'period');
         selectedDates = new Set();
-        selectionAnchor = null;
+        selectionAnchor = null; // Réinitialiser l'ancre
         renderSelectionCalendar();
     }
 
@@ -667,18 +687,6 @@
         selectedDates = new Set();
         selectionAnchor = null;
         renderSelectionCalendar();
-    };
-
-    // Tout effacer
-    document.getElementById('clearAllBtn').onclick = async () => {
-        if (!confirm('ATTENTION : Supprimer TOUS les événements ?')) return;
-        if (!confirm('Confirmez-vous la suppression définitive ?')) return;
-        const { error } = await _supabase.from('events').delete().neq('id', '00000000-0000-0000-0000-000000000000');
-        if (error) alert('Erreur : ' + error.message);
-        else {
-            alert('✅ Tous les événements supprimés.');
-            await fetchEvents();
-        }
     };
 
     (async () => {
