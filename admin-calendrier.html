@@ -133,7 +133,6 @@
             border-color: #e6a000;
         }
 
-        /* Calendrier */
         .calendar-header-row {
             display: flex;
             justify-content: space-between;
@@ -168,40 +167,30 @@
         }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
 
-        /* Couleurs par spectacle */
         .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; font-weight: bold; }
         .cal-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; font-weight: bold; }
-        
-        /* Maboul : fond normal + contour vert */
         .cal-day.spectacle-maboul {
             box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
             font-weight: bold;
         }
-        /* Si Maboul est le seul événement, fond blanc avec contour vert */
         .cal-day.spectacle-maboul-only {
             background: rgba(255,255,255,0.9) !important;
             box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
             font-weight: bold;
             color: #2C5F3F;
         }
-
         .cal-day.today {
             box-shadow: inset 0 0 0 2px var(--rose-spectacle);
             font-weight: bold;
         }
-        
-        /* Aujourd'hui + Maboul */
         .cal-day.today.spectacle-maboul {
             box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important;
         }
 
-        /* Calendrier de sélection */
-        .selection-calendar .cal-day {
-            cursor: pointer;
-        }
+        .selection-calendar .cal-day { cursor: pointer; }
         .selection-calendar .cal-day.selected {
             background: var(--vert-caravane) !important;
             color: white !important;
@@ -235,7 +224,6 @@
         .selected-dates-info.active { display: block; }
         .hidden { display: none !important; }
 
-        /* Légende */
         .legend {
             display: flex;
             flex-wrap: wrap;
@@ -265,7 +253,6 @@
             background: white;
         }
 
-        /* Popup */
         .events-popup {
             display: none;
             position: fixed;
@@ -327,7 +314,6 @@
             <div class="mode-tab" id="modePeriod">📆 Période</div>
         </div>
 
-        <!-- Calendrier de sélection -->
         <div class="selection-calendar">
             <div class="calendar-header-row">
                 <div class="month-year-nav">
@@ -381,15 +367,11 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentMode = 'single';
-    
-    // Calendrier principal
     let currentMonth, currentYear;
-    
-    // Calendrier de sélection
     let selMonth, selYear;
-    
     let eventsData = {}; 
     let editingEventId = null;
+    let editingEventDate = null; // Stocke la date de l'événement en cours d'édition
     let selectedDates = new Set();
     let selectionAnchor = null;
 
@@ -397,7 +379,6 @@
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
-    // Mapping titre -> classe CSS
     function getSpectacleClass(titre) {
         switch(titre) {
             case "DU COUP ON VIENT CHEZ VOUS": return 'spectacle-ducoup1';
@@ -410,7 +391,6 @@
         }
     }
 
-    // Détermine les classes pour une date dans le calendrier principal
     function getEventClasses(dateKey) {
         const events = eventsData[dateKey] || [];
         if (events.length === 0) return { classes: [], hasMaboul: false, hasOther: false };
@@ -429,7 +409,6 @@
             }
         });
         
-        // Si Maboul est le seul événement
         if (hasMaboul && !hasOther) {
             classes.push('spectacle-maboul-only');
         } else if (hasMaboul && hasOther) {
@@ -458,10 +437,10 @@
     }
 
     // Vérifie si un spectacle du groupe "DU COUP" existe déjà à cette date
-    function hasDuCoupOnDate(dateKey, excludePeriodId = null) {
+    function hasDuCoupOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => {
-            if (excludePeriodId && ev.period_id === excludePeriodId) return false;
+            if (excludeEventId && ev.id === excludeEventId) return false;
             return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || 
                    ev.titre === "DU COUP on revient chez vous" || 
                    ev.titre === "COMME SUR DES ROULETTES";
@@ -469,15 +448,15 @@
     }
 
     // Vérifie si DÉLICIEUSEMENT MABOUL existe déjà à cette date
-    function hasMaboulOnDate(dateKey, excludePeriodId = null) {
+    function hasMaboulOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => {
-            if (excludePeriodId && ev.period_id === excludePeriodId) return false;
+            if (excludeEventId && ev.id === excludeEventId) return false;
             return ev.titre === "DÉLICIEUSEMENT MABOUL";
         });
     }
 
-    // --- CALENDRIER PRINCIPAL (visualisation) ---
+    // --- CALENDRIER PRINCIPAL ---
     function renderMainCalendar() {
         const firstDay = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
@@ -496,14 +475,13 @@
             if (key === todayStr) allClasses.push('today');
             allClasses = allClasses.concat(classes);
             
-            html += `<div class="${allClasses.join(' ')}" 
-                         onclick="openPopup('${key}')">${d}</div>`;
+            html += `<div class="${allClasses.join(' ')}" onclick="openPopup('${key}')">${d}</div>`;
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
 
-    // --- CALENDRIER DE SÉLECTION (affiche aussi les événements existants) ---
+    // --- CALENDRIER DE SÉLECTION ---
     function renderSelectionCalendar() {
         const firstDay = new Date(selYear, selMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
@@ -514,7 +492,6 @@
         ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
 
-        // Déterminer la plage sélectionnée pour le mode période
         let rangeStart = null, rangeEnd = null;
         if (currentMode === 'period' && selectedDates.size >= 2) {
             const sorted = Array.from(selectedDates).sort();
@@ -530,13 +507,8 @@
             
             let classes = ['cal-day'];
             if (isToday) classes.push('today');
+            if (!isSelected) classes = classes.concat(eventClasses);
             
-            // Ajouter les classes d'événements existants (sauf si la date est dans la sélection)
-            if (!isSelected) {
-                classes = classes.concat(eventClasses);
-            }
-            
-            // Classes de sélection
             if (currentMode === 'single') {
                 if (isSelected) classes.push('selected');
             } else {
@@ -551,8 +523,7 @@
                 }
             }
             
-            html += `<div class="${classes.join(' ')}" 
-                         onclick="handleSelectionClick(event, '${key}')">${d}</div>`;
+            html += `<div class="${classes.join(' ')}" onclick="handleSelectionClick(event, '${key}')">${d}</div>`;
         }
         document.getElementById('selectionCalendarGrid').innerHTML = html;
         document.getElementById('selMonthName').textContent = `${monthNames[selMonth]} ${selYear}`;
@@ -582,7 +553,6 @@
         const dates = [];
         const current = new Date(Math.min(start, end));
         const last = new Date(Math.max(start, end));
-        
         while (current <= last) {
             dates.push(dateToKey(current));
             current.setDate(current.getDate() + 1);
@@ -599,14 +569,12 @@
             info.classList.remove('active');
             return;
         }
-        
         info.classList.add('active');
         if (sorted.length === 1) {
             text.textContent = `1 date : ${formatDate(sorted[0])}`;
         } else {
             text.textContent = `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
         }
-        
         document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
     }
 
@@ -619,7 +587,23 @@
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    // --- SOUMISSION AVEC VÉRIFICATION DES CONFLITS ---
+    // Vérifie les conflits pour une liste de dates et un titre donné
+    function checkConflicts(dates, titre, excludeEventId = null) {
+        const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"].includes(titre);
+        const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
+        
+        for (const dateKey of dates) {
+            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) {
+                return { conflict: true, date: dateKey, message: `Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}.` };
+            }
+            if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) {
+                return { conflict: true, date: dateKey, message: `"DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.` };
+            }
+        }
+        return { conflict: false };
+    }
+
+    // --- SOUMISSION (AJOUT) ---
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
         
@@ -638,18 +622,12 @@
         }
         
         const sortedDates = Array.from(selectedDates).sort();
-        const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"].includes(titre);
-        const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
         
-        for (const dateKey of sortedDates) {
-            if (isDuCoup && hasDuCoupOnDate(dateKey)) {
-                alert(`⚠️ Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}. Impossible d'en mettre deux le même jour.`);
-                return;
-            }
-            if (isMaboul && hasMaboulOnDate(dateKey)) {
-                alert(`⚠️ "DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.`);
-                return;
-            }
+        // Vérifier les conflits
+        const conflict = checkConflicts(sortedDates, titre);
+        if (conflict.conflict) {
+            alert('⚠️ ' + conflict.message);
+            return;
         }
         
         const btn = document.getElementById('submitBtn');
@@ -680,6 +658,7 @@
         btn.textContent = '💾 Enregistrer';
     };
 
+    // --- POPUP ---
     async function openPopup(dateKey) {
         const events = eventsData[dateKey] || [];
         let html = `<h3 style="margin-bottom:10px;">📅 ${formatDate(dateKey)}</h3>`;
@@ -696,7 +675,7 @@
                 <div class="popup-event-item" style="border-left-color: ${borderColor};">
                     <div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div>
                     <div style="display:flex; gap:5px;">
-                        <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre.replace(/'/g, "\\'")}', '${(ev.lieu || '').replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre.replace(/'/g, "\\'")}', '${(ev.lieu || '').replace(/'/g, "\\'")}', '${ev.event_date}')">✏️</button>
                         <button class="btn btn-danger" onclick="deleteEvent('${ev.id}', '${ev.period_id || ''}')">🗑</button>
                     </div>
                 </div>`;
@@ -708,14 +687,16 @@
             <select id="editTitle"></select>
             <textarea id="editLieu" rows="2"></textarea>
             <button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button>
+            <p id="editError" style="color:red; display:none; margin-top:5px;"></p>
         </div>
         <button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>`;
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
     }
 
-    window.prepareEdit = (id, type, titre, lieu) => {
+    window.prepareEdit = (id, type, titre, lieu, date) => {
         editingEventId = id;
+        editingEventDate = date;
         document.getElementById('editType').value = type;
         updateEditTitleDropdown(type);
         setTimeout(() => {
@@ -725,13 +706,39 @@
         document.getElementById('editForm').classList.add('active');
     };
 
+    // --- SAUVEGARDE MODIFICATION avec vérification conflits ---
     window.saveEdit = async () => {
+        const newTitre = document.getElementById('editTitle').value;
+        const errorEl = document.getElementById('editError');
+        errorEl.style.display = 'none';
+        
+        if (!newTitre) {
+            errorEl.textContent = '⚠️ Veuillez sélectionner un titre.';
+            errorEl.style.display = 'block';
+            return;
+        }
+        
+        // Vérifier les conflits pour cette date (en excluant l'événement en cours d'édition)
+        const conflict = checkConflicts([editingEventDate], newTitre, editingEventId);
+        if (conflict.conflict) {
+            errorEl.textContent = '⚠️ ' + conflict.message;
+            errorEl.style.display = 'block';
+            return;
+        }
+        
         const updates = {
             type: document.getElementById('editType').value,
-            titre: document.getElementById('editTitle').value,
+            titre: newTitre,
             lieu: document.getElementById('editLieu').value
         };
-        await _supabase.from('events').update(updates).eq('id', editingEventId);
+        
+        const { error } = await _supabase.from('events').update(updates).eq('id', editingEventId);
+        if (error) {
+            errorEl.textContent = 'Erreur : ' + error.message;
+            errorEl.style.display = 'block';
+            return;
+        }
+        
         closePopup();
         await fetchEvents();
     };
@@ -769,18 +776,20 @@
         renderSelectionCalendar();
     }
 
-    function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); }
+    function closePopup() { 
+        document.getElementById('eventsPopup').classList.remove('active');
+        editingEventId = null;
+        editingEventDate = null;
+    }
 
     // Init
     document.getElementById('modeSingle').onclick = () => switchMode('single');
     document.getElementById('modePeriod').onclick = () => switchMode('period');
     document.getElementById('eventType').onchange = updateTitleDropdown;
     
-    // Navigation calendrier principal
     document.getElementById('prevMonthBtn').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderMainCalendar(); };
     document.getElementById('nextMonthBtn').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderMainCalendar(); };
     
-    // Navigation calendrier de sélection
     document.getElementById('selPrevMonthBtn').onclick = () => { selMonth--; if(selMonth<0){selMonth=11;selYear--;} renderSelectionCalendar(); };
     document.getElementById('selNextMonthBtn').onclick = () => { selMonth++; if(selMonth>11){selMonth=0;selYear++;} renderSelectionCalendar(); };
     
@@ -791,13 +800,11 @@
     };
 
     (async () => {
-        // Années calendrier principal
         const ySel = document.getElementById('yearSelect');
         for(let y=2024; y<=2030; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
         ySel.value = currentYear;
         ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
         
-        // Années calendrier sélection
         const sySel = document.getElementById('selYearSelect');
         for(let y=2024; y<=2030; y++) sySel.innerHTML += `<option value="${y}">${y}</option>`;
         sySel.value = selYear;
@@ -808,4 +815,4 @@
     })();
 </script>
 </body>
-</html>
+    </html>
