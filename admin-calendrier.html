@@ -507,7 +507,7 @@
 
     let currentMode = 'single';
     let currentMonth, currentYear;
-    let eventsData = {}; // Cache local pour l'affichage rapide
+    let eventsData = {};
     let communesList = [];
 
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
@@ -525,6 +525,7 @@
     // CHARGER LES ÉVÉNEMENTS DEPUIS SUPABASE
     // ============================================================
     async function loadEvents() {
+        console.log('🔄 Chargement des événements...');
         const { data, error } = await supabase
             .from('events')
             .select('*')
@@ -535,16 +536,17 @@
             return;
         }
 
-        // Organiser par date (comme dans le premier code)
         eventsData = {};
-        data.forEach(ev => {
-            if (!eventsData[ev.event_date]) {
-                eventsData[ev.event_date] = [];
-            }
-            eventsData[ev.event_date].push(ev);
-        });
+        if (data) {
+            data.forEach(ev => {
+                if (!eventsData[ev.event_date]) {
+                    eventsData[ev.event_date] = [];
+                }
+                eventsData[ev.event_date].push(ev);
+            });
+        }
 
-        console.log('✅ Événements chargés :', data.length);
+        console.log('✅ Événements chargés :', data ? data.length : 0);
         renderCalendar();
     }
 
@@ -722,6 +724,7 @@
     // CALENDRIER
     // ============================================================
     function renderCalendar() {
+        console.log('📅 Rendu du calendrier :', monthNames[currentMonth], currentYear);
         const firstDay = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -844,18 +847,10 @@
                 }
                 if (confirm(msg)) {
                     if (periodId && periodId !== 'undefined' && periodId !== '') {
-                        // Supprimer la période entière
-                        const { error } = await supabase
-                            .from('events')
-                            .delete()
-                            .eq('period_id', periodId);
+                        const { error } = await supabase.from('events').delete().eq('period_id', periodId);
                         if (error) console.error('Erreur suppression période:', error);
                     } else {
-                        // Supprimer un seul événement
-                        const { error } = await supabase
-                            .from('events')
-                            .delete()
-                            .eq('id', id);
+                        const { error } = await supabase.from('events').delete().eq('id', id);
                         if (error) console.error('Erreur suppression:', error);
                     }
                     await loadEvents();
@@ -914,7 +909,7 @@
     }
 
     // ============================================================
-    // SOUMISSION DU FORMULAIRE
+    // SOUMISSION
     // ============================================================
     document.getElementById('eventForm').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -947,7 +942,6 @@
 
         const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
 
-        // Insérer dans Supabase
         const eventsToInsert = dateKeys.map(dk => ({
             id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2, 5),
             event_date: dk,
@@ -957,9 +951,7 @@
             period_id: periodId
         }));
 
-        const { error } = await supabase
-            .from('events')
-            .insert(eventsToInsert);
+        const { error } = await supabase.from('events').insert(eventsToInsert);
 
         if (error) {
             console.error('Erreur ajout:', error);
@@ -977,15 +969,8 @@
     // ============================================================
     document.getElementById('clearAllBtn').addEventListener('click', async () => {
         if (confirm('⚠️ Supprimer TOUS les événements ?')) {
-            const { error } = await supabase
-                .from('events')
-                .delete()
-                .neq('id', '0'); // Supprime tout
-
-            if (error) {
-                console.error('Erreur suppression:', error);
-            }
-
+            const { error } = await supabase.from('events').delete().neq('id', '0');
+            if (error) console.error('Erreur suppression:', error);
             eventsData = {};
             renderCalendar();
         }
@@ -1001,4 +986,4 @@
     console.log('✅ Admin calendrier Supabase prêt !');
 </script>
 </body>
-</html>
+    </html>
