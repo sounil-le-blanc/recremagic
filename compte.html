@@ -200,50 +200,8 @@
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ============================================================
-    // COMPTEUR DE VISITES
+    // COMPTEUR : LECTURE SEULE (n'incrémente pas)
     // ============================================================
-    async function incrementerVisite() {
-        var dejaCompte = sessionStorage.getItem('visite_comptee');
-
-        if (dejaCompte) {
-            await afficherCompteur();
-            return;
-        }
-
-        // Récupérer le compteur (tolère table vide)
-        var response = await supabaseClient
-            .from('visites')
-            .select('total')
-            .eq('page', 'compte');
-
-        var totalActuel = 0;
-
-        if (response.data && response.data.length > 0) {
-            totalActuel = response.data[0].total || 0;
-        }
-
-        var nouveauTotal = totalActuel + 1;
-
-        // Mettre à jour ou insérer
-        if (response.data && response.data.length > 0) {
-            await supabaseClient
-                .from('visites')
-                .update({ total: nouveauTotal, updated_at: new Date() })
-                .eq('page', 'compte');
-        } else {
-            await supabaseClient
-                .from('visites')
-                .insert({ page: 'compte', total: nouveauTotal });
-        }
-
-        sessionStorage.setItem('visite_comptee', 'true');
-        document.getElementById('compteur').textContent = nouveauTotal;
-
-        var compteurEl = document.getElementById('compteur');
-        compteurEl.style.transform = 'scale(1.3)';
-        setTimeout(function() { compteurEl.style.transform = 'scale(1)'; }, 300);
-    }
-
     async function afficherCompteur() {
         var response = await supabaseClient
             .from('visites')
@@ -279,7 +237,7 @@
     // ============================================================
     // INIT
     // ============================================================
-    incrementerVisite();
+    afficherCompteur();
     afficherUtilisateur();
 </script>
 </body>

@@ -6,10 +6,10 @@
     <title>Récré Magic - Bienvenue</title>
     <meta name="description" content="Récré Magic - Circus Théâtre Ambulant. Choisissez votre espace">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -28,8 +28,6 @@
             justify-content: space-between;
             flex-wrap: nowrap;
         }
-
-        /* Groupe gauche : flèche + logo */
         .nav-left-group {
             display: flex;
             align-items: center;
@@ -37,8 +35,6 @@
             flex-shrink: 0;
             z-index: 2;
         }
-
-        /* Logo qui déborde de la navbar */
         .logo-wrapper {
             text-decoration: none;
             transition: all 0.25s ease;
@@ -54,8 +50,6 @@
             transform: scale(1.08);
             filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
         }
-
-        /* Flèche retour à droite du logo */
         .back-arrow {
             display: flex;
             align-items: center;
@@ -78,8 +72,6 @@
             color: #FFB300;
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
-
-        /* Icônes droite */
         .nav-icons {
             display: flex;
             gap: 1.2rem;
@@ -96,31 +88,19 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-        .icon-wrapper .icon-emoji {
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 1px 1px 3px black;
-            transition: transform 0.2s, color 0.2s;
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
         }
+        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
         .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
+            font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+            color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap;
         }
-.nav-icon-img {
-    height: 32px;
-    width: auto;
-    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-    transition: transform 0.2s;
-}
-.icon-wrapper:hover .nav-icon-img {
-    transform: scale(1.15);
-}
-.icon-wrapper:hover .icon-label { color: #FFB300; }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.jpg');
@@ -315,7 +295,6 @@
             color: #2C1810;
         }
 
-        /* Boutons "DÉCOUVRIR" : marron sur fond beige, rouge au survol */
         .choice-cta {
             display: inline-block;
             padding: 0.6rem 1.6rem;
@@ -375,8 +354,6 @@
             .nav-left-group { gap: 0.4rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .icon-wrapper .icon-emoji { font-size: 1.1rem; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
             .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
             .choice-icon img { height: 110px; }
@@ -390,25 +367,22 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <!-- Groupe gauche : flèche + logo -->
         <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-
-        <!-- Icônes droite -->
-<div class="nav-icons">
-    <a href="boutique.html" class="icon-wrapper">
-        <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
-        <span class="icon-label">Boutique</span>
-    </a>
-    <a href="Abonnement.html" class="icon-wrapper">
-        <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
-        <span class="icon-label">Abonnement</span>
-    </a>
-</div>
+        <div class="nav-icons">
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
     </div>
 </nav>
 
@@ -444,20 +418,68 @@
 </div>
 
 <div id="confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
+
 <script>
+    // ============================================================
+    // CONFIGURATION SUPABASE
+    // ============================================================
+    var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ============================================================
+    // COMPTEUR INVISIBLE : incrémente le compteur de compte.html
+    // ============================================================
+    async function incrementerVisiteIndex() {
+        var dejaCompte = localStorage.getItem('visite_index_comptee');
+        if (dejaCompte) return;
+
+        var response = await supabaseClient
+            .from('visites')
+            .select('total')
+            .eq('page', 'compte');
+
+        var totalActuel = 0;
+        if (response.data && response.data.length > 0) {
+            totalActuel = response.data[0].total || 0;
+        }
+
+        var nouveauTotal = totalActuel + 1;
+
+        if (response.data && response.data.length > 0) {
+            await supabaseClient
+                .from('visites')
+                .update({ total: nouveauTotal, updated_at: new Date() })
+                .eq('page', 'compte');
+        } else {
+            await supabaseClient
+                .from('visites')
+                .insert({ page: 'compte', total: nouveauTotal });
+        }
+
+        localStorage.setItem('visite_index_comptee', 'true');
+    }
+
+    // ============================================================
+    // CONFETTI
+    // ============================================================
     function createConfetti() {
-        const ctn = document.getElementById('confetti');
-        const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
-        for (let i = 0; i < 50; i++) {
-            let d = document.createElement('div');
-            d.style.cssText = `position:absolute; width:${Math.random() * 12 + 5}px; height:${Math.random() * 12 + 5}px; background:${colors[Math.floor(Math.random() * 4)]}; left:${Math.random() * 100}%; top:-20px; opacity:${Math.random() * 0.7 + 0.3}; border-radius:${Math.random() > 0.5 ? '50%' : '0'}; transform:rotate(${Math.random() * 360}deg); animation:fall ${Math.random() * 4 + 5}s linear ${Math.random() * 3}s infinite;`;
+        var ctn = document.getElementById('confetti');
+        var colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+        for (var i = 0; i < 50; i++) {
+            var d = document.createElement('div');
+            d.style.cssText = 'position:absolute; width:'+(Math.random()*12+5)+'px; height:'+(Math.random()*12+5)+'px; background:'+colors[Math.floor(Math.random()*4)]+'; left:'+(Math.random()*100)+'%; top:-20px; opacity:'+(Math.random()*0.7+0.3)+'; border-radius:'+(Math.random()>0.5?'50%':'0')+'; transform:rotate('+(Math.random()*360)+'deg); animation:fall '+(Math.random()*4+5)+'s linear '+(Math.random()*3)+'s infinite;';
             ctn.appendChild(d);
         }
-        let style = document.createElement('style');
+        var style = document.createElement('style');
         style.textContent = '@keyframes fall{to{transform:translateY(100vh) rotate(720deg); opacity:0;}}';
         document.head.appendChild(style);
     }
-    window.addEventListener('load', createConfetti);
+
+    window.addEventListener('load', function() {
+        createConfetti();
+        incrementerVisiteIndex();
+    });
 </script>
 </body>
 </html>

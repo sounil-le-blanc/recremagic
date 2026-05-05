@@ -172,6 +172,7 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
 
         #message {
             margin-top: 1rem;
@@ -235,7 +236,7 @@
         <form id="signup-form">
             <input type="email" id="email" placeholder="Email" required>
             <input type="password" id="password" placeholder="Mot de passe (min. 6 caractères)" required minlength="6">
-            <button type="submit">S'inscrire</button>
+            <button type="submit" id="submitBtn">S'inscrire</button>
         </form>
         <div id="message"></div>
         <div class="switch-link">
@@ -245,44 +246,83 @@
 </div>
 
 <script>
-    // ========== UNE SEULE DECLARATION ==========
-    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    // ============================================================
+    // CONFIGURATION SUPABASE
+    // ============================================================
+    var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========== CODE DU FORMULAIRE ==========
-    const form = document.getElementById('signup-form');
-    const msg = document.getElementById('message');
+    // ============================================================
+    // ENVOI EMAIL DE BIENVENUE (Edge Function Resend)
+    // ============================================================
+    async function sendWelcomeEmail(email) {
+        try {
+            var response = await supabaseClient.functions.invoke('send-welcome-email', {
+                body: { email: email }
+            });
+            if (response.error) {
+                console.warn('⚠️ Email non envoyé:', response.error);
+                return false;
+            }
+            console.log('✅ Email de bienvenue envoyé');
+            return true;
+        } catch (e) {
+            console.warn('⚠️ Erreur envoi email:', e);
+            return false;
+        }
+    }
 
-    form.addEventListener('submit', async (e) => {
+    // ============================================================
+    // FORMULAIRE D'INSCRIPTION
+    // ============================================================
+    var form = document.getElementById('signup-form');
+    var msg = document.getElementById('message');
+    var submitBtn = document.getElementById('submitBtn');
+
+    form.addEventListener('submit', async function(e) {
         e.preventDefault();
-        
-        const email = document.getElementById('email').value.trim();
-        const password = document.getElementById('password').value;
 
-        msg.textContent = 'Inscription en cours...';
+        var email = document.getElementById('email').value.trim();
+        var password = document.getElementById('password').value;
+
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Inscription en cours...';
+        msg.textContent = '';
         msg.className = '';
 
-        const { data, error } = await supabase.auth.signUp({
-            email,
-            password,
+        // 1. Inscription Supabase Auth
+        var response = await supabaseClient.auth.signUp({
+            email: email,
+            password: password,
             options: {
                 emailRedirectTo: 'https://recremagic.vercel.app/connexion.html'
             }
         });
 
-        if (error) {
-            msg.textContent = '❌ ' + error.message;
+        if (response.error) {
+            msg.textContent = '❌ ' + response.error.message;
             msg.className = 'error';
-        } else if (data.user && data.session === null) {
-            msg.textContent = '✅ Email de confirmation envoyé ! Vérifie vos spams.';
-            msg.className = 'success';
-            form.reset();
-        } else {
-            msg.textContent = '✅ Inscription réussie ! Bienvenue !';
-            msg.className = 'success';
-            form.reset();
+            submitBtn.disabled = false;
+            submitBtn.textContent = "S'inscrire";
+            return;
         }
+
+        // 2. Envoi email de bienvenue via Resend
+        await sendWelcomeEmail(email);
+
+        // 3. Message de succès
+        if (response.data.user && response.data.session === null) {
+            msg.textContent = '✅ Email de confirmation envoyé ! Vérifie tes emails (et les spams).';
+            msg.className = 'success';
+        } else {
+            msg.textContent = '✅ Inscription réussie ! Bienvenue chez Récré Magic !';
+            msg.className = 'success';
+        }
+
+        form.reset();
+        submitBtn.disabled = false;
+        submitBtn.textContent = "S'inscrire";
     });
 </script>
 </body>
