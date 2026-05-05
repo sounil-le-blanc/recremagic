@@ -49,6 +49,7 @@
             gap: 1.5rem;
         }
 
+        /* Cartes */
         .card {
             background: rgba(235,215,185,0.96);
             backdrop-filter: blur(8px);
@@ -60,6 +61,7 @@
             box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.3);
         }
 
+        /* Header admin */
         .admin-header {
             display: flex;
             justify-content: space-between;
@@ -76,7 +78,7 @@
             align-items: center;
             gap: 0.5rem;
         }
-
+        .header-buttons { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
         .btn {
             padding: 0.6rem 1.2rem;
             border-radius: 30px;
@@ -95,12 +97,22 @@
         .btn-outline { background: transparent; border: 2px solid #7a5c3e; color: #5a3e2a; }
         .btn-outline:hover { background: rgba(0,0,0,0.05); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-small {
-            padding: 0.3rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 20px;
-        }
 
+        .status-dot {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-right: 0.3rem;
+        }
+        .status-dot.green { background: #4CAF50; }
+        .status-dot.red { background: #f44336; }
+
+        /* Formulaire */
+        .form-section h2 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
         input, textarea, select {
             width: 100%;
             padding: 0.7rem;
@@ -114,6 +126,7 @@
         textarea { border-radius: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
+        /* Mode selector */
         .mode-tabs {
             display: flex;
             gap: 0.5rem;
@@ -169,36 +182,6 @@
         .weekday-checkbox input { width: auto; margin: 0; }
 
         .hidden { display: none !important; }
-
-        /* Autocomplete communes */
-        .autocomplete-wrapper {
-            position: relative;
-        }
-        .autocomplete-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid #7a5c3e;
-            border-top: none;
-            border-radius: 0 0 20px 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 50;
-            display: none;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-        .autocomplete-suggestions.active { display: block; }
-        .autocomplete-item {
-            padding: 0.6rem 1rem;
-            cursor: pointer;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #eee;
-            transition: background 0.15s;
-        }
-        .autocomplete-item:hover { background: #FFF3CD; }
-        .autocomplete-item .cp { color: var(--rose-spectacle); font-weight: bold; margin-right: 0.5rem; }
 
         /* Calendrier */
         .calendar-header-row {
@@ -301,7 +284,7 @@
         }
         .cal-day.other-month { opacity: 0.35; pointer-events: none; }
 
-        /* Popup */
+        /* Popup événements */
         .events-popup {
             display: none;
             position: fixed;
@@ -318,8 +301,8 @@
             border-radius: 25px;
             padding: 1.5rem;
             width: 95%;
-            max-width: 500px;
-            max-height: 85vh;
+            max-width: 480px;
+            max-height: 80vh;
             overflow-y: auto;
             border: 4px solid var(--vert-caravane);
             box-shadow: 0 20px 40px rgba(0,0,0,0.4);
@@ -344,14 +327,13 @@
         .popup-event-info { flex: 1; font-size: 0.85rem; }
         .popup-actions { display: flex; gap: 0.3rem; flex-direction: column; }
         .popup-actions button {
-            width: 36px; height: 36px;
-            border-radius: 50%;
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
             border: none;
             cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: bold;
+            white-space: nowrap;
         }
         .btn-edit { background: #FFB300; color: #2C1810; }
         .btn-edit:hover { background: #e6a000; }
@@ -370,6 +352,7 @@
         }
         .btn-close-popup:hover { background: #888; }
 
+        /* Formulaire d'édition intégré */
         .edit-form {
             display: none;
             margin-top: 1rem;
@@ -397,17 +380,16 @@
             padding: 1rem;
             font-style: italic;
         }
-        .code-section {
+
+        /* Auth */
+        .auth-box {
+            max-width: 450px;
+            margin: 5rem auto;
             text-align: center;
-            padding: 2rem;
         }
-        .code-section input {
-            max-width: 250px;
-            text-align: center;
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-        }
-        .code-error { color: #D32F2F; display: none; margin-top: 0.5rem; font-weight: bold; }
+        .auth-box h2 { font-family: 'MedievalSharp', cursive; color: #f5d06b; margin-bottom: 1.5rem; }
+        .auth-box input { margin-bottom: 0.8rem; }
+        .auth-error { color: #D32F2F; display: none; margin-top: 0.5rem; font-weight: bold; }
 
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
@@ -423,29 +405,34 @@
 
 <div class="admin-wrapper">
 
-    <!-- ===== CODE SECRET ===== -->
-    <div class="card code-section" id="codeSection">
-        <h1 style="font-family:'MedievalSharp',cursive; color:#f5d06b; text-shadow:2px 2px 0 #3e6b3a;">🔐 Administration</h1>
-        <p style="margin:1rem 0; color:#5a3e2a;">Entrez le code d'accès</p>
-        <input type="password" id="accessCode" placeholder="••••••••">
-        <button class="btn btn-primary" id="verifyBtn" style="margin-top:0.5rem;">Vérifier</button>
-        <p class="code-error" id="codeError">Code incorrect</p>
+    <!-- ===== AUTH ===== -->
+    <div id="authBox" class="card auth-box">
+        <h2>🔐 Accès Administration</h2>
+        <input type="email" id="adminEmail" placeholder="Email admin">
+        <input type="password" id="adminPassword" placeholder="Mot de passe">
+        <button class="btn btn-primary" id="loginBtn" style="width:100%;">Se connecter</button>
+        <p class="auth-error" id="authError"></p>
+        <p style="font-size:0.75rem; color:#888; margin-top:1rem;">Compte configuré dans Supabase</p>
     </div>
 
-    <!-- ===== PANEL ADMIN (caché au début) ===== -->
+    <!-- ===== PANEL ADMIN ===== -->
     <div id="adminPanel" class="hidden">
 
         <!-- HEADER -->
         <div class="card admin-header">
             <h1>🎪 Admin Calendrier</h1>
-            <div>
-                <span style="font-size:0.85rem; color:#4CAF50;">✅ Connecté</span>
+            <div class="header-buttons">
+                <span style="font-size:0.85rem;">
+                    <span class="status-dot green" id="statusDot"></span>
+                    <span id="statusText">Connecté</span>
+                </span>
+                <button class="btn btn-outline" id="logoutBtn">🚪 Déconnexion</button>
             </div>
         </div>
 
         <!-- FORMULAIRE D'AJOUT -->
         <div class="card form-section">
-            <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
+            <h2>➕ Ajouter un événement</h2>
 
             <div class="mode-tabs">
                 <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
@@ -491,10 +478,7 @@
                 </div>
 
                 <label>Lieu</label>
-                <div class="autocomplete-wrapper">
-                    <textarea id="eventLieu" rows="2" placeholder="Commencez à taper une commune..."></textarea>
-                    <div class="autocomplete-suggestions" id="lieuSuggestions"></div>
-                </div>
+                <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
 
                 <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
             </form>
@@ -529,17 +513,15 @@
 
 <script>
     // ============================================================
-    // CONFIG
+    // CONFIG SUPABASE (À REMPLIR)
     // ============================================================
-    const SECRET_CODE = "recremagic";
     const SUPABASE_URL = 'https://ton-projet.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOi...';
 
     let supabase;
     let currentMode = 'single';
     let currentMonth, currentYear;
-    let eventsData = {};
-    let communesList = []; // chargée depuis le CDN
+    let eventsData = {}; // { 'YYYY-M-D': [{id, event_date, type, titre, lieu, period_id}] }
 
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
     const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
@@ -556,7 +538,7 @@
     // INIT SUPABASE
     // ============================================================
     function initSupabase() {
-        if (SUPABASE_URL && !SUPABASE_URL.includes('ton-projet')) {
+        if (!SUPABASE_URL.includes('ton-projet')) {
             supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
             return true;
         }
@@ -564,72 +546,56 @@
     }
 
     // ============================================================
-    // CODE SECRET
+    // AUTH
     // ============================================================
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-        if (document.getElementById('accessCode').value === SECRET_CODE) {
-            document.getElementById('codeSection').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            initApp();
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+        if (!initSupabase()) {
+            document.getElementById('authError').textContent = '⚠️ Configure SUPABASE_URL et SUPABASE_ANON_KEY';
+            document.getElementById('authError').style.display = 'block';
+            return;
+        }
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            document.getElementById('authError').textContent = '❌ ' + error.message;
+            document.getElementById('authError').style.display = 'block';
         } else {
-            document.getElementById('codeError').style.display = 'block';
+            showAdminPanel();
         }
     });
 
-    // Permettre aussi la touche Entrée
-    document.getElementById('accessCode').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('verifyBtn').click();
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        hideAdminPanel();
     });
 
-    // ============================================================
-    // INIT APP (après code secret validé)
-    // ============================================================
-    async function initApp() {
-        populateYearSelect();
-        updateTitleDropdown();
-        renderCalendar();
-        await loadCommunes();
-
-        if (initSupabase()) {
-            await loadAllEvents();
-            renderCalendar();
-        } else {
-            console.warn('⚠️ Supabase non configuré. Utilise la variable globale eventsData pour tes tests.');
-            // Fallback localStorage pour tests en local
-            const stored = localStorage.getItem('recremagic_calendar');
-            if (stored) {
-                const raw = JSON.parse(stored);
-                eventsData = {};
-                // Normaliser
-                for (let key in raw) {
-                    if (!Array.isArray(raw[key])) {
-                        const old = raw[key];
-                        eventsData[key] = [{
-                            id: 'local_' + key,
-                            event_date: key,
-                            type: old.type || 'Spectacle',
-                            titre: old.titre || old.spectacle || '',
-                            lieu: old.lieu || '',
-                            period_id: old.periodId || null
-                        }];
-                    } else {
-                        eventsData[key] = raw[key].map((ev, i) => ({
-                            id: ev.id || 'local_' + key + '_' + i,
-                            event_date: key,
-                            type: ev.type || 'Spectacle',
-                            titre: ev.titre || '',
-                            lieu: ev.lieu || '',
-                            period_id: ev.periodId || null
-                        }));
-                    }
-                }
-                renderCalendar();
-            }
-        }
+    async function checkSession() {
+        if (!initSupabase()) return;
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) showAdminPanel();
     }
 
+    function showAdminPanel() {
+        document.getElementById('authBox').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        loadAllEvents().then(() => {
+            renderCalendar();
+            updateTitleDropdown();
+        });
+    }
+
+    function hideAdminPanel() {
+        document.getElementById('authBox').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPassword').value = '';
+    }
+
+    checkSession();
+
     // ============================================================
-    // MODE (DATE UNIQUE / PÉRIODE)
+    // MODE
     // ============================================================
     document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
     document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
@@ -702,98 +668,10 @@
         return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
-    // ============================================================
-    // AUTOCOMPLETE COMMUNES
-    // ============================================================
-    async function loadCommunes() {
-        try {
-            // Fichier JSON des communes françaises (36 000 entrées) hébergé sur GitHub
-            const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
-            communesList = await res.json();
-            console.log(`✅ ${communesList.length} communes chargées`);
-        } catch (e) {
-            console.warn('⚠️ Impossible de charger les communes, autocomplete désactivé');
-            communesList = [];
-        }
+    function formatDateFrShort(dateStr) {
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
     }
-
-    const lieuInput = document.getElementById('eventLieu');
-    const suggestionsDiv = document.getElementById('lieuSuggestions');
-    let selectedCommuneIndex = -1;
-
-    lieuInput.addEventListener('input', () => {
-        const query = lieuInput.value.trim().toLowerCase();
-        if (query.length < 2 || communesList.length === 0) {
-            suggestionsDiv.classList.remove('active');
-            return;
-        }
-
-        // Filtrer les communes qui commencent par la saisie
-        const matches = communesList.filter(c => 
-            c.nom.toLowerCase().startsWith(query) || 
-            c.code_postal.startsWith(query)
-        ).slice(0, 8); // Limiter à 8 suggestions
-
-        if (matches.length === 0) {
-            suggestionsDiv.classList.remove('active');
-            return;
-        }
-
-        let html = '';
-        matches.forEach((c, i) => {
-            html += `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
-                <span class="cp">${c.code_postal}</span> ${c.nom}
-            </div>`;
-        });
-        suggestionsDiv.innerHTML = html;
-        suggestionsDiv.classList.add('active');
-        selectedCommuneIndex = -1;
-
-        // Clic sur une suggestion
-        suggestionsDiv.querySelectorAll('.autocomplete-item').forEach(item => {
-            item.addEventListener('mousedown', (e) => {
-                e.preventDefault();
-                lieuInput.value = item.dataset.full;
-                suggestionsDiv.classList.remove('active');
-            });
-        });
-    });
-
-    // Navigation clavier dans les suggestions
-    lieuInput.addEventListener('keydown', (e) => {
-        const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
-        if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1);
-            highlightSuggestion(items);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1);
-            highlightSuggestion(items);
-        } else if (e.key === 'Enter' && selectedCommuneIndex >= 0) {
-            e.preventDefault();
-            lieuInput.value = items[selectedCommuneIndex].dataset.full;
-            suggestionsDiv.classList.remove('active');
-        } else if (e.key === 'Escape') {
-            suggestionsDiv.classList.remove('active');
-            selectedCommuneIndex = -1;
-        }
-    });
-
-    function highlightSuggestion(items) {
-        items.forEach((item, i) => {
-            item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '';
-        });
-    }
-
-    // Fermer les suggestions si on clique ailleurs
-    document.addEventListener('click', (e) => {
-        if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
-            suggestionsDiv.classList.remove('active');
-        }
-    });
 
     // ============================================================
     // DROPDOWN TITRES
@@ -812,15 +690,20 @@
     document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
 
     // ============================================================
-    // SUPABASE - CHARGEMENT
+    // CHARGEMENT DEPUIS SUPABASE
     // ============================================================
     async function loadAllEvents() {
-        if (!supabase) return;
         const { data, error } = await supabase
             .from('calendar_events')
             .select('*')
             .order('event_date', { ascending: true });
-        if (error) { console.error('Erreur chargement:', error); return; }
+
+        if (error) {
+            console.error('Erreur chargement:', error);
+            eventsData = {};
+            return;
+        }
+
         eventsData = {};
         data.forEach(ev => {
             if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
@@ -863,6 +746,7 @@
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
         document.getElementById('yearSelect').value = currentYear;
 
+        // Clic sur un jour → ouvre popup
         document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
             dayDiv.addEventListener('click', () => {
                 const y = parseInt(dayDiv.dataset.year);
@@ -929,14 +813,15 @@
                             ${ev.period_id ? '<br><small style="color:#888;">🔗 Fait partie d\'une période</small>' : ''}
                         </div>
                         <div class="popup-actions">
-                            <button class="btn-edit" title="Modifier" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
-                            <button class="btn-delete" title="Supprimer" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
+                            <button class="btn-edit" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
+                            <button class="btn-delete" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
                         </div>
                     </div>
                 `;
             });
         }
 
+        // Formulaire d'édition (caché par défaut)
         html += `
             <div class="edit-form" id="editForm">
                 <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
@@ -960,29 +845,35 @@
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
 
+        // Fermer popup
         document.getElementById('closePopupBtn').onclick = closePopup;
         document.getElementById('eventsPopup').onclick = (e) => {
             if (e.target === document.getElementById('eventsPopup')) closePopup();
         };
 
-        // Supprimer
+        // Boutons supprimer
         document.querySelectorAll('.btn-delete').forEach(btn => {
             btn.onclick = async () => {
                 const id = btn.dataset.id;
                 const periodId = btn.dataset.period;
                 let msg = 'Supprimer cet événement ?';
                 if (periodId && periodId !== 'undefined' && periodId !== '') {
-                    msg = 'Supprimer toute la période ?';
+                    msg = 'Cet événement fait partie d\'une période. Supprimer toute la période ?\n("OK" = toute la période, "Annuler" = rien)';
                 }
                 if (confirm(msg)) {
-                    await deleteEvent(id, periodId);
-                    await refreshAfterChange();
-                    openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
+                    if (periodId && periodId !== 'undefined' && periodId !== '') {
+                        await supabase.from('calendar_events').delete().eq('period_id', periodId);
+                    } else {
+                        await supabase.from('calendar_events').delete().eq('id', id);
+                    }
+                    await loadAllEvents();
+                    renderCalendar();
+                    openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day); // refresh popup
                 }
             };
         });
 
-        // Éditer
+        // Boutons éditer
         document.querySelectorAll('.btn-edit').forEach(btn => {
             btn.onclick = () => {
                 editingEventId = btn.dataset.id;
@@ -1004,8 +895,13 @@
             const newTitre = document.getElementById('editTitle').value;
             const newLieu = document.getElementById('editLieu').value.trim();
             if (!newTitre) { alert('Titre requis'); return; }
-            await updateEvent(editingEventId, { type: newType, titre: newTitre, lieu: newLieu });
-            await refreshAfterChange();
+            const { error } = await supabase
+                .from('calendar_events')
+                .update({ type: newType, titre: newTitre, lieu: newLieu })
+                .eq('id', editingEventId);
+            if (error) { alert('Erreur: ' + error.message); return; }
+            await loadAllEvents();
+            renderCalendar();
             openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
         };
 
@@ -1030,55 +926,6 @@
             opt.value = t; opt.textContent = t;
             select.appendChild(opt);
         });
-    }
-
-    async function deleteEvent(id, periodId) {
-        if (supabase) {
-            if (periodId && periodId !== 'undefined' && periodId !== '') {
-                await supabase.from('calendar_events').delete().eq('period_id', periodId);
-            } else {
-                await supabase.from('calendar_events').delete().eq('id', id);
-            }
-        } else {
-            // Fallback localStorage
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            for (let key in raw) {
-                if (Array.isArray(raw[key])) {
-                    raw[key] = raw[key].filter(ev => ev.id !== id && ev.period_id !== periodId);
-                    if (raw[key].length === 0) delete raw[key];
-                } else if (raw[key].id === id || raw[key].periodId === periodId) {
-                    delete raw[key];
-                }
-            }
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
-        }
-    }
-
-    async function updateEvent(id, updates) {
-        if (supabase) {
-            await supabase.from('calendar_events').update(updates).eq('id', id);
-        } else {
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            for (let key in raw) {
-                if (Array.isArray(raw[key])) {
-                    raw[key].forEach(ev => {
-                        if (ev.id === id) Object.assign(ev, updates);
-                    });
-                } else if (raw[key].id === id) {
-                    Object.assign(raw[key], updates);
-                }
-            }
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
-        }
-    }
-
-    async function refreshAfterChange() {
-        if (supabase) {
-            await loadAllEvents();
-        } else {
-            initApp(); // recharge depuis localStorage
-        }
-        renderCalendar();
     }
 
     function escapeHtml(str) {
@@ -1128,28 +975,20 @@
             created_at: new Date().toISOString()
         }));
 
-        if (supabase) {
-            const { error } = await supabase.from('calendar_events').insert(rows);
-            if (error) { alert('Erreur: ' + error.message); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-        } else {
-            // Fallback localStorage
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            rows.forEach(r => {
-                if (!raw[r.event_date]) raw[r.event_date] = [];
-                raw[r.event_date].push({ ...r, id: 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2,5) });
-            });
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
+        const { error } = await supabase.from('calendar_events').insert(rows);
+        if (error) { alert('Erreur: ' + error.message); }
+        else {
+            document.getElementById('eventLieu').value = '';
+            await loadAllEvents();
+            renderCalendar();
+            alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
         }
-
-        document.getElementById('eventLieu').value = '';
-        await refreshAfterChange();
-        alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
         btn.disabled = false;
         btn.textContent = '💾 Enregistrer';
     });
 
     // ============================================================
-    // INIT CALENDRIER (affiché même avant chargement des données)
+    // INIT
     // ============================================================
     populateYearSelect();
     updateTitleDropdown();
