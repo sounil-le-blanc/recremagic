@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin calendrier - Récré Magic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -14,10 +14,9 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--vert-caravane); border-radius: 10px; }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -27,41 +26,71 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 1.5rem;
             position: relative;
-            overflow-x: hidden;
-            padding: 2rem;
         }
-
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0,0,0,0.45);
             z-index: 0;
             pointer-events: none;
         }
 
-        .admin-container {
-            max-width: 800px;
+        .admin-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1050px;
             margin: 0 auto;
-            background: rgba(235, 215, 185, 0.96);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .card {
+            background: rgba(235,215,185,0.96);
             backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 2rem;
+            border-radius: 40px;
+            padding: 1.8rem;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 10;
-            width: 100%;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.3);
         }
-        h1, h2 { color: #2C1810; text-align: center; }
-        input, textarea, button, select {
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .admin-header h1 {
+            font-family: 'MedievalSharp', cursive;
+            color: #f5d06b;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0 #3e6b3a;
+        }
+
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            border: none;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--vert-caravane); color: white; }
+        .btn-primary:hover { background: #5a8f78; }
+        .btn-danger { background: #D32F2F; color: white; }
+        .btn-danger:hover { background: #b71c1c; }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        input, textarea, select {
             width: 100%;
             padding: 0.7rem;
             margin: 0.5rem 0;
@@ -69,68 +98,360 @@
             border: 1.5px solid #c4a882;
             font-family: inherit;
             background: #fefefe;
+            font-size: 0.9rem;
         }
-        button {
-            background: #7CB69F;
+        textarea { border-radius: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .mode-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mode-tab {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 30px;
+            background: #ddd;
+            color: #555;
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .mode-tab.active {
+            background: var(--jaune-accent);
+            color: #2C1810;
+            border-color: #e6a000;
+        }
+
+        .period-summary {
+            background: #C8E6C9;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+        }
+        .period-summary.visible { display: block; }
+
+        .weekday-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: center;
+            margin-top: 0.3rem;
+        }
+        .weekday-checkbox {
+            padding: 0.3rem 0.6rem;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            cursor: pointer;
+        }
+        .weekday-checkbox input { width: auto; margin: 0; }
+
+        .hidden { display: none !important; }
+
+        /* Autocomplete */
+        .autocomplete-wrapper { position: relative; }
+        .autocomplete-suggestions {
+            position: absolute;
+            top: 100%;
+            left: 0; right: 0;
+            background: white;
+            border: 2px solid #7a5c3e;
+            border-top: none;
+            border-radius: 0 0 20px 20px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 50;
+            display: none;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+        .autocomplete-suggestions.active { display: block; }
+        .autocomplete-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #eee;
+        }
+        .autocomplete-item:hover { background: #FFF3CD; }
+        .autocomplete-item .cp { color: var(--rose-spectacle); font-weight: bold; margin-right: 0.5rem; }
+
+        /* Calendrier */
+        .calendar-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+        .month-year-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(0,0,0,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+        }
+        .month-year-nav span {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            min-width: 160px;
+            text-align: center;
+        }
+        .nav-arrow {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--vert-caravane);
             color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .nav-arrow:hover { transform: scale(1.1); }
+        .year-select-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0,0,0,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+        }
+        .year-select-wrap label { font-weight: bold; color: var(--text-dark); }
+        .year-select-wrap select {
+            width: auto;
+            padding: 0.3rem 0.6rem;
+            margin: 0;
+            border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
-            border: none;
         }
-        button:hover { background: #5a8f78; }
-        .event-item {
-            background: rgba(255, 255, 255, 0.6);
-            margin: 1rem 0;
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            text-align: center;
+        }
+        .weekday-header {
+            font-weight: bold;
+            color: var(--rose-spectacle);
+            padding: 0.6rem 0;
+            background: rgba(255,255,255,0.5);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .cal-day {
+            position: relative;
+            padding: 0.6rem 0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 500;
+            background: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cal-day:hover {
+            transform: scale(1.07);
+            background: var(--jaune-accent);
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .cal-day.has-event {
+            background: #FFE082 !important;
+            font-weight: bold;
+            color: #2C1810;
+        }
+        .cal-day.today {
+            background: var(--rose-spectacle) !important;
+            color: white !important;
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--rose-spectacle);
+        }
+        .cal-day.other-month { opacity: 0.35; pointer-events: none; }
+
+        /* Popup */
+        .events-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .events-popup.active { display: flex; }
+        .popup-content {
+            background: white;
+            border-radius: 25px;
+            padding: 1.5rem;
+            width: 95%;
+            max-width: 500px;
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 4px solid var(--vert-caravane);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .popup-content h3 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--rose-spectacle);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .popup-event-item {
+            background: #f9f9f9;
+            border-radius: 15px;
             padding: 0.8rem;
+            margin-bottom: 0.6rem;
+            border-left: 4px solid var(--vert-caravane);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .popup-event-info { flex: 1; font-size: 0.85rem; }
+        .popup-actions { display: flex; gap: 0.3rem; flex-direction: column; }
+        .popup-actions button {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            font-size: 1rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .btn-edit-popup { background: #FFB300; color: #2C1810; }
+        .btn-edit-popup:hover { background: #e6a000; }
+        .btn-delete-popup { background: #D32F2F; color: white; }
+        .btn-delete-popup:hover { background: #b71c1c; }
+        .btn-close-popup {
+            display: block;
+            margin: 1rem auto 0;
+            background: #aaa;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
             border-radius: 20px;
-            border-left: 5px solid #7CB69F;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .delete-event {
-            background: #D32F2F;
-            width: auto;
-            padding: 0.2rem 0.8rem;
-            margin-top: 0.5rem;
+        .btn-close-popup:hover { background: #888; }
+
+        .edit-form {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
         }
-        .code-section {
-            background: rgba(255, 255, 255, 0.5);
+        .edit-form.active { display: block; }
+        .edit-form label { font-size: 0.8rem; font-weight: bold; display: block; margin-top: 0.5rem; }
+        .edit-form input, .edit-form select, .edit-form textarea {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            margin: 0.2rem 0;
+        }
+        .edit-form .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .btn-save { background: var(--vert-caravane); color: white; flex: 1; }
+        .btn-cancel { background: #aaa; color: white; flex: 1; }
+
+        .no-events-msg {
+            text-align: center;
+            color: #888;
             padding: 1rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            border: 1px solid #c4a882;
+            font-style: italic;
         }
-        .hidden { display: none; }
-        .date-field { transition: background 0.3s; }
-        .date-highlight { background-color: #FFEB3B !important; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+
+        .legend {
+            text-align: center;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #666;
+        }
+
+        @media (max-width: 650px) {
+            body { padding: 0.8rem; }
+            .card { padding: 1rem; border-radius: 30px; }
+            .form-row { grid-template-columns: 1fr; }
+            .cal-day { font-size: 0.75rem; padding: 0.4rem 0; min-height: 32px; }
+            .weekday-header { font-size: 0.65rem; padding: 0.4rem 0; }
+            .month-year-nav span { font-size: 1rem; min-width: 100px; }
+        }
     </style>
 </head>
 <body>
-<div class="admin-container">
-    <h1>🔐 Administration du calendrier</h1>
 
-    <div class="code-section" id="codeSection">
-        <label>Code d'accès :</label>
-        <input type="password" id="accessCode" placeholder="Code secret">
-        <button id="verifyBtn">Vérifier</button>
-        <p id="codeError" style="color:red; display:none;">Code incorrect</p>
+<div class="admin-wrapper">
+
+    <!-- HEADER -->
+    <div class="card admin-header">
+        <h1>🎪 Admin Calendrier</h1>
+        <button class="btn btn-danger" id="clearAllBtn" style="width:auto;">🗑 Tout effacer</button>
     </div>
 
-    <div id="adminPanel" class="hidden">
-        <h2>➕ Ajouter un événement</h2>
+    <!-- FORMULAIRE -->
+    <div class="card">
+        <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
+
+        <div class="mode-tabs">
+            <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
+            <div class="mode-tab" id="modePeriod">📆 Période</div>
+        </div>
+
         <form id="eventForm">
-            <label>Date *</label>
-            <input type="date" id="eventDate" class="date-field" required>
+            <div id="singleDateFields">
+                <label>Date *</label>
+                <input type="date" id="eventDate" required>
+            </div>
+
+            <div id="periodFields" class="hidden">
+                <div class="form-row">
+                    <div><label>Date début *</label><input type="date" id="periodStart"></div>
+                    <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
+                </div>
+                <div class="period-summary" id="periodSummary"></div>
+                <label style="margin-top:0.3rem; font-size:0.85rem;">Jours à inclure :</label>
+                <div class="weekday-checkboxes">
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
+                </div>
+            </div>
 
             <div class="form-row">
-                <div class="form-group">
+                <div>
                     <label>Type</label>
                     <select id="eventType">
                         <option value="Spectacle">🎭 Spectacle</option>
                         <option value="Exposition">🖼️ Exposition</option>
                     </select>
                 </div>
-                <div class="form-group">
+                <div>
                     <label>Titre</label>
                     <select id="eventTitle" required>
                         <option value="">-- Sélectionnez --</option>
@@ -139,158 +460,541 @@
             </div>
 
             <label>Lieu</label>
-            <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
+            <div class="autocomplete-wrapper">
+                <textarea id="eventLieu" rows="2" placeholder="Commencez à taper une commune..."></textarea>
+                <div class="autocomplete-suggestions" id="lieuSuggestions"></div>
+            </div>
 
-            <button type="submit">💾 Enregistrer</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
         </form>
-
-        <hr>
-        <h2>📋 Événements existants</h2>
-        <div id="eventsList"></div>
-
-        <button id="openCalendarBtn" style="background: #7CB69F;">📅 Ouvrir le calendrier public</button>
-        <button id="openInscriptionBtn" style="background: #EC407A; margin-top: 0.8rem;">📝 Inscription</button>
     </div>
+
+    <!-- CALENDRIER -->
+    <div class="card">
+        <div class="calendar-header-row">
+            <div class="month-year-nav">
+                <button class="nav-arrow" id="prevMonthBtn">←</button>
+                <span id="monthName"></span>
+                <button class="nav-arrow" id="nextMonthBtn">→</button>
+            </div>
+            <div class="year-select-wrap">
+                <label for="yearSelect">Année :</label>
+                <select id="yearSelect"></select>
+            </div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <p class="legend">
+            🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
+        </p>
+    </div>
+
+</div>
+
+<!-- POPUP -->
+<div class="events-popup" id="eventsPopup">
+    <div class="popup-content" id="popupContent"></div>
 </div>
 
 <script>
-    const SECRET_CODE = "recremagic";
+    // ============================================================
+    // STOCKAGE LOCAL (localStorage) - pas de Supabase pour l'instant
+    // ============================================================
     const STORAGE_KEY = 'recremagic_calendar';
 
-    const SPECTACLES = [
-        "DU COUP ON VIENT CHEZ VOUS",
-        "DU COUP on revient chez vous",
-        "COMME SUR DES ROULETTES",
-        "DÉLICIEUSEMENT MABOUL"
-    ];
-    const EXPOSITIONS = [
-        "LA FÉERIE DES MARIONNETTES",
-        "LES GÉANTS DU CARNAVAL"
-    ];
+    let currentMode = 'single';
+    let currentMonth, currentYear;
+    let eventsData = {};
+    let communesList = [];
 
-    function updateTitleDropdown() {
-        const type = document.getElementById('eventType').value;
-        const titleSelect = document.getElementById('eventTitle');
-        const titles = (type === 'Spectacle') ? SPECTACLES : EXPOSITIONS;
-        titleSelect.innerHTML = '<option value="">-- Sélectionnez --</option>';
-        titles.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            titleSelect.appendChild(opt);
-        });
-    }
+    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+    const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
+    const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
 
-    document.getElementById('verifyBtn').onclick = () => {
-        if (document.getElementById('accessCode').value === SECRET_CODE) {
-            document.getElementById('codeSection').style.display = 'none';
-            document.getElementById('adminPanel').classList.remove('hidden');
-            loadEvents();
-            updateTitleDropdown();
-        } else {
-            document.getElementById('codeError').style.display = 'block';
-        }
-    };
+    const now = new Date();
+    currentMonth = now.getMonth();
+    currentYear = now.getFullYear();
+    if (currentYear < 2026) currentYear = 2026;
+    if (currentYear > 2028) currentYear = 2028;
 
-    document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
-
-    function getEvents() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return {};
-        const data = JSON.parse(stored);
+    // ============================================================
+    // CHARGER / SAUVEGARDER (localStorage)
+    // ============================================================
+    function loadFromStorage() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) { eventsData = {}; return; }
+        const data = JSON.parse(raw);
+        eventsData = {};
         for (let key in data) {
-            if (!Array.isArray(data[key])) {
+            if (Array.isArray(data[key])) {
+                // Déjà au bon format
+                eventsData[key] = data[key].map((ev, i) => ({
+                    id: ev.id || 'evt_' + key + '_' + i,
+                    event_date: key,
+                    type: ev.type || 'Spectacle',
+                    titre: ev.titre || '',
+                    lieu: ev.lieu || '',
+                    period_id: ev.period_id || ev.periodId || null
+                }));
+            } else {
+                // Ancien format (objet unique)
                 const old = data[key];
-                if (old.spectacle !== undefined || old.titre !== undefined) {
-                    const type = old.type || 'Spectacle';
-                    const titre = old.titre || old.spectacle || '';
-                    const lieu = old.lieu || '';
-                    data[key] = [{ type, titre, lieu }];
-                } else {
-                    data[key] = [];
-                }
+                eventsData[key] = [{
+                    id: 'evt_' + key + '_0',
+                    event_date: key,
+                    type: old.type || 'Spectacle',
+                    titre: old.titre || old.spectacle || '',
+                    lieu: old.lieu || '',
+                    period_id: old.periodId || null
+                }];
             }
         }
-        return data;
     }
 
-    function saveEvents(events) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
+    function saveToStorage() {
+        // Nettoyer : ne garder que les champs utiles
+        const toSave = {};
+        for (let key in eventsData) {
+            toSave[key] = eventsData[key].map(ev => ({
+                type: ev.type,
+                titre: ev.titre,
+                lieu: ev.lieu,
+                period_id: ev.period_id,
+                id: ev.id
+            }));
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
     }
 
-    function addEvent(dateKey, type, titre, lieu) {
-        let events = getEvents();
-        if (!events[dateKey]) events[dateKey] = [];
-        events[dateKey].push({ type, titre, lieu });
-        saveEvents(events);
-        loadEvents();
+    function getEventsForDate(year, month, day) {
+        const key = `${year}-${month+1}-${day}`;
+        return eventsData[key] || [];
     }
 
-    function deleteEventFromDate(dateKey, index) {
-        let events = getEvents();
-        if (events[dateKey] && events[dateKey][index]) {
-            events[dateKey].splice(index, 1);
-            if (events[dateKey].length === 0) delete events[dateKey];
-            saveEvents(events);
-            loadEvents();
+    // ============================================================
+    // MODE
+    // ============================================================
+    document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
+    document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
+
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
+        document.getElementById('modePeriod').classList.toggle('active', mode === 'period');
+        document.getElementById('singleDateFields').classList.toggle('hidden', mode !== 'single');
+        document.getElementById('periodFields').classList.toggle('hidden', mode !== 'period');
+        document.getElementById('eventDate').required = (mode === 'single');
+        document.getElementById('periodStart').required = (mode === 'period');
+        document.getElementById('periodEnd').required = (mode === 'period');
+        if (mode === 'single') {
+            document.getElementById('periodStart').value = '';
+            document.getElementById('periodEnd').value = '';
+            document.getElementById('periodSummary').classList.remove('visible');
+        } else {
+            document.getElementById('eventDate').value = '';
+            updatePeriodSummary();
         }
     }
 
-    function loadEvents() {
-        const events = getEvents();
-        const container = document.getElementById('eventsList');
-        const sortedDates = Object.keys(events).sort();
-        if (sortedDates.length === 0) {
-            container.innerHTML = '<p>Aucun événement.</p>';
+    document.getElementById('periodStart').addEventListener('change', updatePeriodSummary);
+    document.getElementById('periodEnd').addEventListener('change', updatePeriodSummary);
+    document.querySelectorAll('.weekday-filter').forEach(cb => cb.addEventListener('change', updatePeriodSummary));
+
+    function updatePeriodSummary() {
+        const start = document.getElementById('periodStart').value;
+        const end = document.getElementById('periodEnd').value;
+        const summary = document.getElementById('periodSummary');
+        if (!start || !end) { summary.classList.remove('visible'); return; }
+        if (start > end) {
+            summary.textContent = '⚠️ Date début > date fin';
+            summary.style.background = '#FFCDD2';
+            summary.classList.add('visible'); return;
+        }
+        const dates = getDatesInRange(start, end);
+        if (dates.length === 0) {
+            summary.textContent = '⚠️ Aucune date (vérifiez les jours cochés)';
+            summary.style.background = '#FFCDD2';
+            summary.classList.add('visible'); return;
+        }
+        summary.textContent = `📆 ${dates.length} jour(s) : du ${formatDateFr(start)} au ${formatDateFr(end)}`;
+        summary.style.background = '#C8E6C9';
+        summary.classList.add('visible');
+    }
+
+    function getDatesInRange(startStr, endStr) {
+        const dates = [];
+        const start = new Date(startStr + 'T00:00:00');
+        const end = new Date(endStr + 'T00:00:00');
+        const selectedDays = Array.from(document.querySelectorAll('.weekday-filter:checked')).map(cb => parseInt(cb.value));
+        const current = new Date(start);
+        while (current <= end) {
+            if (selectedDays.includes(current.getDay())) dates.push(new Date(current));
+            current.setDate(current.getDate() + 1);
+        }
+        return dates;
+    }
+
+    function dateToKey(date) {
+        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    }
+
+    function formatDateFr(dateStr) {
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+
+    // ============================================================
+    // AUTOCOMPLETE COMMUNES
+    // ============================================================
+    async function loadCommunes() {
+        try {
+            const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
+            communesList = await res.json();
+            console.log('✅ Communes chargées :', communesList.length);
+        } catch (e) {
+            console.warn('⚠️ Communes non chargées, autocomplete désactivé');
+        }
+    }
+
+    const lieuInput = document.getElementById('eventLieu');
+    const suggestionsDiv = document.getElementById('lieuSuggestions');
+    let selectedCommuneIndex = -1;
+
+    lieuInput.addEventListener('input', () => {
+        const query = lieuInput.value.trim().toLowerCase();
+        if (query.length < 2 || communesList.length === 0) {
+            suggestionsDiv.classList.remove('active');
             return;
         }
-        let html = '';
-        for (let date of sortedDates) {
-            const eventList = events[date];
-            html += `<div style="margin-bottom: 1.5rem; border-bottom: 1px solid #ccc;"><strong>📅 ${date}</strong>`;
-            eventList.forEach((ev, idx) => {
-                const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
-                html += `
-                    <div class="event-item">
-                        <div>${typeIcon} <strong>${escapeHtml(ev.titre)}</strong><br>📍 ${escapeHtml(ev.lieu) || '—'}</div>
-                        <button class="delete-event" data-date="${date}" data-index="${idx}">🗑 Supprimer</button>
-                    </div>
-                `;
-            });
-            html += `</div>`;
+        const matches = communesList.filter(c =>
+            c.nom.toLowerCase().startsWith(query) || c.code_postal.startsWith(query)
+        ).slice(0, 8);
+
+        if (matches.length === 0) {
+            suggestionsDiv.classList.remove('active');
+            return;
         }
-        container.innerHTML = html;
-        document.querySelectorAll('.delete-event').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const date = btn.getAttribute('data-date');
-                const idx = parseInt(btn.getAttribute('data-index'));
-                if (confirm(`Supprimer cet événement du ${date} ?`)) deleteEventFromDate(date, idx);
+
+        suggestionsDiv.innerHTML = matches.map((c, i) =>
+            `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
+                <span class="cp">${c.code_postal}</span> ${c.nom}
+            </div>`
+        ).join('');
+        suggestionsDiv.classList.add('active');
+        selectedCommuneIndex = -1;
+
+        suggestionsDiv.querySelectorAll('.autocomplete-item').forEach(item => {
+            item.addEventListener('mousedown', (e) => {
+                e.preventDefault();
+                lieuInput.value = item.dataset.full;
+                suggestionsDiv.classList.remove('active');
+            });
+        });
+    });
+
+    lieuInput.addEventListener('keydown', (e) => {
+        const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
+        if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
+        if (e.key === 'ArrowDown') { e.preventDefault(); selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1); highlightItems(items); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1); highlightItems(items); }
+        else if (e.key === 'Enter' && selectedCommuneIndex >= 0) { e.preventDefault(); lieuInput.value = items[selectedCommuneIndex].dataset.full; suggestionsDiv.classList.remove('active'); }
+        else if (e.key === 'Escape') { suggestionsDiv.classList.remove('active'); }
+    });
+
+    function highlightItems(items) {
+        items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
+    }
+
+    document.addEventListener('click', (e) => {
+        if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
+            suggestionsDiv.classList.remove('active');
+        }
+    });
+
+    // ============================================================
+    // DROPDOWN TITRES
+    // ============================================================
+    function updateTitleDropdown() {
+        const type = document.getElementById('eventType').value;
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('eventTitle');
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
+    }
+    document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
+
+    function updateEditTitleDropdown(type) {
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('editTitle');
+        if (!select) return;
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
+    }
+
+    // ============================================================
+    // CALENDRIER
+    // ============================================================
+    function renderCalendar() {
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const today = new Date();
+        const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
+
+        let html = '';
+        weekdays.forEach(d => { html += `<div class="weekday-header">${d}</div>`; });
+        for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const isToday = isCurrentMonthYear && d === today.getDate();
+            const events = getEventsForDate(currentYear, currentMonth, d);
+            const hasEvent = events.length > 0;
+            html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
+                         data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">${d}</div>`;
+        }
+
+        document.getElementById('calendarGrid').innerHTML = html;
+        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        document.getElementById('yearSelect').value = currentYear;
+
+        document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
+            dayDiv.addEventListener('click', () => {
+                openPopup(parseInt(dayDiv.dataset.year), parseInt(dayDiv.dataset.month), parseInt(dayDiv.dataset.day));
             });
         });
     }
 
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    function populateYearSelect() {
+        const select = document.getElementById('yearSelect');
+        for (let y = 2026; y <= 2028; y++) {
+            const opt = document.createElement('option');
+            opt.value = y; opt.textContent = y;
+            select.appendChild(opt);
+        }
+        select.value = currentYear;
+        select.addEventListener('change', () => { currentYear = parseInt(select.value); renderCalendar(); });
+    }
 
-    const form = document.getElementById('eventForm');
-    form.addEventListener('submit', (e) => {
+    function changeMonth(delta) {
+        let m = currentMonth + delta;
+        let y = currentYear;
+        if (m < 0) { m = 11; y--; if (y < 2026) y = 2026; }
+        else if (m > 11) { m = 0; y++; if (y > 2028) y = 2028; }
+        currentMonth = m; currentYear = y;
+        renderCalendar();
+    }
+
+    document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
+    document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
+
+    // ============================================================
+    // POPUP
+    // ============================================================
+    let currentPopupDate = null;
+    let editingEventId = null;
+
+    function openPopup(year, month, day) {
+        currentPopupDate = { year, month, day };
+        editingEventId = null;
+        const key = `${year}-${month+1}-${day}`;
+        const events = eventsData[key] || [];
+
+        let html = `<h3>📅 ${formatDateFr(key)}</h3>`;
+
+        if (events.length === 0) {
+            html += `<p class="no-events-msg">Aucun événement ce jour.</p>`;
+        } else {
+            events.forEach(ev => {
+                const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                html += `
+                    <div class="popup-event-item">
+                        <div class="popup-event-info">
+                            <strong>${typeIcon} ${escapeHtml(ev.titre)}</strong><br>
+                            📍 ${escapeHtml(ev.lieu) || '—'}
+                            ${ev.period_id ? '<br><small style="color:#888;">🔗 Période</small>' : ''}
+                        </div>
+                        <div class="popup-actions">
+                            <button class="btn-edit-popup" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
+                            <button class="btn-delete-popup" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
+                        </div>
+                    </div>`;
+            });
+        }
+
+        html += `
+            <div class="edit-form" id="editForm">
+                <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
+                <label>Type</label>
+                <select id="editType"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
+                <label>Titre</label>
+                <select id="editTitle"></select>
+                <label>Lieu</label>
+                <textarea id="editLieu" rows="2"></textarea>
+                <div class="btn-row">
+                    <button class="btn-save" id="saveEditBtn">💾 Sauvegarder</button>
+                    <button class="btn-cancel" id="cancelEditBtn">Annuler</button>
+                </div>
+            </div>
+            <button class="btn-close-popup" id="closePopupBtn">✖ Fermer</button>
+        `;
+
+        document.getElementById('popupContent').innerHTML = html;
+        document.getElementById('eventsPopup').classList.add('active');
+
+        document.getElementById('closePopupBtn').onclick = closePopup;
+        document.getElementById('eventsPopup').onclick = (e) => {
+            if (e.target === document.getElementById('eventsPopup')) closePopup();
+        };
+
+        // Supprimer
+        document.querySelectorAll('.btn-delete-popup').forEach(btn => {
+            btn.onclick = () => {
+                const id = btn.dataset.id;
+                const periodId = btn.dataset.period;
+                let msg = 'Supprimer cet événement ?';
+                if (periodId && periodId !== 'undefined' && periodId !== '') {
+                    msg = 'Supprimer toute la période ?';
+                }
+                if (confirm(msg)) {
+                    if (periodId && periodId !== 'undefined' && periodId !== '') {
+                        for (let k in eventsData) {
+                            eventsData[k] = eventsData[k].filter(ev => ev.period_id !== periodId);
+                            if (eventsData[k].length === 0) delete eventsData[k];
+                        }
+                    } else {
+                        for (let k in eventsData) {
+                            eventsData[k] = eventsData[k].filter(ev => ev.id !== id);
+                            if (eventsData[k].length === 0) delete eventsData[k];
+                        }
+                    }
+                    saveToStorage();
+                    renderCalendar();
+                    openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
+                }
+            };
+        });
+
+        // Éditer
+        document.querySelectorAll('.btn-edit-popup').forEach(btn => {
+            btn.onclick = () => {
+                editingEventId = btn.dataset.id;
+                document.getElementById('editType').value = btn.dataset.type;
+                document.getElementById('editLieu').value = btn.dataset.lieu;
+                updateEditTitleDropdown(btn.dataset.type);
+                document.getElementById('editTitle').value = btn.dataset.titre;
+                document.getElementById('editForm').classList.add('active');
+                document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
+            };
+        });
+
+        document.getElementById('editType').addEventListener('change', function() {
+            updateEditTitleDropdown(this.value);
+        });
+
+        document.getElementById('saveEditBtn').onclick = () => {
+            const newType = document.getElementById('editType').value;
+            const newTitre = document.getElementById('editTitle').value;
+            const newLieu = document.getElementById('editLieu').value.trim();
+            if (!newTitre) { alert('Titre requis'); return; }
+            for (let k in eventsData) {
+                eventsData[k].forEach(ev => {
+                    if (ev.id === editingEventId) {
+                        ev.type = newType;
+                        ev.titre = newTitre;
+                        ev.lieu = newLieu;
+                    }
+                });
+            }
+            saveToStorage();
+            renderCalendar();
+            openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
+        };
+
+        document.getElementById('cancelEditBtn').onclick = () => {
+            document.getElementById('editForm').classList.remove('active');
+            editingEventId = null;
+        };
+    }
+
+    function closePopup() {
+        document.getElementById('eventsPopup').classList.remove('active');
+        currentPopupDate = null;
+        editingEventId = null;
+    }
+
+    // ============================================================
+    // SOUMISSION
+    // ============================================================
+    document.getElementById('eventForm').addEventListener('submit', (e) => {
         e.preventDefault();
-        const dateValue = document.getElementById('eventDate').value;
-        if (!dateValue) return;
-        document.getElementById('eventDate').classList.add('date-highlight');
-        setTimeout(() => document.getElementById('eventDate').classList.remove('date-highlight'), 2000);
-        const [year, month, day] = dateValue.split('-');
-        const dateKey = `${year}-${parseInt(month)}-${parseInt(day)}`;
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true; btn.textContent = '⏳...';
+
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
-        if (!titre) { alert("Veuillez sélectionner un titre"); return; }
+        if (!titre) { alert('Titre requis'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
         const lieu = document.getElementById('eventLieu').value.trim();
-        addEvent(dateKey, type, titre, lieu);
+
+        let dateKeys = [];
+        if (currentMode === 'single') {
+            const val = document.getElementById('eventDate').value;
+            if (!val) { alert('Date requise'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            const [y,m,d] = val.split('-');
+            dateKeys.push(`${y}-${parseInt(m)}-${parseInt(d)}`);
+            document.getElementById('eventDate').value = '';
+        } else {
+            const start = document.getElementById('periodStart').value;
+            const end = document.getElementById('periodEnd').value;
+            if (!start || !end) { alert('Dates début et fin requises'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            if (start > end) { alert('Date début > date fin'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            const dates = getDatesInRange(start, end);
+            if (dates.length === 0) { alert('Aucune date dans la plage'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            dateKeys = dates.map(d => dateToKey(d));
+            document.getElementById('periodStart').value = ''; document.getElementById('periodEnd').value = '';
+            document.getElementById('periodSummary').classList.remove('visible');
+        }
+
+        const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
+        dateKeys.forEach(dk => {
+            if (!eventsData[dk]) eventsData[dk] = [];
+            eventsData[dk].push({
+                id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
+                event_date: dk, type, titre, lieu, period_id: periodId
+            });
+        });
+
+        saveToStorage();
         document.getElementById('eventLieu').value = '';
-        alert(`✅ Événement ajouté au ${dateKey}`);
+        renderCalendar();
+        alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
+        btn.disabled = false; btn.textContent = '💾 Enregistrer';
     });
 
-    document.getElementById('openCalendarBtn').onclick = () => window.open('calendrier.html', '_blank');
-    document.getElementById('openInscriptionBtn').onclick = () => window.open('inscription.html', '_blank');
+    // ============================================================
+    // TOUT EFFACER
+    // ============================================================
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+        if (confirm('⚠️ Supprimer TOUS les événements ?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            eventsData = {};
+            renderCalendar();
+        }
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    loadFromStorage();
+    populateYearSelect();
+    updateTitleDropdown();
+    renderCalendar();
+    loadCommunes();
+    console.log('✅ Admin calendrier prêt !');
 </script>
 </body>
 </html>
