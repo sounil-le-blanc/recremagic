@@ -4,7 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin calendrier - Récré Magic</title>
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -14,10 +15,9 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
+        ::-webkit-scrollbar { width: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: var(--vert-caravane); border-radius: 10px; }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -27,41 +27,93 @@
             background-repeat: no-repeat;
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
+            padding: 1.5rem;
             position: relative;
-            overflow-x: hidden;
-            padding: 2rem;
         }
-
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0,0,0,0.45);
             z-index: 0;
             pointer-events: none;
         }
 
-        .admin-container {
-            max-width: 800px;
+        .admin-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1050px;
             margin: 0 auto;
-            background: rgba(235, 215, 185, 0.96);
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        /* Cartes */
+        .card {
+            background: rgba(235,215,185,0.96);
             backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 2rem;
+            border-radius: 40px;
+            padding: 1.8rem;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            position: relative;
-            z-index: 10;
-            width: 100%;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.3);
         }
-        h1, h2 { color: #2C1810; text-align: center; }
-        input, textarea, button, select {
+
+        /* Header admin */
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        .admin-header h1 {
+            font-family: 'MedievalSharp', cursive;
+            color: #f5d06b;
+            font-size: 2rem;
+            text-shadow: 2px 2px 0 #3e6b3a;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .header-buttons { display: flex; gap: 0.6rem; align-items: center; flex-wrap: wrap; }
+        .btn {
+            padding: 0.6rem 1.2rem;
+            border-radius: 30px;
+            border: none;
+            font-family: inherit;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.9rem;
+            white-space: nowrap;
+        }
+        .btn-primary { background: var(--vert-caravane); color: white; }
+        .btn-primary:hover { background: #5a8f78; }
+        .btn-danger { background: #D32F2F; color: white; }
+        .btn-danger:hover { background: #b71c1c; }
+        .btn-outline { background: transparent; border: 2px solid #7a5c3e; color: #5a3e2a; }
+        .btn-outline:hover { background: rgba(0,0,0,0.05); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .status-dot {
+            display: inline-block;
+            width: 10px; height: 10px;
+            border-radius: 50%;
+            margin-right: 0.3rem;
+        }
+        .status-dot.green { background: #4CAF50; }
+        .status-dot.red { background: #f44336; }
+
+        /* Formulaire */
+        .form-section h2 {
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            font-size: 1.3rem;
+        }
+        input, textarea, select {
             width: 100%;
             padding: 0.7rem;
             margin: 0.5rem 0;
@@ -69,228 +121,878 @@
             border: 1.5px solid #c4a882;
             font-family: inherit;
             background: #fefefe;
+            font-size: 0.9rem;
         }
-        button {
-            background: #7CB69F;
+        textarea { border-radius: 20px; }
+        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        /* Mode selector */
+        .mode-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mode-tab {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 30px;
+            background: #ddd;
+            color: #555;
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .mode-tab.active {
+            background: var(--jaune-accent);
+            color: #2C1810;
+            border-color: #e6a000;
+        }
+
+        .period-summary {
+            background: #C8E6C9;
+            padding: 0.4rem 1rem;
+            border-radius: 15px;
+            margin: 0.5rem 0;
+            font-size: 0.85rem;
+            text-align: center;
+            display: none;
+        }
+        .period-summary.visible { display: block; }
+
+        .weekday-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem;
+            justify-content: center;
+            margin-top: 0.3rem;
+        }
+        .weekday-checkbox {
+            padding: 0.3rem 0.6rem;
+            background: #f0f0f0;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 0.2rem;
+            cursor: pointer;
+        }
+        .weekday-checkbox input { width: auto; margin: 0; }
+
+        .hidden { display: none !important; }
+
+        /* Calendrier */
+        .calendar-header-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-bottom: 1.2rem;
+            padding-bottom: 0.8rem;
+            border-bottom: 2px solid rgba(0,0,0,0.1);
+        }
+        .month-year-nav {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            background: rgba(0,0,0,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+        }
+        .month-year-nav span {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            min-width: 140px;
+            text-align: center;
+        }
+        .nav-arrow {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            border: none;
+            background: var(--vert-caravane);
             color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.2s;
+        }
+        .nav-arrow:hover { transform: scale(1.1); }
+        .year-select-wrap {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: rgba(0,0,0,0.05);
+            padding: 0.4rem 1rem;
+            border-radius: 50px;
+        }
+        .year-select-wrap label { font-weight: bold; color: var(--text-dark); }
+        .year-select-wrap select {
+            width: auto;
+            padding: 0.3rem 0.6rem;
+            margin: 0;
+            border-radius: 20px;
             font-weight: bold;
             cursor: pointer;
-            border: none;
         }
-        button:hover { background: #5a8f78; }
-        .event-item {
-            background: rgba(255, 255, 255, 0.6);
-            margin: 1rem 0;
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.4rem;
+            text-align: center;
+        }
+        .weekday-header {
+            font-weight: bold;
+            color: var(--rose-spectacle);
+            padding: 0.6rem 0;
+            background: rgba(255,255,255,0.5);
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .cal-day {
+            position: relative;
+            padding: 0.6rem 0;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.15s;
+            font-weight: 500;
+            background: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .cal-day:hover {
+            transform: scale(1.07);
+            background: var(--jaune-accent);
+            z-index: 5;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        .cal-day.has-event {
+            background: #FFE082 !important;
+            font-weight: bold;
+            color: #2C1810;
+        }
+        .cal-day.today {
+            background: var(--rose-spectacle) !important;
+            color: white !important;
+            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--rose-spectacle);
+        }
+        .cal-day.other-month { opacity: 0.35; pointer-events: none; }
+
+        /* Popup événements */
+        .events-popup {
+            display: none;
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .events-popup.active { display: flex; }
+        .popup-content {
+            background: white;
+            border-radius: 25px;
+            padding: 1.5rem;
+            width: 95%;
+            max-width: 480px;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 4px solid var(--vert-caravane);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .popup-content h3 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--rose-spectacle);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .popup-event-item {
+            background: #f9f9f9;
+            border-radius: 15px;
             padding: 0.8rem;
+            margin-bottom: 0.6rem;
+            border-left: 4px solid var(--vert-caravane);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .popup-event-info { flex: 1; font-size: 0.85rem; }
+        .popup-actions { display: flex; gap: 0.3rem; flex-direction: column; }
+        .popup-actions button {
+            padding: 0.3rem 0.7rem;
+            border-radius: 15px;
+            border: none;
+            cursor: pointer;
+            font-size: 0.75rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+        .btn-edit { background: #FFB300; color: #2C1810; }
+        .btn-edit:hover { background: #e6a000; }
+        .btn-delete { background: #D32F2F; color: white; }
+        .btn-delete:hover { background: #b71c1c; }
+        .btn-close-popup {
+            display: block;
+            margin: 1rem auto 0;
+            background: #aaa;
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
             border-radius: 20px;
-            border-left: 5px solid #7CB69F;
+            cursor: pointer;
+            font-weight: bold;
         }
-        .delete-event {
-            background: #D32F2F;
-            width: auto;
-            padding: 0.2rem 0.8rem;
-            margin-top: 0.5rem;
+        .btn-close-popup:hover { background: #888; }
+
+        /* Formulaire d'édition intégré */
+        .edit-form {
+            display: none;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 2px solid #eee;
         }
-        .code-section {
-            background: rgba(255, 255, 255, 0.5);
+        .edit-form.active { display: block; }
+        .edit-form label { font-size: 0.8rem; font-weight: bold; display: block; margin-top: 0.5rem; }
+        .edit-form input, .edit-form select, .edit-form textarea {
+            padding: 0.5rem;
+            font-size: 0.85rem;
+            margin: 0.2rem 0;
+        }
+        .edit-form .btn-row {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 0.8rem;
+        }
+        .btn-save { background: var(--vert-caravane); color: white; flex: 1; }
+        .btn-cancel { background: #aaa; color: white; flex: 1; }
+
+        .no-events-msg {
+            text-align: center;
+            color: #888;
             padding: 1rem;
-            border-radius: 20px;
-            margin-bottom: 2rem;
-            border: 1px solid #c4a882;
+            font-style: italic;
         }
-        .hidden { display: none; }
-        .date-field { transition: background 0.3s; }
-        .date-highlight { background-color: #FFEB3B !important; }
-        .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-        @media (max-width: 600px) { .form-row { grid-template-columns: 1fr; gap: 0; } }
+
+        /* Auth */
+        .auth-box {
+            max-width: 450px;
+            margin: 5rem auto;
+            text-align: center;
+        }
+        .auth-box h2 { font-family: 'MedievalSharp', cursive; color: #f5d06b; margin-bottom: 1.5rem; }
+        .auth-box input { margin-bottom: 0.8rem; }
+        .auth-error { color: #D32F2F; display: none; margin-top: 0.5rem; font-weight: bold; }
+
+        @media (max-width: 650px) {
+            body { padding: 0.8rem; }
+            .card { padding: 1rem; border-radius: 30px; }
+            .form-row { grid-template-columns: 1fr; }
+            .cal-day { font-size: 0.75rem; padding: 0.4rem 0; min-height: 32px; }
+            .weekday-header { font-size: 0.65rem; padding: 0.4rem 0; }
+            .month-year-nav span { font-size: 1rem; min-width: 100px; }
+        }
     </style>
 </head>
 <body>
-<div class="admin-container">
-    <h1>🔐 Administration du calendrier</h1>
 
-    <div class="code-section" id="codeSection">
-        <label>Code d'accès :</label>
-        <input type="password" id="accessCode" placeholder="Code secret">
-        <button id="verifyBtn">Vérifier</button>
-        <p id="codeError" style="color:red; display:none;">Code incorrect</p>
+<div class="admin-wrapper">
+
+    <!-- ===== AUTH ===== -->
+    <div id="authBox" class="card auth-box">
+        <h2>🔐 Accès Administration</h2>
+        <input type="email" id="adminEmail" placeholder="Email admin">
+        <input type="password" id="adminPassword" placeholder="Mot de passe">
+        <button class="btn btn-primary" id="loginBtn" style="width:100%;">Se connecter</button>
+        <p class="auth-error" id="authError"></p>
+        <p style="font-size:0.75rem; color:#888; margin-top:1rem;">Compte configuré dans Supabase</p>
     </div>
 
+    <!-- ===== PANEL ADMIN ===== -->
     <div id="adminPanel" class="hidden">
-        <h2>➕ Ajouter un événement</h2>
-        <form id="eventForm">
-            <label>Date *</label>
-            <input type="date" id="eventDate" class="date-field" required>
 
-            <div class="form-row">
-                <div class="form-group">
-                    <label>Type</label>
-                    <select id="eventType">
-                        <option value="Spectacle">🎭 Spectacle</option>
-                        <option value="Exposition">🖼️ Exposition</option>
-                    </select>
-                </div>
-                <div class="form-group">
-                    <label>Titre</label>
-                    <select id="eventTitle" required>
-                        <option value="">-- Sélectionnez --</option>
-                    </select>
-                </div>
+        <!-- HEADER -->
+        <div class="card admin-header">
+            <h1>🎪 Admin Calendrier</h1>
+            <div class="header-buttons">
+                <span style="font-size:0.85rem;">
+                    <span class="status-dot green" id="statusDot"></span>
+                    <span id="statusText">Connecté</span>
+                </span>
+                <button class="btn btn-outline" id="logoutBtn">🚪 Déconnexion</button>
+            </div>
+        </div>
+
+        <!-- FORMULAIRE D'AJOUT -->
+        <div class="card form-section">
+            <h2>➕ Ajouter un événement</h2>
+
+            <div class="mode-tabs">
+                <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
+                <div class="mode-tab" id="modePeriod">📆 Période</div>
             </div>
 
-            <label>Lieu</label>
-            <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
+            <form id="eventForm">
+                <div id="singleDateFields">
+                    <label>Date *</label>
+                    <input type="date" id="eventDate" required>
+                </div>
 
-            <button type="submit">💾 Enregistrer</button>
-        </form>
+                <div id="periodFields" class="hidden">
+                    <div class="form-row">
+                        <div><label>Date début *</label><input type="date" id="periodStart"></div>
+                        <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
+                    </div>
+                    <div class="period-summary" id="periodSummary"></div>
+                    <label style="margin-top:0.3rem; font-size:0.85rem;">Jours de la semaine :</label>
+                    <div class="weekday-checkboxes">
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
+                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
+                    </div>
+                </div>
 
-        <hr>
-        <h2>📋 Événements existants</h2>
-        <div id="eventsList"></div>
+                <div class="form-row">
+                    <div><label>Type</label>
+                        <select id="eventType">
+                            <option value="Spectacle">🎭 Spectacle</option>
+                            <option value="Exposition">🖼️ Exposition</option>
+                        </select>
+                    </div>
+                    <div><label>Titre</label>
+                        <select id="eventTitle" required>
+                            <option value="">-- Sélectionnez --</option>
+                        </select>
+                    </div>
+                </div>
 
-        <button id="openCalendarBtn" style="background: #7CB69F;">📅 Ouvrir le calendrier public</button>
-        <button id="openInscriptionBtn" style="background: #EC407A; margin-top: 0.8rem;">📝 Inscription</button>
+                <label>Lieu</label>
+                <textarea id="eventLieu" rows="2" placeholder="Ville, salle..."></textarea>
+
+                <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
+            </form>
+        </div>
+
+        <!-- CALENDRIER -->
+        <div class="card">
+            <div class="calendar-header-row">
+                <div class="month-year-nav">
+                    <button class="nav-arrow" id="prevMonthBtn">←</button>
+                    <span id="monthName"></span>
+                    <button class="nav-arrow" id="nextMonthBtn">→</button>
+                </div>
+                <div class="year-select-wrap">
+                    <label for="yearSelect">Année :</label>
+                    <select id="yearSelect"></select>
+                </div>
+            </div>
+            <div class="calendar-grid" id="calendarGrid"></div>
+            <p style="text-align:center; margin-top:1rem; font-size:0.8rem; color:#666;">
+                🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
+            </p>
+        </div>
+
     </div>
 </div>
 
+<!-- ===== POPUP ===== -->
+<div class="events-popup" id="eventsPopup">
+    <div class="popup-content" id="popupContent"></div>
+</div>
+
 <script>
-    const SECRET_CODE = "recremagic";
-    const STORAGE_KEY = 'recremagic_calendar';
+    // ============================================================
+    // CONFIG SUPABASE (À REMPLIR)
+    // ============================================================
+    const SUPABASE_URL = 'https://ton-projet.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOi...';
 
-    const SPECTACLES = [
-        "DU COUP ON VIENT CHEZ VOUS",
-        "DU COUP on revient chez vous",
-        "COMME SUR DES ROULETTES",
-        "DÉLICIEUSEMENT MABOUL"
-    ];
-    const EXPOSITIONS = [
-        "LA FÉERIE DES MARIONNETTES",
-        "LES GÉANTS DU CARNAVAL"
-    ];
+    let supabase;
+    let currentMode = 'single';
+    let currentMonth, currentYear;
+    let eventsData = {}; // { 'YYYY-M-D': [{id, event_date, type, titre, lieu, period_id}] }
 
-    function updateTitleDropdown() {
-        const type = document.getElementById('eventType').value;
-        const titleSelect = document.getElementById('eventTitle');
-        const titles = (type === 'Spectacle') ? SPECTACLES : EXPOSITIONS;
-        titleSelect.innerHTML = '<option value="">-- Sélectionnez --</option>';
-        titles.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t;
-            opt.textContent = t;
-            titleSelect.appendChild(opt);
+    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+    const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
+    const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
+
+    const now = new Date();
+    currentMonth = now.getMonth();
+    currentYear = now.getFullYear();
+    if (currentYear < 2026) currentYear = 2026;
+    if (currentYear > 2028) currentYear = 2028;
+
+    // ============================================================
+    // INIT SUPABASE
+    // ============================================================
+    function initSupabase() {
+        if (!SUPABASE_URL.includes('ton-projet')) {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+            return true;
+        }
+        return false;
+    }
+
+    // ============================================================
+    // AUTH
+    // ============================================================
+    document.getElementById('loginBtn').addEventListener('click', async () => {
+        if (!initSupabase()) {
+            document.getElementById('authError').textContent = '⚠️ Configure SUPABASE_URL et SUPABASE_ANON_KEY';
+            document.getElementById('authError').style.display = 'block';
+            return;
+        }
+        const email = document.getElementById('adminEmail').value;
+        const password = document.getElementById('adminPassword').value;
+        const { error } = await supabase.auth.signInWithPassword({ email, password });
+        if (error) {
+            document.getElementById('authError').textContent = '❌ ' + error.message;
+            document.getElementById('authError').style.display = 'block';
+        } else {
+            showAdminPanel();
+        }
+    });
+
+    document.getElementById('logoutBtn').addEventListener('click', async () => {
+        await supabase.auth.signOut();
+        hideAdminPanel();
+    });
+
+    async function checkSession() {
+        if (!initSupabase()) return;
+        const { data: { session } } = await supabase.auth.getSession();
+        if (session) showAdminPanel();
+    }
+
+    function showAdminPanel() {
+        document.getElementById('authBox').classList.add('hidden');
+        document.getElementById('adminPanel').classList.remove('hidden');
+        loadAllEvents().then(() => {
+            renderCalendar();
+            updateTitleDropdown();
         });
     }
 
-    document.getElementById('verifyBtn').onclick = () => {
-        if (document.getElementById('accessCode').value === SECRET_CODE) {
-            document.getElementById('codeSection').style.display = 'none';
-            document.getElementById('adminPanel').classList.remove('hidden');
-            loadEvents();
-            updateTitleDropdown();
+    function hideAdminPanel() {
+        document.getElementById('authBox').classList.remove('hidden');
+        document.getElementById('adminPanel').classList.add('hidden');
+        document.getElementById('adminEmail').value = '';
+        document.getElementById('adminPassword').value = '';
+    }
+
+    checkSession();
+
+    // ============================================================
+    // MODE
+    // ============================================================
+    document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
+    document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
+
+    function switchMode(mode) {
+        currentMode = mode;
+        document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
+        document.getElementById('modePeriod').classList.toggle('active', mode === 'period');
+        document.getElementById('singleDateFields').classList.toggle('hidden', mode !== 'single');
+        document.getElementById('periodFields').classList.toggle('hidden', mode !== 'period');
+        document.getElementById('eventDate').required = (mode === 'single');
+        document.getElementById('periodStart').required = (mode === 'period');
+        document.getElementById('periodEnd').required = (mode === 'period');
+        if (mode === 'single') {
+            document.getElementById('periodStart').value = '';
+            document.getElementById('periodEnd').value = '';
+            document.getElementById('periodSummary').classList.remove('visible');
         } else {
-            document.getElementById('codeError').style.display = 'block';
-        }
-    };
-
-    document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
-
-    function getEvents() {
-        const stored = localStorage.getItem(STORAGE_KEY);
-        if (!stored) return {};
-        const data = JSON.parse(stored);
-        for (let key in data) {
-            if (!Array.isArray(data[key])) {
-                const old = data[key];
-                if (old.spectacle !== undefined || old.titre !== undefined) {
-                    const type = old.type || 'Spectacle';
-                    const titre = old.titre || old.spectacle || '';
-                    const lieu = old.lieu || '';
-                    data[key] = [{ type, titre, lieu }];
-                } else {
-                    data[key] = [];
-                }
-            }
-        }
-        return data;
-    }
-
-    function saveEvents(events) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(events));
-    }
-
-    function addEvent(dateKey, type, titre, lieu) {
-        let events = getEvents();
-        if (!events[dateKey]) events[dateKey] = [];
-        events[dateKey].push({ type, titre, lieu });
-        saveEvents(events);
-        loadEvents();
-    }
-
-    function deleteEventFromDate(dateKey, index) {
-        let events = getEvents();
-        if (events[dateKey] && events[dateKey][index]) {
-            events[dateKey].splice(index, 1);
-            if (events[dateKey].length === 0) delete events[dateKey];
-            saveEvents(events);
-            loadEvents();
+            document.getElementById('eventDate').value = '';
+            updatePeriodSummary();
         }
     }
 
-    function loadEvents() {
-        const events = getEvents();
-        const container = document.getElementById('eventsList');
-        const sortedDates = Object.keys(events).sort();
-        if (sortedDates.length === 0) {
-            container.innerHTML = '<p>Aucun événement.</p>';
+    document.getElementById('periodStart').addEventListener('change', updatePeriodSummary);
+    document.getElementById('periodEnd').addEventListener('change', updatePeriodSummary);
+    document.querySelectorAll('.weekday-filter').forEach(cb => cb.addEventListener('change', updatePeriodSummary));
+
+    function updatePeriodSummary() {
+        const start = document.getElementById('periodStart').value;
+        const end = document.getElementById('periodEnd').value;
+        const summary = document.getElementById('periodSummary');
+        if (!start || !end) { summary.classList.remove('visible'); return; }
+        if (start > end) {
+            summary.textContent = '⚠️ Date début > date fin';
+            summary.style.background = '#FFCDD2';
+            summary.classList.add('visible');
             return;
         }
+        const dates = getDatesInRange(start, end);
+        if (dates.length === 0) {
+            summary.textContent = '⚠️ Aucune date (vérifiez les jours cochés)';
+            summary.style.background = '#FFCDD2';
+            summary.classList.add('visible');
+            return;
+        }
+        summary.textContent = `📆 ${dates.length} jour(s) : du ${formatDateFr(start)} au ${formatDateFr(end)}`;
+        summary.style.background = '#C8E6C9';
+        summary.classList.add('visible');
+    }
+
+    function getDatesInRange(startStr, endStr) {
+        const dates = [];
+        const start = new Date(startStr + 'T00:00:00');
+        const end = new Date(endStr + 'T00:00:00');
+        const selectedDays = Array.from(document.querySelectorAll('.weekday-filter:checked')).map(cb => parseInt(cb.value));
+        const current = new Date(start);
+        while (current <= end) {
+            if (selectedDays.includes(current.getDay())) dates.push(new Date(current));
+            current.setDate(current.getDate() + 1);
+        }
+        return dates;
+    }
+
+    function dateToKey(date) {
+        return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+    }
+
+    function formatDateFr(dateStr) {
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+
+    function formatDateFrShort(dateStr) {
+        const d = new Date(dateStr + 'T00:00:00');
+        return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'short' });
+    }
+
+    // ============================================================
+    // DROPDOWN TITRES
+    // ============================================================
+    function updateTitleDropdown() {
+        const type = document.getElementById('eventType').value;
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('eventTitle');
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            select.appendChild(opt);
+        });
+    }
+    document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
+
+    // ============================================================
+    // CHARGEMENT DEPUIS SUPABASE
+    // ============================================================
+    async function loadAllEvents() {
+        const { data, error } = await supabase
+            .from('calendar_events')
+            .select('*')
+            .order('event_date', { ascending: true });
+
+        if (error) {
+            console.error('Erreur chargement:', error);
+            eventsData = {};
+            return;
+        }
+
+        eventsData = {};
+        data.forEach(ev => {
+            if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
+            eventsData[ev.event_date].push(ev);
+        });
+    }
+
+    function getEventsForDate(year, month, day) {
+        const key = `${year}-${month+1}-${day}`;
+        return eventsData[key] || [];
+    }
+
+    // ============================================================
+    // CALENDRIER
+    // ============================================================
+    function renderCalendar() {
+        const firstDay = new Date(currentYear, currentMonth, 1);
+        let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+        const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const today = new Date();
+        const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
+
         let html = '';
-        for (let date of sortedDates) {
-            const eventList = events[date];
-            html += `<div style="margin-bottom: 1.5rem; border-bottom: 1px solid #ccc;"><strong>📅 ${date}</strong>`;
-            eventList.forEach((ev, idx) => {
+        weekdays.forEach(d => { html += `<div class="weekday-header">${d}</div>`; });
+        for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const isToday = isCurrentMonthYear && d === today.getDate();
+            const events = getEventsForDate(currentYear, currentMonth, d);
+            const hasEvent = events.length > 0;
+            html += `
+                <div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
+                     data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                    ${d}
+                </div>
+            `;
+        }
+
+        document.getElementById('calendarGrid').innerHTML = html;
+        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        document.getElementById('yearSelect').value = currentYear;
+
+        // Clic sur un jour → ouvre popup
+        document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
+            dayDiv.addEventListener('click', () => {
+                const y = parseInt(dayDiv.dataset.year);
+                const m = parseInt(dayDiv.dataset.month);
+                const d = parseInt(dayDiv.dataset.day);
+                openPopup(y, m, d);
+            });
+        });
+    }
+
+    function populateYearSelect() {
+        const select = document.getElementById('yearSelect');
+        select.innerHTML = '';
+        for (let y = 2026; y <= 2028; y++) {
+            const opt = document.createElement('option');
+            opt.value = y; opt.textContent = y;
+            select.appendChild(opt);
+        }
+        select.value = currentYear;
+        select.addEventListener('change', () => {
+            currentYear = parseInt(select.value);
+            renderCalendar();
+        });
+    }
+
+    function changeMonth(delta) {
+        let m = currentMonth + delta;
+        let y = currentYear;
+        if (m < 0) { m = 11; y--; if (y < 2026) { y = 2026; m = 0; } }
+        else if (m > 11) { m = 0; y++; if (y > 2028) { y = 2028; m = 11; } }
+        currentMonth = m;
+        currentYear = y;
+        renderCalendar();
+    }
+
+    document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
+    document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
+
+    // ============================================================
+    // POPUP DE GESTION
+    // ============================================================
+    let currentPopupDate = null;
+    let editingEventId = null;
+
+    function openPopup(year, month, day) {
+        currentPopupDate = { year, month, day };
+        editingEventId = null;
+        const key = `${year}-${month+1}-${day}`;
+        const events = eventsData[key] || [];
+        const dateStr = formatDateFr(key);
+
+        let html = `<h3>📅 ${dateStr}</h3>`;
+
+        if (events.length === 0) {
+            html += `<p class="no-events-msg">Aucun événement ce jour.</p>`;
+        } else {
+            events.forEach(ev => {
                 const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
                 html += `
-                    <div class="event-item">
-                        <div>${typeIcon} <strong>${escapeHtml(ev.titre)}</strong><br>📍 ${escapeHtml(ev.lieu) || '—'}</div>
-                        <button class="delete-event" data-date="${date}" data-index="${idx}">🗑 Supprimer</button>
+                    <div class="popup-event-item">
+                        <div class="popup-event-info">
+                            <strong>${typeIcon} ${escapeHtml(ev.titre)}</strong><br>
+                            📍 ${escapeHtml(ev.lieu) || '—'}
+                            ${ev.period_id ? '<br><small style="color:#888;">🔗 Fait partie d\'une période</small>' : ''}
+                        </div>
+                        <div class="popup-actions">
+                            <button class="btn-edit" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
+                            <button class="btn-delete" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
+                        </div>
                     </div>
                 `;
             });
-            html += `</div>`;
         }
-        container.innerHTML = html;
-        document.querySelectorAll('.delete-event').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const date = btn.getAttribute('data-date');
-                const idx = parseInt(btn.getAttribute('data-index'));
-                if (confirm(`Supprimer cet événement du ${date} ?`)) deleteEventFromDate(date, idx);
-            });
+
+        // Formulaire d'édition (caché par défaut)
+        html += `
+            <div class="edit-form" id="editForm">
+                <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
+                <label>Type</label>
+                <select id="editType">
+                    <option value="Spectacle">🎭 Spectacle</option>
+                    <option value="Exposition">🖼️ Exposition</option>
+                </select>
+                <label>Titre</label>
+                <select id="editTitle"></select>
+                <label>Lieu</label>
+                <textarea id="editLieu" rows="2"></textarea>
+                <div class="btn-row">
+                    <button class="btn-save" id="saveEditBtn">💾 Sauvegarder</button>
+                    <button class="btn-cancel" id="cancelEditBtn">Annuler</button>
+                </div>
+            </div>
+            <button class="btn-close-popup" id="closePopupBtn">✖ Fermer</button>
+        `;
+
+        document.getElementById('popupContent').innerHTML = html;
+        document.getElementById('eventsPopup').classList.add('active');
+
+        // Fermer popup
+        document.getElementById('closePopupBtn').onclick = closePopup;
+        document.getElementById('eventsPopup').onclick = (e) => {
+            if (e.target === document.getElementById('eventsPopup')) closePopup();
+        };
+
+        // Boutons supprimer
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = async () => {
+                const id = btn.dataset.id;
+                const periodId = btn.dataset.period;
+                let msg = 'Supprimer cet événement ?';
+                if (periodId && periodId !== 'undefined' && periodId !== '') {
+                    msg = 'Cet événement fait partie d\'une période. Supprimer toute la période ?\n("OK" = toute la période, "Annuler" = rien)';
+                }
+                if (confirm(msg)) {
+                    if (periodId && periodId !== 'undefined' && periodId !== '') {
+                        await supabase.from('calendar_events').delete().eq('period_id', periodId);
+                    } else {
+                        await supabase.from('calendar_events').delete().eq('id', id);
+                    }
+                    await loadAllEvents();
+                    renderCalendar();
+                    openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day); // refresh popup
+                }
+            };
+        });
+
+        // Boutons éditer
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+            btn.onclick = () => {
+                editingEventId = btn.dataset.id;
+                document.getElementById('editType').value = btn.dataset.type;
+                document.getElementById('editLieu').value = btn.dataset.lieu;
+                updateEditTitleDropdown(btn.dataset.type);
+                document.getElementById('editTitle').value = btn.dataset.titre;
+                document.getElementById('editForm').classList.add('active');
+                document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
+            };
+        });
+
+        document.getElementById('editType').addEventListener('change', function() {
+            updateEditTitleDropdown(this.value);
+        });
+
+        document.getElementById('saveEditBtn').onclick = async () => {
+            const newType = document.getElementById('editType').value;
+            const newTitre = document.getElementById('editTitle').value;
+            const newLieu = document.getElementById('editLieu').value.trim();
+            if (!newTitre) { alert('Titre requis'); return; }
+            const { error } = await supabase
+                .from('calendar_events')
+                .update({ type: newType, titre: newTitre, lieu: newLieu })
+                .eq('id', editingEventId);
+            if (error) { alert('Erreur: ' + error.message); return; }
+            await loadAllEvents();
+            renderCalendar();
+            openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
+        };
+
+        document.getElementById('cancelEditBtn').onclick = () => {
+            document.getElementById('editForm').classList.remove('active');
+            editingEventId = null;
+        };
+    }
+
+    function closePopup() {
+        document.getElementById('eventsPopup').classList.remove('active');
+        currentPopupDate = null;
+        editingEventId = null;
+    }
+
+    function updateEditTitleDropdown(type) {
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('editTitle');
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            select.appendChild(opt);
         });
     }
 
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
 
-    const form = document.getElementById('eventForm');
-    form.addEventListener('submit', (e) => {
+    // ============================================================
+    // SOUMISSION AJOUT
+    // ============================================================
+    document.getElementById('eventForm').addEventListener('submit', async (e) => {
         e.preventDefault();
-        const dateValue = document.getElementById('eventDate').value;
-        if (!dateValue) return;
-        document.getElementById('eventDate').classList.add('date-highlight');
-        setTimeout(() => document.getElementById('eventDate').classList.remove('date-highlight'), 2000);
-        const [year, month, day] = dateValue.split('-');
-        const dateKey = `${year}-${parseInt(month)}-${parseInt(day)}`;
+        const btn = document.getElementById('submitBtn');
+        btn.disabled = true;
+        btn.textContent = '⏳...';
+
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
-        if (!titre) { alert("Veuillez sélectionner un titre"); return; }
+        if (!titre) { alert('Titre requis'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
         const lieu = document.getElementById('eventLieu').value.trim();
-        addEvent(dateKey, type, titre, lieu);
-        document.getElementById('eventLieu').value = '';
-        alert(`✅ Événement ajouté au ${dateKey}`);
+
+        let dateKeys = [];
+        if (currentMode === 'single') {
+            const val = document.getElementById('eventDate').value;
+            if (!val) { alert('Date requise'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            const [y,m,d] = val.split('-');
+            dateKeys.push(`${y}-${parseInt(m)}-${parseInt(d)}`);
+            document.getElementById('eventDate').value = '';
+        } else {
+            const start = document.getElementById('periodStart').value;
+            const end = document.getElementById('periodEnd').value;
+            if (!start || !end) { alert('Dates début et fin requises'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            if (start > end) { alert('Date début > date fin'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            const dates = getDatesInRange(start, end);
+            if (dates.length === 0) { alert('Aucune date dans la plage'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
+            dateKeys = dates.map(d => dateToKey(d));
+            document.getElementById('periodStart').value = '';
+            document.getElementById('periodEnd').value = '';
+            document.getElementById('periodSummary').classList.remove('visible');
+        }
+
+        const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
+        const rows = dateKeys.map(dk => ({
+            event_date: dk,
+            type, titre, lieu,
+            period_id: periodId,
+            created_at: new Date().toISOString()
+        }));
+
+        const { error } = await supabase.from('calendar_events').insert(rows);
+        if (error) { alert('Erreur: ' + error.message); }
+        else {
+            document.getElementById('eventLieu').value = '';
+            await loadAllEvents();
+            renderCalendar();
+            alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
+        }
+        btn.disabled = false;
+        btn.textContent = '💾 Enregistrer';
     });
 
-    document.getElementById('openCalendarBtn').onclick = () => window.open('calendrier.html', '_blank');
-    document.getElementById('openInscriptionBtn').onclick = () => window.open('inscription.html', '_blank');
+    // ============================================================
+    // INIT
+    // ============================================================
+    populateYearSelect();
+    updateTitleDropdown();
+    renderCalendar();
 </script>
 </body>
 </html>
