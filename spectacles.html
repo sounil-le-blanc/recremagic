@@ -259,13 +259,12 @@
             gap: 3rem;
         }
 
-        .spectacle-item {
+        /* ========== CARTE SPECTACLE ========== */
+        .spectacle-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 32px;
-            overflow: hidden;
+            overflow: visible;
             transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            display: grid;
-            grid-template-columns: 500px 1fr;
             backdrop-filter: blur(2px);
             position: relative;
             border: 5px solid #7a5c3e;
@@ -274,7 +273,7 @@
             box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
         }
 
-        .spectacle-item::before {
+        .spectacle-card::before {
             content: '';
             position: absolute;
             top: 8px; left: 8px; right: 8px; bottom: 8px;
@@ -284,9 +283,16 @@
             z-index: 1;
         }
 
-        .spectacle-item:hover {
+        .spectacle-card:hover {
             transform: translateY(-8px);
             box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
+        }
+
+        .spectacle-card-inner {
+            display: grid;
+            grid-template-columns: 500px 1fr;
+            border-radius: 32px 32px 0 0;
+            overflow: hidden;
         }
 
         .spectacle-img {
@@ -327,30 +333,33 @@
             color: #2C1810; text-align: justify;
         }
 
-        /* ========== YOUTUBE VIEWER ========== */
+        /* ========== YOUTUBE VIEWER SOUS LA CARTE ========== */
         .youtube-viewer {
             width: 100%;
-            margin-top: 1rem;
-            margin-bottom: 1.5rem;
-            border-radius: 16px;
+            border-radius: 0 0 27px 27px;
             overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.4);
-            border: 3px solid rgba(255,255,255,0.3);
+            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
+            border-top: 4px solid #7a5c3e;
             background: #000;
+            position: relative;
+            z-index: 0;
         }
 
         .youtube-viewer iframe {
             display: block;
             width: 100%;
-            aspect-ratio: 16/9;
+            height: 400px;
             border: none;
         }
 
+        @media (max-width: 968px) {
+            .spectacle-card-inner { grid-template-columns: 1fr; }
+            .spectacle-img { min-height: 250px; }
+            .youtube-viewer iframe { height: 300px; }
+        }
+
         @media (max-width: 600px) {
-            .youtube-viewer {
-                border-radius: 12px;
-                border-width: 2px;
-            }
+            .youtube-viewer iframe { height: 220px; }
         }
 
         .btn {
@@ -365,6 +374,26 @@
             box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
         }
         .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        }
+
+        .btn-devis {
+            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
+            color: white;
+            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            cursor: pointer;
+            border: none;
+            font-family: inherit;
+            display: inline-block;
+            margin-top: 0.5rem;
+        }
+        .btn-devis:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
         }
@@ -452,11 +481,6 @@
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
         .contact-cta a:hover { text-decoration: underline; color: white; }
 
-        @media (max-width: 968px) {
-            .spectacle-item { grid-template-columns: 1fr; }
-            .spectacle-img { min-height: 250px; }
-        }
-
         @media (max-width: 768px) {
             .spectacles-list { padding: 0 1rem; }
             .spectacle-content { padding: 1.5rem; }
@@ -488,7 +512,7 @@
             .page-header p { font-size: 1rem; }
             .parchment-wrapper { padding: 1.5rem 1.8rem; margin: 1rem auto 2rem auto; }
             .spectacle-badge { font-size: 0.7rem; }
-            .btn-primary { display: block; text-align: center; }
+            .btn-primary, .btn-devis { display: block; text-align: center; }
             .gallery-grid { grid-template-columns: 1fr; }
             .nav-arrow { width: 40px; height: 40px; font-size: 30px; }
         }
@@ -529,100 +553,108 @@
 
 <div class="spectacles-list">
     <!-- Spectacle 1 -->
-    <div class="spectacle-item">
-        <div class="spectacle-img">
-            <img src="images/Ducoup-on-vien-chez-vous.png" alt="Du coup on vient chez vous - Récré Magic">
-        </div>
-        <div class="spectacle-content">
-            <span class="spectacle-badge">EN TOURNÉE</span>
-            <h2 class="spectacle-title">DU COUP ON VIENT CHEZ VOUS</h2>
-            <p class="spectacle-description" style="text-align: justify;">
-                C'est le grand jour ! Flo, l'ami fidèle — et un peu turbulent — de Toto, s'apprête peut-être à réaliser son plus grand rêve : intégrer la prestigieuse troupe du Circus Théâtre Récré Magic.<br><br>
-                Sous l'œil attentif de Monsieur Poupif, le directeur de la troupe, les auditions commencent. Mais pour Toto, rien ne va se passer comme prévu… Car Flo, débordant d'enthousiasme et d'imagination, a une fâcheuse tendance à n'en faire qu'à sa tête.<br><br>
-                Toto parviendra-t-il, malgré tout, à canaliser son brin de folie ? Flo réussira-t-il à trouver sa place au sein de la célèbre troupe ?<br><br>
-                Ce premier opus de la série invite le public à suivre l'aventure Récré Magic, à travers une véritable symbiose entre comédiens, marionnettes, chiens savants — et bien sûr le public — emportés dans un univers où se mêlent musique, magie et théâtre burlesque.
-            </p>
-            <div class="youtube-viewer">
-                <iframe src="https://www.youtube.com/embed/HNhvls_XnRg?rel=0&modestbranding=1"
-                        title="Bande-annonce DU COUP ON VIENT CHEZ VOUS"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
+    <div class="spectacle-card">
+        <div class="spectacle-card-inner">
+            <div class="spectacle-img">
+                <img src="images/Ducoup-on-vien-chez-vous.png" alt="Du coup on vient chez vous - Récré Magic">
             </div>
-            <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
+            <div class="spectacle-content">
+                <span class="spectacle-badge">EN TOURNÉE</span>
+                <h2 class="spectacle-title">DU COUP ON VIENT CHEZ VOUS</h2>
+                <p class="spectacle-description" style="text-align: justify;">
+                    C'est le grand jour ! Flo, l'ami fidèle — et un peu turbulent — de Toto, s'apprête peut-être à réaliser son plus grand rêve : intégrer la prestigieuse troupe du Circus Théâtre Récré Magic.<br><br>
+                    Sous l'œil attentif de Monsieur Poupif, le directeur de la troupe, les auditions commencent. Mais pour Toto, rien ne va se passer comme prévu… Car Flo, débordant d'enthousiasme et d'imagination, a une fâcheuse tendance à n'en faire qu'à sa tête.<br><br>
+                    Toto parviendra-t-il, malgré tout, à canaliser son brin de folie ? Flo réussira-t-il à trouver sa place au sein de la célèbre troupe ?<br><br>
+                    Ce premier opus de la série invite le public à suivre l'aventure Récré Magic, à travers une véritable symbiose entre comédiens, marionnettes, chiens savants — et bien sûr le public — emportés dans un univers où se mêlent musique, magie et théâtre burlesque.
+                </p>
+                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+            </div>
+        </div>
+        <div class="youtube-viewer">
+            <iframe src="https://www.youtube.com/embed/HNhvls_XnRg?rel=0&modestbranding=1"
+                    title="Bande-annonce DU COUP ON VIENT CHEZ VOUS"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 
     <!-- Spectacle 2 -->
-    <div class="spectacle-item">
-        <div class="spectacle-img">
-            <img src="images/Ducoup-on-revient-chez-vous.png" alt="Du coup on revient chez vous - Récré Magic">
-        </div>
-        <div class="spectacle-content">
-            <span class="spectacle-badge">NOUVEAU SPECTACLE 2026 EN TOURNÉE</span>
-            <h2 class="spectacle-title">DU COUP on revient chez vous</h2>
-            <p class="spectacle-description" style="text-align: justify;">
-                Flo et Toto sillonnent les routes avec leur spectacle, animés par le plaisir de jouer et de faire rêver. Mais cette tournée, qui s'annonçait joyeuse, va basculer lorsqu'une ancienne malédiction se réveille…<br><br>
-                Gros Boulard, redoutable vilain à l'ambition démesurée, n'a qu'une obsession : conquérir le monde. Pour mener à bien son plan aussi machiavélique que farfelu, il enrôle les créatures féériques du royaume magique.<br><br>
-                Flo et Toto parviendront-ils à déjouer ses manigances ?<br><br>
-                Dans ce nouvel opus de la série Ducoup, le public est invité à plonger plus profondément au cœur du royaume de RécréMagic : un monde peuplé d'êtres féériques — marionnettes, chien acrobate, comédiens costumés… — où se rencontrent un univers musical unique, des tours de magie éclatants et des scènes de théâtre burlesque pleines d'énergie et de surprises.
-            </p>
-            <div class="youtube-viewer">
-                <iframe src="https://www.youtube.com/embed/Ocu-1LbdWts?rel=0&modestbranding=1"
-                        title="Bande-annonce DU COUP ON REVIENT CHEZ VOUS"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
+    <div class="spectacle-card">
+        <div class="spectacle-card-inner">
+            <div class="spectacle-img">
+                <img src="images/Ducoup-on-revient-chez-vous.png" alt="Du coup on revient chez vous - Récré Magic">
             </div>
-            <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
+            <div class="spectacle-content">
+                <span class="spectacle-badge">NOUVEAU SPECTACLE 2026 EN TOURNÉE</span>
+                <h2 class="spectacle-title">DU COUP on revient chez vous</h2>
+                <p class="spectacle-description" style="text-align: justify;">
+                    Flo et Toto sillonnent les routes avec leur spectacle, animés par le plaisir de jouer et de faire rêver. Mais cette tournée, qui s'annonçait joyeuse, va basculer lorsqu'une ancienne malédiction se réveille…<br><br>
+                    Gros Boulard, redoutable vilain à l'ambition démesurée, n'a qu'une obsession : conquérir le monde. Pour mener à bien son plan aussi machiavélique que farfelu, il enrôle les créatures féériques du royaume magique.<br><br>
+                    Flo et Toto parviendront-ils à déjouer ses manigances ?<br><br>
+                    Dans ce nouvel opus de la série Ducoup, le public est invité à plonger plus profondément au cœur du royaume de RécréMagic : un monde peuplé d'êtres féériques — marionnettes, chien acrobate, comédiens costumés… — où se rencontrent un univers musical unique, des tours de magie éclatants et des scènes de théâtre burlesque pleines d'énergie et de surprises.
+                </p>
+                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+            </div>
+        </div>
+        <div class="youtube-viewer">
+            <iframe src="https://www.youtube.com/embed/Ocu-1LbdWts?rel=0&modestbranding=1"
+                    title="Bande-annonce DU COUP ON REVIENT CHEZ VOUS"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 
     <!-- Spectacle 3 -->
-    <div class="spectacle-item">
-        <div class="spectacle-img">
-            <img src="images/Comme-sur-des-roulette.png" alt="Comme sur des roulettes - Récré Magic">
-        </div>
-        <div class="spectacle-content">
-            <span class="spectacle-badge">À LA DEMANDE</span>
-            <h2 class="spectacle-title">COMME SUR DES ROULETTES</h2>
-            <p class="spectacle-description" style="text-align: justify;">
-                Monsieur Toto doit malgré lui partager la scène avec Flo, un personnage inattendu, aussi imprévisible qu'attachant.<br><br>
-                Tour après tour, il se montrera gaffeur, farceur et plein de malice. Flo ne peut s'empêcher de semer un vent de folie dans l'univers bien ordonné de Toto.<br><br>
-                Entre humour, illusion, quiproquos et moment de tendresse, ce duo complice embarque petits et grands pour un moment drôle et décalé, où rien ne se passe tout à fait comme prévu, pour le plus grand plaisir du public.
-            </p>
-            <div class="youtube-viewer">
-                <iframe src="https://www.youtube.com/embed/Xje7iAlDU_8?rel=0&modestbranding=1"
-                        title="Bande-annonce COMME SUR DES ROULETTES"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
+    <div class="spectacle-card">
+        <div class="spectacle-card-inner">
+            <div class="spectacle-img">
+                <img src="images/Comme-sur-des-roulette.png" alt="Comme sur des roulettes - Récré Magic">
             </div>
-            <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
+            <div class="spectacle-content">
+                <span class="spectacle-badge">À LA DEMANDE</span>
+                <h2 class="spectacle-title">COMME SUR DES ROULETTES</h2>
+                <p class="spectacle-description" style="text-align: justify;">
+                    Monsieur Toto doit malgré lui partager la scène avec Flo, un personnage inattendu, aussi imprévisible qu'attachant.<br><br>
+                    Tour après tour, il se montrera gaffeur, farceur et plein de malice. Flo ne peut s'empêcher de semer un vent de folie dans l'univers bien ordonné de Toto.<br><br>
+                    Entre humour, illusion, quiproquos et moment de tendresse, ce duo complice embarque petits et grands pour un moment drôle et décalé, où rien ne se passe tout à fait comme prévu, pour le plus grand plaisir du public.
+                </p>
+                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+            </div>
+        </div>
+        <div class="youtube-viewer">
+            <iframe src="https://www.youtube.com/embed/Xje7iAlDU_8?rel=0&modestbranding=1"
+                    title="Bande-annonce COMME SUR DES ROULETTES"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 
     <!-- Spectacle 4 -->
-    <div class="spectacle-item">
-        <div class="spectacle-img">
-            <img src="images/Delicieusement-Maboul.png" alt="Délicieusement Maboul - Récré Magic">
-        </div>
-        <div class="spectacle-content">
-            <span class="spectacle-badge">INTERACTIF</span>
-            <h2 class="spectacle-title">DÉLICIEUSEMENT MABOUL</h2>
-            <p class="spectacle-description" style="text-align: justify;">
-                Récré Magic vous présente un spectacle exceptionnel réalisé par Monsieur YBOS. Ce spectacle magique laissera aux jeunes enfants et aux grands un souvenir inoubliable, en les plongeant dans l'univers à la fois comique et décalé de Monsieur YBOS.<br><br>
-                Monsieur YBOS débarque avec son énergie débordante et son grain de folie communicatif ! Entre gags hilarants, numéros de magie et complicité avec Black (son chien acrobate), ce clown haut en couleurs entraîne le public dans un tourbillon de rires et de surprises.<br><br>
-                Un spectacle rythmé et joyeux, où petits et grands découvrent qu'il est délicieusement bon d'être… un peu maboul.
-            </p>
-            <div class="youtube-viewer">
-                <iframe src="https://www.youtube.com/embed/bhx0xnXulVg?rel=0&modestbranding=1"
-                        title="Bande-annonce DÉLICIEUSEMENT MABOUL"
-                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        allowfullscreen>
-                </iframe>
+    <div class="spectacle-card">
+        <div class="spectacle-card-inner">
+            <div class="spectacle-img">
+                <img src="images/Delicieusement-Maboul.png" alt="Délicieusement Maboul - Récré Magic">
             </div>
-            <a href="Devis.html" class="btn btn-primary" target="_blank">📩 Demander un devis</a>
+            <div class="spectacle-content">
+                <span class="spectacle-badge">INTERACTIF</span>
+                <h2 class="spectacle-title">DÉLICIEUSEMENT MABOUL</h2>
+                <p class="spectacle-description" style="text-align: justify;">
+                    Récré Magic vous présente un spectacle exceptionnel réalisé par Monsieur YBOS. Ce spectacle magique laissera aux jeunes enfants et aux grands un souvenir inoubliable, en les plongeant dans l'univers à la fois comique et décalé de Monsieur YBOS.<br><br>
+                    Monsieur YBOS débarque avec son énergie débordante et son grain de folie communicatif ! Entre gags hilarants, numéros de magie et complicité avec Black (son chien acrobate), ce clown haut en couleurs entraîne le public dans un tourbillon de rires et de surprises.<br><br>
+                    Un spectacle rythmé et joyeux, où petits et grands découvrent qu'il est délicieusement bon d'être… un peu maboul.
+                </p>
+                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+            </div>
+        </div>
+        <div class="youtube-viewer">
+            <iframe src="https://www.youtube.com/embed/bhx0xnXulVg?rel=0&modestbranding=1"
+                    title="Bande-annonce DÉLICIEUSEMENT MABOUL"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
         </div>
     </div>
 </div>
@@ -659,7 +691,7 @@
         <p>Contactez-nous pour un devis gratuit et personnalisé</p>
         <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
             📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
-        <a href="Devis.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block; background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));" target="_blank">📩 Demander un devis</a>
+        <a href="Devis.html" class="btn-primary" style="margin-top: 1rem; display: inline-block; background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));" target="_blank">📩 Demander un devis</a>
     </div>
 </div>
 
@@ -717,4 +749,4 @@
     });
 </script>
 </body>
-</html>
+    </html>
