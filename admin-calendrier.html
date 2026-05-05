@@ -390,6 +390,44 @@
             color: #666;
         }
 
+        /* Auth styles */
+        .auth-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            z-index: 2000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .auth-card {
+            background: rgba(235,215,185,0.98);
+            border-radius: 40px;
+            padding: 2rem;
+            max-width: 400px;
+            width: 90%;
+            border: 5px solid #7a5c3e;
+            text-align: center;
+        }
+        .auth-card h2 {
+            font-family: 'MedievalSharp', cursive;
+            color: var(--rose-spectacle);
+            margin-bottom: 1rem;
+        }
+        .auth-card input {
+            text-align: center;
+            letter-spacing: 2px;
+            font-size: 1.2rem;
+        }
+        .error-msg {
+            color: #D32F2F;
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+        }
+
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
             .card { padding: 1rem; border-radius: 30px; }
@@ -399,11 +437,23 @@
             .month-year-nav span { font-size: 1rem; min-width: 100px; }
         }
     </style>
+    <!-- Ajout de Supabase JS -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body>
 
-<div class="admin-wrapper">
+<!-- Écran d'authentification -->
+<div id="authOverlay" class="auth-overlay">
+    <div class="auth-card">
+        <h2>🔐 Accès Admin</h2>
+        <p>Entrez le code d'accès :</p>
+        <input type="password" id="accessCode" placeholder="Code" maxlength="20">
+        <button class="btn btn-primary" id="authBtn" style="margin-top: 1rem;">Valider</button>
+        <div id="authError" class="error-msg"></div>
+    </div>
+</div>
 
+<div class="admin-wrapper" id="adminContent" style="display: none;">
     <!-- HEADER -->
     <div class="card admin-header">
         <h1>🎪 Admin Calendrier</h1>
@@ -487,7 +537,6 @@
             🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
         </p>
     </div>
-
 </div>
 
 <!-- POPUP -->
@@ -497,36 +546,205 @@
 
 <script>
     // ============================================================
-    // STOCKAGE LOCAL (localStorage) - pas de Supabase pour l'instant
+    // CONFIGURATION SUPABASE
     // ============================================================
-<<<<<<< Updated upstream
-    const STORAGE_KEY = 'recremagic_calendar';
-=======
-    const SECRET_CODE = "recremagic";
+    // 🔧 REMPLACEZ CES VALEURS PAR LES VÔTRES 🔧
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_gwuNIL4CgVYGOa5lAc46_g_xWRBQxHB';
->>>>>>> Stashed changes
-
-    let currentMode = 'single';
-    let currentMonth, currentYear;
-    let eventsData = {};
-    let communesList = [];
-
-    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-    const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
-    const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
-    const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
-
-    const now = new Date();
-    currentMonth = now.getMonth();
-    currentYear = now.getFullYear();
-    if (currentYear < 2026) currentYear = 2026;
-    if (currentYear > 2028) currentYear = 2028;
-
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    
+    // Code d'accès simple
+    const ACCESS_CODE = 'recremagic';
+    
+    let supabase;
+    let isAuthenticated = false;
+    
+    // Initialiser Supabase
+    function initSupabase() {
+        if (SUPABASE_URL.includes('VOTRE_PROJET') || SUPABASE_ANON_KEY.includes('VOTRE_CLE')) {
+            console.warn('⚠️ Configuration Supabase requise. Veuillez remplacer SUPABASE_URL et SUPABASE_ANON_KEY');
+            return false;
+        }
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
+    }
+    
     // ============================================================
-    // CHARGER / SAUVEGARDER (localStorage)
+    // AUTHENTIFICATION
     // ============================================================
-<<<<<<< Updated upstream
+    function checkAuth() {
+        const auth = sessionStorage.getItem('admin_auth');
+        if (auth === ACCESS_CODE) {
+            isAuthenticated = true;
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            loadAllEvents();
+        } else {
+            document.getElementById('authOverlay').style.display = 'flex';
+            document.getElementById('adminContent').style.display = 'none';
+        }
+    }
+    
+    document.getElementById('authBtn').addEventListener('click', () => {
+        const code = document.getElementById('accessCode').value;
+        const errorDiv = document.getElementById('authError');
+        
+        if (code === ACCESS_CODE) {
+            sessionStorage.setItem('admin_auth', code);
+            isAuthenticated = true;
+            document.getElementById('authOverlay').style.display = 'none';
+            document.getElementById('adminContent').style.display = 'block';
+            errorDiv.textContent = '';
+            document.getElementById('accessCode').value = '';
+            loadAllEvents();
+        } else {
+            errorDiv.textContent = '❌ Code incorrect';
+        }
+    });
+    
+    document.getElementById('accessCode').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+            document.getElementById('authBtn').click();
+        }
+    });
+    
+    // ============================================================
+    // FONCTIONS SUPABASE
+    // ============================================================
+    async function loadAllEvents() {
+        if (!supabase) {
+            if (!initSupabase()) {
+                console.error('Supabase non configuré');
+                return;
+            }
+        }
+        
+        try {
+            const { data, error } = await supabase
+                .from('events')
+                .select('*')
+                .order('event_date', { ascending: true });
+            
+            if (error) throw error;
+            
+            // Transformer les données au format attendu par le calendrier
+            eventsData = {};
+            if (data) {
+                data.forEach(event => {
+                    const key = event.event_date;
+                    if (!eventsData[key]) eventsData[key] = [];
+                    eventsData[key].push({
+                        id: event.id,
+                        event_date: event.event_date,
+                        type: event.type,
+                        titre: event.titre,
+                        lieu: event.lieu || '',
+                        period_id: event.period_id
+                    });
+                });
+            }
+            
+            renderCalendar();
+            console.log('✅ Événements chargés depuis Supabase');
+        } catch (err) {
+            console.error('❌ Erreur chargement:', err);
+            alert('Erreur de chargement des événements');
+        }
+    }
+    
+    async function addEventToSupabase(eventData) {
+        if (!supabase) initSupabase();
+        if (!supabase) return false;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .insert([eventData]);
+            
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Erreur ajout:', err);
+            return false;
+        }
+    }
+    
+    async function updateEventInSupabase(id, updates) {
+        if (!supabase) initSupabase();
+        if (!supabase) return false;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .update(updates)
+                .eq('id', id);
+            
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Erreur mise à jour:', err);
+            return false;
+        }
+    }
+    
+    async function deleteEventFromSupabase(id) {
+        if (!supabase) initSupabase();
+        if (!supabase) return false;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .delete()
+                .eq('id', id);
+            
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Erreur suppression:', err);
+            return false;
+        }
+    }
+    
+    async function deleteEventsByPeriodId(periodId) {
+        if (!supabase) initSupabase();
+        if (!supabase) return false;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .delete()
+                .eq('period_id', periodId);
+            
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Erreur suppression période:', err);
+            return false;
+        }
+    }
+    
+    async function clearAllEventsFromSupabase() {
+        if (!supabase) initSupabase();
+        if (!supabase) return false;
+        
+        try {
+            const { error } = await supabase
+                .from('events')
+                .delete()
+                .neq('id', '0');
+            
+            if (error) throw error;
+            return true;
+        } catch (err) {
+            console.error('Erreur suppression totale:', err);
+            return false;
+        }
+    }
+    
+    // ============================================================
+    // STOCKAGE LOCAL (fallback)
+    // ============================================================
+    const STORAGE_KEY = 'recremagic_calendar_backup';
+    
     function loadFromStorage() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) { eventsData = {}; return; }
@@ -534,67 +752,12 @@
         eventsData = {};
         for (let key in data) {
             if (Array.isArray(data[key])) {
-                // Déjà au bon format
-                eventsData[key] = data[key].map((ev, i) => ({
-                    id: ev.id || 'evt_' + key + '_' + i,
-                    event_date: key,
-                    type: ev.type || 'Spectacle',
-                    titre: ev.titre || '',
-                    lieu: ev.lieu || '',
-                    period_id: ev.period_id || ev.periodId || null
-                }));
-            } else {
-                // Ancien format (objet unique)
-                const old = data[key];
-                eventsData[key] = [{
-                    id: 'evt_' + key + '_0',
-                    event_date: key,
-                    type: old.type || 'Spectacle',
-                    titre: old.titre || old.spectacle || '',
-                    lieu: old.lieu || '',
-                    period_id: old.periodId || null
-                }];
+                eventsData[key] = data[key];
             }
         }
-=======
-    function initSupabase() {
-        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        return true;
     }
-
-    // ============================================================
-    // CODE SECRET
-    // ============================================================
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-        if (document.getElementById('accessCode').value === SECRET_CODE) {
-            document.getElementById('codeSection').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            initApp();
-        } else {
-            document.getElementById('codeError').style.display = 'block';
-        }
-    });
-
-    document.getElementById('accessCode').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('verifyBtn').click();
-    });
-
-    // ============================================================
-    // INIT APP
-    // ============================================================
-    async function initApp() {
-        initSupabase();
-        populateYearSelect();
-        updateTitleDropdown();
-        renderCalendar();
-        await loadCommunes();
-        await loadAllEvents();
-        renderCalendar();
->>>>>>> Stashed changes
-    }
-
+    
     function saveToStorage() {
-        // Nettoyer : ne garder que les champs utiles
         const toSave = {};
         for (let key in eventsData) {
             toSave[key] = eventsData[key].map(ev => ({
@@ -607,41 +770,50 @@
         }
         localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
     }
-
+    
+    // ============================================================
+    // VARIABLES GLOBALES
+    // ============================================================
+    let currentMode = 'single';
+    let currentMonth, currentYear;
+    let eventsData = {};
+    let communesList = [];
+    
+    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+    const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
+    const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
+    const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
+    
+    const now = new Date();
+    currentMonth = now.getMonth();
+    currentYear = now.getFullYear();
+    if (currentYear < 2026) currentYear = 2026;
+    if (currentYear > 2028) currentYear = 2028;
+    
     function getEventsForDate(year, month, day) {
         const key = `${year}-${month+1}-${day}`;
         return eventsData[key] || [];
     }
-
+    
     // ============================================================
     // MODE
     // ============================================================
     document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
     document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
-
+    
     function switchMode(mode) {
         currentMode = mode;
         document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
-        document.getElementById('modePeriod').classList.toggle('active', mode === 'period');
+        document.getElementById('modePeriod').classList.toggle('active', mode !== 'single');
         document.getElementById('singleDateFields').classList.toggle('hidden', mode !== 'single');
         document.getElementById('periodFields').classList.toggle('hidden', mode !== 'period');
-        document.getElementById('eventDate').required = (mode === 'single');
-        document.getElementById('periodStart').required = (mode === 'period');
-        document.getElementById('periodEnd').required = (mode === 'period');
-        if (mode === 'single') {
-            document.getElementById('periodStart').value = '';
-            document.getElementById('periodEnd').value = '';
-            document.getElementById('periodSummary').classList.remove('visible');
-        } else {
-            document.getElementById('eventDate').value = '';
-            updatePeriodSummary();
-        }
+        if (mode === 'period') updatePeriodSummary();
     }
-
+    
     document.getElementById('periodStart').addEventListener('change', updatePeriodSummary);
     document.getElementById('periodEnd').addEventListener('change', updatePeriodSummary);
     document.querySelectorAll('.weekday-filter').forEach(cb => cb.addEventListener('change', updatePeriodSummary));
-
+    
     function updatePeriodSummary() {
         const start = document.getElementById('periodStart').value;
         const end = document.getElementById('periodEnd').value;
@@ -649,20 +821,17 @@
         if (!start || !end) { summary.classList.remove('visible'); return; }
         if (start > end) {
             summary.textContent = '⚠️ Date début > date fin';
-            summary.style.background = '#FFCDD2';
             summary.classList.add('visible'); return;
         }
         const dates = getDatesInRange(start, end);
         if (dates.length === 0) {
             summary.textContent = '⚠️ Aucune date (vérifiez les jours cochés)';
-            summary.style.background = '#FFCDD2';
             summary.classList.add('visible'); return;
         }
         summary.textContent = `📆 ${dates.length} jour(s) : du ${formatDateFr(start)} au ${formatDateFr(end)}`;
-        summary.style.background = '#C8E6C9';
         summary.classList.add('visible');
     }
-
+    
     function getDatesInRange(startStr, endStr) {
         const dates = [];
         const start = new Date(startStr + 'T00:00:00');
@@ -675,21 +844,21 @@
         }
         return dates;
     }
-
+    
     function dateToKey(date) {
         return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
     }
-
+    
     function formatDateFr(dateStr) {
         const d = new Date(dateStr + 'T00:00:00');
         return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
-
+    
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
     }
-
+    
     // ============================================================
     // AUTOCOMPLETE COMMUNES
     // ============================================================
@@ -697,42 +866,31 @@
         try {
             const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
             communesList = await res.json();
-<<<<<<< Updated upstream
-            console.log('✅ Communes chargées :', communesList.length);
+            console.log('✅ Communes chargées');
         } catch (e) {
-            console.warn('⚠️ Communes non chargées, autocomplete désactivé');
-=======
-        } catch (e) {
-            communesList = [];
->>>>>>> Stashed changes
+            console.warn('⚠️ Communes non chargées');
         }
     }
-
+    
     const lieuInput = document.getElementById('eventLieu');
     const suggestionsDiv = document.getElementById('lieuSuggestions');
     let selectedCommuneIndex = -1;
-
+    
     lieuInput.addEventListener('input', () => {
         const query = lieuInput.value.trim().toLowerCase();
         if (query.length < 2 || communesList.length === 0) {
             suggestionsDiv.classList.remove('active');
             return;
         }
-<<<<<<< Updated upstream
         const matches = communesList.filter(c =>
             c.nom.toLowerCase().startsWith(query) || c.code_postal.startsWith(query)
-=======
-        const matches = communesList.filter(c => 
-            c.nom.toLowerCase().startsWith(query) || 
-            c.code_postal.startsWith(query)
->>>>>>> Stashed changes
         ).slice(0, 8);
-
+    
         if (matches.length === 0) {
             suggestionsDiv.classList.remove('active');
             return;
         }
-
+    
         suggestionsDiv.innerHTML = matches.map((c, i) =>
             `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
                 <span class="cp">${c.code_postal}</span> ${c.nom}
@@ -740,7 +898,7 @@
         ).join('');
         suggestionsDiv.classList.add('active');
         selectedCommuneIndex = -1;
-
+    
         suggestionsDiv.querySelectorAll('.autocomplete-item').forEach(item => {
             item.addEventListener('mousedown', (e) => {
                 e.preventDefault();
@@ -749,48 +907,26 @@
             });
         });
     });
-
+    
     lieuInput.addEventListener('keydown', (e) => {
         const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
         if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
-<<<<<<< Updated upstream
         if (e.key === 'ArrowDown') { e.preventDefault(); selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1); highlightItems(items); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1); highlightItems(items); }
         else if (e.key === 'Enter' && selectedCommuneIndex >= 0) { e.preventDefault(); lieuInput.value = items[selectedCommuneIndex].dataset.full; suggestionsDiv.classList.remove('active'); }
         else if (e.key === 'Escape') { suggestionsDiv.classList.remove('active'); }
     });
-
+    
     function highlightItems(items) {
         items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
     }
-
-=======
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1);
-            items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1);
-            items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
-        } else if (e.key === 'Enter' && selectedCommuneIndex >= 0) {
-            e.preventDefault();
-            lieuInput.value = items[selectedCommuneIndex].dataset.full;
-            suggestionsDiv.classList.remove('active');
-        } else if (e.key === 'Escape') {
-            suggestionsDiv.classList.remove('active');
-            selectedCommuneIndex = -1;
-        }
-    });
-
->>>>>>> Stashed changes
+    
     document.addEventListener('click', (e) => {
         if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
             suggestionsDiv.classList.remove('active');
         }
     });
-
+    
     // ============================================================
     // DROPDOWN TITRES
     // ============================================================
@@ -802,37 +938,15 @@
         titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
     }
     document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
-
-<<<<<<< Updated upstream
+    
     function updateEditTitleDropdown(type) {
         const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         const select = document.getElementById('editTitle');
         if (!select) return;
         select.innerHTML = '<option value="">-- Sélectionnez --</option>';
         titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
-=======
-    // ============================================================
-    // SUPABASE - CHARGEMENT
-    // ============================================================
-    async function loadAllEvents() {
-        const { data, error } = await supabase
-            .from('calendar_events')
-            .select('*')
-            .order('event_date', { ascending: true });
-        if (error) { console.error('Erreur chargement:', error); return; }
-        eventsData = {};
-        data.forEach(ev => {
-            if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
-            eventsData[ev.event_date].push(ev);
-        });
     }
-
-    function getEventsForDate(year, month, day) {
-        const key = `${year}-${month+1}-${day}`;
-        return eventsData[key] || [];
->>>>>>> Stashed changes
-    }
-
+    
     // ============================================================
     // CALENDRIER
     // ============================================================
@@ -842,11 +956,11 @@
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const today = new Date();
         const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
-
+    
         let html = '';
         weekdays.forEach(d => { html += `<div class="weekday-header">${d}</div>`; });
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
-
+    
         for (let d = 1; d <= daysInMonth; d++) {
             const isToday = isCurrentMonthYear && d === today.getDate();
             const events = getEventsForDate(currentYear, currentMonth, d);
@@ -854,20 +968,24 @@
             html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
                          data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">${d}</div>`;
         }
-
-        document.getElementById('calendarGrid').innerHTML = html;
-        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-        document.getElementById('yearSelect').value = currentYear;
-
+    
+        const calendarGrid = document.getElementById('calendarGrid');
+        if (calendarGrid) calendarGrid.innerHTML = html;
+        const monthNameSpan = document.getElementById('monthName');
+        if (monthNameSpan) monthNameSpan.textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        const yearSelect = document.getElementById('yearSelect');
+        if (yearSelect) yearSelect.value = currentYear;
+    
         document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
             dayDiv.addEventListener('click', () => {
                 openPopup(parseInt(dayDiv.dataset.year), parseInt(dayDiv.dataset.month), parseInt(dayDiv.dataset.day));
             });
         });
     }
-
+    
     function populateYearSelect() {
         const select = document.getElementById('yearSelect');
+        if (!select) return;
         for (let y = 2026; y <= 2028; y++) {
             const opt = document.createElement('option');
             opt.value = y; opt.textContent = y;
@@ -876,7 +994,7 @@
         select.value = currentYear;
         select.addEventListener('change', () => { currentYear = parseInt(select.value); renderCalendar(); });
     }
-
+    
     function changeMonth(delta) {
         let m = currentMonth + delta;
         let y = currentYear;
@@ -885,24 +1003,26 @@
         currentMonth = m; currentYear = y;
         renderCalendar();
     }
-
-    document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
-    document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
-
+    
+    const prevBtn = document.getElementById('prevMonthBtn');
+    const nextBtn = document.getElementById('nextMonthBtn');
+    if (prevBtn) prevBtn.addEventListener('click', () => changeMonth(-1));
+    if (nextBtn) nextBtn.addEventListener('click', () => changeMonth(1));
+    
     // ============================================================
     // POPUP
     // ============================================================
     let currentPopupDate = null;
     let editingEventId = null;
-
+    
     function openPopup(year, month, day) {
         currentPopupDate = { year, month, day };
         editingEventId = null;
         const key = `${year}-${month+1}-${day}`;
         const events = eventsData[key] || [];
-
+    
         let html = `<h3>📅 ${formatDateFr(key)}</h3>`;
-
+    
         if (events.length === 0) {
             html += `<p class="no-events-msg">Aucun événement ce jour.</p>`;
         } else {
@@ -922,10 +1042,10 @@
                     </div>`;
             });
         }
-
+    
         html += `
             <div class="edit-form" id="editForm">
-                <h4 style="color:var(--rose-spectacle);">✏️ Modifier</h4>
+                <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
                 <label>Type</label>
                 <select id="editType"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
                 <label>Titre</label>
@@ -939,19 +1059,21 @@
             </div>
             <button class="btn-close-popup" id="closePopupBtn">✖ Fermer</button>
         `;
-
-        document.getElementById('popupContent').innerHTML = html;
-        document.getElementById('eventsPopup').classList.add('active');
-
-        document.getElementById('closePopupBtn').onclick = closePopup;
-        document.getElementById('eventsPopup').onclick = (e) => {
-            if (e.target === document.getElementById('eventsPopup')) closePopup();
+    
+        const popupContent = document.getElementById('popupContent');
+        if (popupContent) popupContent.innerHTML = html;
+        const eventsPopup = document.getElementById('eventsPopup');
+        if (eventsPopup) eventsPopup.classList.add('active');
+    
+        const closeBtn = document.getElementById('closePopupBtn');
+        if (closeBtn) closeBtn.onclick = closePopup;
+        if (eventsPopup) eventsPopup.onclick = (e) => {
+            if (e.target === eventsPopup) closePopup();
         };
-
-<<<<<<< Updated upstream
+    
         // Supprimer
         document.querySelectorAll('.btn-delete-popup').forEach(btn => {
-            btn.onclick = () => {
+            btn.onclick = async () => {
                 const id = btn.dataset.id;
                 const periodId = btn.dataset.period;
                 let msg = 'Supprimer cet événement ?';
@@ -959,209 +1081,211 @@
                     msg = 'Supprimer toute la période ?';
                 }
                 if (confirm(msg)) {
+                    let success = false;
                     if (periodId && periodId !== 'undefined' && periodId !== '') {
-                        for (let k in eventsData) {
-                            eventsData[k] = eventsData[k].filter(ev => ev.period_id !== periodId);
-                            if (eventsData[k].length === 0) delete eventsData[k];
+                        success = await deleteEventsByPeriodId(periodId);
+                        if (success) {
+                            for (let k in eventsData) {
+                                eventsData[k] = eventsData[k].filter(ev => ev.period_id !== periodId);
+                                if (eventsData[k].length === 0) delete eventsData[k];
+                            }
                         }
                     } else {
-                        for (let k in eventsData) {
-                            eventsData[k] = eventsData[k].filter(ev => ev.id !== id);
-                            if (eventsData[k].length === 0) delete eventsData[k];
+                        success = await deleteEventFromSupabase(id);
+                        if (success) {
+                            for (let k in eventsData) {
+                                eventsData[k] = eventsData[k].filter(ev => ev.id !== id);
+                                if (eventsData[k].length === 0) delete eventsData[k];
+                            }
                         }
                     }
-                    saveToStorage();
-=======
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = async () => {
-                const id = btn.dataset.id;
-                const periodId = btn.dataset.period;
-                if (confirm(periodId && periodId !== 'undefined' && periodId !== '' ? 'Supprimer toute la période ?' : 'Supprimer cet événement ?')) {
-                    if (periodId && periodId !== 'undefined' && periodId !== '') {
-                        await supabase.from('calendar_events').delete().eq('period_id', periodId);
+                    if (success) {
+                        renderCalendar();
+                        openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
                     } else {
-                        await supabase.from('calendar_events').delete().eq('id', id);
+                        alert('Erreur lors de la suppression');
                     }
-                    await loadAllEvents();
->>>>>>> Stashed changes
-                    renderCalendar();
-                    openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
                 }
             };
         });
-
-<<<<<<< Updated upstream
+    
         // Éditer
         document.querySelectorAll('.btn-edit-popup').forEach(btn => {
-=======
-        document.querySelectorAll('.btn-edit').forEach(btn => {
->>>>>>> Stashed changes
             btn.onclick = () => {
                 editingEventId = btn.dataset.id;
-                document.getElementById('editType').value = btn.dataset.type;
-                document.getElementById('editLieu').value = btn.dataset.lieu;
+                const editType = document.getElementById('editType');
+                const editTitle = document.getElementById('editTitle');
+                const editLieu = document.getElementById('editLieu');
+                if (editType) editType.value = btn.dataset.type;
+                if (editLieu) editLieu.value = btn.dataset.lieu;
                 updateEditTitleDropdown(btn.dataset.type);
-                document.getElementById('editTitle').value = btn.dataset.titre;
-                document.getElementById('editForm').classList.add('active');
-                document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
+                if (editTitle) editTitle.value = btn.dataset.titre;
+                const editForm = document.getElementById('editForm');
+                if (editForm) editForm.classList.add('active');
+                if (editForm) editForm.scrollIntoView({ behavior: 'smooth' });
             };
         });
-
-        document.getElementById('editType').addEventListener('change', function() {
-            updateEditTitleDropdown(this.value);
-        });
-
-        document.getElementById('saveEditBtn').onclick = () => {
-            const newType = document.getElementById('editType').value;
-            const newTitre = document.getElementById('editTitle').value;
-            const newLieu = document.getElementById('editLieu').value.trim();
-            if (!newTitre) { alert('Titre requis'); return; }
-<<<<<<< Updated upstream
-            for (let k in eventsData) {
-                eventsData[k].forEach(ev => {
-                    if (ev.id === editingEventId) {
-                        ev.type = newType;
-                        ev.titre = newTitre;
-                        ev.lieu = newLieu;
+    
+        const editType = document.getElementById('editType');
+        if (editType) {
+            editType.addEventListener('change', function() {
+                updateEditTitleDropdown(this.value);
+            });
+        }
+    
+        const saveBtn = document.getElementById('saveEditBtn');
+        if (saveBtn) {
+            saveBtn.onclick = async () => {
+                const newType = document.getElementById('editType').value;
+                const newTitre = document.getElementById('editTitle').value;
+                const newLieu = document.getElementById('editLieu').value.trim();
+                if (!newTitre) { alert('Titre requis'); return; }
+                
+                let success = false;
+                for (let k in eventsData) {
+                    eventsData[k].forEach(ev => {
+                        if (ev.id === editingEventId) {
+                            success = true;
+                        }
+                    });
+                }
+                
+                if (success) {
+                    const updates = { type: newType, titre: newTitre, lieu: newLieu };
+                    const updateSuccess = await updateEventInSupabase(editingEventId, updates);
+                    if (updateSuccess) {
+                        for (let k in eventsData) {
+                            eventsData[k].forEach(ev => {
+                                if (ev.id === editingEventId) {
+                                    ev.type = newType;
+                                    ev.titre = newTitre;
+                                    ev.lieu = newLieu;
+                                }
+                            });
+                        }
+                        renderCalendar();
+                        openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
+                    } else {
+                        alert('Erreur lors de la modification');
                     }
-                });
-            }
-            saveToStorage();
-=======
-            await supabase.from('calendar_events').update({ type: newType, titre: newTitre, lieu: newLieu }).eq('id', editingEventId);
-            await loadAllEvents();
->>>>>>> Stashed changes
-            renderCalendar();
-            openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
-        };
-
-        document.getElementById('cancelEditBtn').onclick = () => {
-            document.getElementById('editForm').classList.remove('active');
-            editingEventId = null;
-        };
+                }
+            };
+        }
+    
+        const cancelBtn = document.getElementById('cancelEditBtn');
+        if (cancelBtn) {
+            cancelBtn.onclick = () => {
+                const editForm = document.getElementById('editForm');
+                if (editForm) editForm.classList.remove('active');
+                editingEventId = null;
+            };
+        }
     }
-
+    
     function closePopup() {
-        document.getElementById('eventsPopup').classList.remove('active');
+        const eventsPopup = document.getElementById('eventsPopup');
+        if (eventsPopup) eventsPopup.classList.remove('active');
         currentPopupDate = null;
         editingEventId = null;
     }
-
-<<<<<<< Updated upstream
-=======
-    function updateEditTitleDropdown(type) {
-        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
-        const select = document.getElementById('editTitle');
-        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
-        titles.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t; opt.textContent = t;
-            select.appendChild(opt);
-        });
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
-    }
-
->>>>>>> Stashed changes
+    
     // ============================================================
     // SOUMISSION
     // ============================================================
-    document.getElementById('eventForm').addEventListener('submit', (e) => {
-        e.preventDefault();
-        const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.textContent = '⏳...';
-
-        const type = document.getElementById('eventType').value;
-        const titre = document.getElementById('eventTitle').value;
-        if (!titre) { alert('Titre requis'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-        const lieu = document.getElementById('eventLieu').value.trim();
-
-        let dateKeys = [];
-        if (currentMode === 'single') {
-            const val = document.getElementById('eventDate').value;
-            if (!val) { alert('Date requise'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-            const [y,m,d] = val.split('-');
-            dateKeys.push(`${y}-${parseInt(m)}-${parseInt(d)}`);
-            document.getElementById('eventDate').value = '';
-        } else {
-            const start = document.getElementById('periodStart').value;
-            const end = document.getElementById('periodEnd').value;
-            if (!start || !end) { alert('Dates début et fin requises'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-            if (start > end) { alert('Date début > date fin'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-            const dates = getDatesInRange(start, end);
-            if (dates.length === 0) { alert('Aucune date dans la plage'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-            dateKeys = dates.map(d => dateToKey(d));
-            document.getElementById('periodStart').value = ''; document.getElementById('periodEnd').value = '';
-            document.getElementById('periodSummary').classList.remove('visible');
-        }
-
-        const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
-<<<<<<< Updated upstream
-        dateKeys.forEach(dk => {
-            if (!eventsData[dk]) eventsData[dk] = [];
-            eventsData[dk].push({
-                id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
-                event_date: dk, type, titre, lieu, period_id: periodId
-            });
+    const eventForm = document.getElementById('eventForm');
+    if (eventForm) {
+        eventForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const btn = document.getElementById('submitBtn');
+            if (btn) { btn.disabled = true; btn.textContent = '⏳...'; }
+    
+            const type = document.getElementById('eventType').value;
+            const titre = document.getElementById('eventTitle').value;
+            if (!titre) { alert('Titre requis'); if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; } return; }
+            const lieu = document.getElementById('eventLieu').value.trim();
+    
+            let dateKeys = [];
+            if (currentMode === 'single') {
+                const val = document.getElementById('eventDate').value;
+                if (!val) { alert('Date requise'); if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; } return; }
+                const [y,m,d] = val.split('-');
+                dateKeys.push(`${y}-${parseInt(m)}-${parseInt(d)}`);
+                document.getElementById('eventDate').value = '';
+            } else {
+                const start = document.getElementById('periodStart').value;
+                const end = document.getElementById('periodEnd').value;
+                if (!start || !end) { alert('Dates début et fin requises'); if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; } return; }
+                if (start > end) { alert('Date début > date fin'); if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; } return; }
+                const dates = getDatesInRange(start, end);
+                if (dates.length === 0) { alert('Aucune date dans la plage'); if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; } return; }
+                dateKeys = dates.map(d => dateToKey(d));
+                document.getElementById('periodStart').value = ''; 
+                document.getElementById('periodEnd').value = '';
+                document.getElementById('periodSummary').classList.remove('visible');
+            }
+    
+            const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
+            let allSuccess = true;
+            
+            for (const dk of dateKeys) {
+                const eventData = {
+                    id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
+                    event_date: dk,
+                    type: type,
+                    titre: titre,
+                    lieu: lieu,
+                    period_id: periodId
+                };
+                
+                const success = await addEventToSupabase(eventData);
+                if (success) {
+                    if (!eventsData[dk]) eventsData[dk] = [];
+                    eventsData[dk].push(eventData);
+                } else {
+                    allSuccess = false;
+                }
+            }
+    
+            if (allSuccess) {
+                document.getElementById('eventLieu').value = '';
+                renderCalendar();
+                alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
+            } else {
+                alert('⚠️ Certains événements n\'ont pas pu être sauvegardés');
+            }
+            
+            if (btn) { btn.disabled = false; btn.textContent = '💾 Enregistrer'; }
         });
-
-        saveToStorage();
-        document.getElementById('eventLieu').value = '';
-        renderCalendar();
-        alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
-        btn.disabled = false; btn.textContent = '💾 Enregistrer';
-    });
-
+    }
+    
     // ============================================================
     // TOUT EFFACER
-=======
-        const rows = dateKeys.map(dk => ({
-            event_date: dk,
-            type, titre, lieu,
-            period_id: periodId,
-            created_at: new Date().toISOString()
-        }));
-
-        const { error } = await supabase.from('calendar_events').insert(rows);
-        if (error) { alert('Erreur: ' + error.message); }
-        else {
-            document.getElementById('eventLieu').value = '';
-            await loadAllEvents();
-            renderCalendar();
-            alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
-        }
-        btn.disabled = false;
-        btn.textContent = '💾 Enregistrer';
-    });
-
     // ============================================================
-    // INIT
->>>>>>> Stashed changes
-    // ============================================================
-    document.getElementById('clearAllBtn').addEventListener('click', () => {
-        if (confirm('⚠️ Supprimer TOUS les événements ?')) {
-            localStorage.removeItem(STORAGE_KEY);
-            eventsData = {};
-            renderCalendar();
-        }
-    });
-
+    const clearBtn = document.getElementById('clearAllBtn');
+    if (clearBtn) {
+        clearBtn.addEventListener('click', async () => {
+            if (confirm('⚠️ Supprimer TOUS les événements ? Cette action est irréversible.')) {
+                const success = await clearAllEventsFromSupabase();
+                if (success) {
+                    eventsData = {};
+                    renderCalendar();
+                    alert('Tous les événements ont été supprimés');
+                } else {
+                    alert('Erreur lors de la suppression');
+                }
+            }
+        });
+    }
+    
     // ============================================================
     // INIT
     // ============================================================
-    loadFromStorage();
+    initSupabase();
+    checkAuth();
     populateYearSelect();
     updateTitleDropdown();
-    renderCalendar();
     loadCommunes();
     console.log('✅ Admin calendrier prêt !');
 </script>
 </body>
-<<<<<<< Updated upstream
-                    </html>
-=======
 </html>
->>>>>>> Stashed changes
