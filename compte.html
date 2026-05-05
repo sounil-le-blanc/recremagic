@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Compte - Récré Magic</title>
+    <link rel="icon" type="image/png" href="images/favicon.png">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.jpg');
+            background-size: cover;
+            background-attachment: fixed;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem;
+            padding-top: 100px;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.45);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
+        }
+        .navbar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+        }
+        .logo-wrapper img {
+            height: 100px;
+            margin-top: 40px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+        }
+        .back-arrow {
+            width: 36px; height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: all 0.25s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); color: #FFB300; }
+
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+            width: 100%;
+        }
+
+        .card {
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 40px;
+            padding: 2rem;
+            text-align: center;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2rem;
+            color: #2C1810;
+            margin-bottom: 1rem;
+        }
+
+        .compteur-box {
+            background: linear-gradient(135deg, #FFF8E1, #FFECB3);
+            border: 3px solid #7a5c3e;
+            border-radius: 30px;
+            padding: 2rem;
+            margin: 1.5rem 0;
+        }
+
+        .compteur-label {
+            font-size: 0.9rem;
+            color: #5a3e2a;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        .compteur-number {
+            font-family: 'Fredoka', cursive;
+            font-size: 4rem;
+            font-weight: 700;
+            color: #D32F2F;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.1);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        .visite-emoji {
+            font-size: 3rem;
+            animation: bounce 1s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .btn-deconnexion {
+            display: inline-block;
+            margin-top: 1rem;
+            padding: 0.6rem 1.5rem;
+            background: #D32F2F;
+            color: white;
+            border: none;
+            border-radius: 30px;
+            font-weight: bold;
+            cursor: pointer;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+        .btn-deconnexion:hover { background: #b71c1c; }
+
+        @media (max-width: 600px) {
+            .compteur-number { font-size: 3rem; }
+            .logo-wrapper img { height: 70px; margin-top: 30px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.png" alt="Récré Magic">
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        </div>
+    </div>
+</nav>
+
+<div class="container">
+    <div class="card">
+        <h1>🎪 Mon Compte</h1>
+        
+        <div class="compteur-box">
+            <div class="visite-emoji">👁️</div>
+            <div class="compteur-label">Visites sur le site</div>
+            <div class="compteur-number" id="compteur">...</div>
+        </div>
+
+        <p style="color:#5a3e2a; margin-bottom:1rem;" id="userEmail"></p>
+        
+        <a href="#" class="btn-deconnexion" id="btnDeconnexion">🚪 Déconnexion</a>
+    </div>
+</div>
+
+<script>
+    // ============================================================
+    // CONFIGURATION SUPABASE
+    // ============================================================
+    var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ============================================================
+    // COMPTEUR DE VISITES
+    // ============================================================
+    async function incrementerVisite() {
+        var dejaCompte = sessionStorage.getItem('visite_comptee');
+
+        if (dejaCompte) {
+            await afficherCompteur();
+            return;
+        }
+
+        // Récupérer le compteur (tolère table vide)
+        var response = await supabaseClient
+            .from('visites')
+            .select('total')
+            .eq('page', 'compte');
+
+        var totalActuel = 0;
+
+        if (response.data && response.data.length > 0) {
+            totalActuel = response.data[0].total || 0;
+        }
+
+        var nouveauTotal = totalActuel + 1;
+
+        // Mettre à jour ou insérer
+        if (response.data && response.data.length > 0) {
+            await supabaseClient
+                .from('visites')
+                .update({ total: nouveauTotal, updated_at: new Date() })
+                .eq('page', 'compte');
+        } else {
+            await supabaseClient
+                .from('visites')
+                .insert({ page: 'compte', total: nouveauTotal });
+        }
+
+        sessionStorage.setItem('visite_comptee', 'true');
+        document.getElementById('compteur').textContent = nouveauTotal;
+
+        var compteurEl = document.getElementById('compteur');
+        compteurEl.style.transform = 'scale(1.3)';
+        setTimeout(function() { compteurEl.style.transform = 'scale(1)'; }, 300);
+    }
+
+    async function afficherCompteur() {
+        var response = await supabaseClient
+            .from('visites')
+            .select('total')
+            .eq('page', 'compte');
+
+        if (response.data && response.data.length > 0) {
+            document.getElementById('compteur').textContent = response.data[0].total;
+        } else {
+            document.getElementById('compteur').textContent = '0';
+        }
+    }
+
+    // ============================================================
+    // AFFICHAGE EMAIL UTILISATEUR
+    // ============================================================
+    async function afficherUtilisateur() {
+        var response = await supabaseClient.auth.getUser();
+        if (response.data && response.data.user) {
+            document.getElementById('userEmail').textContent = '👤 ' + response.data.user.email;
+        }
+    }
+
+    // ============================================================
+    // DÉCONNEXION
+    // ============================================================
+    document.getElementById('btnDeconnexion').addEventListener('click', async function(e) {
+        e.preventDefault();
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    incrementerVisite();
+    afficherUtilisateur();
+</script>
+</body>
+</html>
