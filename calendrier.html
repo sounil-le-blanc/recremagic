@@ -58,7 +58,6 @@
             pointer-events: none; z-index: 1; overflow: hidden;
         }
 
-        /* ========== INDICATEUR DE CHARGEMENT ========== */
         .loading-indicator {
             display: none;
             position: fixed;
@@ -73,7 +72,6 @@
         }
         .loading-indicator.active { display: block; }
 
-        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -177,7 +175,6 @@
             z-index: 2;
         }
 
-        /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
             display: inline-block;
             position: relative;
@@ -346,10 +343,23 @@
         .edit-card button:hover { background: #888; }
 
         .events-summary h2 { font-family: 'Fredoka', cursive; color: var(--text-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
+        .month-section { margin-bottom: 1.5rem; }
+        .month-title {
+            font-family: 'Fredoka', cursive;
+            color: var(--rose-spectacle);
+            font-size: 1.3rem;
+            margin-bottom: 0.8rem;
+            padding-bottom: 0.3rem;
+            border-bottom: 2px solid var(--rose-spectacle);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
         .events-list { display: flex; flex-direction: column; gap: 0.8rem; }
         .event-row { background: rgba(0, 0, 0, 0.03); border-radius: 20px; padding: 0.8rem 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; }
-        .event-date { font-weight: bold; color: var(--rose-spectacle); min-width: 100px; }
-        .event-type { background: var(--vert-caravane); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; }
+        .event-date { font-weight: bold; color: var(--rose-spectacle); min-width: 140px; }
+        .event-period { color: #E65100; font-weight: bold; }
+        .event-type { background: var(--vert-caravane); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
         .event-type.exposition { background: var(--rose-spectacle); }
         .event-title { font-weight: 600; flex: 1; }
         .event-lieu { color: var(--text-dark); opacity: 0.7; }
@@ -422,6 +432,7 @@
             .page-header h1 { font-size: 2rem; }
             .contact-cta p { font-size: 0.9rem; }
             .contact-cta a { font-size: 1rem; }
+            .event-date { min-width: auto; }
         }
     </style>
 </head>
@@ -493,20 +504,14 @@
 </div>
 
 <script>
-    // ============================================================
-    // 🔌 CONFIGURATION SUPABASE
-    // ============================================================
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const TABLE_NAME = 'events';
-
-    // Initialisation Supabase
     supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
-
     if (currentYear < 2026) currentYear = 2026;
     if (currentYear > 2028) currentYear = 2028;
 
@@ -527,24 +532,19 @@
 
     async function loadEventsFromSupabase() {
         if (isLoading) return;
-        
         showLoading(true);
         console.log('🔄 Chargement des événements depuis Supabase...');
-        
         try {
             const { data, error } = await supabase
                 .from(TABLE_NAME)
                 .select('*')
                 .order('event_date', { ascending: true });
-
             if (error) {
                 console.error('❌ Erreur Supabase :', error.message);
-                showError('Impossible de charger les événements. Vérifiez la connexion.');
+                showError('Impossible de charger les événements.');
                 showLoading(false);
                 return;
             }
-
-            // Organiser les événements par date
             eventsData = {};
             if (data && data.length > 0) {
                 data.forEach(ev => {
@@ -559,7 +559,6 @@
                     });
                 });
             }
-
             console.log(`✅ ${data?.length || 0} événements chargés`);
             showLoading(false);
             renderAll();
@@ -571,13 +570,11 @@
     }
 
     function showError(message) {
-        const container = document.getElementById('eventsListContainer');
-        container.innerHTML = `
+        document.getElementById('eventsListContainer').innerHTML = `
             <div class="error-message">
                 <p>⚠️ ${message}</p>
                 <button class="retry-btn" onclick="loadEventsFromSupabase()">🔄 Réessayer</button>
-            </div>
-        `;
+            </div>`;
     }
 
     // ============================================================
@@ -590,8 +587,7 @@
     }
 
     function loadEventsForDate(year, month, day) {
-        const key = getDateKey(year, month, day);
-        return eventsData[key] || [];
+        return eventsData[getDateKey(year, month, day)] || [];
     }
 
     function escapeHtml(str) { 
@@ -600,31 +596,24 @@
     }
 
     let currentOpenCard = null;
-    
     function showCard(card) {
         if (hideTimeout) clearTimeout(hideTimeout);
         if (currentOpenCard && currentOpenCard !== card) currentOpenCard.classList.remove('visible');
         card.classList.add('visible');
         currentOpenCard = card;
     }
-    
     function scheduleHideCard(card) {
         hideTimeout = setTimeout(() => {
             if (card) card.classList.remove('visible');
             if (currentOpenCard === card) currentOpenCard = null;
         }, 200);
     }
-    
-    function cancelHide() { 
-        if (hideTimeout) clearTimeout(hideTimeout); 
-    }
+    function cancelHide() { if (hideTimeout) clearTimeout(hideTimeout); }
 
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
-        let startWeekday = firstDayOfMonth.getDay();
-        let startOffset = startWeekday === 0 ? 6 : startWeekday - 1;
+        let startOffset = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        
         let calendarHtml = '';
         weekdays.forEach(day => { calendarHtml += `<div class="weekday">${day}</div>`; });
         for (let i = 0; i < startOffset; i++) { calendarHtml += `<div class="calendar-day other-month"></div>`; }
@@ -634,42 +623,33 @@
 
         for (let d = 1; d <= daysInMonth; d++) {
             const isToday = (isCurrentMonthYear && d === today.getDate());
-            const todayClass = isToday ? 'today' : '';
             const events = loadEventsForDate(currentYear, currentMonth, d);
             const hasEvent = events.length > 0;
-            const eventClass = hasEvent ? 'has-event' : '';
 
             let cardContent = `<div class="edit-card"><h4>📋 Événements du ${d}/${currentMonth+1}/${currentYear}</h4>`;
             if (events.length === 0) {
                 cardContent += `<p>Aucun événement programmé.</p>`;
             } else {
                 events.forEach(ev => {
-                    const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
                     cardContent += `
                         <div class="event-entry">
-                            <p><strong>${typeIcon} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
+                            <p><strong>${ev.type === 'Exposition' ? '🖼️' : '🎭'} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
                             <p><strong>📍 Lieu :</strong> ${escapeHtml(ev.lieu) || '—'}</p>
-                        </div>
-                    `;
+                        </div>`;
                 });
             }
             cardContent += `<button class="close-card">✖ Fermer</button></div>`;
 
             calendarHtml += `
-                <div class="calendar-day ${todayClass} ${eventClass}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
-                    ${d}
-                    ${cardContent}
-                </div>
-            `;
+                <div class="calendar-day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                    ${d}${cardContent}
+                </div>`;
         }
 
         document.getElementById('calendarGrid').innerHTML = calendarHtml;
         document.getElementById('monthName').innerText = `${monthNames[currentMonth]} ${currentYear}`;
-        
-        const yearSelect = document.getElementById('yearSelect');
-        if (yearSelect.value != currentYear) yearSelect.value = currentYear;
+        document.getElementById('yearSelect').value = currentYear;
 
-        // Attacher les événements hover
         document.querySelectorAll('.calendar-day[data-day]').forEach(dayDiv => {
             const card = dayDiv.querySelector('.edit-card');
             if (!card) return;
@@ -678,50 +658,133 @@
             card.addEventListener('mouseenter', cancelHide);
             card.addEventListener('mouseleave', () => scheduleHideCard(card));
             const closeBtn = card.querySelector('.close-card');
-            if (closeBtn) closeBtn.onclick = (e) => { 
-                e.stopPropagation(); 
-                card.classList.remove('visible'); 
-                if (currentOpenCard === card) currentOpenCard = null; 
-            };
+            if (closeBtn) closeBtn.onclick = (e) => { e.stopPropagation(); card.classList.remove('visible'); if (currentOpenCard === card) currentOpenCard = null; };
         });
     }
 
     // ============================================================
-    // LISTE DES ÉVÉNEMENTS
+    // LISTE DES ÉVÉNEMENTS GROUPÉE PAR MOIS + PÉRIODES
     // ============================================================
     function renderEventsSummary() {
         const container = document.getElementById('eventsListContainer');
         if (!container) return;
         
-        const sortedDates = Object.keys(eventsData).sort((a, b) => {
-            const [y1, m1, d1] = a.split('-').map(Number);
-            const [y2, m2, d2] = b.split('-').map(Number);
-            return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
-        });
-        
-        if (sortedDates.length === 0) {
+        // Collecter tous les événements avec leur date
+        const allEntries = [];
+        for (let dateKey in eventsData) {
+            const eventList = eventsData[dateKey];
+            if (!Array.isArray(eventList)) continue;
+            eventList.forEach(ev => {
+                allEntries.push({ dateKey, ...ev });
+            });
+        }
+
+        if (allEntries.length === 0) {
             container.innerHTML = '<div class="no-events">Aucun événement programmé pour le moment.</div>';
             return;
         }
-        
-        let html = '<div class="events-list">';
-        for (let dateKey of sortedDates) {
-            const eventList = eventsData[dateKey];
-            if (!Array.isArray(eventList)) continue;
-            for (let ev of eventList) {
-                const typeIcon = ev.type === 'Exposition' ? '🖼️' : '🎭';
-                const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
-                html += `
-                    <div class="event-row">
-                        <div class="event-date">📅 ${dateKey}</div>
-                        <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(ev.type)}</div>
-                        <div class="event-title">${escapeHtml(ev.titre)}</div>
-                        <div class="event-lieu">📍 ${escapeHtml(ev.lieu) || 'Lieu non précisé'}</div>
-                    </div>
-                `;
+
+        // Trier par date
+        allEntries.sort((a, b) => {
+            const [y1, m1, d1] = a.dateKey.split('-').map(Number);
+            const [y2, m2, d2] = b.dateKey.split('-').map(Number);
+            return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
+        });
+
+        // Regrouper par period_id pour détecter les périodes
+        const groups = {}; // key = period_id ou dateKey si pas de period_id
+        allEntries.forEach(entry => {
+            const groupKey = entry.period_id || entry.dateKey + '_' + entry.titre + '_' + entry.lieu;
+            if (!groups[groupKey]) {
+                groups[groupKey] = { entries: [], period_id: entry.period_id };
+            }
+            groups[groupKey].entries.push(entry);
+        });
+
+        // Construire la liste finale
+        const finalEntries = [];
+        for (let groupKey in groups) {
+            const group = groups[groupKey];
+            const entries = group.entries;
+            
+            if (group.period_id && entries.length > 1) {
+                // C'est une période : fusionner
+                const first = entries[0];
+                const last = entries[entries.length - 1];
+                finalEntries.push({
+                    dateKey: first.dateKey,
+                    endDateKey: last.dateKey,
+                    type: first.type,
+                    titre: first.titre,
+                    lieu: first.lieu,
+                    isPeriod: true
+                });
+            } else {
+                // Événement unique
+                entries.forEach(entry => {
+                    finalEntries.push({
+                        dateKey: entry.dateKey,
+                        endDateKey: null,
+                        type: entry.type,
+                        titre: entry.titre,
+                        lieu: entry.lieu,
+                        isPeriod: false
+                    });
+                });
             }
         }
-        html += '</div>';
+
+        // Retrier après fusion
+        finalEntries.sort((a, b) => {
+            const [y1, m1, d1] = a.dateKey.split('-').map(Number);
+            const [y2, m2, d2] = b.dateKey.split('-').map(Number);
+            return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
+        });
+
+        // Grouper par mois
+        const byMonth = {};
+        finalEntries.forEach(entry => {
+            const [y, m] = entry.dateKey.split('-');
+            const monthKey = `${y}-${m}`;
+            if (!byMonth[monthKey]) byMonth[monthKey] = [];
+            byMonth[monthKey].push(entry);
+        });
+
+        // Rendu HTML
+        let html = '';
+        const sortedMonths = Object.keys(byMonth).sort();
+
+        for (let monthKey of sortedMonths) {
+            const [y, m] = monthKey.split('-').map(Number);
+            html += `
+                <div class="month-section">
+                    <h3 class="month-title"><span style="font-size:1.5rem;">📅</span> ${monthNames[m-1]} ${y}</h3>
+                    <div class="events-list">`;
+
+            for (let entry of byMonth[monthKey]) {
+                const [yy, mm, dd] = entry.dateKey.split('-');
+                const typeIcon = entry.type === 'Exposition' ? '🖼️' : '🎭';
+                const typeClass = entry.type === 'Exposition' ? 'exposition' : '';
+
+                let dateDisplay;
+                if (entry.isPeriod && entry.endDateKey) {
+                    const [ey, em, ed] = entry.endDateKey.split('-');
+                    dateDisplay = `<span class="event-period">📍 Du ${parseInt(dd)} au ${parseInt(ed)} ${monthNames[parseInt(mm)-1].substring(0,3).toLowerCase()}. ${yy}</span>`;
+                } else {
+                    dateDisplay = `📅 ${parseInt(dd)} ${monthNames[parseInt(mm)-1].substring(0,3).toLowerCase()}.`;
+                }
+
+                html += `
+                    <div class="event-row">
+                        <div class="event-date">${dateDisplay}</div>
+                        <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(entry.type)}</div>
+                        <div class="event-title">${escapeHtml(entry.titre)}</div>
+                        <div class="event-lieu">📍 ${escapeHtml(entry.lieu) || 'Lieu non précisé'}</div>
+                    </div>`;
+            }
+            html += '</div></div>';
+        }
+
         container.innerHTML = html;
     }
 
@@ -735,32 +798,19 @@
         yearSelect.innerHTML = '';
         for (let y = 2026; y <= 2028; y++) {
             const option = document.createElement('option');
-            option.value = y;
-            option.textContent = y;
+            option.value = y; option.textContent = y;
             yearSelect.appendChild(option);
         }
         yearSelect.value = currentYear;
-        yearSelect.addEventListener('change', (e) => { 
-            currentYear = parseInt(e.target.value); 
-            renderCalendar(); 
-        });
+        yearSelect.addEventListener('change', (e) => { currentYear = parseInt(e.target.value); renderCalendar(); });
     }
 
     function changeMonth(delta) {
         let newMonth = currentMonth + delta;
         let newYear = currentYear;
-        if (newMonth < 0) { 
-            newMonth = 11; 
-            newYear--; 
-            if (newYear < 2026) newYear = 2026; 
-        }
-        else if (newMonth > 11) { 
-            newMonth = 0; 
-            newYear++; 
-            if (newYear > 2028) newYear = 2028; 
-        }
-        currentMonth = newMonth;
-        currentYear = newYear;
+        if (newMonth < 0) { newMonth = 11; newYear--; if (newYear < 2026) newYear = 2026; }
+        else if (newMonth > 11) { newMonth = 0; newYear++; if (newYear > 2028) newYear = 2028; }
+        currentMonth = newMonth; currentYear = newYear;
         renderCalendar();
     }
 
@@ -776,40 +826,30 @@
         const colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
         for (let i = 0; i < 30; i++) {
             const confetti = document.createElement('div');
-            confetti.style.position = 'absolute';
-            confetti.style.width = Math.random() * 10 + 5 + 'px';
-            confetti.style.height = Math.random() * 10 + 5 + 'px';
-            confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-            confetti.style.left = Math.random() * 100 + '%';
-            confetti.style.top = -20 + 'px';
-            confetti.style.opacity = Math.random() * 0.7 + 0.3;
-            confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-            confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
-            const duration = Math.random() * 4 + 5;
-            confetti.style.animation = `fall ${duration}s linear ${Math.random() * 3}s infinite`;
+            confetti.style.cssText = `position:absolute;width:${Math.random()*10+5}px;height:${Math.random()*10+5}px;background:${colors[Math.floor(Math.random()*colors.length)]};left:${Math.random()*100}%;top:-20px;opacity:${Math.random()*0.7+0.3};border-radius:${Math.random()>.5?'50%':'0'};transform:rotate(${Math.random()*360}deg);animation:fall ${Math.random()*4+5}s linear ${Math.random()*3}s infinite`;
             container.appendChild(confetti);
-            setTimeout(() => confetti.remove(), duration * 1000);
+            setTimeout(() => confetti.remove(), (Math.random()*4+5+Math.random()*3)*1000);
         }
-        const style = document.createElement('style');
-        style.textContent = `@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
-        document.head.appendChild(style);
+        if (!document.getElementById('confetti-style')) {
+            const style = document.createElement('style');
+            style.id = 'confetti-style';
+            style.textContent = `@keyframes fall { to { transform: translateY(100vh) rotate(720deg); opacity: 0; } }`;
+            document.head.appendChild(style);
+        }
     }
 
     // ============================================================
-    // INITIALISATION
+    // INIT
     // ============================================================
     async function init() {
         populateYearSelect();
         renderCalendar();
         await loadEventsFromSupabase();
-        
-        // Recharger automatiquement toutes les 30 secondes
         setInterval(loadEventsFromSupabase, 30000);
     }
 
     init();
     window.addEventListener('load', createConfetti);
-
     console.log('🎪 Calendrier connecté à Supabase !');
 </script>
 </body>
