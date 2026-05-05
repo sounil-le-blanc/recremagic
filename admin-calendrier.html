@@ -12,6 +12,12 @@
             --rose-spectacle: #EC407A;
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
+            --couleur-ducoup1: #FF8A65;
+            --couleur-ducoup2: #FFAB91;
+            --couleur-roulettes: #FFCC80;
+            --couleur-maboul: #4CAF50;
+            --couleur-expo1: #81D4FA;
+            --couleur-expo2: #B39DDB;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
         ::-webkit-scrollbar { width: 10px; }
@@ -157,10 +163,40 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            position: relative;
+            font-weight: 500;
         }
-        .cal-day.has-event { background: #FFE082 !important; font-weight: bold; }
-        .cal-day.today { background: var(--rose-spectacle) !important; color: white !important; }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
+
+        /* Couleurs par spectacle */
+        .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #4E2000; font-weight: bold; }
+        .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #4E2000; font-weight: bold; }
+        .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #4E2000; font-weight: bold; }
+        .cal-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; font-weight: bold; }
+        .cal-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; font-weight: bold; }
+        
+        /* Maboul : fond normal + contour vert */
+        .cal-day.spectacle-maboul {
+            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
+            font-weight: bold;
+        }
+        /* Si Maboul est le seul événement, fond blanc avec contour vert */
+        .cal-day.spectacle-maboul-only {
+            background: rgba(255,255,255,0.9) !important;
+            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
+            font-weight: bold;
+            color: #2C5F3F;
+        }
+
+        .cal-day.today {
+            box-shadow: inset 0 0 0 2px var(--rose-spectacle);
+            font-weight: bold;
+        }
+        
+        /* Aujourd'hui + Maboul */
+        .cal-day.today.spectacle-maboul {
+            box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important;
+        }
 
         /* Calendrier de sélection */
         .selection-calendar .cal-day {
@@ -171,17 +207,20 @@
             color: white !important;
             font-weight: bold;
             transform: scale(1.05);
+            box-shadow: none !important;
         }
         .selection-calendar .cal-day.in-range {
             background: #b8dfca !important;
             color: #2C5F3F;
             font-weight: bold;
+            box-shadow: none !important;
         }
         .selection-calendar .cal-day.range-start,
         .selection-calendar .cal-day.range-end {
             background: var(--vert-caravane) !important;
             color: white !important;
             font-weight: bold;
+            box-shadow: none !important;
         }
 
         .selected-dates-info {
@@ -196,14 +235,34 @@
         .selected-dates-info.active { display: block; }
         .hidden { display: none !important; }
 
-        .weekday-checkboxes {
+        /* Légende */
+        .legend {
             display: flex;
             flex-wrap: wrap;
-            gap: 5px;
-            margin: 10px 0;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            align-items: center;
         }
-        .weekday-checkboxes label {
-            font-size: 0.85rem;
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            padding: 0.2rem 0.5rem;
+            background: rgba(255,255,255,0.5);
+            border-radius: 12px;
+        }
+        .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+        }
+        .legend-outline {
+            width: 14px;
+            height: 14px;
+            border-radius: 4px;
+            border: 3px solid var(--couleur-maboul);
+            background: white;
         }
 
         /* Popup */
@@ -249,6 +308,15 @@
             <select id="yearSelect" style="width:auto; margin:0;"></select>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="legend">
+            <span style="font-weight:bold;">Légende :</span>
+            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-ducoup1);"></div> DU COUP ON VIENT</div>
+            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-ducoup2);"></div> DU COUP revient</div>
+            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-roulettes);"></div> ROULETTES</div>
+            <div class="legend-item"><div class="legend-outline"></div> MABOUL</div>
+            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-expo1);"></div> FÉERIE</div>
+            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-expo2);"></div> GÉANTS</div>
+        </div>
     </div>
 
     <!-- Carte 2 : Ajout d'événement avec calendrier de sélection -->
@@ -275,16 +343,6 @@
         <div class="selected-dates-info" id="selectedDatesInfo">
             🗓 <strong>Dates sélectionnées :</strong> <span id="selectedDatesText"></span>
             <button class="btn btn-danger" id="clearSelectionBtn" style="margin-left:10px; padding:0.3rem 0.8rem; font-size:0.8rem;">✕</button>
-        </div>
-
-        <div id="periodWeekdays" class="weekday-checkboxes hidden">
-            <label><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
-            <label><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
-            <label><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
-            <label><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
-            <label><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
-            <label><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
-            <label><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
         </div>
 
         <form id="eventForm">
@@ -333,11 +391,53 @@
     let eventsData = {}; 
     let editingEventId = null;
     let selectedDates = new Set();
-    let selectionAnchor = null; // Pour stocker la première date cliquée en mode période
+    let selectionAnchor = null;
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
+
+    // Mapping titre -> classe CSS
+    function getSpectacleClass(titre) {
+        switch(titre) {
+            case "DU COUP ON VIENT CHEZ VOUS": return 'spectacle-ducoup1';
+            case "DU COUP on revient chez vous": return 'spectacle-ducoup2';
+            case "COMME SUR DES ROULETTES": return 'spectacle-roulettes';
+            case "DÉLICIEUSEMENT MABOUL": return 'spectacle-maboul';
+            case "LA FÉERIE DES MARIONNETTES": return 'spectacle-expo1';
+            case "LES GÉANTS DU CARNAVAL": return 'spectacle-expo2';
+            default: return '';
+        }
+    }
+
+    // Détermine les classes pour une date dans le calendrier principal
+    function getEventClasses(dateKey) {
+        const events = eventsData[dateKey] || [];
+        if (events.length === 0) return { classes: [], hasMaboul: false, hasOther: false };
+        
+        let hasMaboul = false;
+        let hasOther = false;
+        let classes = [];
+        
+        events.forEach(ev => {
+            if (ev.titre === "DÉLICIEUSEMENT MABOUL") {
+                hasMaboul = true;
+            } else {
+                hasOther = true;
+                const cls = getSpectacleClass(ev.titre);
+                if (cls && !classes.includes(cls)) classes.push(cls);
+            }
+        });
+        
+        // Si Maboul est le seul événement
+        if (hasMaboul && !hasOther) {
+            classes.push('spectacle-maboul-only');
+        } else if (hasMaboul && hasOther) {
+            classes.push('spectacle-maboul');
+        }
+        
+        return { classes, hasMaboul, hasOther };
+    }
 
     const now = new Date();
     currentMonth = now.getMonth();
@@ -390,15 +490,20 @@
 
         for (let d = 1; d <= daysInMonth; d++) {
             const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const hasEvent = eventsData[key] && eventsData[key].length > 0;
-            html += `<div class="cal-day ${key === todayStr ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" 
+            const { classes } = getEventClasses(key);
+            
+            let allClasses = ['cal-day'];
+            if (key === todayStr) allClasses.push('today');
+            allClasses = allClasses.concat(classes);
+            
+            html += `<div class="${allClasses.join(' ')}" 
                          onclick="openPopup('${key}')">${d}</div>`;
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
 
-    // --- CALENDRIER DE SÉLECTION ---
+    // --- CALENDRIER DE SÉLECTION (affiche aussi les événements existants) ---
     function renderSelectionCalendar() {
         const firstDay = new Date(selYear, selMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
@@ -421,19 +526,25 @@
             const key = `${selYear}-${String(selMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isSelected = selectedDates.has(key);
             const isToday = key === todayStr;
+            const { classes: eventClasses } = getEventClasses(key);
             
             let classes = ['cal-day'];
             if (isToday) classes.push('today');
             
+            // Ajouter les classes d'événements existants (sauf si la date est dans la sélection)
+            if (!isSelected) {
+                classes = classes.concat(eventClasses);
+            }
+            
+            // Classes de sélection
             if (currentMode === 'single') {
                 if (isSelected) classes.push('selected');
             } else {
-                // Mode période
-                if (isSelected && key === rangeStart && key === rangeEnd) {
+                if (isSelected && key === rangeStart && rangeEnd && key === rangeEnd) {
                     classes.push('selected');
                 } else if (isSelected && key === rangeStart) {
                     classes.push('range-start');
-                } else if (isSelected && key === rangeEnd) {
+                } else if (isSelected && rangeEnd && key === rangeEnd) {
                     classes.push('range-end');
                 } else if (isSelected) {
                     classes.push('in-range');
@@ -450,24 +561,16 @@
 
     function handleSelectionClick(event, dateKey) {
         if (currentMode === 'single') {
-            // Mode date unique : un seul clic sélectionne la date
             selectedDates = new Set([dateKey]);
             selectionAnchor = null;
         } else {
-            // Mode période
             if (selectionAnchor === null) {
-                // Premier clic : on définit l'ancre
                 selectionAnchor = dateKey;
                 selectedDates = new Set([dateKey]);
             } else {
-                // Deuxième clic : on crée la plage entre l'ancre et la date cliquée
                 const allDates = getDatesBetween(selectionAnchor, dateKey);
-                const activeDays = getActiveWeekdays();
-                selectedDates = new Set(allDates.filter(d => {
-                    const day = new Date(d + 'T00:00:00').getDay();
-                    return activeDays.includes(day);
-                }));
-                selectionAnchor = null; // On réinitialise pour la prochaine sélection
+                selectedDates = new Set(allDates);
+                selectionAnchor = null;
             }
         }
         renderSelectionCalendar();
@@ -485,11 +588,6 @@
             current.setDate(current.getDate() + 1);
         }
         return dates;
-    }
-
-    function getActiveWeekdays() {
-        if (currentMode !== 'period') return [0,1,2,3,4,5,6]; // Tous les jours
-        return Array.from(document.querySelectorAll('.weekday-filter:checked')).map(c => parseInt(c.value));
     }
 
     function updateSelectedDatesInfo() {
@@ -539,12 +637,10 @@
             return;
         }
         
-        // Vérification des conflits
         const sortedDates = Array.from(selectedDates).sort();
         const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"].includes(titre);
         const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
         
-        // Vérifier les conflits
         for (const dateKey of sortedDates) {
             if (isDuCoup && hasDuCoupOnDate(dateKey)) {
                 alert(`⚠️ Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}. Impossible d'en mettre deux le même jour.`);
@@ -590,8 +686,14 @@
         if (events.length === 0) html += `<p>Aucun événement.</p>`;
         else {
             events.forEach(ev => {
+                let borderColor = '#7CB69F';
+                if (ev.titre === "DÉLICIEUSEMENT MABOUL") borderColor = '#4CAF50';
+                if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#FF8A65';
+                if (ev.titre === "DU COUP on revient chez vous") borderColor = '#FFAB91';
+                if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#FFCC80';
+                
                 html += `
-                <div class="popup-event-item">
+                <div class="popup-event-item" style="border-left-color: ${borderColor};">
                     <div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div>
                     <div style="display:flex; gap:5px;">
                         <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre.replace(/'/g, "\\'")}', '${(ev.lieu || '').replace(/'/g, "\\'")}')">✏️</button>
@@ -662,9 +764,8 @@
         currentMode = m;
         document.getElementById('modeSingle').classList.toggle('active', m === 'single');
         document.getElementById('modePeriod').classList.toggle('active', m === 'period');
-        document.getElementById('periodWeekdays').classList.toggle('hidden', m !== 'period');
         selectedDates = new Set();
-        selectionAnchor = null; // Réinitialiser l'ancre
+        selectionAnchor = null;
         renderSelectionCalendar();
     }
 
