@@ -109,6 +109,56 @@
         textarea { border-radius: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
+        /* Autocomplétion lieu */
+        .lieu-wrapper {
+            position: relative;
+        }
+        .suggestions-dropdown {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            right: 0;
+            background: white;
+            border: 2px solid var(--vert-caravane);
+            border-radius: 15px;
+            margin-top: 2px;
+            max-height: 200px;
+            overflow-y: auto;
+            z-index: 100;
+            display: none;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+        .suggestions-dropdown.active {
+            display: block;
+        }
+        .suggestion-item {
+            padding: 0.6rem 1rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee;
+            transition: background 0.15s;
+        }
+        .suggestion-item:last-child {
+            border-bottom: none;
+        }
+        .suggestion-item:hover {
+            background: #e8f5e9;
+        }
+        .suggestion-item .city-name {
+            font-weight: 600;
+            color: #2C1810;
+        }
+        .suggestion-item .postcode {
+            color: #888;
+            font-size: 0.8rem;
+            margin-left: 0.3rem;
+        }
+        .suggestion-item .department {
+            color: #aaa;
+            font-size: 0.75rem;
+            display: block;
+        }
+
         .mode-tabs {
             display: flex;
             gap: 0.5rem;
@@ -349,7 +399,10 @@
             </div>
 
             <label>Lieu</label>
-            <textarea id="eventLieu" rows="2" placeholder="Commune et code postal..."></textarea>
+            <div class="lieu-wrapper">
+                <input type="text" id="eventLieu" placeholder="Commune..." autocomplete="off">
+                <div class="suggestions-dropdown" id="lieuSuggestions"></div>
+            </div>
 
             <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
         </form>
@@ -371,9 +424,13 @@
     let selMonth, selYear;
     let eventsData = {}; 
     let editingEventId = null;
-    let editingEventDate = null; // Stocke la date de l'événement en cours d'édition
+    let editingEventDate = null;
     let selectedDates = new Set();
     let selectionAnchor = null;
+    
+    // Autocomplétion lieu
+    let lieuTimeout = null;
+    let currentLieuInput = null; // 'eventLieu' ou 'editLieu'
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
@@ -394,35 +451,76 @@
     function getEventClasses(dateKey) {
         const events = eventsData[dateKey] || [];
         if (events.length === 0) return { classes: [], hasMaboul: false, hasOther: false };
-        
-        let hasMaboul = false;
-        let hasOther = false;
-        let classes = [];
-        
+        let hasMaboul = false, hasOther = false, classes = [];
         events.forEach(ev => {
-            if (ev.titre === "DÉLICIEUSEMENT MABOUL") {
-                hasMaboul = true;
-            } else {
-                hasOther = true;
-                const cls = getSpectacleClass(ev.titre);
-                if (cls && !classes.includes(cls)) classes.push(cls);
-            }
+            if (ev.titre === "DÉLICIEUSEMENT MABOUL") hasMaboul = true;
+            else { hasOther = true; const cls = getSpectacleClass(ev.titre); if (cls && !classes.includes(cls)) classes.push(cls); }
         });
-        
-        if (hasMaboul && !hasOther) {
-            classes.push('spectacle-maboul-only');
-        } else if (hasMaboul && hasOther) {
-            classes.push('spectacle-maboul');
-        }
-        
+        if (hasMaboul && !hasOther) classes.push('spectacle-maboul-only');
+        else if (hasMaboul && hasOther) classes.push('spectacle-maboul');
         return { classes, hasMaboul, hasOther };
     }
 
     const now = new Date();
-    currentMonth = now.getMonth();
-    currentYear = now.getFullYear();
-    selMonth = now.getMonth();
-    selYear = now.getFullYear();
+    currentMonth = now.getMonth(); currentYear = now.getFullYear();
+    selMonth = now.getMonth(); selYear = now.getFullYear();
+
+    // --- API BAN : Autocomplétion des communes ---
+    async function searchCommunes(query, targetInputId) {
+        if (query.length < 2) {
+            document.getElementById(targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions').classList.remove('active');
+            return;
+        }
+        
+        const dropdownId = targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions';
+        const dropdown = document.getElementById(dropdownId);
+        
+        try {
+            const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=5`);
+            const data = await response.json();
+            
+            if (!data.features || data.features.length === 0) {
+                dropdown.classList.remove('active');
+                return;
+            }
+            
+            let html = '';
+            data.features.forEach(f => {
+                const city = f.properties.city;
+                const postcode = f.properties.postcode;
+                const department = f.properties.context ? f.properties.context.split(',')[0] : '';
+                const label = f.properties.label;
+                
+                html += `
+                <div class="suggestion-item" onclick="selectCommune('${label.replace(/'/g, "\\'")}', '${targetInputId}')">
+                    <span class="city-name">${city}</span><span class="postcode">(${postcode})</span>
+                    <span class="department">${department}</span>
+                </div>`;
+            });
+            
+            dropdown.innerHTML = html;
+            dropdown.classList.add('active');
+        } catch (err) {
+            console.error('Erreur API BAN:', err);
+        }
+    }
+    
+    function selectCommune(label, targetInputId) {
+        document.getElementById(targetInputId).value = label;
+        document.getElementById(targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions').classList.remove('active');
+    }
+    
+    // Écouteur pour le champ lieu du formulaire d'ajout
+    document.addEventListener('DOMContentLoaded', () => {
+        const lieuInput = document.getElementById('eventLieu');
+        lieuInput.addEventListener('input', function() {
+            clearTimeout(lieuTimeout);
+            lieuTimeout = setTimeout(() => searchCommunes(this.value, 'eventLieu'), 300);
+        });
+        lieuInput.addEventListener('blur', () => {
+            setTimeout(() => document.getElementById('lieuSuggestions').classList.remove('active'), 200);
+        });
+    });
 
     async function fetchEvents() {
         const { data, error } = await _supabase.from('events').select('*');
@@ -436,18 +534,14 @@
         renderSelectionCalendar();
     }
 
-    // Vérifie si un spectacle du groupe "DU COUP" existe déjà à cette date
     function hasDuCoupOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => {
             if (excludeEventId && ev.id === excludeEventId) return false;
-            return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || 
-                   ev.titre === "DU COUP on revient chez vous" || 
-                   ev.titre === "COMME SUR DES ROULETTES";
+            return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || ev.titre === "DU COUP on revient chez vous" || ev.titre === "COMME SUR DES ROULETTES";
         });
     }
 
-    // Vérifie si DÉLICIEUSEMENT MABOUL existe déjà à cette date
     function hasMaboulOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => {
@@ -456,73 +550,54 @@
         });
     }
 
-    // --- CALENDRIER PRINCIPAL ---
     function renderMainCalendar() {
         const firstDay = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const todayStr = dateToKey(new Date());
-
         let html = '';
         ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
-
         for (let d = 1; d <= daysInMonth; d++) {
             const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const { classes } = getEventClasses(key);
-            
             let allClasses = ['cal-day'];
             if (key === todayStr) allClasses.push('today');
             allClasses = allClasses.concat(classes);
-            
             html += `<div class="${allClasses.join(' ')}" onclick="openPopup('${key}')">${d}</div>`;
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
     }
 
-    // --- CALENDRIER DE SÉLECTION ---
     function renderSelectionCalendar() {
         const firstDay = new Date(selYear, selMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
         const daysInMonth = new Date(selYear, selMonth + 1, 0).getDate();
         const todayStr = dateToKey(new Date());
-
         let html = '';
         ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
-
         let rangeStart = null, rangeEnd = null;
         if (currentMode === 'period' && selectedDates.size >= 2) {
             const sorted = Array.from(selectedDates).sort();
-            rangeStart = sorted[0];
-            rangeEnd = sorted[sorted.length - 1];
+            rangeStart = sorted[0]; rangeEnd = sorted[sorted.length - 1];
         }
-
         for (let d = 1; d <= daysInMonth; d++) {
             const key = `${selYear}-${String(selMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isSelected = selectedDates.has(key);
             const isToday = key === todayStr;
             const { classes: eventClasses } = getEventClasses(key);
-            
             let classes = ['cal-day'];
             if (isToday) classes.push('today');
             if (!isSelected) classes = classes.concat(eventClasses);
-            
-            if (currentMode === 'single') {
-                if (isSelected) classes.push('selected');
-            } else {
-                if (isSelected && key === rangeStart && rangeEnd && key === rangeEnd) {
-                    classes.push('selected');
-                } else if (isSelected && key === rangeStart) {
-                    classes.push('range-start');
-                } else if (isSelected && rangeEnd && key === rangeEnd) {
-                    classes.push('range-end');
-                } else if (isSelected) {
-                    classes.push('in-range');
-                }
+            if (currentMode === 'single') { if (isSelected) classes.push('selected'); }
+            else {
+                if (isSelected && key === rangeStart && rangeEnd && key === rangeEnd) classes.push('selected');
+                else if (isSelected && key === rangeStart) classes.push('range-start');
+                else if (isSelected && rangeEnd && key === rangeEnd) classes.push('range-end');
+                else if (isSelected) classes.push('in-range');
             }
-            
             html += `<div class="${classes.join(' ')}" onclick="handleSelectionClick(event, '${key}')">${d}</div>`;
         }
         document.getElementById('selectionCalendarGrid').innerHTML = html;
@@ -531,134 +606,67 @@
     }
 
     function handleSelectionClick(event, dateKey) {
-        if (currentMode === 'single') {
-            selectedDates = new Set([dateKey]);
-            selectionAnchor = null;
-        } else {
-            if (selectionAnchor === null) {
-                selectionAnchor = dateKey;
-                selectedDates = new Set([dateKey]);
-            } else {
-                const allDates = getDatesBetween(selectionAnchor, dateKey);
-                selectedDates = new Set(allDates);
-                selectionAnchor = null;
-            }
+        if (currentMode === 'single') { selectedDates = new Set([dateKey]); selectionAnchor = null; }
+        else {
+            if (selectionAnchor === null) { selectionAnchor = dateKey; selectedDates = new Set([dateKey]); }
+            else { const allDates = getDatesBetween(selectionAnchor, dateKey); selectedDates = new Set(allDates); selectionAnchor = null; }
         }
         renderSelectionCalendar();
     }
 
     function getDatesBetween(startKey, endKey) {
-        const start = new Date(startKey + 'T00:00:00');
-        const end = new Date(endKey + 'T00:00:00');
-        const dates = [];
-        const current = new Date(Math.min(start, end));
-        const last = new Date(Math.max(start, end));
-        while (current <= last) {
-            dates.push(dateToKey(current));
-            current.setDate(current.getDate() + 1);
-        }
+        const start = new Date(startKey + 'T00:00:00'), end = new Date(endKey + 'T00:00:00');
+        const dates = [], current = new Date(Math.min(start, end)), last = new Date(Math.max(start, end));
+        while (current <= last) { dates.push(dateToKey(current)); current.setDate(current.getDate() + 1); }
         return dates;
     }
 
     function updateSelectedDatesInfo() {
-        const info = document.getElementById('selectedDatesInfo');
-        const text = document.getElementById('selectedDatesText');
+        const info = document.getElementById('selectedDatesInfo'), text = document.getElementById('selectedDatesText');
         const sorted = Array.from(selectedDates).sort();
-        
-        if (sorted.length === 0) {
-            info.classList.remove('active');
-            return;
-        }
+        if (sorted.length === 0) { info.classList.remove('active'); return; }
         info.classList.add('active');
-        if (sorted.length === 1) {
-            text.textContent = `1 date : ${formatDate(sorted[0])}`;
-        } else {
-            text.textContent = `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
-        }
+        text.textContent = sorted.length === 1 ? `1 date : ${formatDate(sorted[0])}` : `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
         document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
     }
 
-    function formatDate(key) {
-        const [y, m, d] = key.split('-');
-        return `${d}/${m}/${y}`;
-    }
+    function formatDate(key) { const [y,m,d]=key.split('-'); return `${d}/${m}/${y}`; }
+    function dateToKey(date) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
 
-    function dateToKey(date) {
-        return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
-    }
-
-    // Vérifie les conflits pour une liste de dates et un titre donné
     function checkConflicts(dates, titre, excludeEventId = null) {
-        const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"].includes(titre);
+        const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES"].includes(titre);
         const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
-        
         for (const dateKey of dates) {
-            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) {
-                return { conflict: true, date: dateKey, message: `Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}.` };
-            }
-            if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) {
-                return { conflict: true, date: dateKey, message: `"DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.` };
-            }
+            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: `Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}.` };
+            if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: `"DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.` };
         }
         return { conflict: false };
     }
 
-    // --- SOUMISSION (AJOUT) ---
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
-        
-        if (selectedDates.size === 0) {
-            alert('⚠️ Veuillez sélectionner au moins une date dans le calendrier de sélection.');
-            return;
-        }
-        
-        const type = document.getElementById('eventType').value;
-        const titre = document.getElementById('eventTitle').value;
-        const lieu = document.getElementById('eventLieu').value.trim();
-        
-        if (!titre) {
-            alert('⚠️ Veuillez sélectionner un titre.');
-            return;
-        }
-        
+        if (selectedDates.size === 0) { alert('⚠️ Veuillez sélectionner au moins une date.'); return; }
+        const type = document.getElementById('eventType').value, titre = document.getElementById('eventTitle').value, lieu = document.getElementById('eventLieu').value.trim();
+        if (!titre) { alert('⚠️ Veuillez sélectionner un titre.'); return; }
         const sortedDates = Array.from(selectedDates).sort();
-        
-        // Vérifier les conflits
         const conflict = checkConflicts(sortedDates, titre);
-        if (conflict.conflict) {
-            alert('⚠️ ' + conflict.message);
-            return;
-        }
-        
+        if (conflict.conflict) { alert('⚠️ ' + conflict.message); return; }
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.textContent = '⏳ Enregistrement...';
-        
         const periodId = sortedDates.length > 1 ? 'p_' + Date.now() : null;
-        
-        const toInsert = sortedDates.map(dateKey => ({ 
-            id: crypto.randomUUID(), 
-            event_date: dateKey, 
-            type, 
-            titre, 
-            lieu,
-            period_id: periodId
-        }));
-
+        const toInsert = sortedDates.map(dateKey => ({ id: crypto.randomUUID(), event_date: dateKey, type, titre, lieu, period_id: periodId }));
         const { error } = await _supabase.from('events').insert(toInsert);
         if (error) alert("Erreur : " + error.message);
         else {
             alert(`✅ ${toInsert.length} événement(s) ajouté(s) !`);
             document.getElementById('eventForm').reset();
-            selectedDates = new Set();
-            selectionAnchor = null;
+            selectedDates = new Set(); selectionAnchor = null;
             updateTitleDropdown();
             await fetchEvents();
         }
-        btn.disabled = false;
-        btn.textContent = '💾 Enregistrer';
+        btn.disabled = false; btn.textContent = '💾 Enregistrer';
     };
 
-    // --- POPUP ---
     async function openPopup(dateKey) {
         const events = eventsData[dateKey] || [];
         let html = `<h3 style="margin-bottom:10px;">📅 ${formatDate(dateKey)}</h3>`;
@@ -670,7 +678,6 @@
                 if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#FF8A65';
                 if (ev.titre === "DU COUP on revient chez vous") borderColor = '#FFAB91';
                 if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#FFCC80';
-                
                 html += `
                 <div class="popup-event-item" style="border-left-color: ${borderColor};">
                     <div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div>
@@ -685,13 +692,33 @@
         <div class="edit-form" id="editForm">
             <select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
             <select id="editTitle"></select>
-            <textarea id="editLieu" rows="2"></textarea>
+            <div class="lieu-wrapper" style="margin-top:0.5rem;">
+                <input type="text" id="editLieu" placeholder="Commune..." autocomplete="off">
+                <div class="suggestions-dropdown" id="editLieuSuggestions"></div>
+            </div>
             <button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button>
             <p id="editError" style="color:red; display:none; margin-top:5px;"></p>
         </div>
         <button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>`;
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
+        
+        // Ajouter l'écouteur sur le champ editLieu après création
+        setTimeout(() => {
+            const editLieuInput = document.getElementById('editLieu');
+            if (editLieuInput) {
+                editLieuInput.addEventListener('input', function() {
+                    clearTimeout(lieuTimeout);
+                    lieuTimeout = setTimeout(() => searchCommunes(this.value, 'editLieu'), 300);
+                });
+                editLieuInput.addEventListener('blur', () => {
+                    setTimeout(() => {
+                        const dd = document.getElementById('editLieuSuggestions');
+                        if (dd) dd.classList.remove('active');
+                    }, 200);
+                });
+            }
+        }, 100);
     }
 
     window.prepareEdit = (id, type, titre, lieu, date) => {
@@ -706,39 +733,20 @@
         document.getElementById('editForm').classList.add('active');
     };
 
-    // --- SAUVEGARDE MODIFICATION avec vérification conflits ---
     window.saveEdit = async () => {
         const newTitre = document.getElementById('editTitle').value;
         const errorEl = document.getElementById('editError');
         errorEl.style.display = 'none';
-        
-        if (!newTitre) {
-            errorEl.textContent = '⚠️ Veuillez sélectionner un titre.';
-            errorEl.style.display = 'block';
-            return;
-        }
-        
-        // Vérifier les conflits pour cette date (en excluant l'événement en cours d'édition)
+        if (!newTitre) { errorEl.textContent = '⚠️ Veuillez sélectionner un titre.'; errorEl.style.display = 'block'; return; }
         const conflict = checkConflicts([editingEventDate], newTitre, editingEventId);
-        if (conflict.conflict) {
-            errorEl.textContent = '⚠️ ' + conflict.message;
-            errorEl.style.display = 'block';
-            return;
-        }
-        
+        if (conflict.conflict) { errorEl.textContent = '⚠️ ' + conflict.message; errorEl.style.display = 'block'; return; }
         const updates = {
             type: document.getElementById('editType').value,
             titre: newTitre,
             lieu: document.getElementById('editLieu').value
         };
-        
         const { error } = await _supabase.from('events').update(updates).eq('id', editingEventId);
-        if (error) {
-            errorEl.textContent = 'Erreur : ' + error.message;
-            errorEl.style.display = 'block';
-            return;
-        }
-        
+        if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; return; }
         closePopup();
         await fetchEvents();
     };
@@ -746,11 +754,8 @@
     window.deleteEvent = async (id, periodId) => {
         if (!confirm('Supprimer ?')) return;
         let q = _supabase.from('events').delete();
-        if (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') {
-            q = q.eq('period_id', periodId);
-        } else {
-            q = q.eq('id', id);
-        }
+        if (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') q = q.eq('period_id', periodId);
+        else q = q.eq('id', id);
         await q;
         closePopup();
         await fetchEvents();
@@ -771,48 +776,36 @@
         currentMode = m;
         document.getElementById('modeSingle').classList.toggle('active', m === 'single');
         document.getElementById('modePeriod').classList.toggle('active', m === 'period');
-        selectedDates = new Set();
-        selectionAnchor = null;
+        selectedDates = new Set(); selectionAnchor = null;
         renderSelectionCalendar();
     }
 
     function closePopup() { 
         document.getElementById('eventsPopup').classList.remove('active');
-        editingEventId = null;
-        editingEventDate = null;
+        editingEventId = null; editingEventDate = null;
     }
 
-    // Init
     document.getElementById('modeSingle').onclick = () => switchMode('single');
     document.getElementById('modePeriod').onclick = () => switchMode('period');
     document.getElementById('eventType').onchange = updateTitleDropdown;
-    
     document.getElementById('prevMonthBtn').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderMainCalendar(); };
     document.getElementById('nextMonthBtn').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderMainCalendar(); };
-    
     document.getElementById('selPrevMonthBtn').onclick = () => { selMonth--; if(selMonth<0){selMonth=11;selYear--;} renderSelectionCalendar(); };
     document.getElementById('selNextMonthBtn').onclick = () => { selMonth++; if(selMonth>11){selMonth=0;selYear++;} renderSelectionCalendar(); };
-    
-    document.getElementById('clearSelectionBtn').onclick = () => {
-        selectedDates = new Set();
-        selectionAnchor = null;
-        renderSelectionCalendar();
-    };
+    document.getElementById('clearSelectionBtn').onclick = () => { selectedDates = new Set(); selectionAnchor = null; renderSelectionCalendar(); };
 
     (async () => {
         const ySel = document.getElementById('yearSelect');
         for(let y=2024; y<=2030; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
         ySel.value = currentYear;
         ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
-        
         const sySel = document.getElementById('selYearSelect');
         for(let y=2024; y<=2030; y++) sySel.innerHTML += `<option value="${y}">${y}</option>`;
         sySel.value = selYear;
         sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
-        
         updateTitleDropdown();
         await fetchEvents();
     })();
 </script>
 </body>
-    </html>
+</html>
