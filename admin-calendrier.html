@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin calendrier - Récré Magic (Supabase)</title>
+    <title>Admin calendrier - Récré Magic (Supabase Fix)</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -127,140 +127,30 @@
             border-color: #e6a000;
         }
 
-        .period-summary {
-            background: #C8E6C9;
-            padding: 0.4rem 1rem;
-            border-radius: 15px;
-            margin: 0.5rem 0;
-            font-size: 0.85rem;
-            text-align: center;
-            display: none;
-        }
-        .period-summary.visible { display: block; }
-
-        .weekday-checkboxes {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.3rem;
-            justify-content: center;
-            margin-top: 0.3rem;
-        }
-        .weekday-checkbox {
-            padding: 0.3rem 0.6rem;
-            background: #f0f0f0;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            display: flex;
-            align-items: center;
-            gap: 0.2rem;
-            cursor: pointer;
-        }
-        .weekday-checkbox input { width: auto; margin: 0; }
-
-        .hidden { display: none !important; }
-
-        /* Autocomplete */
-        .autocomplete-wrapper { position: relative; }
-        .autocomplete-suggestions {
-            position: absolute;
-            top: 100%;
-            left: 0; right: 0;
-            background: white;
-            border: 2px solid #7a5c3e;
-            border-top: none;
-            border-radius: 0 0 20px 20px;
-            max-height: 200px;
-            overflow-y: auto;
-            z-index: 50;
-            display: none;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
-        }
-        .autocomplete-suggestions.active { display: block; }
-        .autocomplete-item {
-            padding: 0.6rem 1rem;
-            cursor: pointer;
-            font-size: 0.85rem;
-            border-bottom: 1px solid #eee;
-        }
-        .autocomplete-item:hover { background: #FFF3CD; }
-        .autocomplete-item .cp { color: var(--rose-spectacle); font-weight: bold; margin-right: 0.5rem; }
-
         /* Calendrier */
         .calendar-header-row {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            flex-wrap: wrap;
             gap: 0.8rem;
             margin-bottom: 1.2rem;
-            padding-bottom: 0.8rem;
-            border-bottom: 2px solid rgba(0,0,0,0.1);
         }
         .month-year-nav {
             display: flex;
             align-items: center;
             gap: 0.8rem;
-            background: rgba(0,0,0,0.05);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
         }
-        .month-year-nav span {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: var(--text-dark);
-            min-width: 160px;
-            text-align: center;
-        }
-        .nav-arrow {
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            border: none;
-            background: var(--vert-caravane);
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .nav-arrow:hover { transform: scale(1.1); }
-        .year-select-wrap {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
-            background: rgba(0,0,0,0.05);
-            padding: 0.4rem 1rem;
-            border-radius: 50px;
-        }
-        .year-select-wrap label { font-weight: bold; color: var(--text-dark); }
-        .year-select-wrap select {
-            width: auto;
-            padding: 0.3rem 0.6rem;
-            margin: 0;
-            border-radius: 20px;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         .calendar-grid {
             display: grid;
             grid-template-columns: repeat(7, 1fr);
             gap: 0.4rem;
             text-align: center;
         }
-        .weekday-header {
-            font-weight: bold;
-            color: var(--rose-spectacle);
-            padding: 0.6rem 0;
-            background: rgba(255,255,255,0.5);
-            border-radius: 20px;
-            font-size: 0.8rem;
-        }
+        .weekday-header { font-weight: bold; color: var(--rose-spectacle); padding: 0.6rem 0; font-size: 0.8rem; }
         .cal-day {
-            position: relative;
             padding: 0.6rem 0;
             border-radius: 20px;
             cursor: pointer;
-            transition: all 0.15s;
-            font-weight: 500;
             background: rgba(255,255,255,0.7);
             font-size: 0.9rem;
             min-height: 40px;
@@ -268,30 +158,15 @@
             align-items: center;
             justify-content: center;
         }
-        .cal-day:hover {
-            transform: scale(1.07);
-            background: var(--jaune-accent);
-            z-index: 5;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
-        }
-        .cal-day.has-event {
-            background: #FFE082 !important;
-            font-weight: bold;
-            color: #2C1810;
-        }
-        .cal-day.today {
-            background: var(--rose-spectacle) !important;
-            color: white !important;
-            box-shadow: 0 0 0 3px white, 0 0 0 5px var(--rose-spectacle);
-        }
-        .cal-day.other-month { opacity: 0.35; pointer-events: none; }
+        .cal-day.has-event { background: #FFE082 !important; font-weight: bold; }
+        .cal-day.today { background: var(--rose-spectacle) !important; color: white !important; }
+        .cal-day.other-month { opacity: 0.3; pointer-events: none; }
 
         /* Popup */
         .events-popup {
             display: none;
             position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
+            top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.6);
             z-index: 1000;
             justify-content: center;
@@ -299,84 +174,17 @@
         }
         .events-popup.active { display: flex; }
         .popup-content {
-            background: white;
-            border-radius: 25px;
-            padding: 1.5rem;
-            width: 95%;
-            max-width: 500px;
-            max-height: 85vh;
-            overflow-y: auto;
-            border: 4px solid var(--vert-caravane);
-            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
-        }
-        .popup-content h3 {
-            font-family: 'MedievalSharp', cursive;
-            color: var(--rose-spectacle);
-            margin-bottom: 1rem;
-            text-align: center;
+            background: white; border-radius: 25px; padding: 1.5rem;
+            width: 95%; max-width: 500px; border: 4px solid var(--vert-caravane);
         }
         .popup-event-item {
-            background: #f9f9f9;
-            border-radius: 15px;
-            padding: 0.8rem;
-            margin-bottom: 0.6rem;
+            background: #f9f9f9; padding: 0.8rem; margin-bottom: 0.6rem;
             border-left: 4px solid var(--vert-caravane);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.5rem;
+            display: flex; justify-content: space-between; align-items: center;
         }
-        .popup-event-info { flex: 1; font-size: 0.85rem; }
-        .popup-actions { display: flex; gap: 0.3rem; flex-direction: column; }
-        .popup-actions button {
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            border: none;
-            cursor: pointer;
-            font-size: 1rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .btn-edit-popup { background: #FFB300; color: #2C1810; }
-        .btn-delete-popup { background: #D32F2F; color: white; }
-        .btn-close-popup {
-            display: block;
-            margin: 1rem auto 0;
-            background: #aaa;
-            color: white;
-            border: none;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-        }
-
-        .edit-form {
-            display: none;
-            margin-top: 1rem;
-            padding-top: 1rem;
-            border-top: 2px solid #eee;
-        }
+        .edit-form { display: none; margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem; }
         .edit-form.active { display: block; }
-        .edit-form label { font-size: 0.8rem; font-weight: bold; display: block; margin-top: 0.5rem; }
-        .edit-form .btn-row {
-            display: flex;
-            gap: 0.5rem;
-            margin-top: 0.8rem;
-        }
-        .btn-save { background: var(--vert-caravane); color: white; flex: 1; }
-        .btn-cancel { background: #aaa; color: white; flex: 1; }
-
-        .no-events-msg { text-align: center; color: #888; padding: 1rem; font-style: italic; }
-        .legend { text-align: center; margin-top: 1rem; font-size: 0.8rem; color: #666; }
-
-        @media (max-width: 650px) {
-            body { padding: 0.8rem; }
-            .card { padding: 1rem; border-radius: 30px; }
-            .form-row { grid-template-columns: 1fr; }
-            .cal-day { font-size: 0.75rem; padding: 0.4rem 0; min-height: 32px; }
-        }
+        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -405,15 +213,14 @@
                     <div><label>Date début *</label><input type="date" id="periodStart"></div>
                     <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
                 </div>
-                <div class="period-summary" id="periodSummary"></div>
-                <div class="weekday-checkboxes">
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
-                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
+                <div class="weekday-checkboxes" style="display:flex; flex-wrap:wrap; gap:5px; margin: 10px 0;">
+                    <label><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
+                    <label><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
+                    <label><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
+                    <label><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
+                    <label><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
+                    <label><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
+                    <label><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
                 </div>
             </div>
 
@@ -434,10 +241,7 @@
             </div>
 
             <label>Lieu</label>
-            <div class="autocomplete-wrapper">
-                <textarea id="eventLieu" rows="2" placeholder="Commencez à taper une commune..."></textarea>
-                <div class="autocomplete-suggestions" id="lieuSuggestions"></div>
-            </div>
+            <textarea id="eventLieu" rows="2" placeholder="Commune et code postal..."></textarea>
 
             <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
         </form>
@@ -446,17 +250,13 @@
     <div class="card">
         <div class="calendar-header-row">
             <div class="month-year-nav">
-                <button class="nav-arrow" id="prevMonthBtn">←</button>
-                <span id="monthName"></span>
-                <button class="nav-arrow" id="nextMonthBtn">→</button>
+                <button class="btn btn-primary" id="prevMonthBtn">←</button>
+                <span id="monthName" style="font-weight:bold; font-size:1.2rem; min-width:150px; text-align:center;"></span>
+                <button class="btn btn-primary" id="nextMonthBtn">→</button>
             </div>
-            <div class="year-select-wrap">
-                <label for="yearSelect">Année :</label>
-                <select id="yearSelect"></select>
-            </div>
+            <select id="yearSelect" style="width:auto; margin:0;"></select>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
-        <p class="legend">🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui</p>
     </div>
 </div>
 
@@ -473,22 +273,19 @@
     let currentMode = 'single';
     let currentMonth, currentYear;
     let eventsData = {}; 
-    let communesList = [];
     let editingEventId = null;
 
-    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
-    const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
+    const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
 
     const now = new Date();
     currentMonth = now.getMonth();
     currentYear = now.getFullYear();
 
-    // --- FONCTIONS DB ---
     async function fetchEvents() {
         const { data, error } = await _supabase.from('events').select('*');
-        if (error) { console.error(error); return; }
+        if (error) return console.error(error);
         eventsData = {};
         data.forEach(ev => {
             if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
@@ -497,39 +294,35 @@
         renderCalendar();
     }
 
-    // --- LOGIQUE CALENDRIER ---
     function renderCalendar() {
         const firstDay = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        const today = new Date();
-        const todayStr = dateToKey(today);
+        const todayStr = dateToKey(new Date());
 
         let html = '';
-        weekdays.forEach(d => html += `<div class="weekday-header">${d}</div>`);
+        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
 
         for (let d = 1; d <= daysInMonth; d++) {
-            const currentKey = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
-            const isToday = currentKey === todayStr;
-            const hasEvent = eventsData[currentKey] && eventsData[currentKey].length > 0;
-            html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" 
-                         onclick="openPopup('${currentKey}')">${d}</div>`;
+            const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const hasEvent = eventsData[key] && eventsData[key].length > 0;
+            html += `<div class="cal-day ${key === todayStr ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" 
+                         onclick="openPopup('${key}')">${d}</div>`;
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-        document.getElementById('yearSelect').value = currentYear;
     }
 
     function dateToKey(date) {
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    // --- GESTION FORMULAIRE ---
+    // --- SOUMISSION AVEC CORRECTIF ID ---
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true; btn.textContent = '⏳...';
+        btn.disabled = true; btn.textContent = '⏳ Enregistrement...';
 
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
@@ -538,19 +331,23 @@
 
         if (currentMode === 'single') {
             const date = document.getElementById('eventDate').value;
-            if (date) toInsert.push({ event_date: date, type, titre, lieu });
+            if (date) toInsert.push({ id: crypto.randomUUID(), event_date: date, type, titre, lieu });
         } else {
             const start = document.getElementById('periodStart').value;
             const end = document.getElementById('periodEnd').value;
             const pid = 'p_' + Date.now();
             const dates = getDatesInRange(start, end);
-            toInsert = dates.map(d => ({ event_date: dateToKey(d), type, titre, lieu, period_id: pid }));
+            toInsert = dates.map(d => ({ 
+                id: crypto.randomUUID(), 
+                event_date: dateToKey(d), 
+                type, titre, lieu, period_id: pid 
+            }));
         }
 
         const { error } = await _supabase.from('events').insert(toInsert);
-        if (error) alert(error.message);
+        if (error) alert("Erreur : " + error.message);
         else {
-            alert('✅ Ajouté !');
+            alert('✅ Événement(s) ajouté(s) !');
             document.getElementById('eventForm').reset();
             updateTitleDropdown();
             await fetchEvents();
@@ -558,35 +355,30 @@
         btn.disabled = false; btn.textContent = '💾 Enregistrer';
     };
 
-    // --- POPUP & MODIFS ---
     async function openPopup(dateKey) {
         const events = eventsData[dateKey] || [];
-        let html = `<h3>📅 ${dateKey}</h3>`;
-        if (events.length === 0) html += `<p class="no-events-msg">Rien de prévu.</p>`;
+        let html = `<h3 style="margin-bottom:10px;">📅 ${dateKey}</h3>`;
+        if (events.length === 0) html += `<p>Aucun événement.</p>`;
         else {
             events.forEach(ev => {
                 html += `
                 <div class="popup-event-item">
-                    <div class="popup-event-info"><strong>${ev.titre}</strong><br>📍 ${ev.lieu || '—'}</div>
-                    <div class="popup-actions">
-                        <button class="btn-edit-popup" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre}', '${ev.lieu.replace(/'/g, "\\'")}')">✏️</button>
-                        <button class="btn-delete-popup" onclick="deleteEvent('${ev.id}', '${ev.period_id}')">🗑</button>
+                    <div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div>
+                    <div style="display:flex; gap:5px;">
+                        <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre}', '${ev.lieu.replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="btn btn-danger" onclick="deleteEvent('${ev.id}', '${ev.period_id}')">🗑</button>
                     </div>
                 </div>`;
             });
         }
         html += `
         <div class="edit-form" id="editForm">
-            <h4 style="color:var(--rose-spectacle);">Modifier</h4>
             <select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
             <select id="editTitle"></select>
             <textarea id="editLieu" rows="2"></textarea>
-            <div class="btn-row">
-                <button class="btn-save" onclick="saveEdit()">Sauver</button>
-                <button class="btn-cancel" onclick="document.getElementById('editForm').classList.remove('active')">Annuler</button>
-            </div>
+            <button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button>
         </div>
-        <button class="btn-close-popup" onclick="closePopup()">Fermer</button>`;
+        <button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>`;
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
     }
@@ -614,14 +406,13 @@
     window.deleteEvent = async (id, periodId) => {
         if (!confirm('Supprimer ?')) return;
         let q = _supabase.from('events').delete();
-        if (periodId && periodId !== 'null') q = q.eq('period_id', periodId);
+        if (periodId && periodId !== 'null' && periodId !== 'undefined') q = q.eq('period_id', periodId);
         else q = q.eq('id', id);
         await q;
         closePopup();
         await fetchEvents();
-    };
+    }
 
-    // --- UTILITAIRES ---
     function getDatesInRange(s, e) {
         const dates = []; let curr = new Date(s); const end = new Date(e);
         const activeDays = Array.from(document.querySelectorAll('.weekday-filter:checked')).map(c => parseInt(c.value));
@@ -635,8 +426,7 @@
     function updateTitleDropdown() {
         const t = document.getElementById('eventType').value;
         const list = t === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
-        const sel = document.getElementById('eventTitle');
-        sel.innerHTML = '<option value="">-- Sélectionnez --</option>' + list.map(x => `<option value="${x}">${x}</option>`).join('');
+        document.getElementById('eventTitle').innerHTML = '<option value="">-- Sélectionnez --</option>' + list.map(x => `<option value="${x}">${x}</option>`).join('');
     }
 
     window.updateEditTitleDropdown = (type) => {
@@ -644,11 +434,6 @@
         document.getElementById('editTitle').innerHTML = list.map(x => `<option value="${x}">${x}</option>`).join('');
     };
 
-    function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); }
-
-    // --- INIT ---
-    document.getElementById('modeSingle').onclick = () => switchMode('single');
-    document.getElementById('modePeriod').onclick = () => switchMode('period');
     function switchMode(m) {
         currentMode = m;
         document.getElementById('modeSingle').classList.toggle('active', m === 'single');
@@ -657,14 +442,19 @@
         document.getElementById('periodFields').classList.toggle('hidden', m !== 'period');
     }
 
+    function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); }
+
+    // Init
+    document.getElementById('modeSingle').onclick = () => switchMode('single');
+    document.getElementById('modePeriod').onclick = () => switchMode('period');
     document.getElementById('eventType').onchange = updateTitleDropdown;
     document.getElementById('prevMonthBtn').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderCalendar(); };
     document.getElementById('nextMonthBtn').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderCalendar(); };
 
-    // Initialisation
     (async () => {
         const ySel = document.getElementById('yearSelect');
         for(let y=2024; y<=2030; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
+        ySel.value = currentYear;
         ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderCalendar(); };
         updateTitleDropdown();
         await fetchEvents();
