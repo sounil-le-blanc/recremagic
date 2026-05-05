@@ -5,28 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devis - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
-    
-    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Flatpickr -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
     <style>
-        :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --jaune-accent: #FFB300;
-            --text-dark: #2C1810;
-            --text-light: #ffffff;
-        }
+        :root { --vert-caravane: #7CB69F; --rose-spectacle: #EC407A; --jaune-accent: #FFB300; --text-dark: #2C1810; --text-light: #ffffff; }
         * { margin: 0; padding: 0; box-sizing: border-box; }
-
         ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
@@ -44,97 +33,57 @@
             overflow-x: hidden;
             padding-top: 120px;
         }
+        body::before { content: ''; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.45); z-index: 0; pointer-events: none; }
 
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
-            pointer-events: none;
-        }
+        .navbar { position: fixed; top: 0; left: 0; width: 100%; background: rgba(0,0,0,0.35); backdrop-filter: blur(10px); z-index: 1000; border-bottom: 1px solid rgba(255,255,255,0.1); height: 55px; }
+        .navbar-container { width: 100%; height: 100%; padding: 0 1.2rem; display: flex; align-items: center; justify-content: space-between; }
+        .nav-left-group { display: flex; align-items: center; gap: 0.6rem; }
+        .logo-wrapper { text-decoration: none; }
+        .logo-wrapper img { height: 120px; margin-top: 60px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); }
+        .back-arrow { width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); color: white; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); color: #FFB300; }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; text-decoration: none; }
+        .nav-icon-img { height: 32px; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); }
+        .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; color: rgba(255,255,255,0.7); }
 
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 55px;
-        }
-        .navbar-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
-        }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
-        .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
-        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
-        .back-arrow { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0; }
-        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
-        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
-        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
-        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
-        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
-        .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
-
-        .devis-wrapper { display: flex; max-width: 1400px; margin: 0 auto; padding: 2rem; gap: 2rem; min-height: calc(100vh - 80px); position: relative; z-index: 10; width: 100%; }
-        .conditions { flex: 1; background: rgba(235, 215, 185, 0.96); backdrop-filter: blur(8px); border-radius: 60px; padding: 1.8rem; color: #2C1810; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3); height: fit-content; }
-        .conditions h2 { font-family: 'Fredoka', cursive; font-size: 1.5rem; color: #2C1810; margin-bottom: 1.2rem; }
-        .conditions h3 { font-size: 1.1rem; color: #2C1810; margin: 1rem 0 0.5rem 0; }
-        .conditions p { margin-bottom: 0.8rem; line-height: 1.5; font-size: 0.9rem; }
+        .devis-wrapper { display: flex; max-width: 1400px; margin: 0 auto; padding: 2rem; gap: 2rem; position: relative; z-index: 10; width: 100%; }
+        .conditions { flex: 1; background: rgba(235,215,185,0.96); backdrop-filter: blur(8px); border-radius: 60px; padding: 1.8rem; color: #2C1810; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3); }
+        .conditions h2 { font-family: 'Fredoka', cursive; font-size: 1.5rem; margin-bottom: 1.2rem; }
+        .conditions h3 { font-size: 1.1rem; margin: 1rem 0 0.5rem 0; }
+        .conditions p { margin-bottom: 0.8rem; font-size: 0.9rem; }
         .conditions ul { margin-left: 1.5rem; margin-bottom: 1rem; }
-        .conditions li { margin-bottom: 0.3rem; font-size: 0.9rem; line-height: 1.4; }
-        .conditions .highlight { background: rgba(124, 182, 159, 0.2); padding: 0.8rem; border-radius: 10px; margin: 1rem 0; border-left: 3px solid #7CB69F; }
-        .calendar-btn { display: inline-block; background: linear-gradient(135deg, #D32F2F, #EC407A); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1.5rem; transition: transform 0.2s, box-shadow 0.2s; text-align: center; width: 100%; }
-        .calendar-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2); }
+        .conditions li { font-size: 0.9rem; }
+        .conditions .highlight { background: rgba(124,182,159,0.2); padding: 0.8rem; border-radius: 10px; margin: 1rem 0; border-left: 3px solid #7CB69F; }
+        .calendar-btn { display: inline-block; background: linear-gradient(135deg, #D32F2F, #EC407A); color: white; padding: 0.8rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1.5rem; text-align: center; width: 100%; }
+        .calendar-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
 
-        .devis-form { flex: 1.2; background: rgba(235, 215, 185, 0.96); backdrop-filter: blur(8px); border-radius: 60px; padding: 2rem; width: 100%; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3); }
-        .devis-form h1 { font-size: 1.8rem; color: #2C1810; margin-bottom: 0.5rem; text-align: center; }
-        .devis-form .subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; font-size: 0.9rem; }
+        .devis-form { flex: 1.2; background: rgba(235,215,185,0.96); backdrop-filter: blur(8px); border-radius: 60px; padding: 2rem; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3); }
+        .devis-form h1 { font-size: 1.8rem; color: #2C1810; text-align: center; margin-bottom: 0.5rem; }
+        .subtitle { text-align: center; color: #666; margin-bottom: 1.5rem; }
         .form-group { margin-bottom: 1rem; }
-        .form-group label { display: block; font-weight: 600; margin-bottom: 0.4rem; color: #2C1810; font-size: 0.85rem; }
-        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.7rem 1rem; border: 1.5px solid #c4a882; border-radius: 10px; font-family: inherit; font-size: 0.9rem; transition: all 0.3s; background: #fefefe; }
-        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #7CB69F; box-shadow: 0 0 0 3px rgba(124, 182, 159, 0.1); }
-        .form-group textarea { resize: vertical; min-height: 80px; }
+        .form-group label { display: block; font-weight: 600; color: #2C1810; font-size: 0.85rem; margin-bottom: 0.4rem; }
+        .form-group input, .form-group select, .form-group textarea { width: 100%; padding: 0.7rem 1rem; border: 1.5px solid #c4a882; border-radius: 10px; font-family: inherit; font-size: 0.9rem; background: #fefefe; }
+        .form-group input:focus, .form-group select:focus, .form-group textarea:focus { outline: none; border-color: #7CB69F; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
         .checkbox-group { margin-bottom: 1rem; }
-        .checkbox-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2C1810; font-size: 0.85rem; }
-        .checkbox-options { display: flex; gap: 2rem; align-items: center; }
+        .checkbox-group label { font-weight: 600; color: #2C1810; font-size: 0.85rem; margin-bottom: 0.5rem; }
+        .checkbox-options { display: flex; gap: 2rem; }
         .checkbox-option { display: flex; align-items: center; gap: 0.5rem; cursor: pointer; }
-        .checkbox-option input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #7CB69F; }
-        .checkbox-option span { font-size: 0.9rem; color: #2C1810; }
+        .checkbox-option input { width: 18px; height: 18px; accent-color: #7CB69F; }
         .spectacles-checkbox-group, .expos-checkbox-group { margin-bottom: 1rem; }
-        .spectacles-checkbox-group label, .expos-checkbox-group label { display: block; font-weight: 600; margin-bottom: 0.5rem; color: #2C1810; font-size: 0.85rem; }
-        .spectacles-list, .expos-list { display: flex; flex-direction: column; gap: 0.6rem; background: rgba(255, 255, 255, 0.5); padding: 1rem; border-radius: 12px; border: 1px solid #c4a882; }
-        .spectacle-checkbox, .expo-checkbox { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; padding: 0.5rem 0.8rem; border-radius: 10px; transition: background 0.2s ease; }
-        .spectacle-checkbox:hover, .expo-checkbox:hover { background: rgba(124, 182, 159, 0.1); }
-        .spectacle-checkbox input[type="checkbox"], .expo-checkbox input[type="checkbox"] { width: 18px; height: 18px; cursor: pointer; accent-color: #7CB69F; }
-        .spectacle-checkbox span, .expo-checkbox span { font-size: 0.9rem; color: #2C1810; font-weight: 500; }
-        .spectacle-checkbox span small, .expo-checkbox span small { font-weight: normal; color: #888; font-size: 0.75rem; }
+        .spectacles-checkbox-group label, .expos-checkbox-group label { font-weight: 600; color: #2C1810; font-size: 0.85rem; margin-bottom: 0.5rem; display: block; }
+        .spectacles-list, .expos-list { display: flex; flex-direction: column; gap: 0.6rem; background: rgba(255,255,255,0.5); padding: 1rem; border-radius: 12px; border: 1px solid #c4a882; }
+        .spectacle-checkbox, .expo-checkbox { display: flex; align-items: center; gap: 0.7rem; cursor: pointer; padding: 0.5rem 0.8rem; border-radius: 10px; }
+        .spectacle-checkbox:hover, .expo-checkbox:hover { background: rgba(124,182,159,0.1); }
+        .spectacle-checkbox input, .expo-checkbox input { width: 18px; height: 18px; accent-color: #7CB69F; }
         .extra-date-lieu { display: none; margin-top: 1rem; margin-bottom: 1rem; }
-        .btn-submit { width: 100%; background: #7CB69F; color: white; padding: 0.8rem; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s; margin-top: 0.5rem; }
-        .btn-submit:hover { background: #5a8f78; transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); }
+        .btn-submit { width: 100%; background: #7CB69F; color: white; padding: 0.8rem; border: none; border-radius: 50px; font-size: 1rem; font-weight: 600; cursor: pointer; margin-top: 0.5rem; }
+        .btn-submit:hover { background: #5a8f78; }
         .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
-        .confirmation-message { display: none; text-align: center; margin-top: 1rem; padding: 0.8rem; background: #d4edda; color: #155724; border-radius: 10px; border: 1px solid #c3e6cb; }
+        .confirmation-message { display: none; text-align: center; margin-top: 1rem; padding: 0.8rem; border-radius: 10px; }
         .flatpickr-day.disabled { background-color: #888888 !important; color: #2c2c2c !important; text-decoration: line-through; }
-
-        @media (max-width: 968px) { .devis-wrapper { flex-direction: column; padding: 1rem; } .conditions { order: 2; } .devis-form { order: 1; max-width: 100%; } }
-        @media (max-width: 768px) { .devis-form { padding: 1.2rem; } .devis-form h1 { font-size: 1.4rem; } .form-row { grid-template-columns: 1fr; gap: 0; } .checkbox-options { gap: 1rem; } .conditions { padding: 1.2rem; } .conditions h2 { font-size: 1.3rem; } .spectacles-list, .expos-list { padding: 0.8rem; } .spectacle-checkbox, .expo-checkbox { padding: 0.4rem 0.6rem; } }
-        @media (max-width: 600px) { body { padding-top: 100px; } .navbar { height: 48px; } .navbar-container { padding: 0 0.8rem; } .nav-left-group { gap: 0.4rem; } .logo-wrapper img { height: 80px; margin-top: 30px; } .back-arrow { width: 32px; height: 32px; font-size: 1rem; } .nav-icon-img { height: 26px; } .icon-wrapper .icon-label { font-size: 0.5rem; } .nav-icons { gap: 0.7rem; } }
+        @media (max-width: 968px) { .devis-wrapper { flex-direction: column; } .conditions { order: 2; } }
     </style>
 </head>
 <body>
@@ -143,11 +92,11 @@
     <div class="navbar-container">
         <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper"><img src="images/logo.png" alt="Récré Magic"></a>
-            <a href="javascript:history.back()" class="back-arrow" title="Retour">←</a>
+            <a href="javascript:history.back()" class="back-arrow">←</a>
         </div>
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper"><img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img"><span class="icon-label">Boutique</span></a>
-            <a href="Abonnement.html" class="icon-wrapper"><img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img"><span class="icon-label">Abonnement</span></a>
+            <a href="boutique.html" class="icon-wrapper"><img src="images/icone-boutique.png" class="nav-icon-img"><span class="icon-label">Boutique</span></a>
+            <a href="Abonnement.html" class="icon-wrapper"><img src="images/icone-abonnement.png" class="nav-icon-img"><span class="icon-label">Abonnement</span></a>
         </div>
     </div>
 </nav>
@@ -171,16 +120,16 @@
         <p class="subtitle">Remplissez ce formulaire, nous vous répondrons rapidement.</p>
         <form id="devisForm">
             <div class="form-row">
-                <div class="form-group"><label>Nom / Prénom *</label><input type="text" id="nom" placeholder="Votre nom" required></div>
-                <div class="form-group"><label>Structure</label><input type="text" id="structure" placeholder="Nom de votre structure"></div>
+                <div class="form-group"><label>Nom / Prénom *</label><input type="text" id="nom" required></div>
+                <div class="form-group"><label>Structure</label><input type="text" id="structure"></div>
             </div>
             <div class="form-row">
-                <div class="form-group"><label>Email *</label><input type="email" id="email" placeholder="votre@email.com" required></div>
-                <div class="form-group"><label>Téléphone</label><input type="tel" id="telephone" placeholder="06 12 34 56 78"></div>
+                <div class="form-group"><label>Email *</label><input type="email" id="email" required></div>
+                <div class="form-group"><label>Téléphone</label><input type="tel" id="telephone"></div>
             </div>
             <div class="checkbox-group">
                 <label>Lieu du spectacle</label>
-                <div class="checkbox-options" id="lieuCheckboxes">
+                <div class="checkbox-options">
                     <label class="checkbox-option"><input type="checkbox" name="lieu" value="Intérieur"><span>🏠 Intérieur</span></label>
                     <label class="checkbox-option"><input type="checkbox" name="lieu" value="Extérieur"><span>🌳 Extérieur</span></label>
                 </div>
@@ -189,17 +138,11 @@
                 <label>Type d'événement</label>
                 <select id="typeEvenement">
                     <option value="">Sélectionnez...</option>
-                    <option>Fête de village / Fête de quartier</option>
-                    <option>Festival</option>
-                    <option>Médiathèque / Bibliothèque</option>
-                    <option>École / Centre de loisirs</option>
-                    <option>Centre commercial</option>
-                    <option>Anniversaire / Événement privé</option>
-                    <option>Autre</option>
+                    <option>Fête de village / Fête de quartier</option><option>Festival</option><option>Médiathèque / Bibliothèque</option>
+                    <option>École / Centre de loisirs</option><option>Centre commercial</option><option>Anniversaire / Événement privé</option><option>Autre</option>
                 </select>
             </div>
 
-            <!-- SPECTACLES -->
             <div class="spectacles-checkbox-group">
                 <label>🎭 Spectacle(s) souhaité(s)</label>
                 <div class="spectacles-list">
@@ -210,185 +153,117 @@
                 </div>
             </div>
 
-            <!-- Date/Lieu pour les 3 spectacles -->
             <div id="extraDateSpectacle" class="extra-date-lieu">
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>📅 Date souhaitée (spectacle)</label>
-                        <input type="text" id="dateSpectacle" placeholder="Cliquez pour choisir une date" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>📍 Code postal / Ville</label>
-                        <input type="text" id="lieuSpectacle" placeholder="Ex: 75001 Paris">
-                    </div>
+                    <div class="form-group"><label>📅 Date souhaitée (spectacle)</label><input type="text" id="dateSpectacle" autocomplete="off"></div>
+                    <div class="form-group"><label>📍 Code postal / Ville</label><input type="text" id="lieuSpectacle"></div>
                 </div>
             </div>
 
-            <!-- Bloc Maboul -->
             <div id="extraDateMaboul" class="extra-date-lieu">
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>📅 Date souhaitée pour DÉLICIEUSEMENT MABOUL</label>
-                        <input type="text" id="dateMaboul" placeholder="Cliquez pour choisir une date" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>📍 Code postal / Ville</label>
-                        <input type="text" id="lieuMaboul" placeholder="Ex: 75001 Paris">
-                    </div>
+                    <div class="form-group"><label>📅 Date souhaitée pour DÉLICIEUSEMENT MABOUL</label><input type="text" id="dateMaboul" autocomplete="off"></div>
+                    <div class="form-group"><label>📍 Code postal / Ville</label><input type="text" id="lieuMaboul"></div>
                 </div>
             </div>
 
-            <!-- EXPOSITIONS -->
             <div class="expos-checkbox-group">
                 <label>🖼️ Exposition(s) souhaitée(s)</label>
                 <div class="expos-list">
-                    <label class="expo-checkbox"><input type="checkbox" name="expositions" value="LA FÉERIE DES MARIONNETTES"><span>🎨 <strong>LA FÉERIE DES MARIONNETTES</strong> <small>- 12 vitrines</small></span></label>
-                    <label class="expo-checkbox"><input type="checkbox" name="expositions" value="LES GÉANTS DU CARNAVAL"><span>🎭 <strong>LES GÉANTS DU CARNAVAL</strong> <small>- 12 géants</small></span></label>
+                    <label class="expo-checkbox"><input type="checkbox" name="expositions" value="LA FÉERIE DES MARIONNETTES"><span>🎨 <strong>LA FÉERIE DES MARIONNETTES</strong></span></label>
+                    <label class="expo-checkbox"><input type="checkbox" name="expositions" value="LES GÉANTS DU CARNAVAL"><span>🎭 <strong>LES GÉANTS DU CARNAVAL</strong></span></label>
                 </div>
             </div>
             <div id="extraDateLieuExpo" class="extra-date-lieu">
                 <div class="form-row">
-                    <div class="form-group">
-                        <label>📅 Date souhaitée (exposition)</label>
-                        <input type="text" id="dateExpo" placeholder="Cliquez pour choisir une date" autocomplete="off">
-                    </div>
-                    <div class="form-group">
-                        <label>📍 Code postal / Ville</label>
-                        <input type="text" id="lieuExpo" placeholder="Ex: 75001 Paris">
-                    </div>
+                    <div class="form-group"><label>📅 Date souhaitée (exposition)</label><input type="text" id="dateExpo" autocomplete="off"></div>
+                    <div class="form-group"><label>📍 Code postal / Ville</label><input type="text" id="lieuExpo"></div>
                 </div>
             </div>
 
-            <div class="form-group">
-                <label>Message</label>
-                <textarea id="message" placeholder="Décrivez votre projet..." rows="3"></textarea>
-            </div>
+            <div class="form-group"><label>Message</label><textarea id="message" rows="3"></textarea></div>
             <button type="submit" class="btn-submit" id="submitBtn">📩 Envoyer ma demande</button>
-            <div id="confirmationMsg" class="confirmation-message">✅ Votre demande a bien été envoyée !</div>
+            <div id="confirmationMsg" class="confirmation-message"></div>
         </form>
     </div>
 </div>
 
 <script>
-    // ============================================================
-    // CONFIGURATION SUPABASE
-    // ============================================================
     var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-    var TABLE_NAME = 'events';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // ============================================================
-    // AFFICHAGE/MASQUAGE DES BLOCS
-    // ============================================================
-    var checkSpectacle3 = document.querySelectorAll('.check-spectacle-3');
-    checkSpectacle3.forEach(function(cb) {
+    // AFFICHAGE/MASQUAGE BLOCS
+    document.querySelectorAll('.check-spectacle-3').forEach(function(cb) {
         cb.addEventListener('change', function() {
-            var anyChecked = document.querySelectorAll('.check-spectacle-3:checked').length > 0;
-            document.getElementById('extraDateSpectacle').style.display = anyChecked ? 'block' : 'none';
+            document.getElementById('extraDateSpectacle').style.display = document.querySelectorAll('.check-spectacle-3:checked').length > 0 ? 'block' : 'none';
         });
     });
-
     document.getElementById('checkMaboul').addEventListener('change', function() {
         document.getElementById('extraDateMaboul').style.display = this.checked ? 'block' : 'none';
     });
-
     document.querySelectorAll('input[name="expositions"]').forEach(function(cb) {
         cb.addEventListener('change', function() {
-            var anyChecked = document.querySelectorAll('input[name="expositions"]:checked').length > 0;
-            document.getElementById('extraDateLieuExpo').style.display = anyChecked ? 'block' : 'none';
+            document.getElementById('extraDateLieuExpo').style.display = document.querySelectorAll('input[name="expositions"]:checked').length > 0 ? 'block' : 'none';
         });
     });
 
-    // ============================================================
-    // CHARGEMENT SUPABASE + INIT FLATPICKR
-    // ============================================================
-    async function initAll() {
+    // FLATPICKR
+    async function initFlatpickr() {
+        var TABLE_NAME = 'events';
         var response = await supabaseClient.from(TABLE_NAME).select('*');
-        var allEvents = response.data;
-
-        if (!allEvents) return;
-
+        var allEvents = response.data || [];
         var bloque3 = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"];
-        var datesSpectacle = allEvents.filter(function(ev) { return ev.type === 'Spectacle' && bloque3.includes(ev.titre); }).map(function(ev) { return ev.event_date; });
-        var datesMaboul = allEvents.filter(function(ev) { return ev.titre === 'DÉLICIEUSEMENT MABOUL'; }).map(function(ev) { return ev.event_date; });
-        var datesExpo = allEvents.filter(function(ev) { return ev.type === 'Exposition'; }).map(function(ev) { return ev.event_date; });
-
-        flatpickr("#dateSpectacle", { locale: "fr", dateFormat: "Y-m-d", disable: datesSpectacle });
-        flatpickr("#dateMaboul", { locale: "fr", dateFormat: "Y-m-d", disable: datesMaboul });
-        flatpickr("#dateExpo", { locale: "fr", dateFormat: "Y-m-d", disable: datesExpo });
+        flatpickr("#dateSpectacle", { locale: "fr", dateFormat: "Y-m-d", disable: allEvents.filter(function(ev) { return ev.type === 'Spectacle' && bloque3.includes(ev.titre); }).map(function(ev) { return ev.event_date; }) });
+        flatpickr("#dateMaboul", { locale: "fr", dateFormat: "Y-m-d", disable: allEvents.filter(function(ev) { return ev.titre === 'DÉLICIEUSEMENT MABOUL'; }).map(function(ev) { return ev.event_date; }) });
+        flatpickr("#dateExpo", { locale: "fr", dateFormat: "Y-m-d", disable: allEvents.filter(function(ev) { return ev.type === 'Exposition'; }).map(function(ev) { return ev.event_date; }) });
     }
 
-    // ============================================================
-    // ENVOI DU FORMULAIRE VIA RESEND
-    // ============================================================
+    // ENVOI VIA EDGE FUNCTION
     document.getElementById('devisForm').addEventListener('submit', async function(e) {
         e.preventDefault();
-        
         var btn = document.getElementById('submitBtn');
         var msg = document.getElementById('confirmationMsg');
-        
         btn.disabled = true;
-        btn.textContent = '⏳ Envoi en cours...';
+        btn.textContent = '⏳ Envoi...';
         msg.style.display = 'none';
-
-        var lieux = Array.from(document.querySelectorAll('input[name="lieu"]:checked')).map(function(cb) { return cb.value; }).join(', ');
-        var spectacles = Array.from(document.querySelectorAll('input[name="spectacles"]:checked')).map(function(cb) { return cb.value; }).join(', ');
-        var expositions = Array.from(document.querySelectorAll('input[name="expositions"]:checked')).map(function(cb) { return cb.value; }).join(', ');
 
         var formData = {
             nom: document.getElementById('nom').value,
             structure: document.getElementById('structure').value,
             email: document.getElementById('email').value,
             telephone: document.getElementById('telephone').value,
-            lieu: lieux,
+            lieu: Array.from(document.querySelectorAll('input[name="lieu"]:checked')).map(function(cb) { return cb.value; }).join(', '),
             typeEvenement: document.getElementById('typeEvenement').value,
-            spectacles: spectacles,
+            spectacles: Array.from(document.querySelectorAll('input[name="spectacles"]:checked')).map(function(cb) { return cb.value; }).join(', '),
             dateSpectacle: document.getElementById('dateSpectacle').value,
             lieuSpectacle: document.getElementById('lieuSpectacle').value,
             dateMaboul: document.getElementById('dateMaboul').value,
             lieuMaboul: document.getElementById('lieuMaboul').value,
-            expositions: expositions,
+            expositions: Array.from(document.querySelectorAll('input[name="expositions"]:checked')).map(function(cb) { return cb.value; }).join(', '),
             dateExpo: document.getElementById('dateExpo').value,
             lieuExpo: document.getElementById('lieuExpo').value,
             message: document.getElementById('message').value
         };
 
-        try {
-            var response = await supabaseClient.functions.invoke('send-devis-email', {
-                body: formData
-            });
+        var response = await supabaseClient.functions.invoke('send-devis-email', { body: formData });
 
-            if (response.error) {
-                msg.textContent = '❌ Erreur lors de l\'envoi. Veuillez réessayer.';
-                msg.style.background = '#FFCDD2';
-                msg.style.color = '#C62828';
-                msg.style.display = 'block';
-            } else {
-                msg.textContent = '✅ Votre demande a bien été envoyée ! Nous vous recontacterons rapidement.';
-                msg.style.background = '#d4edda';
-                msg.style.color = '#155724';
-                msg.style.display = 'block';
-                document.getElementById('devisForm').reset();
-                document.getElementById('extraDateSpectacle').style.display = 'none';
-                document.getElementById('extraDateMaboul').style.display = 'none';
-                document.getElementById('extraDateLieuExpo').style.display = 'none';
-            }
-        } catch (err) {
-            msg.textContent = '❌ Erreur de connexion. Veuillez réessayer.';
-            msg.style.background = '#FFCDD2';
-            msg.style.color = '#C62828';
-            msg.style.display = 'block';
+        if (response.error) {
+            msg.textContent = '❌ Erreur : ' + (response.error.message || 'Réessayez');
+            msg.style.background = '#FFCDD2'; msg.style.color = '#C62828'; msg.style.display = 'block';
+        } else {
+            msg.textContent = '✅ Votre demande a bien été envoyée !';
+            msg.style.background = '#d4edda'; msg.style.color = '#155724'; msg.style.display = 'block';
+            document.getElementById('devisForm').reset();
+            document.getElementById('extraDateSpectacle').style.display = 'none';
+            document.getElementById('extraDateMaboul').style.display = 'none';
+            document.getElementById('extraDateLieuExpo').style.display = 'none';
         }
-
         btn.disabled = false;
         btn.textContent = '📩 Envoyer ma demande';
     });
 
-    // ============================================================
-    // GO !
-    // ============================================================
-    initAll();
+    initFlatpickr();
 </script>
 </body>
 </html>
