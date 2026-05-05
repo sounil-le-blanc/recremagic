@@ -5,6 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Calendrier perpétuel - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
+    
+    <!-- SUPABASE -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
@@ -53,6 +57,21 @@
             top: 0; left: 0; width: 100%; height: 100%;
             pointer-events: none; z-index: 1; overflow: hidden;
         }
+
+        /* ========== INDICATEUR DE CHARGEMENT ========== */
+        .loading-indicator {
+            display: none;
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            z-index: 9999;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+        }
+        .loading-indicator.active { display: block; }
 
         /* ========== NAVBAR ========== */
         .navbar {
@@ -335,6 +354,26 @@
         .event-title { font-weight: 600; flex: 1; }
         .event-lieu { color: var(--text-dark); opacity: 0.7; }
         .no-events { text-align: center; padding: 2rem; color: #888; font-style: italic; }
+        
+        .error-message {
+            background: #FFCDD2;
+            color: #C62828;
+            padding: 1rem;
+            border-radius: 15px;
+            text-align: center;
+            margin: 1rem 0;
+        }
+        .retry-btn {
+            background: var(--rose-spectacle);
+            color: white;
+            border: none;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+        .retry-btn:hover { background: #C62828; }
 
         .contact-cta {
             background: rgba(0, 0, 0, 0.5);
@@ -389,6 +428,7 @@
 <body>
 
 <div class="confetti-container" id="confetti"></div>
+<div class="loading-indicator" id="loadingIndicator">🔄 Chargement...</div>
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -453,6 +493,16 @@
 </div>
 
 <script>
+    // ============================================================
+    // 🔌 CONFIGURATION SUPABASE - REMPLACE CES 2 LIGNES
+    // ============================================================
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const TABLE_NAME = 'events';
+
+    // Initialisation Supabase
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
     let currentYear = currentDate.getFullYear();
@@ -465,59 +515,114 @@
 
     let eventsData = {};
     let hideTimeout = null;
+    let isLoading = false;
 
-    function loadData() {
-        const stored = localStorage.getItem('recremagic_calendar');
-        if (stored) {
-            eventsData = JSON.parse(stored);
-            for (let key in eventsData) {
-                if (!Array.isArray(eventsData[key])) {
-                    const old = eventsData[key];
-                    if (old.spectacle !== undefined || old.titre !== undefined) {
-                        const type = old.type || 'Spectacle';
-                        const titre = old.titre || old.spectacle || '';
-                        const lieu = old.lieu || '';
-                        eventsData[key] = [{ type, titre, lieu }];
-                    } else {
-                        eventsData[key] = [];
-                    }
-                }
-            }
-        } else {
-            eventsData = {};
-        }
-        renderEventsSummary();
+    // ============================================================
+    // CHARGEMENT DEPUIS SUPABASE
+    // ============================================================
+    function showLoading(show) {
+        document.getElementById('loadingIndicator').classList.toggle('active', show);
+        isLoading = show;
     }
 
-    function getDateKey(year, month, day) { return `${year}-${month+1}-${day}`; }
+    async function loadEventsFromSupabase() {
+        if (isLoading) return;
+        
+        showLoading(true);
+        console.log('🔄 Chargement des événements depuis Supabase...');
+        
+        try {
+            const { data, error } = await supabase
+                .from(TABLE_NAME)
+                .select('*')
+                .order('event_date', { ascending: true });
+
+            if (error) {
+                console.error('❌ Erreur Supabase :', error.message);
+                showError('Impossible de charger les événements. Vérifiez la connexion.');
+                showLoading(false);
+                return;
+            }
+
+            // Organiser les événements par date
+            eventsData = {};
+            if (data && data.length > 0) {
+                data.forEach(ev => {
+                    if (!eventsData[ev.event_date]) {
+                        eventsData[ev.event_date] = [];
+                    }
+                    eventsData[ev.event_date].push({
+                        type: ev.type || 'Spectacle',
+                        titre: ev.titre || '',
+                        lieu: ev.lieu || '',
+                        period_id: ev.period_id
+                    });
+                });
+            }
+
+            console.log(`✅ ${data?.length || 0} événements chargés`);
+            showLoading(false);
+            renderAll();
+        } catch (e) {
+            console.error('❌ Erreur :', e);
+            showError('Erreur de connexion à Supabase.');
+            showLoading(false);
+        }
+    }
+
+    function showError(message) {
+        const container = document.getElementById('eventsListContainer');
+        container.innerHTML = `
+            <div class="error-message">
+                <p>⚠️ ${message}</p>
+                <button class="retry-btn" onclick="loadEventsFromSupabase()">🔄 Réessayer</button>
+            </div>
+        `;
+    }
+
+    // ============================================================
+    // RENDU DU CALENDRIER
+    // ============================================================
+    function getDateKey(year, month, day) { 
+        return `${year}-${month+1}-${day}`; 
+    }
 
     function loadEventsForDate(year, month, day) {
         const key = getDateKey(year, month, day);
         return eventsData[key] || [];
     }
 
+    function escapeHtml(str) { 
+        if (!str) return ''; 
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
+    }
+
     let currentOpenCard = null;
+    
     function showCard(card) {
         if (hideTimeout) clearTimeout(hideTimeout);
         if (currentOpenCard && currentOpenCard !== card) currentOpenCard.classList.remove('visible');
         card.classList.add('visible');
         currentOpenCard = card;
     }
+    
     function scheduleHideCard(card) {
         hideTimeout = setTimeout(() => {
             if (card) card.classList.remove('visible');
             if (currentOpenCard === card) currentOpenCard = null;
         }, 200);
     }
-    function cancelHide() { if (hideTimeout) clearTimeout(hideTimeout); }
-
-    function escapeHtml(str) { if (!str) return ''; return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); }
+    
+    function cancelHide() { 
+        if (hideTimeout) clearTimeout(hideTimeout); 
+    }
 
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
         let startWeekday = firstDayOfMonth.getDay();
         let startOffset = startWeekday === 0 ? 6 : startWeekday - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        
         let calendarHtml = '';
         weekdays.forEach(day => { calendarHtml += `<div class="weekday">${day}</div>`; });
         for (let i = 0; i < startOffset; i++) { calendarHtml += `<div class="calendar-day other-month"></div>`; }
@@ -558,9 +663,11 @@
 
         document.getElementById('calendarGrid').innerHTML = calendarHtml;
         document.getElementById('monthName').innerText = `${monthNames[currentMonth]} ${currentYear}`;
+        
         const yearSelect = document.getElementById('yearSelect');
         if (yearSelect.value != currentYear) yearSelect.value = currentYear;
 
+        // Attacher les événements hover
         document.querySelectorAll('.calendar-day[data-day]').forEach(dayDiv => {
             const card = dayDiv.querySelector('.edit-card');
             if (!card) return;
@@ -569,22 +676,32 @@
             card.addEventListener('mouseenter', cancelHide);
             card.addEventListener('mouseleave', () => scheduleHideCard(card));
             const closeBtn = card.querySelector('.close-card');
-            if (closeBtn) closeBtn.onclick = (e) => { e.stopPropagation(); card.classList.remove('visible'); if (currentOpenCard === card) currentOpenCard = null; };
+            if (closeBtn) closeBtn.onclick = (e) => { 
+                e.stopPropagation(); 
+                card.classList.remove('visible'); 
+                if (currentOpenCard === card) currentOpenCard = null; 
+            };
         });
     }
 
+    // ============================================================
+    // LISTE DES ÉVÉNEMENTS
+    // ============================================================
     function renderEventsSummary() {
         const container = document.getElementById('eventsListContainer');
         if (!container) return;
+        
         const sortedDates = Object.keys(eventsData).sort((a, b) => {
             const [y1, m1, d1] = a.split('-').map(Number);
             const [y2, m2, d2] = b.split('-').map(Number);
             return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
         });
+        
         if (sortedDates.length === 0) {
             container.innerHTML = '<div class="no-events">Aucun événement programmé pour le moment.</div>';
             return;
         }
+        
         let html = '<div class="events-list">';
         for (let dateKey of sortedDates) {
             const eventList = eventsData[dateKey];
@@ -595,7 +712,7 @@
                 html += `
                     <div class="event-row">
                         <div class="event-date">📅 ${dateKey}</div>
-                        <div class="event-type ${typeClass}">${typeIcon} ${ev.type}</div>
+                        <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(ev.type)}</div>
                         <div class="event-title">${escapeHtml(ev.titre)}</div>
                         <div class="event-lieu">📍 ${escapeHtml(ev.lieu) || 'Lieu non précisé'}</div>
                     </div>
@@ -606,8 +723,14 @@
         container.innerHTML = html;
     }
 
+    function renderAll() {
+        renderCalendar();
+        renderEventsSummary();
+    }
+
     function populateYearSelect() {
         const yearSelect = document.getElementById('yearSelect');
+        yearSelect.innerHTML = '';
         for (let y = 2026; y <= 2028; y++) {
             const option = document.createElement('option');
             option.value = y;
@@ -615,14 +738,25 @@
             yearSelect.appendChild(option);
         }
         yearSelect.value = currentYear;
-        yearSelect.addEventListener('change', (e) => { currentYear = parseInt(e.target.value); renderCalendar(); });
+        yearSelect.addEventListener('change', (e) => { 
+            currentYear = parseInt(e.target.value); 
+            renderCalendar(); 
+        });
     }
 
     function changeMonth(delta) {
         let newMonth = currentMonth + delta;
         let newYear = currentYear;
-        if (newMonth < 0) { newMonth = 11; newYear--; if (newYear < 2026) newYear = 2026; }
-        else if (newMonth > 11) { newMonth = 0; newYear++; if (newYear > 2028) newYear = 2028; }
+        if (newMonth < 0) { 
+            newMonth = 11; 
+            newYear--; 
+            if (newYear < 2026) newYear = 2026; 
+        }
+        else if (newMonth > 11) { 
+            newMonth = 0; 
+            newYear++; 
+            if (newYear > 2028) newYear = 2028; 
+        }
         currentMonth = newMonth;
         currentYear = newYear;
         renderCalendar();
@@ -631,6 +765,9 @@
     document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
 
+    // ============================================================
+    // CONFETTI
+    // ============================================================
     function createConfetti() {
         const container = document.getElementById('confetti');
         if (!container) return;
@@ -656,16 +793,22 @@
         document.head.appendChild(style);
     }
 
-    loadData();
-    populateYearSelect();
-    renderCalendar();
+    // ============================================================
+    // INITIALISATION
+    // ============================================================
+    async function init() {
+        populateYearSelect();
+        renderCalendar(); // Affiche le calendrier vide d'abord
+        await loadEventsFromSupabase(); // Puis charge les données
+        
+        // Recharger automatiquement toutes les 30 secondes
+        setInterval(loadEventsFromSupabase, 30000);
+    }
+
+    init();
     window.addEventListener('load', createConfetti);
-    window.addEventListener('storage', (e) => {
-        if (e.key === 'recremagic_calendar') {
-            loadData();
-            renderCalendar();
-        }
-    });
+
+    console.log('🎪 Calendrier connecté à Supabase !');
 </script>
 </body>
 </html>
