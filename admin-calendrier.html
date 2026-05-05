@@ -404,10 +404,11 @@
 <body>
 
 <div class="admin-wrapper">
+
     <!-- HEADER -->
     <div class="card admin-header">
         <h1>🎪 Admin Calendrier</h1>
-        <button class="btn btn-danger" id="clearAllBtn">🗑 Tout effacer</button>
+        <button class="btn btn-danger" id="clearAllBtn" style="width:auto;">🗑 Tout effacer</button>
     </div>
 
     <!-- FORMULAIRE -->
@@ -487,6 +488,7 @@
             🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
         </p>
     </div>
+
 </div>
 
 <!-- POPUP -->
@@ -496,34 +498,36 @@
 
 <script>
     // ============================================================
-    // CONFIGURATION SUPABASE - À MODIFIER AVEC TES INFOS
+    // CONFIGURATION SUPABASE - À MODIFIER AVEC TES INFOS !
     // ============================================================
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';  // ← REMPLACE ICI
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';  // ← REMPLACE ICI
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     
     let supabase;
-    let eventsData = {};
-    let communesList = [];
     let currentMode = 'single';
     let currentMonth, currentYear;
-    
+    let eventsData = {};
+    let communesList = [];
+
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
     const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
-    
+
     const now = new Date();
     currentMonth = now.getMonth();
     currentYear = now.getFullYear();
     if (currentYear < 2026) currentYear = 2026;
     if (currentYear > 2028) currentYear = 2028;
-    
-    // Initialiser Supabase
+
+    // ============================================================
+    // INITIALISATION SUPABASE
+    // ============================================================
     function initSupabase() {
         supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         console.log('✅ Supabase initialisé');
     }
-    
+
     // ============================================================
     // FONCTIONS SUPABASE
     // ============================================================
@@ -555,9 +559,10 @@
             console.log('✅ Événements chargés depuis Supabase');
         } catch (err) {
             console.error('❌ Erreur chargement:', err);
+            alert('Erreur de chargement des événements');
         }
     }
-    
+
     async function addEventToSupabase(eventData) {
         try {
             const { error } = await supabase
@@ -571,7 +576,7 @@
             return false;
         }
     }
-    
+
     async function updateEventInSupabase(id, updates) {
         try {
             const { error } = await supabase
@@ -586,7 +591,7 @@
             return false;
         }
     }
-    
+
     async function deleteEventFromSupabase(id) {
         try {
             const { error } = await supabase
@@ -601,7 +606,7 @@
             return false;
         }
     }
-    
+
     async function deleteEventsByPeriodId(periodId) {
         try {
             const { error } = await supabase
@@ -616,7 +621,7 @@
             return false;
         }
     }
-    
+
     async function clearAllEventsFromSupabase() {
         try {
             const { error } = await supabase
@@ -631,31 +636,41 @@
             return false;
         }
     }
-    
+
     function getEventsForDate(year, month, day) {
         const key = `${year}-${month+1}-${day}`;
         return eventsData[key] || [];
     }
-    
+
     // ============================================================
-    // MODE DATE / PÉRIODE
+    // MODE
     // ============================================================
     document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
     document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
-    
+
     function switchMode(mode) {
         currentMode = mode;
         document.getElementById('modeSingle').classList.toggle('active', mode === 'single');
-        document.getElementById('modePeriod').classList.toggle('active', mode !== 'single');
+        document.getElementById('modePeriod').classList.toggle('active', mode === 'period');
         document.getElementById('singleDateFields').classList.toggle('hidden', mode !== 'single');
         document.getElementById('periodFields').classList.toggle('hidden', mode !== 'period');
-        if (mode === 'period') updatePeriodSummary();
+        document.getElementById('eventDate').required = (mode === 'single');
+        document.getElementById('periodStart').required = (mode === 'period');
+        document.getElementById('periodEnd').required = (mode === 'period');
+        if (mode === 'single') {
+            document.getElementById('periodStart').value = '';
+            document.getElementById('periodEnd').value = '';
+            document.getElementById('periodSummary').classList.remove('visible');
+        } else {
+            document.getElementById('eventDate').value = '';
+            updatePeriodSummary();
+        }
     }
-    
+
     document.getElementById('periodStart').addEventListener('change', updatePeriodSummary);
     document.getElementById('periodEnd').addEventListener('change', updatePeriodSummary);
     document.querySelectorAll('.weekday-filter').forEach(cb => cb.addEventListener('change', updatePeriodSummary));
-    
+
     function updatePeriodSummary() {
         const start = document.getElementById('periodStart').value;
         const end = document.getElementById('periodEnd').value;
@@ -663,17 +678,20 @@
         if (!start || !end) { summary.classList.remove('visible'); return; }
         if (start > end) {
             summary.textContent = '⚠️ Date début > date fin';
+            summary.style.background = '#FFCDD2';
             summary.classList.add('visible'); return;
         }
         const dates = getDatesInRange(start, end);
         if (dates.length === 0) {
             summary.textContent = '⚠️ Aucune date (vérifiez les jours cochés)';
+            summary.style.background = '#FFCDD2';
             summary.classList.add('visible'); return;
         }
         summary.textContent = `📆 ${dates.length} jour(s) : du ${formatDateFr(start)} au ${formatDateFr(end)}`;
+        summary.style.background = '#C8E6C9';
         summary.classList.add('visible');
     }
-    
+
     function getDatesInRange(startStr, endStr) {
         const dates = [];
         const start = new Date(startStr + 'T00:00:00');
@@ -686,21 +704,21 @@
         }
         return dates;
     }
-    
+
     function dateToKey(date) {
         return `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
     }
-    
+
     function formatDateFr(dateStr) {
         const d = new Date(dateStr + 'T00:00:00');
         return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
-    
+
     function escapeHtml(str) {
         if (!str) return '';
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
     }
-    
+
     // ============================================================
     // AUTOCOMPLETE COMMUNES
     // ============================================================
@@ -708,16 +726,16 @@
         try {
             const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
             communesList = await res.json();
-            console.log('✅ Communes chargées');
+            console.log('✅ Communes chargées :', communesList.length);
         } catch (e) {
-            console.warn('⚠️ Communes non chargées');
+            console.warn('⚠️ Communes non chargées, autocomplete désactivé');
         }
     }
-    
+
     const lieuInput = document.getElementById('eventLieu');
     const suggestionsDiv = document.getElementById('lieuSuggestions');
     let selectedCommuneIndex = -1;
-    
+
     lieuInput.addEventListener('input', () => {
         const query = lieuInput.value.trim().toLowerCase();
         if (query.length < 2 || communesList.length === 0) {
@@ -727,12 +745,12 @@
         const matches = communesList.filter(c =>
             c.nom.toLowerCase().startsWith(query) || c.code_postal.startsWith(query)
         ).slice(0, 8);
-    
+
         if (matches.length === 0) {
             suggestionsDiv.classList.remove('active');
             return;
         }
-    
+
         suggestionsDiv.innerHTML = matches.map((c, i) =>
             `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
                 <span class="cp">${c.code_postal}</span> ${c.nom}
@@ -740,7 +758,7 @@
         ).join('');
         suggestionsDiv.classList.add('active');
         selectedCommuneIndex = -1;
-    
+
         suggestionsDiv.querySelectorAll('.autocomplete-item').forEach(item => {
             item.addEventListener('mousedown', (e) => {
                 e.preventDefault();
@@ -749,7 +767,7 @@
             });
         });
     });
-    
+
     lieuInput.addEventListener('keydown', (e) => {
         const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
         if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
@@ -758,17 +776,17 @@
         else if (e.key === 'Enter' && selectedCommuneIndex >= 0) { e.preventDefault(); lieuInput.value = items[selectedCommuneIndex].dataset.full; suggestionsDiv.classList.remove('active'); }
         else if (e.key === 'Escape') { suggestionsDiv.classList.remove('active'); }
     });
-    
+
     function highlightItems(items) {
         items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
     }
-    
+
     document.addEventListener('click', (e) => {
         if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
             suggestionsDiv.classList.remove('active');
         }
     });
-    
+
     // ============================================================
     // DROPDOWN TITRES
     // ============================================================
@@ -780,7 +798,7 @@
         titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
     }
     document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
-    
+
     function updateEditTitleDropdown(type) {
         const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         const select = document.getElementById('editTitle');
@@ -788,7 +806,7 @@
         select.innerHTML = '<option value="">-- Sélectionnez --</option>';
         titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
     }
-    
+
     // ============================================================
     // CALENDRIER
     // ============================================================
@@ -798,11 +816,11 @@
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const today = new Date();
         const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
-    
+
         let html = '';
         weekdays.forEach(d => { html += `<div class="weekday-header">${d}</div>`; });
         for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
-    
+
         for (let d = 1; d <= daysInMonth; d++) {
             const isToday = isCurrentMonthYear && d === today.getDate();
             const events = getEventsForDate(currentYear, currentMonth, d);
@@ -810,18 +828,18 @@
             html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
                          data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">${d}</div>`;
         }
-    
+
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
         document.getElementById('yearSelect').value = currentYear;
-    
+
         document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
             dayDiv.addEventListener('click', () => {
                 openPopup(parseInt(dayDiv.dataset.year), parseInt(dayDiv.dataset.month), parseInt(dayDiv.dataset.day));
             });
         });
     }
-    
+
     function populateYearSelect() {
         const select = document.getElementById('yearSelect');
         for (let y = 2026; y <= 2028; y++) {
@@ -832,7 +850,7 @@
         select.value = currentYear;
         select.addEventListener('change', () => { currentYear = parseInt(select.value); renderCalendar(); });
     }
-    
+
     function changeMonth(delta) {
         let m = currentMonth + delta;
         let y = currentYear;
@@ -841,24 +859,24 @@
         currentMonth = m; currentYear = y;
         renderCalendar();
     }
-    
+
     document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
-    
+
     // ============================================================
     // POPUP
     // ============================================================
     let currentPopupDate = null;
     let editingEventId = null;
-    
+
     function openPopup(year, month, day) {
         currentPopupDate = { year, month, day };
         editingEventId = null;
         const key = `${year}-${month+1}-${day}`;
         const events = eventsData[key] || [];
-    
+
         let html = `<h3>📅 ${formatDateFr(key)}</h3>`;
-    
+
         if (events.length === 0) {
             html += `<p class="no-events-msg">Aucun événement ce jour.</p>`;
         } else {
@@ -878,7 +896,7 @@
                     </div>`;
             });
         }
-    
+
         html += `
             <div class="edit-form" id="editForm">
                 <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
@@ -895,15 +913,15 @@
             </div>
             <button class="btn-close-popup" id="closePopupBtn">✖ Fermer</button>
         `;
-    
+
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
-    
+
         document.getElementById('closePopupBtn').onclick = closePopup;
         document.getElementById('eventsPopup').onclick = (e) => {
             if (e.target === document.getElementById('eventsPopup')) closePopup();
         };
-    
+
         // Supprimer
         document.querySelectorAll('.btn-delete-popup').forEach(btn => {
             btn.onclick = async () => {
@@ -941,7 +959,7 @@
                 }
             };
         });
-    
+
         // Éditer
         document.querySelectorAll('.btn-edit-popup').forEach(btn => {
             btn.onclick = () => {
@@ -954,11 +972,11 @@
                 document.getElementById('editForm').scrollIntoView({ behavior: 'smooth' });
             };
         });
-    
+
         document.getElementById('editType').addEventListener('change', function() {
             updateEditTitleDropdown(this.value);
         });
-    
+
         document.getElementById('saveEditBtn').onclick = async () => {
             const newType = document.getElementById('editType').value;
             const newTitre = document.getElementById('editTitle').value;
@@ -982,33 +1000,33 @@
                 alert('Erreur lors de la modification');
             }
         };
-    
+
         document.getElementById('cancelEditBtn').onclick = () => {
             document.getElementById('editForm').classList.remove('active');
             editingEventId = null;
         };
     }
-    
+
     function closePopup() {
         document.getElementById('eventsPopup').classList.remove('active');
         currentPopupDate = null;
         editingEventId = null;
     }
-    
+
     // ============================================================
-    // SOUMISSION DU FORMULAIRE
+    // SOUMISSION
     // ============================================================
     document.getElementById('eventForm').addEventListener('submit', async (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
         btn.disabled = true;
         btn.textContent = '⏳...';
-    
+
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
         if (!titre) { alert('Titre requis'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
         const lieu = document.getElementById('eventLieu').value.trim();
-    
+
         let dateKeys = [];
         if (currentMode === 'single') {
             const val = document.getElementById('eventDate').value;
@@ -1028,7 +1046,7 @@
             document.getElementById('periodEnd').value = '';
             document.getElementById('periodSummary').classList.remove('visible');
         }
-    
+
         const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
         let allSuccess = true;
         
@@ -1050,7 +1068,7 @@
                 allSuccess = false;
             }
         }
-    
+
         if (allSuccess) {
             document.getElementById('eventLieu').value = '';
             renderCalendar();
@@ -1062,7 +1080,7 @@
         btn.disabled = false;
         btn.textContent = '💾 Enregistrer';
     });
-    
+
     // ============================================================
     // TOUT EFFACER
     // ============================================================
@@ -1078,9 +1096,9 @@
             }
         }
     });
-    
+
     // ============================================================
-    // INITIALISATION
+    // INIT
     // ============================================================
     initSupabase();
     populateYearSelect();
