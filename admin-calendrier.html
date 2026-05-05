@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin calendrier - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -72,9 +71,6 @@
             color: #f5d06b;
             font-size: 2rem;
             text-shadow: 2px 2px 0 #3e6b3a;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
         }
 
         .btn {
@@ -92,14 +88,7 @@
         .btn-primary:hover { background: #5a8f78; }
         .btn-danger { background: #D32F2F; color: white; }
         .btn-danger:hover { background: #b71c1c; }
-        .btn-outline { background: transparent; border: 2px solid #7a5c3e; color: #5a3e2a; }
-        .btn-outline:hover { background: rgba(0,0,0,0.05); }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
-        .btn-small {
-            padding: 0.3rem 0.8rem;
-            font-size: 0.8rem;
-            border-radius: 20px;
-        }
 
         input, textarea, select {
             width: 100%;
@@ -170,15 +159,12 @@
 
         .hidden { display: none !important; }
 
-        /* Autocomplete communes */
-        .autocomplete-wrapper {
-            position: relative;
-        }
+        /* Autocomplete */
+        .autocomplete-wrapper { position: relative; }
         .autocomplete-suggestions {
             position: absolute;
             top: 100%;
-            left: 0;
-            right: 0;
+            left: 0; right: 0;
             background: white;
             border: 2px solid #7a5c3e;
             border-top: none;
@@ -195,7 +181,6 @@
             cursor: pointer;
             font-size: 0.85rem;
             border-bottom: 1px solid #eee;
-            transition: background 0.15s;
         }
         .autocomplete-item:hover { background: #FFF3CD; }
         .autocomplete-item .cp { color: var(--rose-spectacle); font-weight: bold; margin-right: 0.5rem; }
@@ -223,7 +208,7 @@
             font-size: 1.3rem;
             font-weight: bold;
             color: var(--text-dark);
-            min-width: 140px;
+            min-width: 160px;
             text-align: center;
         }
         .nav-arrow {
@@ -353,10 +338,10 @@
             align-items: center;
             justify-content: center;
         }
-        .btn-edit { background: #FFB300; color: #2C1810; }
-        .btn-edit:hover { background: #e6a000; }
-        .btn-delete { background: #D32F2F; color: white; }
-        .btn-delete:hover { background: #b71c1c; }
+        .btn-edit-popup { background: #FFB300; color: #2C1810; }
+        .btn-edit-popup:hover { background: #e6a000; }
+        .btn-delete-popup { background: #D32F2F; color: white; }
+        .btn-delete-popup:hover { background: #b71c1c; }
         .btn-close-popup {
             display: block;
             margin: 1rem auto 0;
@@ -397,17 +382,13 @@
             padding: 1rem;
             font-style: italic;
         }
-        .code-section {
+
+        .legend {
             text-align: center;
-            padding: 2rem;
+            margin-top: 1rem;
+            font-size: 0.8rem;
+            color: #666;
         }
-        .code-section input {
-            max-width: 250px;
-            text-align: center;
-            font-size: 1.2rem;
-            letter-spacing: 3px;
-        }
-        .code-error { color: #D32F2F; display: none; margin-top: 0.5rem; font-weight: bold; }
 
         @media (max-width: 650px) {
             body { padding: 0.8rem; }
@@ -423,123 +404,107 @@
 
 <div class="admin-wrapper">
 
-    <!-- ===== CODE SECRET ===== -->
-    <div class="card code-section" id="codeSection">
-        <h1 style="font-family:'MedievalSharp',cursive; color:#f5d06b; text-shadow:2px 2px 0 #3e6b3a;">🔐 Administration</h1>
-        <p style="margin:1rem 0; color:#5a3e2a;">Entrez le code d'accès</p>
-        <input type="password" id="accessCode" placeholder="••••••••">
-        <button class="btn btn-primary" id="verifyBtn" style="margin-top:0.5rem;">Vérifier</button>
-        <p class="code-error" id="codeError">Code incorrect</p>
+    <!-- HEADER -->
+    <div class="card admin-header">
+        <h1>🎪 Admin Calendrier</h1>
+        <button class="btn btn-danger" id="clearAllBtn" style="width:auto;">🗑 Tout effacer</button>
     </div>
 
-    <!-- ===== PANEL ADMIN (caché au début) ===== -->
-    <div id="adminPanel" class="hidden">
+    <!-- FORMULAIRE -->
+    <div class="card">
+        <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
 
-        <!-- HEADER -->
-        <div class="card admin-header">
-            <h1>🎪 Admin Calendrier</h1>
-            <div>
-                <span style="font-size:0.85rem; color:#4CAF50;">✅ Connecté</span>
-            </div>
+        <div class="mode-tabs">
+            <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
+            <div class="mode-tab" id="modePeriod">📆 Période</div>
         </div>
 
-        <!-- FORMULAIRE D'AJOUT -->
-        <div class="card form-section">
-            <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
-
-            <div class="mode-tabs">
-                <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
-                <div class="mode-tab" id="modePeriod">📆 Période</div>
+        <form id="eventForm">
+            <div id="singleDateFields">
+                <label>Date *</label>
+                <input type="date" id="eventDate" required>
             </div>
 
-            <form id="eventForm">
-                <div id="singleDateFields">
-                    <label>Date *</label>
-                    <input type="date" id="eventDate" required>
-                </div>
-
-                <div id="periodFields" class="hidden">
-                    <div class="form-row">
-                        <div><label>Date début *</label><input type="date" id="periodStart"></div>
-                        <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
-                    </div>
-                    <div class="period-summary" id="periodSummary"></div>
-                    <label style="margin-top:0.3rem; font-size:0.85rem;">Jours de la semaine :</label>
-                    <div class="weekday-checkboxes">
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
-                        <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
-                    </div>
-                </div>
-
+            <div id="periodFields" class="hidden">
                 <div class="form-row">
-                    <div><label>Type</label>
-                        <select id="eventType">
-                            <option value="Spectacle">🎭 Spectacle</option>
-                            <option value="Exposition">🖼️ Exposition</option>
-                        </select>
-                    </div>
-                    <div><label>Titre</label>
-                        <select id="eventTitle" required>
-                            <option value="">-- Sélectionnez --</option>
-                        </select>
-                    </div>
+                    <div><label>Date début *</label><input type="date" id="periodStart"></div>
+                    <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
                 </div>
-
-                <label>Lieu</label>
-                <div class="autocomplete-wrapper">
-                    <textarea id="eventLieu" rows="2" placeholder="Commencez à taper une commune..."></textarea>
-                    <div class="autocomplete-suggestions" id="lieuSuggestions"></div>
-                </div>
-
-                <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
-            </form>
-        </div>
-
-        <!-- CALENDRIER -->
-        <div class="card">
-            <div class="calendar-header-row">
-                <div class="month-year-nav">
-                    <button class="nav-arrow" id="prevMonthBtn">←</button>
-                    <span id="monthName"></span>
-                    <button class="nav-arrow" id="nextMonthBtn">→</button>
-                </div>
-                <div class="year-select-wrap">
-                    <label for="yearSelect">Année :</label>
-                    <select id="yearSelect"></select>
+                <div class="period-summary" id="periodSummary"></div>
+                <label style="margin-top:0.3rem; font-size:0.85rem;">Jours à inclure :</label>
+                <div class="weekday-checkboxes">
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
+                    <label class="weekday-checkbox"><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
                 </div>
             </div>
-            <div class="calendar-grid" id="calendarGrid"></div>
-            <p style="text-align:center; margin-top:1rem; font-size:0.8rem; color:#666;">
-                🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
-            </p>
-        </div>
 
+            <div class="form-row">
+                <div>
+                    <label>Type</label>
+                    <select id="eventType">
+                        <option value="Spectacle">🎭 Spectacle</option>
+                        <option value="Exposition">🖼️ Exposition</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Titre</label>
+                    <select id="eventTitle" required>
+                        <option value="">-- Sélectionnez --</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>Lieu</label>
+            <div class="autocomplete-wrapper">
+                <textarea id="eventLieu" rows="2" placeholder="Commencez à taper une commune..."></textarea>
+                <div class="autocomplete-suggestions" id="lieuSuggestions"></div>
+            </div>
+
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
+        </form>
     </div>
+
+    <!-- CALENDRIER -->
+    <div class="card">
+        <div class="calendar-header-row">
+            <div class="month-year-nav">
+                <button class="nav-arrow" id="prevMonthBtn">←</button>
+                <span id="monthName"></span>
+                <button class="nav-arrow" id="nextMonthBtn">→</button>
+            </div>
+            <div class="year-select-wrap">
+                <label for="yearSelect">Année :</label>
+                <select id="yearSelect"></select>
+            </div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+        <p class="legend">
+            🟡 = événement(s) &nbsp;|&nbsp; 🔴 = aujourd'hui &nbsp;|&nbsp; Cliquez sur une date pour gérer
+        </p>
+    </div>
+
 </div>
 
-<!-- ===== POPUP ===== -->
+<!-- POPUP -->
 <div class="events-popup" id="eventsPopup">
     <div class="popup-content" id="popupContent"></div>
 </div>
 
 <script>
     // ============================================================
-    // CONFIG
+    // STOCKAGE LOCAL (localStorage) - pas de Supabase pour l'instant
     // ============================================================
-    const SECRET_CODE = "recremagic";
-    const SUPABASE_URL = 'https://ton-projet.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOi...';
+    const STORAGE_KEY = 'recremagic_calendar';
 
-    let supabase;
     let currentMode = 'single';
     let currentMonth, currentYear;
     let eventsData = {};
-    let communesList = []; // chargée depuis le CDN
+    let communesList = [];
 
     const monthNames = ["Janvier","Février","Mars","Avril","Mai","Juin","Juillet","Août","Septembre","Octobre","Novembre","Décembre"];
     const weekdays = ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"];
@@ -553,83 +518,61 @@
     if (currentYear > 2028) currentYear = 2028;
 
     // ============================================================
-    // INIT SUPABASE
+    // CHARGER / SAUVEGARDER (localStorage)
     // ============================================================
-    function initSupabase() {
-        if (SUPABASE_URL && !SUPABASE_URL.includes('ton-projet')) {
-            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-            return true;
-        }
-        return false;
-    }
-
-    // ============================================================
-    // CODE SECRET
-    // ============================================================
-    document.getElementById('verifyBtn').addEventListener('click', () => {
-        if (document.getElementById('accessCode').value === SECRET_CODE) {
-            document.getElementById('codeSection').classList.add('hidden');
-            document.getElementById('adminPanel').classList.remove('hidden');
-            initApp();
-        } else {
-            document.getElementById('codeError').style.display = 'block';
-        }
-    });
-
-    // Permettre aussi la touche Entrée
-    document.getElementById('accessCode').addEventListener('keypress', (e) => {
-        if (e.key === 'Enter') document.getElementById('verifyBtn').click();
-    });
-
-    // ============================================================
-    // INIT APP (après code secret validé)
-    // ============================================================
-    async function initApp() {
-        populateYearSelect();
-        updateTitleDropdown();
-        renderCalendar();
-        await loadCommunes();
-
-        if (initSupabase()) {
-            await loadAllEvents();
-            renderCalendar();
-        } else {
-            console.warn('⚠️ Supabase non configuré. Utilise la variable globale eventsData pour tes tests.');
-            // Fallback localStorage pour tests en local
-            const stored = localStorage.getItem('recremagic_calendar');
-            if (stored) {
-                const raw = JSON.parse(stored);
-                eventsData = {};
-                // Normaliser
-                for (let key in raw) {
-                    if (!Array.isArray(raw[key])) {
-                        const old = raw[key];
-                        eventsData[key] = [{
-                            id: 'local_' + key,
-                            event_date: key,
-                            type: old.type || 'Spectacle',
-                            titre: old.titre || old.spectacle || '',
-                            lieu: old.lieu || '',
-                            period_id: old.periodId || null
-                        }];
-                    } else {
-                        eventsData[key] = raw[key].map((ev, i) => ({
-                            id: ev.id || 'local_' + key + '_' + i,
-                            event_date: key,
-                            type: ev.type || 'Spectacle',
-                            titre: ev.titre || '',
-                            lieu: ev.lieu || '',
-                            period_id: ev.periodId || null
-                        }));
-                    }
-                }
-                renderCalendar();
+    function loadFromStorage() {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) { eventsData = {}; return; }
+        const data = JSON.parse(raw);
+        eventsData = {};
+        for (let key in data) {
+            if (Array.isArray(data[key])) {
+                // Déjà au bon format
+                eventsData[key] = data[key].map((ev, i) => ({
+                    id: ev.id || 'evt_' + key + '_' + i,
+                    event_date: key,
+                    type: ev.type || 'Spectacle',
+                    titre: ev.titre || '',
+                    lieu: ev.lieu || '',
+                    period_id: ev.period_id || ev.periodId || null
+                }));
+            } else {
+                // Ancien format (objet unique)
+                const old = data[key];
+                eventsData[key] = [{
+                    id: 'evt_' + key + '_0',
+                    event_date: key,
+                    type: old.type || 'Spectacle',
+                    titre: old.titre || old.spectacle || '',
+                    lieu: old.lieu || '',
+                    period_id: old.periodId || null
+                }];
             }
         }
     }
 
+    function saveToStorage() {
+        // Nettoyer : ne garder que les champs utiles
+        const toSave = {};
+        for (let key in eventsData) {
+            toSave[key] = eventsData[key].map(ev => ({
+                type: ev.type,
+                titre: ev.titre,
+                lieu: ev.lieu,
+                period_id: ev.period_id,
+                id: ev.id
+            }));
+        }
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(toSave));
+    }
+
+    function getEventsForDate(year, month, day) {
+        const key = `${year}-${month+1}-${day}`;
+        return eventsData[key] || [];
+    }
+
     // ============================================================
-    // MODE (DATE UNIQUE / PÉRIODE)
+    // MODE
     // ============================================================
     document.getElementById('modeSingle').addEventListener('click', () => switchMode('single'));
     document.getElementById('modePeriod').addEventListener('click', () => switchMode('period'));
@@ -665,15 +608,13 @@
         if (start > end) {
             summary.textContent = '⚠️ Date début > date fin';
             summary.style.background = '#FFCDD2';
-            summary.classList.add('visible');
-            return;
+            summary.classList.add('visible'); return;
         }
         const dates = getDatesInRange(start, end);
         if (dates.length === 0) {
             summary.textContent = '⚠️ Aucune date (vérifiez les jours cochés)';
             summary.style.background = '#FFCDD2';
-            summary.classList.add('visible');
-            return;
+            summary.classList.add('visible'); return;
         }
         summary.textContent = `📆 ${dates.length} jour(s) : du ${formatDateFr(start)} au ${formatDateFr(end)}`;
         summary.style.background = '#C8E6C9';
@@ -702,18 +643,21 @@
         return d.toLocaleDateString('fr-FR', { day: 'numeric', month: 'long', year: 'numeric' });
     }
 
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+
     // ============================================================
     // AUTOCOMPLETE COMMUNES
     // ============================================================
     async function loadCommunes() {
         try {
-            // Fichier JSON des communes françaises (36 000 entrées) hébergé sur GitHub
             const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
             communesList = await res.json();
-            console.log(`✅ ${communesList.length} communes chargées`);
+            console.log('✅ Communes chargées :', communesList.length);
         } catch (e) {
-            console.warn('⚠️ Impossible de charger les communes, autocomplete désactivé');
-            communesList = [];
+            console.warn('⚠️ Communes non chargées, autocomplete désactivé');
         }
     }
 
@@ -727,29 +671,23 @@
             suggestionsDiv.classList.remove('active');
             return;
         }
-
-        // Filtrer les communes qui commencent par la saisie
-        const matches = communesList.filter(c => 
-            c.nom.toLowerCase().startsWith(query) || 
-            c.code_postal.startsWith(query)
-        ).slice(0, 8); // Limiter à 8 suggestions
+        const matches = communesList.filter(c =>
+            c.nom.toLowerCase().startsWith(query) || c.code_postal.startsWith(query)
+        ).slice(0, 8);
 
         if (matches.length === 0) {
             suggestionsDiv.classList.remove('active');
             return;
         }
 
-        let html = '';
-        matches.forEach((c, i) => {
-            html += `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
+        suggestionsDiv.innerHTML = matches.map((c, i) =>
+            `<div class="autocomplete-item" data-index="${i}" data-full="${c.nom} (${c.code_postal})">
                 <span class="cp">${c.code_postal}</span> ${c.nom}
-            </div>`;
-        });
-        suggestionsDiv.innerHTML = html;
+            </div>`
+        ).join('');
         suggestionsDiv.classList.add('active');
         selectedCommuneIndex = -1;
 
-        // Clic sur une suggestion
         suggestionsDiv.querySelectorAll('.autocomplete-item').forEach(item => {
             item.addEventListener('mousedown', (e) => {
                 e.preventDefault();
@@ -759,36 +697,19 @@
         });
     });
 
-    // Navigation clavier dans les suggestions
     lieuInput.addEventListener('keydown', (e) => {
         const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
         if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
-
-        if (e.key === 'ArrowDown') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1);
-            highlightSuggestion(items);
-        } else if (e.key === 'ArrowUp') {
-            e.preventDefault();
-            selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1);
-            highlightSuggestion(items);
-        } else if (e.key === 'Enter' && selectedCommuneIndex >= 0) {
-            e.preventDefault();
-            lieuInput.value = items[selectedCommuneIndex].dataset.full;
-            suggestionsDiv.classList.remove('active');
-        } else if (e.key === 'Escape') {
-            suggestionsDiv.classList.remove('active');
-            selectedCommuneIndex = -1;
-        }
+        if (e.key === 'ArrowDown') { e.preventDefault(); selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1); highlightItems(items); }
+        else if (e.key === 'ArrowUp') { e.preventDefault(); selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1); highlightItems(items); }
+        else if (e.key === 'Enter' && selectedCommuneIndex >= 0) { e.preventDefault(); lieuInput.value = items[selectedCommuneIndex].dataset.full; suggestionsDiv.classList.remove('active'); }
+        else if (e.key === 'Escape') { suggestionsDiv.classList.remove('active'); }
     });
 
-    function highlightSuggestion(items) {
-        items.forEach((item, i) => {
-            item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '';
-        });
+    function highlightItems(items) {
+        items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
     }
 
-    // Fermer les suggestions si on clique ailleurs
     document.addEventListener('click', (e) => {
         if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
             suggestionsDiv.classList.remove('active');
@@ -803,34 +724,16 @@
         const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         const select = document.getElementById('eventTitle');
         select.innerHTML = '<option value="">-- Sélectionnez --</option>';
-        titles.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t; opt.textContent = t;
-            select.appendChild(opt);
-        });
+        titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
     }
     document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
 
-    // ============================================================
-    // SUPABASE - CHARGEMENT
-    // ============================================================
-    async function loadAllEvents() {
-        if (!supabase) return;
-        const { data, error } = await supabase
-            .from('calendar_events')
-            .select('*')
-            .order('event_date', { ascending: true });
-        if (error) { console.error('Erreur chargement:', error); return; }
-        eventsData = {};
-        data.forEach(ev => {
-            if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
-            eventsData[ev.event_date].push(ev);
-        });
-    }
-
-    function getEventsForDate(year, month, day) {
-        const key = `${year}-${month+1}-${day}`;
-        return eventsData[key] || [];
+    function updateEditTitleDropdown(type) {
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('editTitle');
+        if (!select) return;
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
     }
 
     // ============================================================
@@ -851,12 +754,8 @@
             const isToday = isCurrentMonthYear && d === today.getDate();
             const events = getEventsForDate(currentYear, currentMonth, d);
             const hasEvent = events.length > 0;
-            html += `
-                <div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
-                     data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
-                    ${d}
-                </div>
-            `;
+            html += `<div class="cal-day ${isToday ? 'today' : ''} ${hasEvent ? 'has-event' : ''}"
+                         data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">${d}</div>`;
         }
 
         document.getElementById('calendarGrid').innerHTML = html;
@@ -865,36 +764,28 @@
 
         document.querySelectorAll('.cal-day[data-day]').forEach(dayDiv => {
             dayDiv.addEventListener('click', () => {
-                const y = parseInt(dayDiv.dataset.year);
-                const m = parseInt(dayDiv.dataset.month);
-                const d = parseInt(dayDiv.dataset.day);
-                openPopup(y, m, d);
+                openPopup(parseInt(dayDiv.dataset.year), parseInt(dayDiv.dataset.month), parseInt(dayDiv.dataset.day));
             });
         });
     }
 
     function populateYearSelect() {
         const select = document.getElementById('yearSelect');
-        select.innerHTML = '';
         for (let y = 2026; y <= 2028; y++) {
             const opt = document.createElement('option');
             opt.value = y; opt.textContent = y;
             select.appendChild(opt);
         }
         select.value = currentYear;
-        select.addEventListener('change', () => {
-            currentYear = parseInt(select.value);
-            renderCalendar();
-        });
+        select.addEventListener('change', () => { currentYear = parseInt(select.value); renderCalendar(); });
     }
 
     function changeMonth(delta) {
         let m = currentMonth + delta;
         let y = currentYear;
-        if (m < 0) { m = 11; y--; if (y < 2026) { y = 2026; m = 0; } }
-        else if (m > 11) { m = 0; y++; if (y > 2028) { y = 2028; m = 11; } }
-        currentMonth = m;
-        currentYear = y;
+        if (m < 0) { m = 11; y--; if (y < 2026) y = 2026; }
+        else if (m > 11) { m = 0; y++; if (y > 2028) y = 2028; }
+        currentMonth = m; currentYear = y;
         renderCalendar();
     }
 
@@ -902,7 +793,7 @@
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
 
     // ============================================================
-    // POPUP DE GESTION
+    // POPUP
     // ============================================================
     let currentPopupDate = null;
     let editingEventId = null;
@@ -912,9 +803,8 @@
         editingEventId = null;
         const key = `${year}-${month+1}-${day}`;
         const events = eventsData[key] || [];
-        const dateStr = formatDateFr(key);
 
-        let html = `<h3>📅 ${dateStr}</h3>`;
+        let html = `<h3>📅 ${formatDateFr(key)}</h3>`;
 
         if (events.length === 0) {
             html += `<p class="no-events-msg">Aucun événement ce jour.</p>`;
@@ -926,14 +816,13 @@
                         <div class="popup-event-info">
                             <strong>${typeIcon} ${escapeHtml(ev.titre)}</strong><br>
                             📍 ${escapeHtml(ev.lieu) || '—'}
-                            ${ev.period_id ? '<br><small style="color:#888;">🔗 Fait partie d\'une période</small>' : ''}
+                            ${ev.period_id ? '<br><small style="color:#888;">🔗 Période</small>' : ''}
                         </div>
                         <div class="popup-actions">
-                            <button class="btn-edit" title="Modifier" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
-                            <button class="btn-delete" title="Supprimer" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
+                            <button class="btn-edit-popup" data-id="${ev.id}" data-type="${escapeHtml(ev.type)}" data-titre="${escapeHtml(ev.titre)}" data-lieu="${escapeHtml(ev.lieu || '')}">✏️</button>
+                            <button class="btn-delete-popup" data-id="${ev.id}" data-period="${ev.period_id || ''}">🗑</button>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             });
         }
 
@@ -941,10 +830,7 @@
             <div class="edit-form" id="editForm">
                 <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
                 <label>Type</label>
-                <select id="editType">
-                    <option value="Spectacle">🎭 Spectacle</option>
-                    <option value="Exposition">🖼️ Exposition</option>
-                </select>
+                <select id="editType"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
                 <label>Titre</label>
                 <select id="editTitle"></select>
                 <label>Lieu</label>
@@ -966,8 +852,8 @@
         };
 
         // Supprimer
-        document.querySelectorAll('.btn-delete').forEach(btn => {
-            btn.onclick = async () => {
+        document.querySelectorAll('.btn-delete-popup').forEach(btn => {
+            btn.onclick = () => {
                 const id = btn.dataset.id;
                 const periodId = btn.dataset.period;
                 let msg = 'Supprimer cet événement ?';
@@ -975,15 +861,26 @@
                     msg = 'Supprimer toute la période ?';
                 }
                 if (confirm(msg)) {
-                    await deleteEvent(id, periodId);
-                    await refreshAfterChange();
+                    if (periodId && periodId !== 'undefined' && periodId !== '') {
+                        for (let k in eventsData) {
+                            eventsData[k] = eventsData[k].filter(ev => ev.period_id !== periodId);
+                            if (eventsData[k].length === 0) delete eventsData[k];
+                        }
+                    } else {
+                        for (let k in eventsData) {
+                            eventsData[k] = eventsData[k].filter(ev => ev.id !== id);
+                            if (eventsData[k].length === 0) delete eventsData[k];
+                        }
+                    }
+                    saveToStorage();
+                    renderCalendar();
                     openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
                 }
             };
         });
 
         // Éditer
-        document.querySelectorAll('.btn-edit').forEach(btn => {
+        document.querySelectorAll('.btn-edit-popup').forEach(btn => {
             btn.onclick = () => {
                 editingEventId = btn.dataset.id;
                 document.getElementById('editType').value = btn.dataset.type;
@@ -999,13 +896,22 @@
             updateEditTitleDropdown(this.value);
         });
 
-        document.getElementById('saveEditBtn').onclick = async () => {
+        document.getElementById('saveEditBtn').onclick = () => {
             const newType = document.getElementById('editType').value;
             const newTitre = document.getElementById('editTitle').value;
             const newLieu = document.getElementById('editLieu').value.trim();
             if (!newTitre) { alert('Titre requis'); return; }
-            await updateEvent(editingEventId, { type: newType, titre: newTitre, lieu: newLieu });
-            await refreshAfterChange();
+            for (let k in eventsData) {
+                eventsData[k].forEach(ev => {
+                    if (ev.id === editingEventId) {
+                        ev.type = newType;
+                        ev.titre = newTitre;
+                        ev.lieu = newLieu;
+                    }
+                });
+            }
+            saveToStorage();
+            renderCalendar();
             openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
         };
 
@@ -1021,79 +927,13 @@
         editingEventId = null;
     }
 
-    function updateEditTitleDropdown(type) {
-        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
-        const select = document.getElementById('editTitle');
-        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
-        titles.forEach(t => {
-            const opt = document.createElement('option');
-            opt.value = t; opt.textContent = t;
-            select.appendChild(opt);
-        });
-    }
-
-    async function deleteEvent(id, periodId) {
-        if (supabase) {
-            if (periodId && periodId !== 'undefined' && periodId !== '') {
-                await supabase.from('calendar_events').delete().eq('period_id', periodId);
-            } else {
-                await supabase.from('calendar_events').delete().eq('id', id);
-            }
-        } else {
-            // Fallback localStorage
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            for (let key in raw) {
-                if (Array.isArray(raw[key])) {
-                    raw[key] = raw[key].filter(ev => ev.id !== id && ev.period_id !== periodId);
-                    if (raw[key].length === 0) delete raw[key];
-                } else if (raw[key].id === id || raw[key].periodId === periodId) {
-                    delete raw[key];
-                }
-            }
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
-        }
-    }
-
-    async function updateEvent(id, updates) {
-        if (supabase) {
-            await supabase.from('calendar_events').update(updates).eq('id', id);
-        } else {
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            for (let key in raw) {
-                if (Array.isArray(raw[key])) {
-                    raw[key].forEach(ev => {
-                        if (ev.id === id) Object.assign(ev, updates);
-                    });
-                } else if (raw[key].id === id) {
-                    Object.assign(raw[key], updates);
-                }
-            }
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
-        }
-    }
-
-    async function refreshAfterChange() {
-        if (supabase) {
-            await loadAllEvents();
-        } else {
-            initApp(); // recharge depuis localStorage
-        }
-        renderCalendar();
-    }
-
-    function escapeHtml(str) {
-        if (!str) return '';
-        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
-    }
-
     // ============================================================
-    // SOUMISSION AJOUT
+    // SOUMISSION
     // ============================================================
-    document.getElementById('eventForm').addEventListener('submit', async (e) => {
+    document.getElementById('eventForm').addEventListener('submit', (e) => {
         e.preventDefault();
         const btn = document.getElementById('submitBtn');
-        btn.disabled = true;
-        btn.textContent = '⏳...';
+        btn.disabled = true; btn.textContent = '⏳...';
 
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
@@ -1115,45 +955,46 @@
             const dates = getDatesInRange(start, end);
             if (dates.length === 0) { alert('Aucune date dans la plage'); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
             dateKeys = dates.map(d => dateToKey(d));
-            document.getElementById('periodStart').value = '';
-            document.getElementById('periodEnd').value = '';
+            document.getElementById('periodStart').value = ''; document.getElementById('periodEnd').value = '';
             document.getElementById('periodSummary').classList.remove('visible');
         }
 
         const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
-        const rows = dateKeys.map(dk => ({
-            event_date: dk,
-            type, titre, lieu,
-            period_id: periodId,
-            created_at: new Date().toISOString()
-        }));
-
-        if (supabase) {
-            const { error } = await supabase.from('calendar_events').insert(rows);
-            if (error) { alert('Erreur: ' + error.message); btn.disabled = false; btn.textContent = '💾 Enregistrer'; return; }
-        } else {
-            // Fallback localStorage
-            let raw = JSON.parse(localStorage.getItem('recremagic_calendar') || '{}');
-            rows.forEach(r => {
-                if (!raw[r.event_date]) raw[r.event_date] = [];
-                raw[r.event_date].push({ ...r, id: 'local_' + Date.now() + '_' + Math.random().toString(36).substr(2,5) });
+        dateKeys.forEach(dk => {
+            if (!eventsData[dk]) eventsData[dk] = [];
+            eventsData[dk].push({
+                id: 'evt_' + Date.now() + '_' + Math.random().toString(36).substr(2,5),
+                event_date: dk, type, titre, lieu, period_id: periodId
             });
-            localStorage.setItem('recremagic_calendar', JSON.stringify(raw));
-        }
+        });
 
+        saveToStorage();
         document.getElementById('eventLieu').value = '';
-        await refreshAfterChange();
+        renderCalendar();
         alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
-        btn.disabled = false;
-        btn.textContent = '💾 Enregistrer';
+        btn.disabled = false; btn.textContent = '💾 Enregistrer';
     });
 
     // ============================================================
-    // INIT CALENDRIER (affiché même avant chargement des données)
+    // TOUT EFFACER
     // ============================================================
+    document.getElementById('clearAllBtn').addEventListener('click', () => {
+        if (confirm('⚠️ Supprimer TOUS les événements ?')) {
+            localStorage.removeItem(STORAGE_KEY);
+            eventsData = {};
+            renderCalendar();
+        }
+    });
+
+    // ============================================================
+    // INIT
+    // ============================================================
+    loadFromStorage();
     populateYearSelect();
     updateTitleDropdown();
     renderCalendar();
+    loadCommunes();
+    console.log('✅ Admin calendrier prêt !');
 </script>
 </body>
-</html>
+                    </html>
