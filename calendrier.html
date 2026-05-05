@@ -281,6 +281,29 @@
 
         .events-summary { margin-bottom: 0; }
 
+        /* Header de la liste avec logo */
+        .events-summary-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+        .events-summary-header h2 {
+            margin-bottom: 0;
+            font-family: 'Fredoka', cursive;
+            color: var(--text-dark);
+        }
+        .events-summary-logo {
+            height: 70px;
+            width: auto;
+            transition: transform 0.3s ease;
+            filter: drop-shadow(0 4px 8px rgba(0,0,0,0.6));
+        }
+        .events-summary-logo:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 6px 14px rgba(0,0,0,0.8));
+        }
+
         .calendar-header {
             display: flex; justify-content: space-between; align-items: center;
             flex-wrap: wrap; gap: 1rem; margin-bottom: 2rem;
@@ -342,7 +365,6 @@
         .edit-card button { background: #aaa; border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; cursor: pointer; font-size: 0.7rem; margin-top: 0.5rem; }
         .edit-card button:hover { background: #888; }
 
-        .events-summary h2 { font-family: 'Fredoka', cursive; color: var(--text-dark); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.5rem; }
         .month-section { margin-bottom: 1.5rem; }
         .month-title {
             font-family: 'Fredoka', cursive;
@@ -433,6 +455,7 @@
             .contact-cta p { font-size: 0.9rem; }
             .contact-cta a { font-size: 1rem; }
             .event-date { min-width: auto; }
+            .events-summary-logo { height: 50px; }
         }
     </style>
 </head>
@@ -473,7 +496,12 @@
 </div>
 
 <div class="events-summary" id="eventsSummary">
-    <h2><i class="fas fa-list"></i> Liste des événements</h2>
+    <div class="events-summary-header">
+        <h2><i class="fas fa-list"></i> Liste des événements</h2>
+        <a href="index.html">
+            <img src="images/logo.png" alt="Accueil" class="events-summary-logo" title="Retour à l'accueil">
+        </a>
+    </div>
     <div id="eventsListContainer"></div>
 </div>
 
@@ -522,9 +550,6 @@
     let hideTimeout = null;
     let isLoading = false;
 
-    // ============================================================
-    // CHARGEMENT DEPUIS SUPABASE
-    // ============================================================
     function showLoading(show) {
         document.getElementById('loadingIndicator').classList.toggle('active', show);
         isLoading = show;
@@ -577,9 +602,6 @@
             </div>`;
     }
 
-    // ============================================================
-    // RENDU DU CALENDRIER
-    // ============================================================
     function getDateKey(year, month, day) { 
         const m = String(month + 1).padStart(2, '0');
         const d = String(day).padStart(2, '0');
@@ -662,14 +684,10 @@
         });
     }
 
-    // ============================================================
-    // LISTE DES ÉVÉNEMENTS GROUPÉE PAR MOIS + PÉRIODES
-    // ============================================================
     function renderEventsSummary() {
         const container = document.getElementById('eventsListContainer');
         if (!container) return;
         
-        // Collecter tous les événements avec leur date
         const allEntries = [];
         for (let dateKey in eventsData) {
             const eventList = eventsData[dateKey];
@@ -684,15 +702,13 @@
             return;
         }
 
-        // Trier par date
         allEntries.sort((a, b) => {
             const [y1, m1, d1] = a.dateKey.split('-').map(Number);
             const [y2, m2, d2] = b.dateKey.split('-').map(Number);
             return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
         });
 
-        // Regrouper par period_id pour détecter les périodes
-        const groups = {}; // key = period_id ou dateKey si pas de period_id
+        const groups = {};
         allEntries.forEach(entry => {
             const groupKey = entry.period_id || entry.dateKey + '_' + entry.titre + '_' + entry.lieu;
             if (!groups[groupKey]) {
@@ -701,14 +717,12 @@
             groups[groupKey].entries.push(entry);
         });
 
-        // Construire la liste finale
         const finalEntries = [];
         for (let groupKey in groups) {
             const group = groups[groupKey];
             const entries = group.entries;
             
             if (group.period_id && entries.length > 1) {
-                // C'est une période : fusionner
                 const first = entries[0];
                 const last = entries[entries.length - 1];
                 finalEntries.push({
@@ -720,7 +734,6 @@
                     isPeriod: true
                 });
             } else {
-                // Événement unique
                 entries.forEach(entry => {
                     finalEntries.push({
                         dateKey: entry.dateKey,
@@ -734,14 +747,12 @@
             }
         }
 
-        // Retrier après fusion
         finalEntries.sort((a, b) => {
             const [y1, m1, d1] = a.dateKey.split('-').map(Number);
             const [y2, m2, d2] = b.dateKey.split('-').map(Number);
             return new Date(y1, m1-1, d1) - new Date(y2, m2-1, d2);
         });
 
-        // Grouper par mois
         const byMonth = {};
         finalEntries.forEach(entry => {
             const [y, m] = entry.dateKey.split('-');
@@ -750,7 +761,6 @@
             byMonth[monthKey].push(entry);
         });
 
-        // Rendu HTML
         let html = '';
         const sortedMonths = Object.keys(byMonth).sort();
 
@@ -817,9 +827,6 @@
     document.getElementById('prevMonthBtn').addEventListener('click', () => changeMonth(-1));
     document.getElementById('nextMonthBtn').addEventListener('click', () => changeMonth(1));
 
-    // ============================================================
-    // CONFETTI
-    // ============================================================
     function createConfetti() {
         const container = document.getElementById('confetti');
         if (!container) return;
@@ -838,9 +845,6 @@
         }
     }
 
-    // ============================================================
-    // INIT
-    // ============================================================
     async function init() {
         populateYearSelect();
         renderCalendar();
