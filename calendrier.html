@@ -494,14 +494,14 @@
 
 <script>
     // ============================================================
-    // 🔌 CONFIGURATION SUPABASE - REMPLACE CES 2 LIGNES
+    // 🔌 CONFIGURATION SUPABASE
     // ============================================================
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const TABLE_NAME = 'events';
 
     // Initialisation Supabase
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
@@ -584,7 +584,9 @@
     // RENDU DU CALENDRIER
     // ============================================================
     function getDateKey(year, month, day) { 
-        return `${year}-${month+1}-${day}`; 
+        const m = String(month + 1).padStart(2, '0');
+        const d = String(day).padStart(2, '0');
+        return `${year}-${m}-${d}`; 
     }
 
     function loadEventsForDate(year, month, day) {
@@ -798,8 +800,8 @@
     // ============================================================
     async function init() {
         populateYearSelect();
-        renderCalendar(); // Affiche le calendrier vide d'abord
-        await loadEventsFromSupabase(); // Puis charge les données
+        renderCalendar();
+        await loadEventsFromSupabase();
         
         // Recharger automatiquement toutes les 30 secondes
         setInterval(loadEventsFromSupabase, 30000);
