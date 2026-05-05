@@ -168,6 +168,7 @@
             margin: 0 auto;
         }
 
+        /* Cadre marron autour de l'image */
         .caravane-image {
             width: 100%;
             height: auto;
@@ -175,6 +176,9 @@
             border-radius: 10px;
             box-shadow: 0 20px 80px rgba(0, 0, 0, 0.8);
             transition: opacity 0.05s ease;
+            border: 8px solid #5C3A1E;
+            outline: 4px solid #3E2A1A;
+            outline-offset: 2px;
         }
 
         .hotspots-svg {
@@ -243,6 +247,7 @@
             flex-shrink: 0;
         }
 
+        /* Cadre marron pour la version mobile */
         .mobile-caravane-image {
             height: 60vh;
             width: auto;
@@ -254,6 +259,9 @@
             -webkit-touch-callout: none;
             -webkit-user-select: none;
             user-select: none;
+            border: 8px solid #5C3A1E;
+            outline: 4px solid #3E2A1A;
+            outline-offset: 2px;
         }
 
         @media (max-width: 968px) {
@@ -271,6 +279,16 @@
             .nav-icon-img { height: 26px; }
             .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
+            .caravane-image {
+                border-width: 5px;
+                outline-width: 3px;
+                outline-offset: 1px;
+            }
+            .mobile-caravane-image {
+                border-width: 5px;
+                outline-width: 3px;
+                outline-offset: 1px;
+            }
         }
     </style>
 </head>
