@@ -226,12 +226,12 @@
     }
 
     // ============================================================
-    // DÉCONNEXION
+    // DÉCONNEXION → redirige vers admin-calendrier.html
     // ============================================================
     document.getElementById('btnDeconnexion').addEventListener('click', async function(e) {
         e.preventDefault();
         await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
+        window.location.href = 'admin-calendrier.html';
     });
 
     // ============================================================
