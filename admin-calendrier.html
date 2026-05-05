@@ -71,12 +71,50 @@
             align-items: center;
             flex-wrap: wrap;
             gap: 1rem;
+            position: relative;
         }
         .admin-header h1 {
             font-family: 'MedievalSharp', cursive;
             color: #f5d06b;
             font-size: 2rem;
             text-shadow: 2px 2px 0 #3e6b3a;
+        }
+
+        .admin-finger-link {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2.5rem;
+            text-decoration: none;
+            animation: fingerBounce 0.6s infinite alternate;
+            cursor: pointer;
+            z-index: 5;
+            transition: transform 0.2s;
+        }
+        .admin-finger-link:hover {
+            animation: fingerShake 0.2s infinite;
+            transform: translateY(-50%) scale(1.3);
+        }
+        @keyframes fingerBounce {
+            0% { transform: translateY(-50%) rotate(-5deg); }
+            100% { transform: translateY(-50%) rotate(5deg); }
+        }
+        @keyframes fingerShake {
+            0% { transform: translateY(-50%) rotate(-15deg) scale(1.3); }
+            50% { transform: translateY(-50%) rotate(15deg) scale(1.3); }
+            100% { transform: translateY(-50%) rotate(-15deg) scale(1.3); }
+        }
+
+        .poop-particle {
+            position: absolute;
+            font-size: 1rem;
+            animation: poopFall 1.5s forwards;
+            pointer-events: none;
+        }
+        @keyframes poopFall {
+            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
+            100% { opacity: 0; transform: translateY(40px) rotate(180deg); }
         }
 
         .btn {
@@ -109,208 +147,77 @@
         textarea { border-radius: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
 
-        /* Autocomplétion lieu */
-        .lieu-wrapper {
-            position: relative;
-        }
+        .lieu-wrapper { position: relative; }
         .suggestions-dropdown {
-            position: absolute;
-            left: 0;
-            right: 0;
-            background: white;
-            border: 2px solid var(--vert-caravane);
-            border-radius: 15px;
-            margin-top: 2px;
-            max-height: 250px;
-            overflow-y: auto;
-            z-index: 100;
-            display: none;
+            position: absolute; left: 0; right: 0; background: white;
+            border: 2px solid var(--vert-caravane); border-radius: 15px; margin-top: 2px;
+            max-height: 250px; overflow-y: auto; z-index: 100; display: none;
             box-shadow: 0 4px 12px rgba(0,0,0,0.15);
         }
-        .suggestions-dropdown.active {
-            display: block;
-        }
+        .suggestions-dropdown.active { display: block; }
         .suggestion-item {
-            padding: 0.6rem 1rem;
-            cursor: pointer;
-            font-size: 0.9rem;
-            border-bottom: 1px solid #eee;
-            transition: background 0.15s;
+            padding: 0.6rem 1rem; cursor: pointer; font-size: 0.9rem;
+            border-bottom: 1px solid #eee; transition: background 0.15s;
         }
-        .suggestion-item:last-child {
-            border-bottom: none;
-        }
-        .suggestion-item:hover {
-            background: #e8f5e9;
-        }
-        .suggestion-item .city-name {
-            font-weight: 600;
-            color: #2C1810;
-        }
-        .suggestion-item .postcode {
-            color: #888;
-            font-size: 0.8rem;
-            margin-left: 0.3rem;
-        }
-        .suggestion-item .department {
-            color: #aaa;
-            font-size: 0.75rem;
-            display: block;
-        }
-        .mode-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .mode-tab {
-            flex: 1;
-            padding: 0.5rem;
-            border-radius: 30px;
-            background: #ddd;
-            color: #555;
-            border: 2px solid transparent;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .mode-tab.active {
-            background: var(--jaune-accent);
-            color: #2C1810;
-            border-color: #e6a000;
-        }
+        .suggestion-item:last-child { border-bottom: none; }
+        .suggestion-item:hover { background: #e8f5e9; }
+        .suggestion-item .city-name { font-weight: 600; color: #2C1810; }
+        .suggestion-item .postcode { color: #888; font-size: 0.8rem; margin-left: 0.3rem; }
+        .suggestion-item .department { color: #aaa; font-size: 0.75rem; display: block; }
 
-        .calendar-header-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 0.8rem;
-            margin-bottom: 1.2rem;
+        .mode-tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; }
+        .mode-tab {
+            flex: 1; padding: 0.5rem; border-radius: 30px; background: #ddd;
+            color: #555; border: 2px solid transparent; text-align: center;
+            cursor: pointer; font-weight: 600; font-size: 0.9rem; transition: all 0.2s;
         }
-        .month-year-nav {
-            display: flex;
-            align-items: center;
-            gap: 0.8rem;
-        }
-        .calendar-grid {
-            display: grid;
-            grid-template-columns: repeat(7, 1fr);
-            gap: 0.4rem;
-            text-align: center;
-        }
+        .mode-tab.active { background: var(--jaune-accent); color: #2C1810; border-color: #e6a000; }
+
+        .calendar-header-row { display: flex; justify-content: space-between; align-items: center; gap: 0.8rem; margin-bottom: 1.2rem; }
+        .month-year-nav { display: flex; align-items: center; gap: 0.8rem; }
+        .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; text-align: center; }
         .weekday-header { font-weight: bold; color: var(--rose-spectacle); padding: 0.6rem 0; font-size: 0.8rem; }
         .cal-day {
-            padding: 0.6rem 0;
-            border-radius: 20px;
-            cursor: pointer;
-            background: rgba(255,255,255,0.7);
-            font-size: 0.9rem;
-            min-height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            font-weight: 500;
+            padding: 0.6rem 0; border-radius: 20px; cursor: pointer;
+            background: rgba(255,255,255,0.7); font-size: 0.9rem; min-height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            position: relative; font-weight: 500;
         }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
-
         .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #4E2000; font-weight: bold; }
         .cal-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; font-weight: bold; }
         .cal-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; font-weight: bold; }
-        .cal-day.spectacle-maboul {
-            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
-            font-weight: bold;
-        }
-        .cal-day.spectacle-maboul-only {
-            background: rgba(255,255,255,0.9) !important;
-            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important;
-            font-weight: bold;
-            color: #2C5F3F;
-        }
-        .cal-day.today {
-            box-shadow: inset 0 0 0 2px var(--rose-spectacle);
-            font-weight: bold;
-        }
-        .cal-day.today.spectacle-maboul {
-            box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important;
-        }
+        .cal-day.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; }
+        .cal-day.spectacle-maboul-only { background: rgba(255,255,255,0.9) !important; box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; color: #2C5F3F; }
+        .cal-day.today { box-shadow: inset 0 0 0 2px var(--rose-spectacle); font-weight: bold; }
+        .cal-day.today.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important; }
         .selection-calendar .cal-day { cursor: pointer; }
-        .selection-calendar .cal-day.selected {
-            background: var(--vert-caravane) !important;
-            color: white !important;
-            font-weight: bold;
-            transform: scale(1.05);
-            box-shadow: none !important;
-        }
-        .selection-calendar .cal-day.in-range {
-            background: #b8dfca !important;
-            color: #2C5F3F;
-            font-weight: bold;
-            box-shadow: none !important;
-        }
-        .selection-calendar .cal-day.range-start,
-        .selection-calendar .cal-day.range-end {
-            background: var(--vert-caravane) !important;
-            color: white !important;
-            font-weight: bold;
-            box-shadow: none !important;
-        }
-        .selected-dates-info {
-            background: #f0f8f2;
-            padding: 10px 15px;
-            border-radius: 15px;
-            margin: 1rem 0;
-            font-size: 0.9rem;
-            display: none;
-            border-left: 4px solid var(--vert-caravane);
-        }
+        .selection-calendar .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); box-shadow: none !important; }
+        .selection-calendar .cal-day.in-range { background: #b8dfca !important; color: #2C5F3F; font-weight: bold; box-shadow: none !important; }
+        .selection-calendar .cal-day.range-start, .selection-calendar .cal-day.range-end { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; box-shadow: none !important; }
+        .selected-dates-info { background: #f0f8f2; padding: 10px 15px; border-radius: 15px; margin: 1rem 0; font-size: 0.9rem; display: none; border-left: 4px solid var(--vert-caravane); }
         .selected-dates-info.active { display: block; }
         .hidden { display: none !important; }
-        .legend {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-            margin-top: 1rem;
-            font-size: 0.8rem;
-            align-items: center;
-        }
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-            padding: 0.2rem 0.5rem;
-            background: rgba(255,255,255,0.5);
-            border-radius: 12px;
-        }
+        .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; font-size: 0.8rem; align-items: center; }
+        .legend-item { display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.5); border-radius: 12px; }
         .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-        .legend-outline {
-            width: 14px; height: 14px; border-radius: 4px;
-            border: 3px solid var(--couleur-maboul); background: white;
-        }
-        .events-popup {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center;
-        }
+        .legend-outline { width: 14px; height: 14px; border-radius: 4px; border: 3px solid var(--couleur-maboul); background: white; }
+        .events-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
         .events-popup.active { display: flex; }
-        .popup-content {
-            background: white; border-radius: 25px; padding: 1.5rem;
-            width: 95%; max-width: 500px; border: 4px solid var(--vert-caravane);
-        }
-        .popup-event-item {
-            background: #f9f9f9; padding: 0.8rem; margin-bottom: 0.6rem;
-            border-left: 4px solid var(--vert-caravane);
-            display: flex; justify-content: space-between; align-items: center;
-        }
+        .popup-content { background: white; border-radius: 25px; padding: 1.5rem; width: 95%; max-width: 500px; border: 4px solid var(--vert-caravane); }
+        .popup-event-item { background: #f9f9f9; padding: 0.8rem; margin-bottom: 0.6rem; border-left: 4px solid var(--vert-caravane); display: flex; justify-content: space-between; align-items: center; }
         .edit-form { display: none; margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem; }
         .edit-form.active { display: block; }
     </style>
 </head>
 <body>
 <div class="admin-wrapper">
-    <div class="card admin-header"><h1>🎪 Admin Calendrier</h1></div>
+    <div class="card admin-header">
+        <h1>🎪 Admin Calendrier</h1>
+        <a href="compte.html" class="admin-finger-link" title="📈 Voir le compteur">📈</a>
+    </div>
     <div class="card">
         <h2 style="color:var(--text-dark); margin-bottom:1rem;">📅 Calendrier des événements</h2>
         <div class="calendar-header-row">
@@ -411,24 +318,6 @@
     currentMonth = now.getMonth(); currentYear = now.getFullYear();
     selMonth = now.getMonth(); selYear = now.getFullYear();
 
-    // --- API BAN ---
-    function handleDropdownOverflow(dropdown) {
-        const rect = dropdown.getBoundingClientRect();
-        const viewportHeight = window.innerHeight;
-        const dropdownHeight = dropdown.scrollHeight || 200;
-        if (rect.bottom + dropdownHeight > viewportHeight && rect.top > dropdownHeight) {
-            dropdown.style.top = 'auto';
-            dropdown.style.bottom = '100%';
-            dropdown.style.marginTop = '0';
-            dropdown.style.marginBottom = '2px';
-        } else {
-            dropdown.style.top = '100%';
-            dropdown.style.bottom = 'auto';
-            dropdown.style.marginTop = '2px';
-            dropdown.style.marginBottom = '0';
-        }
-    }
-
     async function searchCommunes(query, targetInputId) {
         if (query.length < 2) {
             document.getElementById(targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions').classList.remove('active');
@@ -454,15 +343,14 @@
             });
             dropdown.innerHTML = html;
             dropdown.classList.add('active');
-            handleDropdownOverflow(dropdown);
         } catch (err) { console.error('Erreur API BAN:', err); }
     }
 
-    function selectCommune(label, postcode, department, targetInputId) {
+    window.selectCommune = (label, postcode, department, targetInputId) => {
         const finalLabel = department ? `${label} - ${department}` : label;
         document.getElementById(targetInputId).value = finalLabel;
         document.getElementById(targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions').classList.remove('active');
-    }
+    };
 
     document.addEventListener('DOMContentLoaded', () => {
         const lieuInput = document.getElementById('eventLieu');
@@ -536,11 +424,11 @@
         updateSelectedDatesInfo();
     }
 
-    function handleSelectionClick(event, dateKey) {
+    window.handleSelectionClick = (event, dateKey) => {
         if (currentMode === 'single') { selectedDates = new Set([dateKey]); selectionAnchor = null; }
         else { if (selectionAnchor === null) { selectionAnchor = dateKey; selectedDates = new Set([dateKey]); } else { const allDates = getDatesBetween(selectionAnchor, dateKey); selectedDates = new Set(allDates); selectionAnchor = null; } }
         renderSelectionCalendar();
-    }
+    };
 
     function getDatesBetween(startKey, endKey) {
         const start = new Date(startKey + 'T00:00:00'), end = new Date(endKey + 'T00:00:00');
@@ -552,7 +440,7 @@
     function updateSelectedDatesInfo() {
         const info = document.getElementById('selectedDatesInfo'), text = document.getElementById('selectedDatesText');
         const sorted = Array.from(selectedDates).sort();
-        if (sorted.length === 0) { info.classList.remove('active'); return; }
+        if (sorted.length === 0) { info.classList.remove('active'); document.getElementById('submitBtn').textContent = '💾 Enregistrer'; return; }
         info.classList.add('active');
         text.textContent = sorted.length === 1 ? `1 date : ${formatDate(sorted[0])}` : `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
         document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
@@ -585,7 +473,7 @@
         btn.disabled = false; btn.textContent = '💾 Enregistrer';
     };
 
-    async function openPopup(dateKey) {
+    window.openPopup = async (dateKey) => {
         const events = eventsData[dateKey] || [];
         let html = `<h3 style="margin-bottom:10px;">📅 ${formatDate(dateKey)}</h3>`;
         if (events.length === 0) html += `<p>Aucun événement.</p>`;
@@ -609,7 +497,7 @@
                 editLieuInput.addEventListener('blur', () => { setTimeout(() => { const dd = document.getElementById('editLieuSuggestions'); if (dd) dd.classList.remove('active'); }, 200); });
             }
         }, 100);
-    }
+    };
 
     window.prepareEdit = (id, type, titre, lieu, date) => {
         editingEventId = id; editingEventDate = date;

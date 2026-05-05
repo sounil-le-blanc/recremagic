@@ -205,22 +205,24 @@
             <div class="spectacles-checkbox-group">
                 <label>🎭 Spectacle(s) souhaité(s)</label>
                 <div class="spectacles-list">
-                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="DU COUP ON VIENT CHEZ VOUS"><span>🎪 <strong>DU COUP ON VIENT CHEZ VOUS</strong> <small>- 1h00</small></span></label>
-                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="DU COUP on revient chez vous"><span>🎪 <strong>DU COUP ON REVIENT CHEZ VOUS</strong> <small>- 1h00</small></span></label>
-                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="COMME SUR DES ROULETTES"><span>🎪 <strong>COMME SUR DES ROULETTES</strong> <small>- 55 min</small></span></label>
+                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="DU COUP ON VIENT CHEZ VOUS" class="check-spectacle-3"><span>🎪 <strong>DU COUP ON VIENT CHEZ VOUS</strong> <small>- 1h00</small></span></label>
+                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="DU COUP on revient chez vous" class="check-spectacle-3"><span>🎪 <strong>DU COUP ON REVIENT CHEZ VOUS</strong> <small>- 1h00</small></span></label>
+                    <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="COMME SUR DES ROULETTES" class="check-spectacle-3"><span>🎪 <strong>COMME SUR DES ROULETTES</strong> <small>- 55 min</small></span></label>
                     <label class="spectacle-checkbox"><input type="checkbox" name="Spectacle" value="DÉLICIEUSEMENT MABOUL" id="checkMaboul"><span>🎪 <strong>DÉLICIEUSEMENT MABOUL</strong> <small>- 1h00</small></span></label>
                 </div>
             </div>
 
-            <!-- Date/Lieu général pour les 3 spectacles -->
-            <div class="form-row">
-                <div class="form-group">
-                    <label>📅 Date souhaitée (spectacle)</label>
-                    <input type="text" id="dateSpectacle" name="Date souhaitée spectacle" placeholder="Cliquez pour choisir une date" autocomplete="off">
-                </div>
-                <div class="form-group">
-                    <label>📍 Code postal / Ville</label>
-                    <input type="text" name="Lieu spectacle" placeholder="Ex: 75001 Paris">
+            <!-- Date/Lieu général pour les 3 spectacles (caché par défaut) -->
+            <div id="extraDateSpectacle" class="extra-date-lieu">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>📅 Date souhaitée (spectacle)</label>
+                        <input type="text" id="dateSpectacle" name="Date souhaitée spectacle" placeholder="Cliquez pour choisir une date" autocomplete="off">
+                    </div>
+                    <div class="form-group">
+                        <label>📍 Code postal / Ville</label>
+                        <input type="text" name="Lieu spectacle" placeholder="Ex: 75001 Paris">
+                    </div>
                 </div>
             </div>
 
@@ -281,10 +283,22 @@
     // ============================================================
     // AFFICHAGE/MASQUAGE DES BLOCS
     // ============================================================
+    
+    // Bloc 3 spectacles (DU COUP x2 + ROULETTES)
+    var checkSpectacle3 = document.querySelectorAll('.check-spectacle-3');
+    checkSpectacle3.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+            var anyChecked = document.querySelectorAll('.check-spectacle-3:checked').length > 0;
+            document.getElementById('extraDateSpectacle').style.display = anyChecked ? 'block' : 'none';
+        });
+    });
+
+    // Bloc Maboul
     document.getElementById('checkMaboul').addEventListener('change', function() {
         document.getElementById('extraDateMaboul').style.display = this.checked ? 'block' : 'none';
     });
 
+    // Bloc Expositions
     document.querySelectorAll('input[name="Exposition"]').forEach(function(cb) {
         cb.addEventListener('change', function() {
             var anyChecked = document.querySelectorAll('input[name="Exposition"]:checked').length > 0;
@@ -318,9 +332,9 @@
             .filter(function(ev) { return ev.type === 'Exposition'; })
             .map(function(ev) { return ev.event_date; });
 
-        console.log('📅 Spectacle (3) bloquées:', datesSpectacle.length, datesSpectacle);
-        console.log('📅 Maboul bloquées:', datesMaboul.length, datesMaboul);
-        console.log('📅 Expo bloquées:', datesExpo.length, datesExpo);
+        console.log('📅 Spectacle (3) bloquées:', datesSpectacle.length);
+        console.log('📅 Maboul bloquées:', datesMaboul.length);
+        console.log('📅 Expo bloquées:', datesExpo.length);
 
         // Flatpickr 1 : Spectacle général
         flatpickr("#dateSpectacle", {
