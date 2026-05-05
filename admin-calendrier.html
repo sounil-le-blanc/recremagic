@@ -499,7 +499,13 @@
     // ============================================================
     // STOCKAGE LOCAL (localStorage) - pas de Supabase pour l'instant
     // ============================================================
+<<<<<<< Updated upstream
     const STORAGE_KEY = 'recremagic_calendar';
+=======
+    const SECRET_CODE = "recremagic";
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'sb_publishable_gwuNIL4CgVYGOa5lAc46_g_xWRBQxHB';
+>>>>>>> Stashed changes
 
     let currentMode = 'single';
     let currentMonth, currentYear;
@@ -520,6 +526,7 @@
     // ============================================================
     // CHARGER / SAUVEGARDER (localStorage)
     // ============================================================
+<<<<<<< Updated upstream
     function loadFromStorage() {
         const raw = localStorage.getItem(STORAGE_KEY);
         if (!raw) { eventsData = {}; return; }
@@ -549,6 +556,41 @@
                 }];
             }
         }
+=======
+    function initSupabase() {
+        supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        return true;
+    }
+
+    // ============================================================
+    // CODE SECRET
+    // ============================================================
+    document.getElementById('verifyBtn').addEventListener('click', () => {
+        if (document.getElementById('accessCode').value === SECRET_CODE) {
+            document.getElementById('codeSection').classList.add('hidden');
+            document.getElementById('adminPanel').classList.remove('hidden');
+            initApp();
+        } else {
+            document.getElementById('codeError').style.display = 'block';
+        }
+    });
+
+    document.getElementById('accessCode').addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') document.getElementById('verifyBtn').click();
+    });
+
+    // ============================================================
+    // INIT APP
+    // ============================================================
+    async function initApp() {
+        initSupabase();
+        populateYearSelect();
+        updateTitleDropdown();
+        renderCalendar();
+        await loadCommunes();
+        await loadAllEvents();
+        renderCalendar();
+>>>>>>> Stashed changes
     }
 
     function saveToStorage() {
@@ -655,9 +697,14 @@
         try {
             const res = await fetch('https://raw.githubusercontent.com/kevin-robert/communes-francaises/main/communes.json');
             communesList = await res.json();
+<<<<<<< Updated upstream
             console.log('✅ Communes chargées :', communesList.length);
         } catch (e) {
             console.warn('⚠️ Communes non chargées, autocomplete désactivé');
+=======
+        } catch (e) {
+            communesList = [];
+>>>>>>> Stashed changes
         }
     }
 
@@ -671,8 +718,14 @@
             suggestionsDiv.classList.remove('active');
             return;
         }
+<<<<<<< Updated upstream
         const matches = communesList.filter(c =>
             c.nom.toLowerCase().startsWith(query) || c.code_postal.startsWith(query)
+=======
+        const matches = communesList.filter(c => 
+            c.nom.toLowerCase().startsWith(query) || 
+            c.code_postal.startsWith(query)
+>>>>>>> Stashed changes
         ).slice(0, 8);
 
         if (matches.length === 0) {
@@ -700,6 +753,7 @@
     lieuInput.addEventListener('keydown', (e) => {
         const items = suggestionsDiv.querySelectorAll('.autocomplete-item');
         if (!suggestionsDiv.classList.contains('active') || items.length === 0) return;
+<<<<<<< Updated upstream
         if (e.key === 'ArrowDown') { e.preventDefault(); selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1); highlightItems(items); }
         else if (e.key === 'ArrowUp') { e.preventDefault(); selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1); highlightItems(items); }
         else if (e.key === 'Enter' && selectedCommuneIndex >= 0) { e.preventDefault(); lieuInput.value = items[selectedCommuneIndex].dataset.full; suggestionsDiv.classList.remove('active'); }
@@ -710,6 +764,27 @@
         items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
     }
 
+=======
+
+        if (e.key === 'ArrowDown') {
+            e.preventDefault();
+            selectedCommuneIndex = Math.min(selectedCommuneIndex + 1, items.length - 1);
+            items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
+        } else if (e.key === 'ArrowUp') {
+            e.preventDefault();
+            selectedCommuneIndex = Math.max(selectedCommuneIndex - 1, -1);
+            items.forEach((item, i) => item.style.background = i === selectedCommuneIndex ? '#FFF3CD' : '');
+        } else if (e.key === 'Enter' && selectedCommuneIndex >= 0) {
+            e.preventDefault();
+            lieuInput.value = items[selectedCommuneIndex].dataset.full;
+            suggestionsDiv.classList.remove('active');
+        } else if (e.key === 'Escape') {
+            suggestionsDiv.classList.remove('active');
+            selectedCommuneIndex = -1;
+        }
+    });
+
+>>>>>>> Stashed changes
     document.addEventListener('click', (e) => {
         if (!lieuInput.contains(e.target) && !suggestionsDiv.contains(e.target)) {
             suggestionsDiv.classList.remove('active');
@@ -728,12 +803,34 @@
     }
     document.getElementById('eventType').addEventListener('change', updateTitleDropdown);
 
+<<<<<<< Updated upstream
     function updateEditTitleDropdown(type) {
         const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         const select = document.getElementById('editTitle');
         if (!select) return;
         select.innerHTML = '<option value="">-- Sélectionnez --</option>';
         titles.forEach(t => { const opt = document.createElement('option'); opt.value = t; opt.textContent = t; select.appendChild(opt); });
+=======
+    // ============================================================
+    // SUPABASE - CHARGEMENT
+    // ============================================================
+    async function loadAllEvents() {
+        const { data, error } = await supabase
+            .from('calendar_events')
+            .select('*')
+            .order('event_date', { ascending: true });
+        if (error) { console.error('Erreur chargement:', error); return; }
+        eventsData = {};
+        data.forEach(ev => {
+            if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
+            eventsData[ev.event_date].push(ev);
+        });
+    }
+
+    function getEventsForDate(year, month, day) {
+        const key = `${year}-${month+1}-${day}`;
+        return eventsData[key] || [];
+>>>>>>> Stashed changes
     }
 
     // ============================================================
@@ -828,7 +925,7 @@
 
         html += `
             <div class="edit-form" id="editForm">
-                <h4 style="color:var(--rose-spectacle);">✏️ Modifier l'événement</h4>
+                <h4 style="color:var(--rose-spectacle);">✏️ Modifier</h4>
                 <label>Type</label>
                 <select id="editType"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select>
                 <label>Titre</label>
@@ -851,6 +948,7 @@
             if (e.target === document.getElementById('eventsPopup')) closePopup();
         };
 
+<<<<<<< Updated upstream
         // Supprimer
         document.querySelectorAll('.btn-delete-popup').forEach(btn => {
             btn.onclick = () => {
@@ -873,14 +971,31 @@
                         }
                     }
                     saveToStorage();
+=======
+        document.querySelectorAll('.btn-delete').forEach(btn => {
+            btn.onclick = async () => {
+                const id = btn.dataset.id;
+                const periodId = btn.dataset.period;
+                if (confirm(periodId && periodId !== 'undefined' && periodId !== '' ? 'Supprimer toute la période ?' : 'Supprimer cet événement ?')) {
+                    if (periodId && periodId !== 'undefined' && periodId !== '') {
+                        await supabase.from('calendar_events').delete().eq('period_id', periodId);
+                    } else {
+                        await supabase.from('calendar_events').delete().eq('id', id);
+                    }
+                    await loadAllEvents();
+>>>>>>> Stashed changes
                     renderCalendar();
                     openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
                 }
             };
         });
 
+<<<<<<< Updated upstream
         // Éditer
         document.querySelectorAll('.btn-edit-popup').forEach(btn => {
+=======
+        document.querySelectorAll('.btn-edit').forEach(btn => {
+>>>>>>> Stashed changes
             btn.onclick = () => {
                 editingEventId = btn.dataset.id;
                 document.getElementById('editType').value = btn.dataset.type;
@@ -901,6 +1016,7 @@
             const newTitre = document.getElementById('editTitle').value;
             const newLieu = document.getElementById('editLieu').value.trim();
             if (!newTitre) { alert('Titre requis'); return; }
+<<<<<<< Updated upstream
             for (let k in eventsData) {
                 eventsData[k].forEach(ev => {
                     if (ev.id === editingEventId) {
@@ -911,6 +1027,10 @@
                 });
             }
             saveToStorage();
+=======
+            await supabase.from('calendar_events').update({ type: newType, titre: newTitre, lieu: newLieu }).eq('id', editingEventId);
+            await loadAllEvents();
+>>>>>>> Stashed changes
             renderCalendar();
             openPopup(currentPopupDate.year, currentPopupDate.month, currentPopupDate.day);
         };
@@ -927,6 +1047,25 @@
         editingEventId = null;
     }
 
+<<<<<<< Updated upstream
+=======
+    function updateEditTitleDropdown(type) {
+        const titles = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
+        const select = document.getElementById('editTitle');
+        select.innerHTML = '<option value="">-- Sélectionnez --</option>';
+        titles.forEach(t => {
+            const opt = document.createElement('option');
+            opt.value = t; opt.textContent = t;
+            select.appendChild(opt);
+        });
+    }
+
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;'));
+    }
+
+>>>>>>> Stashed changes
     // ============================================================
     // SOUMISSION
     // ============================================================
@@ -960,6 +1099,7 @@
         }
 
         const periodId = (currentMode === 'period') ? 'period_' + Date.now() : null;
+<<<<<<< Updated upstream
         dateKeys.forEach(dk => {
             if (!eventsData[dk]) eventsData[dk] = [];
             eventsData[dk].push({
@@ -977,6 +1117,29 @@
 
     // ============================================================
     // TOUT EFFACER
+=======
+        const rows = dateKeys.map(dk => ({
+            event_date: dk,
+            type, titre, lieu,
+            period_id: periodId,
+            created_at: new Date().toISOString()
+        }));
+
+        const { error } = await supabase.from('calendar_events').insert(rows);
+        if (error) { alert('Erreur: ' + error.message); }
+        else {
+            document.getElementById('eventLieu').value = '';
+            await loadAllEvents();
+            renderCalendar();
+            alert(`✅ ${dateKeys.length} événement(s) ajouté(s) !`);
+        }
+        btn.disabled = false;
+        btn.textContent = '💾 Enregistrer';
+    });
+
+    // ============================================================
+    // INIT
+>>>>>>> Stashed changes
     // ============================================================
     document.getElementById('clearAllBtn').addEventListener('click', () => {
         if (confirm('⚠️ Supprimer TOUS les événements ?')) {
@@ -997,4 +1160,8 @@
     console.log('✅ Admin calendrier prêt !');
 </script>
 </body>
+<<<<<<< Updated upstream
                     </html>
+=======
+</html>
+>>>>>>> Stashed changes
