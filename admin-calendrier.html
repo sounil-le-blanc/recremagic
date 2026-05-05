@@ -88,6 +88,8 @@
         .btn-primary:hover { background: #5a8f78; }
         .btn-danger { background: #D32F2F; color: white; }
         .btn-danger:hover { background: #b71c1c; }
+        .btn-success { background: #4CAF50; color: white; }
+        .btn-success:hover { background: #388E3C; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         input, textarea, select {
@@ -102,30 +104,6 @@
         }
         textarea { border-radius: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-        .mode-tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1rem;
-        }
-        .mode-tab {
-            flex: 1;
-            padding: 0.5rem;
-            border-radius: 30px;
-            background: #ddd;
-            color: #555;
-            border: 2px solid transparent;
-            text-align: center;
-            cursor: pointer;
-            font-weight: 600;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-        }
-        .mode-tab.active {
-            background: var(--jaune-accent);
-            color: #2C1810;
-            border-color: #e6a000;
-        }
 
         /* Calendrier */
         .calendar-header-row {
@@ -157,10 +135,25 @@
             display: flex;
             align-items: center;
             justify-content: center;
+            user-select: none;
         }
         .cal-day.has-event { background: #FFE082 !important; font-weight: bold; }
-        .cal-day.today { background: var(--rose-spectacle) !important; color: white !important; }
+        .cal-day.today { box-shadow: inset 0 0 0 3px var(--rose-spectacle); color: var(--rose-spectacle); font-weight: bold; }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
+        .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); }
+        .cal-day.in-range { background: #b8dfca !important; color: #2C5F3F; font-weight: bold; }
+        .cal-day.range-start, .cal-day.range-end { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; }
+
+        .selection-info {
+            background: #f0f8f2;
+            padding: 10px 15px;
+            border-radius: 15px;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+            display: none;
+            border-left: 4px solid var(--vert-caravane);
+        }
+        .selection-info.active { display: block; }
 
         /* Popup */
         .events-popup {
@@ -197,33 +190,12 @@
 
     <div class="card">
         <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
-        <div class="mode-tabs">
-            <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
-            <div class="mode-tab" id="modePeriod">📆 Période</div>
+        <div class="selection-info" id="selectionInfo">
+            🗓 <strong>Dates sélectionnées :</strong> <span id="selectedDatesText"></span>
+            <button class="btn btn-danger" id="clearSelectionBtn" style="margin-left:10px; padding:0.3rem 0.8rem; font-size:0.8rem;">✕</button>
         </div>
 
         <form id="eventForm">
-            <div id="singleDateFields">
-                <label>Date *</label>
-                <input type="date" id="eventDate" required>
-            </div>
-
-            <div id="periodFields" class="hidden">
-                <div class="form-row">
-                    <div><label>Date début *</label><input type="date" id="periodStart"></div>
-                    <div><label>Date fin *</label><input type="date" id="periodEnd"></div>
-                </div>
-                <div class="weekday-checkboxes" style="display:flex; flex-wrap:wrap; gap:5px; margin: 10px 0;">
-                    <label><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
-                    <label><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
-                    <label><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
-                    <label><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
-                    <label><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
-                    <label><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
-                    <label><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
-                </div>
-            </div>
-
             <div class="form-row">
                 <div>
                     <label>Type</label>
@@ -243,7 +215,7 @@
             <label>Lieu</label>
             <textarea id="eventLieu" rows="2" placeholder="Commune et code postal..."></textarea>
 
-            <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
+            <button type="submit" class="btn btn-success" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer sur les dates sélectionnées</button>
         </form>
     </div>
 
@@ -257,6 +229,7 @@
             <select id="yearSelect" style="width:auto; margin:0;"></select>
         </div>
         <div class="calendar-grid" id="calendarGrid"></div>
+        <p style="font-size:0.8rem; color:#666; margin-top:0.8rem;">🟡 Date déjà prise | 🟢 Sélection actuelle | 🔴 Aujourd'hui</p>
     </div>
 </div>
 
@@ -270,10 +243,13 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentMode = 'single';
     let currentMonth, currentYear;
-    let eventsData = {}; 
+    let eventsData = {};
     let editingEventId = null;
+    
+    // Gestion de la sélection
+    let selectedDates = new Set();
+    let selectionAnchor = null; // Pour la sélection par plage
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
@@ -307,57 +283,142 @@
         for (let d = 1; d <= daysInMonth; d++) {
             const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const hasEvent = eventsData[key] && eventsData[key].length > 0;
-            html += `<div class="cal-day ${key === todayStr ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" 
-                         onclick="openPopup('${key}')">${d}</div>`;
+            const isSelected = selectedDates.has(key);
+            const isToday = key === todayStr;
+            
+            let classes = ['cal-day'];
+            if (isToday) classes.push('today');
+            if (hasEvent) classes.push('has-event');
+            if (isSelected) {
+                // Vérifier si c'est le début ou la fin de la plage sélectionnée
+                const sorted = Array.from(selectedDates).sort();
+                if (sorted[0] === key) classes.push('range-start');
+                else if (sorted[sorted.length - 1] === key) classes.push('range-end');
+                else classes.push('in-range');
+            }
+            
+            html += `<div class="${classes.join(' ')}" 
+                         onclick="handleDateClick(event, '${key}')">${d}</div>`;
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        updateSelectionInfo();
+    }
+
+    function handleDateClick(event, dateKey) {
+        if (event.ctrlKey || event.metaKey) {
+            // Ctrl+Click : toggle une date individuelle
+            if (selectedDates.has(dateKey)) {
+                selectedDates.delete(dateKey);
+            } else {
+                selectedDates.add(dateKey);
+            }
+            selectionAnchor = dateKey;
+        } else if (event.shiftKey && selectionAnchor) {
+            // Shift+Click : sélectionner une plage entre l'ancre et la date cliquée
+            const sortedKeys = getDatesBetween(selectionAnchor, dateKey);
+            selectedDates = new Set(sortedKeys);
+        } else {
+            // Clic simple : si la date est déjà la seule sélectionnée, on ouvre la popup
+            if (selectedDates.size === 1 && selectedDates.has(dateKey)) {
+                openPopup(dateKey);
+                return;
+            }
+            // Sinon, nouvelle sélection unique
+            selectedDates = new Set([dateKey]);
+            selectionAnchor = dateKey;
+        }
+        renderCalendar();
+    }
+
+    function getDatesBetween(startKey, endKey) {
+        const start = new Date(startKey + 'T00:00:00');
+        const end = new Date(endKey + 'T00:00:00');
+        const dates = [];
+        const current = new Date(Math.min(start, end));
+        const last = new Date(Math.max(start, end));
+        
+        while (current <= last) {
+            dates.push(dateToKey(current));
+            current.setDate(current.getDate() + 1);
+        }
+        return dates;
+    }
+
+    function updateSelectionInfo() {
+        const info = document.getElementById('selectionInfo');
+        const text = document.getElementById('selectedDatesText');
+        const sorted = Array.from(selectedDates).sort();
+        
+        if (sorted.length === 0) {
+            info.classList.remove('active');
+            return;
+        }
+        
+        info.classList.add('active');
+        if (sorted.length === 1) {
+            text.textContent = `1 date : ${formatDate(sorted[0])}`;
+        } else if (sorted.length > 1) {
+            text.textContent = `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
+        }
+        
+        document.getElementById('submitBtn').textContent = `💾 Enregistrer sur ${sorted.length} date(s)`;
+    }
+
+    function formatDate(key) {
+        const [y, m, d] = key.split('-');
+        return `${d}/${m}/${y}`;
     }
 
     function dateToKey(date) {
         return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
     }
 
-    // --- SOUMISSION AVEC CORRECTIF ID ---
+    // --- SOUMISSION ---
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
+        
+        if (selectedDates.size === 0) {
+            alert('⚠️ Veuillez sélectionner au moins une date dans le calendrier.');
+            return;
+        }
+        
         const btn = document.getElementById('submitBtn');
         btn.disabled = true; btn.textContent = '⏳ Enregistrement...';
 
         const type = document.getElementById('eventType').value;
         const titre = document.getElementById('eventTitle').value;
         const lieu = document.getElementById('eventLieu').value.trim();
-        let toInsert = [];
-
-        if (currentMode === 'single') {
-            const date = document.getElementById('eventDate').value;
-            if (date) toInsert.push({ id: crypto.randomUUID(), event_date: date, type, titre, lieu });
-        } else {
-            const start = document.getElementById('periodStart').value;
-            const end = document.getElementById('periodEnd').value;
-            const pid = 'p_' + Date.now();
-            const dates = getDatesInRange(start, end);
-            toInsert = dates.map(d => ({ 
-                id: crypto.randomUUID(), 
-                event_date: dateToKey(d), 
-                type, titre, lieu, period_id: pid 
-            }));
-        }
+        
+        const periodId = 'p_' + Date.now();
+        const sortedDates = Array.from(selectedDates).sort();
+        
+        const toInsert = sortedDates.map(dateKey => ({ 
+            id: crypto.randomUUID(), 
+            event_date: dateKey, 
+            type, 
+            titre, 
+            lieu,
+            period_id: sortedDates.length > 1 ? periodId : null
+        }));
 
         const { error } = await _supabase.from('events').insert(toInsert);
         if (error) alert("Erreur : " + error.message);
         else {
-            alert('✅ Événement(s) ajouté(s) !');
+            alert(`✅ ${toInsert.length} événement(s) ajouté(s) !`);
             document.getElementById('eventForm').reset();
+            selectedDates = new Set();
+            selectionAnchor = null;
             updateTitleDropdown();
             await fetchEvents();
         }
-        btn.disabled = false; btn.textContent = '💾 Enregistrer';
+        btn.disabled = false;
+        updateSelectionInfo();
     };
 
     async function openPopup(dateKey) {
         const events = eventsData[dateKey] || [];
-        let html = `<h3 style="margin-bottom:10px;">📅 ${dateKey}</h3>`;
+        let html = `<h3 style="margin-bottom:10px;">📅 ${formatDate(dateKey)}</h3>`;
         if (events.length === 0) html += `<p>Aucun événement.</p>`;
         else {
             events.forEach(ev => {
@@ -365,8 +426,8 @@
                 <div class="popup-event-item">
                     <div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div>
                     <div style="display:flex; gap:5px;">
-                        <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre}', '${ev.lieu.replace(/'/g, "\\'")}')">✏️</button>
-                        <button class="btn btn-danger" onclick="deleteEvent('${ev.id}', '${ev.period_id}')">🗑</button>
+                        <button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre.replace(/'/g, "\\'")}', '${(ev.lieu || '').replace(/'/g, "\\'")}')">✏️</button>
+                        <button class="btn btn-danger" onclick="deleteEvent('${ev.id}', '${ev.period_id || ''}')">🗑</button>
                     </div>
                 </div>`;
             });
@@ -387,8 +448,11 @@
         editingEventId = id;
         document.getElementById('editType').value = type;
         updateEditTitleDropdown(type);
-        document.getElementById('editTitle').value = titre;
-        document.getElementById('editLieu').value = lieu;
+        // Petit délai pour que le DOM soit prêt
+        setTimeout(() => {
+            document.getElementById('editTitle').value = titre;
+            document.getElementById('editLieu').value = lieu;
+        }, 50);
         document.getElementById('editForm').classList.add('active');
     };
 
@@ -406,21 +470,14 @@
     window.deleteEvent = async (id, periodId) => {
         if (!confirm('Supprimer ?')) return;
         let q = _supabase.from('events').delete();
-        if (periodId && periodId !== 'null' && periodId !== 'undefined') q = q.eq('period_id', periodId);
-        else q = q.eq('id', id);
+        if (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') {
+            q = q.eq('period_id', periodId);
+        } else {
+            q = q.eq('id', id);
+        }
         await q;
         closePopup();
         await fetchEvents();
-    }
-
-    function getDatesInRange(s, e) {
-        const dates = []; let curr = new Date(s); const end = new Date(e);
-        const activeDays = Array.from(document.querySelectorAll('.weekday-filter:checked')).map(c => parseInt(c.value));
-        while (curr <= end) {
-            if (activeDays.includes(curr.getDay())) dates.push(new Date(curr));
-            curr.setDate(curr.getDate() + 1);
-        }
-        return dates;
     }
 
     function updateTitleDropdown() {
@@ -434,22 +491,38 @@
         document.getElementById('editTitle').innerHTML = list.map(x => `<option value="${x}">${x}</option>`).join('');
     };
 
-    function switchMode(m) {
-        currentMode = m;
-        document.getElementById('modeSingle').classList.toggle('active', m === 'single');
-        document.getElementById('modePeriod').classList.toggle('active', m === 'period');
-        document.getElementById('singleDateFields').classList.toggle('hidden', m !== 'single');
-        document.getElementById('periodFields').classList.toggle('hidden', m !== 'period');
-    }
-
     function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); }
 
     // Init
-    document.getElementById('modeSingle').onclick = () => switchMode('single');
-    document.getElementById('modePeriod').onclick = () => switchMode('period');
     document.getElementById('eventType').onchange = updateTitleDropdown;
-    document.getElementById('prevMonthBtn').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderCalendar(); };
-    document.getElementById('nextMonthBtn').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderCalendar(); };
+    document.getElementById('prevMonthBtn').onclick = () => { 
+        currentMonth--; 
+        if(currentMonth<0){currentMonth=11;currentYear--;} 
+        renderCalendar(); 
+    };
+    document.getElementById('nextMonthBtn').onclick = () => { 
+        currentMonth++; 
+        if(currentMonth>11){currentMonth=0;currentYear++;} 
+        renderCalendar(); 
+    };
+    
+    document.getElementById('clearSelectionBtn').onclick = () => {
+        selectedDates = new Set();
+        selectionAnchor = null;
+        renderCalendar();
+    };
+
+    // Tout effacer
+    document.getElementById('clearAllBtn').onclick = async () => {
+        if (!confirm('ATTENTION : Supprimer TOUS les événements ? Cette action est irréversible.')) return;
+        if (!confirm('Confirmez-vous la suppression définitive ?')) return;
+        const { error } = await _supabase.from('events').delete().neq('id', '00000000-0000-0000-0000-000000000000');
+        if (error) alert('Erreur : ' + error.message);
+        else {
+            alert('✅ Tous les événements ont été supprimés.');
+            await fetchEvents();
+        }
+    };
 
     (async () => {
         const ySel = document.getElementById('yearSelect');
