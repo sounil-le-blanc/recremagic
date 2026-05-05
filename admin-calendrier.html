@@ -88,8 +88,6 @@
         .btn-primary:hover { background: #5a8f78; }
         .btn-danger { background: #D32F2F; color: white; }
         .btn-danger:hover { background: #b71c1c; }
-        .btn-success { background: #4CAF50; color: white; }
-        .btn-success:hover { background: #388E3C; }
         .btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
         input, textarea, select {
@@ -104,6 +102,30 @@
         }
         textarea { border-radius: 20px; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+        .mode-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+        .mode-tab {
+            flex: 1;
+            padding: 0.5rem;
+            border-radius: 30px;
+            background: #ddd;
+            color: #555;
+            border: 2px solid transparent;
+            text-align: center;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+        }
+        .mode-tab.active {
+            background: var(--jaune-accent);
+            color: #2C1810;
+            border-color: #e6a000;
+        }
 
         /* Calendrier */
         .calendar-header-row {
@@ -135,25 +157,54 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            user-select: none;
         }
         .cal-day.has-event { background: #FFE082 !important; font-weight: bold; }
-        .cal-day.today { box-shadow: inset 0 0 0 3px var(--rose-spectacle); color: var(--rose-spectacle); font-weight: bold; }
+        .cal-day.today { background: var(--rose-spectacle) !important; color: white !important; }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
-        .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); }
-        .cal-day.in-range { background: #b8dfca !important; color: #2C5F3F; font-weight: bold; }
-        .cal-day.range-start, .cal-day.range-end { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; }
 
-        .selection-info {
+        /* Calendrier de sélection */
+        .selection-calendar .cal-day {
+            cursor: pointer;
+        }
+        .selection-calendar .cal-day.selected {
+            background: var(--vert-caravane) !important;
+            color: white !important;
+            font-weight: bold;
+            transform: scale(1.05);
+        }
+        .selection-calendar .cal-day.in-range {
+            background: #b8dfca !important;
+            color: #2C5F3F;
+            font-weight: bold;
+        }
+        .selection-calendar .cal-day.range-start,
+        .selection-calendar .cal-day.range-end {
+            background: var(--vert-caravane) !important;
+            color: white !important;
+            font-weight: bold;
+        }
+
+        .selected-dates-info {
             background: #f0f8f2;
             padding: 10px 15px;
             border-radius: 15px;
-            margin-bottom: 1rem;
+            margin: 1rem 0;
             font-size: 0.9rem;
             display: none;
             border-left: 4px solid var(--vert-caravane);
         }
-        .selection-info.active { display: block; }
+        .selected-dates-info.active { display: block; }
+        .hidden { display: none !important; }
+
+        .weekday-checkboxes {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            margin: 10px 0;
+        }
+        .weekday-checkboxes label {
+            font-size: 0.85rem;
+        }
 
         /* Popup */
         .events-popup {
@@ -177,7 +228,6 @@
         }
         .edit-form { display: none; margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem; }
         .edit-form.active { display: block; }
-        .hidden { display: none !important; }
     </style>
 </head>
 <body>
@@ -188,11 +238,54 @@
         <button class="btn btn-danger" id="clearAllBtn" style="width:auto;">🗑 Tout effacer</button>
     </div>
 
+    <!-- Carte 1 : Calendrier de visualisation -->
+    <div class="card">
+        <h2 style="color:var(--text-dark); margin-bottom:1rem;">📅 Calendrier des événements</h2>
+        <div class="calendar-header-row">
+            <div class="month-year-nav">
+                <button class="btn btn-primary" id="prevMonthBtn">←</button>
+                <span id="monthName" style="font-weight:bold; font-size:1.2rem; min-width:150px; text-align:center;"></span>
+                <button class="btn btn-primary" id="nextMonthBtn">→</button>
+            </div>
+            <select id="yearSelect" style="width:auto; margin:0;"></select>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <!-- Carte 2 : Ajout d'événement avec calendrier de sélection -->
     <div class="card">
         <h2 style="color:var(--text-dark); margin-bottom:1rem;">➕ Ajouter un événement</h2>
-        <div class="selection-info" id="selectionInfo">
+        <div class="mode-tabs">
+            <div class="mode-tab active" id="modeSingle">📅 Date unique</div>
+            <div class="mode-tab" id="modePeriod">📆 Période</div>
+        </div>
+
+        <!-- Calendrier de sélection -->
+        <div class="selection-calendar">
+            <div class="calendar-header-row">
+                <div class="month-year-nav">
+                    <button class="btn btn-primary" id="selPrevMonthBtn">←</button>
+                    <span id="selMonthName" style="font-weight:bold; font-size:1rem; min-width:130px; text-align:center;"></span>
+                    <button class="btn btn-primary" id="selNextMonthBtn">→</button>
+                </div>
+                <select id="selYearSelect" style="width:auto; margin:0;"></select>
+            </div>
+            <div class="calendar-grid" id="selectionCalendarGrid"></div>
+        </div>
+
+        <div class="selected-dates-info" id="selectedDatesInfo">
             🗓 <strong>Dates sélectionnées :</strong> <span id="selectedDatesText"></span>
             <button class="btn btn-danger" id="clearSelectionBtn" style="margin-left:10px; padding:0.3rem 0.8rem; font-size:0.8rem;">✕</button>
+        </div>
+
+        <div id="periodWeekdays" class="weekday-checkboxes hidden">
+            <label><input type="checkbox" class="weekday-filter" value="1" checked> Lun</label>
+            <label><input type="checkbox" class="weekday-filter" value="2" checked> Mar</label>
+            <label><input type="checkbox" class="weekday-filter" value="3" checked> Mer</label>
+            <label><input type="checkbox" class="weekday-filter" value="4" checked> Jeu</label>
+            <label><input type="checkbox" class="weekday-filter" value="5" checked> Ven</label>
+            <label><input type="checkbox" class="weekday-filter" value="6" checked> Sam</label>
+            <label><input type="checkbox" class="weekday-filter" value="0"> Dim</label>
         </div>
 
         <form id="eventForm">
@@ -215,21 +308,8 @@
             <label>Lieu</label>
             <textarea id="eventLieu" rows="2" placeholder="Commune et code postal..."></textarea>
 
-            <button type="submit" class="btn btn-success" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer sur les dates sélectionnées</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn" style="width:100%; margin-top:0.5rem;">💾 Enregistrer</button>
         </form>
-    </div>
-
-    <div class="card">
-        <div class="calendar-header-row">
-            <div class="month-year-nav">
-                <button class="btn btn-primary" id="prevMonthBtn">←</button>
-                <span id="monthName" style="font-weight:bold; font-size:1.2rem; min-width:150px; text-align:center;"></span>
-                <button class="btn btn-primary" id="nextMonthBtn">→</button>
-            </div>
-            <select id="yearSelect" style="width:auto; margin:0;"></select>
-        </div>
-        <div class="calendar-grid" id="calendarGrid"></div>
-        <p style="font-size:0.8rem; color:#666; margin-top:0.8rem;">🟡 Date déjà prise | 🟢 Sélection actuelle | 🔴 Aujourd'hui</p>
     </div>
 </div>
 
@@ -243,13 +323,18 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    let currentMonth, currentYear;
-    let eventsData = {};
-    let editingEventId = null;
+    let currentMode = 'single';
     
-    // Gestion de la sélection
+    // Calendrier principal
+    let currentMonth, currentYear;
+    
+    // Calendrier de sélection
+    let selMonth, selYear;
+    
+    let eventsData = {}; 
+    let editingEventId = null;
     let selectedDates = new Set();
-    let selectionAnchor = null; // Pour la sélection par plage
+    let selectionAnchor = null;
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
     const EXPOSITIONS = ["LA FÉERIE DES MARIONNETTES","LES GÉANTS DU CARNAVAL"];
@@ -258,6 +343,8 @@
     const now = new Date();
     currentMonth = now.getMonth();
     currentYear = now.getFullYear();
+    selMonth = now.getMonth();
+    selYear = now.getFullYear();
 
     async function fetchEvents() {
         const { data, error } = await _supabase.from('events').select('*');
@@ -267,10 +354,12 @@
             if (!eventsData[ev.event_date]) eventsData[ev.event_date] = [];
             eventsData[ev.event_date].push(ev);
         });
-        renderCalendar();
+        renderMainCalendar();
+        renderSelectionCalendar();
     }
 
-    function renderCalendar() {
+    // --- CALENDRIER PRINCIPAL (visualisation) ---
+    function renderMainCalendar() {
         const firstDay = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
@@ -283,52 +372,91 @@
         for (let d = 1; d <= daysInMonth; d++) {
             const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const hasEvent = eventsData[key] && eventsData[key].length > 0;
+            html += `<div class="cal-day ${key === todayStr ? 'today' : ''} ${hasEvent ? 'has-event' : ''}" 
+                         onclick="openPopup('${key}')">${d}</div>`;
+        }
+        document.getElementById('calendarGrid').innerHTML = html;
+        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+    }
+
+    // --- CALENDRIER DE SÉLECTION ---
+    function renderSelectionCalendar() {
+        const firstDay = new Date(selYear, selMonth, 1);
+        let startOffset = firstDay.getDay() === 0 ? 6 : firstDay.getDay() - 1;
+        const daysInMonth = new Date(selYear, selMonth + 1, 0).getDate();
+        const todayStr = dateToKey(new Date());
+
+        let html = '';
+        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
+        for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
+
+        // Déterminer la plage sélectionnée pour le mode période
+        let rangeStart = null, rangeEnd = null;
+        if (currentMode === 'period' && selectedDates.size >= 2) {
+            const sorted = Array.from(selectedDates).sort();
+            rangeStart = sorted[0];
+            rangeEnd = sorted[sorted.length - 1];
+        }
+
+        for (let d = 1; d <= daysInMonth; d++) {
+            const key = `${selYear}-${String(selMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
             const isSelected = selectedDates.has(key);
             const isToday = key === todayStr;
             
             let classes = ['cal-day'];
             if (isToday) classes.push('today');
-            if (hasEvent) classes.push('has-event');
-            if (isSelected) {
-                // Vérifier si c'est le début ou la fin de la plage sélectionnée
-                const sorted = Array.from(selectedDates).sort();
-                if (sorted[0] === key) classes.push('range-start');
-                else if (sorted[sorted.length - 1] === key) classes.push('range-end');
-                else classes.push('in-range');
+            
+            if (currentMode === 'single') {
+                if (isSelected) classes.push('selected');
+            } else {
+                // Mode période
+                if (isSelected && key === rangeStart && key === rangeEnd) {
+                    classes.push('selected');
+                } else if (isSelected && key === rangeStart) {
+                    classes.push('range-start');
+                } else if (isSelected && key === rangeEnd) {
+                    classes.push('range-end');
+                } else if (isSelected) {
+                    classes.push('in-range');
+                }
             }
             
             html += `<div class="${classes.join(' ')}" 
-                         onclick="handleDateClick(event, '${key}')">${d}</div>`;
+                         onclick="handleSelectionClick(event, '${key}')">${d}</div>`;
         }
-        document.getElementById('calendarGrid').innerHTML = html;
-        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
-        updateSelectionInfo();
+        document.getElementById('selectionCalendarGrid').innerHTML = html;
+        document.getElementById('selMonthName').textContent = `${monthNames[selMonth]} ${selYear}`;
+        updateSelectedDatesInfo();
     }
 
-    function handleDateClick(event, dateKey) {
-        if (event.ctrlKey || event.metaKey) {
-            // Ctrl+Click : toggle une date individuelle
-            if (selectedDates.has(dateKey)) {
-                selectedDates.delete(dateKey);
-            } else {
-                selectedDates.add(dateKey);
-            }
-            selectionAnchor = dateKey;
-        } else if (event.shiftKey && selectionAnchor) {
-            // Shift+Click : sélectionner une plage entre l'ancre et la date cliquée
-            const sortedKeys = getDatesBetween(selectionAnchor, dateKey);
-            selectedDates = new Set(sortedKeys);
-        } else {
-            // Clic simple : si la date est déjà la seule sélectionnée, on ouvre la popup
-            if (selectedDates.size === 1 && selectedDates.has(dateKey)) {
-                openPopup(dateKey);
-                return;
-            }
-            // Sinon, nouvelle sélection unique
+    function handleSelectionClick(event, dateKey) {
+        if (currentMode === 'single') {
+            // Mode date unique : un seul clic sélectionne/déselectionne
             selectedDates = new Set([dateKey]);
             selectionAnchor = dateKey;
+        } else {
+            // Mode période
+            if (event.shiftKey && selectionAnchor) {
+                // Shift+Click : sélectionner une plage
+                const dates = getDatesBetween(selectionAnchor, dateKey);
+                // Appliquer les filtres de jours de la semaine
+                const activeDays = getActiveWeekdays();
+                selectedDates = new Set(dates.filter(d => {
+                    const day = new Date(d + 'T00:00:00').getDay();
+                    return activeDays.includes(day);
+                }));
+            } else {
+                // Clic simple : début de la plage
+                if (selectedDates.size === 1 && selectedDates.has(dateKey)) {
+                    // Re-clic sur la même date : on applique la plage avec les jours cochés
+                    applyPeriodRange();
+                    return;
+                }
+                selectedDates = new Set([dateKey]);
+                selectionAnchor = dateKey;
+            }
         }
-        renderCalendar();
+        renderSelectionCalendar();
     }
 
     function getDatesBetween(startKey, endKey) {
@@ -345,8 +473,28 @@
         return dates;
     }
 
-    function updateSelectionInfo() {
-        const info = document.getElementById('selectionInfo');
+    function getActiveWeekdays() {
+        if (currentMode !== 'period') return [0,1,2,3,4,5,6]; // Tous les jours
+        return Array.from(document.querySelectorAll('.weekday-filter:checked')).map(c => parseInt(c.value));
+    }
+
+    function applyPeriodRange() {
+        if (selectedDates.size !== 1) return;
+        const anchorKey = Array.from(selectedDates)[0];
+        const endKey = prompt("Entrez la date de fin (YYYY-MM-DD) :", anchorKey);
+        if (!endKey) return;
+        
+        const allDates = getDatesBetween(anchorKey, endKey);
+        const activeDays = getActiveWeekdays();
+        selectedDates = new Set(allDates.filter(d => {
+            const day = new Date(d + 'T00:00:00').getDay();
+            return activeDays.includes(day);
+        }));
+        renderSelectionCalendar();
+    }
+
+    function updateSelectedDatesInfo() {
+        const info = document.getElementById('selectedDatesInfo');
         const text = document.getElementById('selectedDatesText');
         const sorted = Array.from(selectedDates).sort();
         
@@ -358,11 +506,11 @@
         info.classList.add('active');
         if (sorted.length === 1) {
             text.textContent = `1 date : ${formatDate(sorted[0])}`;
-        } else if (sorted.length > 1) {
-            text.textContent = `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
+        } else {
+            text.textContent = `${sorted.length} dates sélectionnées`;
         }
         
-        document.getElementById('submitBtn').textContent = `💾 Enregistrer sur ${sorted.length} date(s)`;
+        document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
     }
 
     function formatDate(key) {
@@ -379,7 +527,7 @@
         e.preventDefault();
         
         if (selectedDates.size === 0) {
-            alert('⚠️ Veuillez sélectionner au moins une date dans le calendrier.');
+            alert('⚠️ Veuillez sélectionner au moins une date dans le calendrier de sélection.');
             return;
         }
         
@@ -390,7 +538,7 @@
         const titre = document.getElementById('eventTitle').value;
         const lieu = document.getElementById('eventLieu').value.trim();
         
-        const periodId = 'p_' + Date.now();
+        const periodId = selectedDates.size > 1 ? 'p_' + Date.now() : null;
         const sortedDates = Array.from(selectedDates).sort();
         
         const toInsert = sortedDates.map(dateKey => ({ 
@@ -399,7 +547,7 @@
             type, 
             titre, 
             lieu,
-            period_id: sortedDates.length > 1 ? periodId : null
+            period_id: periodId
         }));
 
         const { error } = await _supabase.from('events').insert(toInsert);
@@ -413,7 +561,7 @@
             await fetchEvents();
         }
         btn.disabled = false;
-        updateSelectionInfo();
+        btn.textContent = '💾 Enregistrer';
     };
 
     async function openPopup(dateKey) {
@@ -448,7 +596,6 @@
         editingEventId = id;
         document.getElementById('editType').value = type;
         updateEditTitleDropdown(type);
-        // Petit délai pour que le DOM soit prêt
         setTimeout(() => {
             document.getElementById('editTitle').value = titre;
             document.getElementById('editLieu').value = lieu;
@@ -491,44 +638,62 @@
         document.getElementById('editTitle').innerHTML = list.map(x => `<option value="${x}">${x}</option>`).join('');
     };
 
+    function switchMode(m) {
+        currentMode = m;
+        document.getElementById('modeSingle').classList.toggle('active', m === 'single');
+        document.getElementById('modePeriod').classList.toggle('active', m === 'period');
+        document.getElementById('periodWeekdays').classList.toggle('hidden', m !== 'period');
+        selectedDates = new Set();
+        selectionAnchor = null;
+        renderSelectionCalendar();
+    }
+
     function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); }
 
     // Init
+    document.getElementById('modeSingle').onclick = () => switchMode('single');
+    document.getElementById('modePeriod').onclick = () => switchMode('period');
     document.getElementById('eventType').onchange = updateTitleDropdown;
-    document.getElementById('prevMonthBtn').onclick = () => { 
-        currentMonth--; 
-        if(currentMonth<0){currentMonth=11;currentYear--;} 
-        renderCalendar(); 
-    };
-    document.getElementById('nextMonthBtn').onclick = () => { 
-        currentMonth++; 
-        if(currentMonth>11){currentMonth=0;currentYear++;} 
-        renderCalendar(); 
-    };
+    
+    // Navigation calendrier principal
+    document.getElementById('prevMonthBtn').onclick = () => { currentMonth--; if(currentMonth<0){currentMonth=11;currentYear--;} renderMainCalendar(); };
+    document.getElementById('nextMonthBtn').onclick = () => { currentMonth++; if(currentMonth>11){currentMonth=0;currentYear++;} renderMainCalendar(); };
+    
+    // Navigation calendrier de sélection
+    document.getElementById('selPrevMonthBtn').onclick = () => { selMonth--; if(selMonth<0){selMonth=11;selYear--;} renderSelectionCalendar(); };
+    document.getElementById('selNextMonthBtn').onclick = () => { selMonth++; if(selMonth>11){selMonth=0;selYear++;} renderSelectionCalendar(); };
     
     document.getElementById('clearSelectionBtn').onclick = () => {
         selectedDates = new Set();
         selectionAnchor = null;
-        renderCalendar();
+        renderSelectionCalendar();
     };
 
     // Tout effacer
     document.getElementById('clearAllBtn').onclick = async () => {
-        if (!confirm('ATTENTION : Supprimer TOUS les événements ? Cette action est irréversible.')) return;
+        if (!confirm('ATTENTION : Supprimer TOUS les événements ?')) return;
         if (!confirm('Confirmez-vous la suppression définitive ?')) return;
         const { error } = await _supabase.from('events').delete().neq('id', '00000000-0000-0000-0000-000000000000');
         if (error) alert('Erreur : ' + error.message);
         else {
-            alert('✅ Tous les événements ont été supprimés.');
+            alert('✅ Tous les événements supprimés.');
             await fetchEvents();
         }
     };
 
     (async () => {
+        // Années calendrier principal
         const ySel = document.getElementById('yearSelect');
         for(let y=2024; y<=2030; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`;
         ySel.value = currentYear;
-        ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderCalendar(); };
+        ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
+        
+        // Années calendrier sélection
+        const sySel = document.getElementById('selYearSelect');
+        for(let y=2024; y<=2030; y++) sySel.innerHTML += `<option value="${y}">${y}</option>`;
+        sySel.value = selYear;
+        sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
+        
         updateTitleDropdown();
         await fetchEvents();
     })();
