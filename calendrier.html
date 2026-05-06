@@ -21,6 +21,14 @@
             --text-dark: #2C1810;
             --text-light: #ffffff;
             --bg-card: rgba(235, 215, 185, 0.96);
+            
+            /* Couleurs des spectacles/expositions - LIÉES À ADMIN */
+            --couleur-ducoup1: #b41979;
+            --couleur-ducoup2: #f70202;
+            --couleur-roulettes: #fffb00;
+            --couleur-maboul: #4CAF50;
+            --couleur-expo1: #81D4FA;
+            --couleur-expo2: #B39DDB;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -281,7 +289,6 @@
 
         .events-summary { margin-bottom: 0; }
 
-        /* Header de la liste avec logo */
         .events-summary-header {
             display: flex;
             justify-content: space-between;
@@ -343,13 +350,98 @@
             cursor: default; transition: transform 0.2s ease; font-weight: 500;
             background: rgba(255, 255, 255, 0.7);
         }
-        .calendar-day.has-event { background: #FFE082 !important; color: #2C1810; font-weight: bold; }
+        
+        .calendar-day.has-event { 
+            font-weight: bold; 
+            position: relative;
+        }
+
+        /* Couleurs spécifiques par type d'événement */
+        .calendar-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #ffffff; }
+        .calendar-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #ffffff; }
+        .calendar-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #2C1810; }
+        .calendar-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; }
+        .calendar-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; }
+        .calendar-day.spectacle-maboul { 
+            background: rgba(255,255,255,0.9) !important; 
+            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; 
+            color: #2C5F3F; 
+        }
+
+        /* Gestion des jours avec plusieurs événements - MÉLANGES DE COULEURS */
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { 
+            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-ducoup2) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-roulettes { 
+            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-roulettes) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-maboul { 
+            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-maboul) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo1 { 
+            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo1) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo2 { 
+            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo2) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-roulettes { 
+            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-roulettes) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-maboul { 
+            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-maboul) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo1 { 
+            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo1) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo2 { 
+            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo2) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-maboul { 
+            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-maboul) 100%) !important; 
+            color: #2C1810 !important; 
+        }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo1 { 
+            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo1) 100%) !important; 
+            color: #2C1810 !important; 
+        }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo2 { 
+            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo2) 100%) !important; 
+            color: #2C1810 !important; 
+        }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo1 { 
+            background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo1) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo2 { 
+            background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo2) 100%) !important; 
+            color: #ffffff !important; 
+        }
+        .calendar-day.multi-event.spectacle-expo1.spectacle-expo2 { 
+            background: linear-gradient(135deg, var(--couleur-expo1) 0%, var(--couleur-expo2) 100%) !important; 
+            color: #003049 !important; 
+        }
+
+        /* Fallback si plus de 2 événements ou combo non prévu */
+        .calendar-day.multi-event {
+            background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%) !important;
+            color: #2C1810 !important;
+            font-weight: bold;
+        }
+
         .calendar-day:hover {
             transform: scale(1.08); background: var(--jaune-accent);
             color: var(--text-dark); z-index: 5; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        .today { background: var(--rose-spectacle); color: white; box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); }
-        .today.has-event { background: var(--rose-spectacle); color: white; }
+        .today { background: var(--rose-spectacle) !important; color: white !important; box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); }
         .other-month { opacity: 0.4; }
         .edit-card {
             position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
@@ -378,7 +470,25 @@
             gap: 0.5rem;
         }
         .events-list { display: flex; flex-direction: column; gap: 0.8rem; }
-        .event-row { background: rgba(0, 0, 0, 0.03); border-radius: 20px; padding: 0.8rem 1.2rem; display: flex; align-items: center; flex-wrap: wrap; gap: 1rem; font-size: 0.9rem; }
+        .event-row { 
+            background: rgba(0, 0, 0, 0.03); 
+            border-radius: 20px; 
+            padding: 0.8rem 1.2rem; 
+            display: flex; 
+            align-items: center; 
+            flex-wrap: wrap; 
+            gap: 1rem; 
+            font-size: 0.9rem; 
+        }
+        
+        /* Couleurs dans la liste des événements */
+        .event-row.ducoup1 { border-left: 5px solid var(--couleur-ducoup1); }
+        .event-row.ducoup2 { border-left: 5px solid var(--couleur-ducoup2); }
+        .event-row.roulettes { border-left: 5px solid var(--couleur-roulettes); }
+        .event-row.maboul { border-left: 5px solid var(--couleur-maboul); }
+        .event-row.expo1 { border-left: 5px solid var(--couleur-expo1); }
+        .event-row.expo2 { border-left: 5px solid var(--couleur-expo2); }
+        
         .event-date { font-weight: bold; color: var(--rose-spectacle); min-width: 140px; }
         .event-period { color: #E65100; font-weight: bold; }
         .event-type { background: var(--vert-caravane); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
@@ -491,7 +601,6 @@
         <div class="inner-parchment"></div>
         <span class="magic-sparks">✨</span>
         <h1><img src="images/icone-calendrier.png" alt="Calendrier" style="height: 80px; width: auto; vertical-align: middle;"> Calendrier</h1>
-        
     </div>
 </div>
 
@@ -617,6 +726,30 @@
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
     }
 
+    function getSpectacleClass(titre) {
+        switch(titre) {
+            case "DU COUP ON VIENT CHEZ VOUS": return 'spectacle-ducoup1';
+            case "DU COUP on revient chez vous": return 'spectacle-ducoup2';
+            case "COMME SUR DES ROULETTES": return 'spectacle-roulettes';
+            case "DÉLICIEUSEMENT MABOUL": return 'spectacle-maboul';
+            case "LA FÉERIE DES MARIONNETTES": return 'spectacle-expo1';
+            case "LES GÉANTS DU CARNAVAL": return 'spectacle-expo2';
+            default: return '';
+        }
+    }
+
+    function getEventRowClass(titre) {
+        switch(titre) {
+            case "DU COUP ON VIENT CHEZ VOUS": return 'ducoup1';
+            case "DU COUP on revient chez vous": return 'ducoup2';
+            case "COMME SUR DES ROULETTES": return 'roulettes';
+            case "DÉLICIEUSEMENT MABOUL": return 'maboul';
+            case "LA FÉERIE DES MARIONNETTES": return 'expo1';
+            case "LES GÉANTS DU CARNAVAL": return 'expo2';
+            default: return '';
+        }
+    }
+
     let currentOpenCard = null;
     function showCard(card) {
         if (hideTimeout) clearTimeout(hideTimeout);
@@ -648,13 +781,43 @@
             const events = loadEventsForDate(currentYear, currentMonth, d);
             const hasEvent = events.length > 0;
 
+            let eventClasses = [];
+            if (hasEvent) {
+                events.forEach(ev => {
+                    const cls = getSpectacleClass(ev.titre);
+                    if (cls && !eventClasses.includes(cls)) eventClasses.push(cls);
+                });
+            }
+            // Si plusieurs types : on garde TOUTES les classes pour le mix de couleurs
+            if (eventClasses.length > 1) {
+                eventClasses.unshift('has-event', 'multi-event');
+            } else if (eventClasses.length === 1) {
+                eventClasses.unshift('has-event');
+            } else if (hasEvent) {
+                eventClasses = ['has-event'];
+            }
+
+            const classAttr = [
+                'calendar-day',
+                isToday ? 'today' : '',
+                ...eventClasses
+            ].filter(Boolean).join(' ');
+
             let cardContent = `<div class="edit-card"><h4>📋 Événements du ${d}/${currentMonth+1}/${currentYear}</h4>`;
             if (events.length === 0) {
                 cardContent += `<p>Aucun événement programmé.</p>`;
             } else {
                 events.forEach(ev => {
+                    const borderColor = 
+                        ev.titre === 'DU COUP ON VIENT CHEZ VOUS' ? 'var(--couleur-ducoup1)' :
+                        ev.titre === 'DU COUP on revient chez vous' ? 'var(--couleur-ducoup2)' :
+                        ev.titre === 'COMME SUR DES ROULETTES' ? 'var(--couleur-roulettes)' :
+                        ev.titre === 'DÉLICIEUSEMENT MABOUL' ? 'var(--couleur-maboul)' :
+                        ev.titre === 'LA FÉERIE DES MARIONNETTES' ? 'var(--couleur-expo1)' :
+                        ev.titre === 'LES GÉANTS DU CARNAVAL' ? 'var(--couleur-expo2)' :
+                        '#7CB69F';
                     cardContent += `
-                        <div class="event-entry">
+                        <div class="event-entry" style="border-left: 3px solid ${borderColor}; padding-left: 8px; margin-bottom: 5px;">
                             <p><strong>${ev.type === 'Exposition' ? '🖼️' : '🎭'} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
                             <p><strong>📍 Lieu :</strong> ${escapeHtml(ev.lieu) || '—'}</p>
                         </div>`;
@@ -663,7 +826,7 @@
             cardContent += `<button class="close-card">✖ Fermer</button></div>`;
 
             calendarHtml += `
-                <div class="calendar-day${isToday ? ' today' : ''}${hasEvent ? ' has-event' : ''}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                <div class="${classAttr}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
                     ${d}${cardContent}
                 </div>`;
         }
@@ -775,6 +938,7 @@
                 const [yy, mm, dd] = entry.dateKey.split('-');
                 const typeIcon = entry.type === 'Exposition' ? '🖼️' : '🎭';
                 const typeClass = entry.type === 'Exposition' ? 'exposition' : '';
+                const rowClass = getEventRowClass(entry.titre);
 
                 let dateDisplay;
                 if (entry.isPeriod && entry.endDateKey) {
@@ -785,7 +949,7 @@
                 }
 
                 html += `
-                    <div class="event-row">
+                    <div class="event-row ${rowClass}">
                         <div class="event-date">${dateDisplay}</div>
                         <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(entry.type)}</div>
                         <div class="event-title">${escapeHtml(entry.titre)}</div>
