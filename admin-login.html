@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Connexion</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #1a1a2e;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            color: white;
+        }
+        .login-card {
+            background: #16213e;
+            padding: 2.5rem;
+            border-radius: 20px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 1.8rem;
+            color: #e94560;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.4rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #a0a0b0;
+        }
+        input {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1.2rem;
+            border-radius: 10px;
+            border: 2px solid #0f3460;
+            background: #0f3460;
+            color: white;
+            font-size: 1rem;
+            transition: border 0.3s;
+        }
+        input:focus {
+            outline: none;
+            border-color: #e94560;
+        }
+        button {
+            width: 100%;
+            padding: 0.9rem;
+            background: #e94560;
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background 0.3s;
+        }
+        button:hover { background: #c23152; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .error {
+            background: rgba(233,69,96,0.2);
+            color: #e94560;
+            padding: 0.8rem;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            text-align: center;
+            display: none;
+        }
+        .error.active { display: block; }
+    </style>
+</head>
+<body>
+<div class="login-card">
+    <h1>🔐 Admin Récré Magic</h1>
+    <div class="error" id="errorMsg"></div>
+    <form id="loginForm">
+        <label>Email</label>
+        <input type="email" id="email" placeholder="admin@exemple.com" required>
+        <label>Mot de passe</label>
+        <input type="password" id="password" placeholder="••••••••" required>
+        <button type="submit" id="loginBtn">Se connecter</button>
+    </form>
+</div>
+
+<script>
+    // Fonction SHA256 maison (pas besoin de CDN)
+    async function sha256(message) {
+        const msgBuffer = new TextEncoder().encode(message);
+        const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        return hashHex;
+    }
+
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    
+    // On charge Supabase
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2';
+    script.onload = function() {
+        window._supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    };
+    document.head.appendChild(script);
+
+    document.getElementById('loginForm').onsubmit = async function(e) {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value.trim();
+        const password = document.getElementById('password').value;
+        const errorEl = document.getElementById('errorMsg');
+        const btn = document.getElementById('loginBtn');
+
+        errorEl.classList.remove('active');
+        btn.disabled = true;
+        btn.textContent = 'Connexion...';
+
+        try {
+            // Hasher le mot de passe
+            const passwordHash = await sha256(password);
+
+            // Chercher l'admin dans la base
+            const { data, error } = await window._supabase
+                .from('admin_users')
+                .select('*')
+                .eq('email', email)
+                .eq('password_hash', passwordHash)
+                .single();
+
+            if (error || !data) {
+                errorEl.textContent = '❌ Email ou mot de passe incorrect.';
+                errorEl.classList.add('active');
+                btn.disabled = false;
+                btn.textContent = 'Se connecter';
+                return;
+            }
+
+            // Stocker la session
+            var session = {
+                id: data.id,
+                email: data.email,
+                role: data.role,
+                expires: Date.now() + (8 * 60 * 60 * 1000)
+            };
+            localStorage.setItem('admin_session', JSON.stringify(session));
+
+            // Rediriger
+            window.location.href = 'admin-calendrier.html';
+        } catch (err) {
+            console.error(err);
+            errorEl.textContent = '❌ Erreur de connexion.';
+            errorEl.classList.add('active');
+            btn.disabled = false;
+            btn.textContent = 'Se connecter';
+        }
+    };
+</script>
+</body>
+</html>
