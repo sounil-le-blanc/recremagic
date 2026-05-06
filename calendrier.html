@@ -584,6 +584,38 @@
         .legend-color.expo1 { background: var(--couleur-expo1); }
         .legend-color.expo2 { background: var(--couleur-expo2); }
 
+        /* NOUVEAU : Contour fin coloré sur les titres dans la liste */
+        .event-title-contour {
+            padding: 0.2rem 0.5rem;
+            border-radius: 6px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.9);
+        }
+        .event-title-contour.ducoup1 { 
+            border: 2px solid var(--couleur-ducoup1); 
+            color: var(--couleur-ducoup1); 
+        }
+        .event-title-contour.ducoup2 { 
+            border: 2px solid var(--couleur-ducoup2); 
+            color: var(--couleur-ducoup2); 
+        }
+        .event-title-contour.roulettes { 
+            border: 2px solid var(--couleur-roulettes); 
+            color: var(--couleur-roulettes); 
+        }
+        .event-title-contour.maboul { 
+            border: 2px solid var(--couleur-maboul); 
+            color: var(--couleur-maboul); 
+        }
+        .event-title-contour.expo1 { 
+            border: 2px solid var(--couleur-expo1); 
+            color: #0288D1; 
+        }
+        .event-title-contour.expo2 { 
+            border: 2px solid var(--couleur-expo2); 
+            color: #6A1B9A; 
+        }
+
         .contact-cta {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
@@ -687,6 +719,7 @@
     </div>
     <div class="calendar-grid" id="calendarGrid"></div>
     
+    <!-- LÉGENDE : texte en noir, comme avant -->
     <div class="legend-inline">
         <span class="legend-title">🎨</span>
         <div class="legend-item">
@@ -1075,13 +1108,16 @@
                     dateDisplay = `📅 ${parseInt(dd)} ${monthNames[parseInt(mm)-1].substring(0,3).toLowerCase()}.`;
                 }
 
+                // CONTOUR COLORÉ SUR LE TITRE UNIQUEMENT
+                const titreContourClass = `event-title-contour ${rowClass}`;
+                
                 html += `
                     <div class="event-row ${rowClass}">
                         <div class="event-date">${dateDisplay}</div>
                         <div class="event-lieu">📍 ${escapeHtml(entry.lieu) || 'Lieu non précisé'}</div>
                         <div class="event-title-wrapper">
                             <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(entry.type)}</div>
-                            <div class="event-title">${escapeHtml(entry.titre)}</div>
+                            <div class="${titreContourClass}">${escapeHtml(entry.titre)}</div>
                         </div>
                     </div>`;
             }
