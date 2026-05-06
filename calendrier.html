@@ -176,7 +176,7 @@
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        .page-header, .calendar-wrapper, .events-summary, .contact-cta, .footer {
+        .page-header, .calendar-container, .events-summary, .contact-cta, .footer {
             position: relative;
             z-index: 2;
         }
@@ -266,82 +266,7 @@
                 0 0 15px #a5d6a7;
         }
 
-        .calendar-wrapper {
-            max-width: 1300px;
-            width: 95%;
-            margin: 2rem auto;
-            display: flex;
-            gap: 1.5rem;
-            align-items: flex-start;
-        }
-
-        .calendar-container {
-            flex: 1;
-            min-width: 0;
-            background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            border-radius: 40px;
-            padding: 2rem;
-            border: 5px solid #7a5c3e;
-            outline: 4px solid #5a3e2a;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
-        }
-
-        .legend-box {
-            width: 250px;
-            flex-shrink: 0;
-            background: var(--bg-card);
-            backdrop-filter: blur(8px);
-            border-radius: 30px;
-            padding: 1.5rem;
-            border: 4px solid #7a5c3e;
-            outline: 3px solid #5a3e2a;
-            outline-offset: 3px;
-            box-shadow: 0 0 0 6px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
-            position: sticky;
-            top: 130px;
-        }
-
-        .legend-box h3 {
-            font-family: 'Fredoka', cursive;
-            color: var(--text-dark);
-            font-size: 1.1rem;
-            margin-bottom: 1rem;
-            text-align: center;
-            padding-bottom: 0.5rem;
-            border-bottom: 2px solid var(--rose-spectacle);
-        }
-
-        .legend-item {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            padding: 0.5rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.05);
-            font-size: 0.8rem;
-            font-weight: 500;
-            color: var(--text-dark);
-        }
-        .legend-item:last-child {
-            border-bottom: none;
-        }
-
-        .legend-color {
-            width: 22px;
-            height: 22px;
-            border-radius: 6px;
-            flex-shrink: 0;
-        }
-
-        .legend-color.ducoup1 { background: var(--couleur-ducoup1); }
-        .legend-color.ducoup2 { background: var(--couleur-ducoup2); }
-        .legend-color.roulettes { background: var(--couleur-roulettes); }
-        .legend-color.maboul { background: var(--couleur-maboul); }
-        .legend-color.expo1 { background: var(--couleur-expo1); }
-        .legend-color.expo2 { background: var(--couleur-expo2); }
-
-        .events-summary {
+        .calendar-container, .events-summary {
             max-width: 1000px;
             width: 95%;
             margin: 2rem auto;
@@ -615,6 +540,50 @@
         }
         .retry-btn:hover { background: #C62828; }
 
+        .legend-inline {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            justify-content: center;
+            align-items: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 2px solid rgba(0,0,0,0.1);
+        }
+
+        .legend-inline .legend-title {
+            font-weight: bold;
+            font-size: 0.85rem;
+            color: var(--text-dark);
+            margin-right: 0.3rem;
+        }
+
+        .legend-inline .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+            font-size: 0.7rem;
+            font-weight: 500;
+            color: var(--text-dark);
+            background: rgba(255,255,255,0.5);
+            padding: 0.25rem 0.6rem;
+            border-radius: 15px;
+        }
+
+        .legend-inline .legend-color {
+            width: 16px;
+            height: 16px;
+            border-radius: 4px;
+            flex-shrink: 0;
+        }
+
+        .legend-color.ducoup1 { background: var(--couleur-ducoup1); }
+        .legend-color.ducoup2 { background: var(--couleur-ducoup2); }
+        .legend-color.roulettes { background: var(--couleur-roulettes); }
+        .legend-color.maboul { background: var(--couleur-maboul); }
+        .legend-color.expo1 { background: var(--couleur-expo1); }
+        .legend-color.expo2 { background: var(--couleur-expo2); }
+
         .contact-cta {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
@@ -642,29 +611,6 @@
             font-size: 0.8rem;
         }
 
-        @media (max-width: 900px) {
-            .calendar-wrapper {
-                flex-direction: column;
-            }
-            .legend-box {
-                width: 100%;
-                position: static;
-                display: flex;
-                flex-wrap: wrap;
-                gap: 0.5rem;
-                justify-content: center;
-                padding: 1rem;
-            }
-            .legend-box h3 {
-                width: 100%;
-                margin-bottom: 0.5rem;
-            }
-            .legend-item {
-                border-bottom: none;
-                padding: 0.3rem 0.5rem;
-            }
-        }
-
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
@@ -687,6 +633,8 @@
             .contact-cta a { font-size: 1rem; }
             .event-date { min-width: auto; }
             .events-summary-logo { height: 50px; }
+            .legend-inline { gap: 0.4rem; }
+            .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
         }
     </style>
 </head>
@@ -725,47 +673,45 @@
     </div>
 </div>
 
-<div class="calendar-wrapper">
-    <div class="calendar-container">
-        <div class="calendar-header">
-            <div class="month-year">
-                <button class="nav-btn" id="prevMonthBtn">←</button>
-                <span id="monthName"></span>
-                <button class="nav-btn" id="nextMonthBtn">→</button>
-            </div>
-            <div class="year-selector">
-                <label for="yearSelect">Année :</label>
-                <select id="yearSelect"></select>
-            </div>
+<div class="calendar-container">
+    <div class="calendar-header">
+        <div class="month-year">
+            <button class="nav-btn" id="prevMonthBtn">←</button>
+            <span id="monthName"></span>
+            <button class="nav-btn" id="nextMonthBtn">→</button>
         </div>
-        <div class="calendar-grid" id="calendarGrid"></div>
+        <div class="year-selector">
+            <label for="yearSelect">Année :</label>
+            <select id="yearSelect"></select>
+        </div>
     </div>
-
-    <div class="legend-box">
-        <h3>🎨 Légende</h3>
+    <div class="calendar-grid" id="calendarGrid"></div>
+    
+    <div class="legend-inline">
+        <span class="legend-title">🎨</span>
         <div class="legend-item">
             <div class="legend-color ducoup1"></div>
-            <span>DU COUP ON VIENT CHEZ VOUS</span>
+            <span>DU COUP ON VIENT</span>
         </div>
         <div class="legend-item">
             <div class="legend-color ducoup2"></div>
-            <span>DU COUP on revient chez vous</span>
+            <span>DU COUP revient</span>
         </div>
         <div class="legend-item">
             <div class="legend-color roulettes"></div>
-            <span>COMME SUR DES ROULETTES</span>
+            <span>ROULETTES</span>
         </div>
         <div class="legend-item">
             <div class="legend-color maboul"></div>
-            <span>DÉLICIEUSEMENT MABOUL</span>
+            <span>MABOUL</span>
         </div>
         <div class="legend-item">
             <div class="legend-color expo1"></div>
-            <span>LA FÉERIE DES MARIONNETTES</span>
+            <span>FÉERIE</span>
         </div>
         <div class="legend-item">
             <div class="legend-color expo2"></div>
-            <span>LES GÉANTS DU CARNAVAL</span>
+            <span>GÉANTS</span>
         </div>
     </div>
 </div>
