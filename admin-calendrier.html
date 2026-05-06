@@ -80,49 +80,45 @@
             text-shadow: 2px 2px 0 #3e6b3a;
         }
 
-        .logout-btn {
-            position: absolute;
-            right: 1rem;
-            top: 50%;
-            transform: translateY(-50%);
-            background: #D32F2F;
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 0.85rem;
-            z-index: 100;
-            transition: background 0.2s;
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
         }
-        .logout-btn:hover { background: #b71c1c; }
 
         .admin-finger-link {
-            position: absolute;
-            right: 6rem;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 2.5rem;
+            font-size: 2rem;
             text-decoration: none;
             animation: fingerBounce 0.6s infinite alternate;
             cursor: pointer;
-            z-index: 5;
             transition: transform 0.2s;
         }
         .admin-finger-link:hover {
             animation: fingerShake 0.2s infinite;
-            transform: translateY(-50%) scale(1.3);
+            transform: scale(1.3);
         }
         @keyframes fingerBounce {
-            0% { transform: translateY(-50%) rotate(-5deg); }
-            100% { transform: translateY(-50%) rotate(5deg); }
+            0% { transform: rotate(-5deg); }
+            100% { transform: rotate(5deg); }
         }
         @keyframes fingerShake {
-            0% { transform: translateY(-50%) rotate(-15deg) scale(1.3); }
-            50% { transform: translateY(-50%) rotate(15deg) scale(1.3); }
-            100% { transform: translateY(-50%) rotate(-15deg) scale(1.3); }
+            0% { transform: rotate(-15deg) scale(1.3); }
+            50% { transform: rotate(15deg) scale(1.3); }
+            100% { transform: rotate(-15deg) scale(1.3); }
         }
+
+        .logout-btn {
+            background: #D32F2F;
+            color: white;
+            border: none;
+            padding: 0.45rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover { background: #b71c1c; }
 
         .poop-particle {
             position: absolute;
@@ -213,23 +209,22 @@
         .cal-day.today { box-shadow: inset 0 0 0 2px var(--rose-spectacle); font-weight: bold; }
         .cal-day.today.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important; }
 
-        /* Mélanges multi-événements */
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-ducoup2) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-roulettes) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-maboul) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-roulettes) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-maboul) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-maboul) 100%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo1) 100%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo2) 100%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-maboul.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-maboul.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-expo1) 0%, var(--couleur-expo2) 100%) !important; color: #003049; }
-        .cal-day.multi-event { background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-ducoup2) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-roulettes) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-maboul) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-roulettes) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-maboul) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-maboul) 50%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo1) 50%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo2) 50%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%) !important; color: #003049; }
+        .cal-day.multi-event { background: linear-gradient(135deg, #e0e0e0 50%, #bdbdbd 50%) !important; color: #2C1810; }
 
         .selection-calendar .cal-day { cursor: pointer; }
         .selection-calendar .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); box-shadow: none !important; }
@@ -252,7 +247,6 @@
 </head>
 <body>
 
-<!-- VÉRIFICATION SESSION ADMIN -->
 <script>
 (function() {
     var session = JSON.parse(localStorage.getItem('admin_session') || '{}');
@@ -267,8 +261,10 @@
 <div class="admin-wrapper">
     <div class="card admin-header">
         <h1>🎪 Admin Calendrier</h1>
-        <a href="compte.html" class="admin-finger-link" title="📈 Voir le compteur">📈</a>
-        <button class="logout-btn" onclick="logout()">🚪 Déconnexion</button>
+        <div class="header-actions">
+            <a href="compte.html" class="admin-finger-link" title="📈 Voir le compteur">📈</a>
+            <button class="logout-btn" onclick="logout()">🚪 Déconnexion</button>
+        </div>
     </div>
     <div class="card">
         <h2 style="color:var(--text-dark); margin-bottom:1rem;">📅 Calendrier des événements</h2>
