@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin calendrier - Récré Magic (Supabase Fix)</title>
+    <title>Admin calendrier - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -80,9 +80,27 @@
             text-shadow: 2px 2px 0 #3e6b3a;
         }
 
-        .admin-finger-link {
+        .logout-btn {
             position: absolute;
             right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #D32F2F;
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.85rem;
+            z-index: 100;
+            transition: background 0.2s;
+        }
+        .logout-btn:hover { background: #b71c1c; }
+
+        .admin-finger-link {
+            position: absolute;
+            right: 6rem;
             top: 50%;
             transform: translateY(-50%);
             font-size: 2.5rem;
@@ -184,15 +202,35 @@
             position: relative; font-weight: 500;
         }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
-        .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #4E2000; font-weight: bold; }
-        .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #4E2000; font-weight: bold; }
-        .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #4E2000; font-weight: bold; }
+        
+        .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #ffffff; font-weight: bold; }
+        .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #ffffff; font-weight: bold; }
+        .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #2C1810; font-weight: bold; }
         .cal-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; font-weight: bold; }
         .cal-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; font-weight: bold; }
         .cal-day.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; }
         .cal-day.spectacle-maboul-only { background: rgba(255,255,255,0.9) !important; box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; color: #2C5F3F; }
         .cal-day.today { box-shadow: inset 0 0 0 2px var(--rose-spectacle); font-weight: bold; }
         .cal-day.today.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important; }
+
+        /* Mélanges multi-événements */
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-ducoup2) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-roulettes) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-maboul) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-roulettes) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-maboul) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-maboul) 100%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo1) 100%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo2) 100%) !important; color: #2C1810; }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo1) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo2) 100%) !important; color: #ffffff; }
+        .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-expo1) 0%, var(--couleur-expo2) 100%) !important; color: #003049; }
+        .cal-day.multi-event { background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%) !important; color: #2C1810; }
+
         .selection-calendar .cal-day { cursor: pointer; }
         .selection-calendar .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); box-shadow: none !important; }
         .selection-calendar .cal-day.in-range { background: #b8dfca !important; color: #2C5F3F; font-weight: bold; box-shadow: none !important; }
@@ -213,10 +251,24 @@
     </style>
 </head>
 <body>
+
+<!-- VÉRIFICATION SESSION ADMIN -->
+<script>
+(function() {
+    var session = JSON.parse(localStorage.getItem('admin_session') || '{}');
+    if (!session.id || !session.expires || session.expires < Date.now()) {
+        localStorage.removeItem('admin_session');
+        window.location.href = 'admin-login.html';
+    }
+    window.adminRole = session.role;
+})();
+</script>
+
 <div class="admin-wrapper">
     <div class="card admin-header">
         <h1>🎪 Admin Calendrier</h1>
         <a href="compte.html" class="admin-finger-link" title="📈 Voir le compteur">📈</a>
+        <button class="logout-btn" onclick="logout()">🚪 Déconnexion</button>
     </div>
     <div class="card">
         <h2 style="color:var(--text-dark); margin-bottom:1rem;">📅 Calendrier des événements</h2>
@@ -277,6 +329,11 @@
 <div class="events-popup" id="eventsPopup"><div class="popup-content" id="popupContent"></div></div>
 
 <script>
+    function logout() {
+        localStorage.removeItem('admin_session');
+        window.location.href = 'admin-login.html';
+    }
+
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -326,7 +383,7 @@
         const dropdownId = targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions';
         const dropdown = document.getElementById(dropdownId);
         try {
-            const response = await fetch(`https://api-adresse.data.gouv.fr/search/?q=${encodeURIComponent(query)}&type=municipality&limit=5`);
+            const response = await fetch('https://api-adresse.data.gouv.fr/search/?q=' + encodeURIComponent(query) + '&type=municipality&limit=5');
             const data = await response.json();
             if (!data.features || data.features.length === 0) { dropdown.classList.remove('active'); return; }
             let html = '';
@@ -335,11 +392,7 @@
                 const postcode = f.properties.postcode;
                 const department = f.properties.context ? f.properties.context.split(',')[0].trim() : '';
                 const label = f.properties.label;
-                html += `
-                <div class="suggestion-item" onclick="selectCommune('${label.replace(/'/g, "\\'")}', '${postcode}', '${department.replace(/'/g, "\\'")}', '${targetInputId}')">
-                    <span class="city-name">${city}</span><span class="postcode">(${postcode})</span>
-                    <span class="department">${department}</span>
-                </div>`;
+                html += '<div class="suggestion-item" onclick="selectCommune(\'' + label.replace(/'/g, "\\'") + '\', \'' + postcode + '\', \'' + department.replace(/'/g, "\\'") + '\', \'' + targetInputId + '\')"><span class="city-name">' + city + '</span><span class="postcode">(' + postcode + ')</span><span class="department">' + department + '</span></div>';
             });
             dropdown.innerHTML = html;
             dropdown.classList.add('active');
@@ -347,7 +400,7 @@
     }
 
     window.selectCommune = (label, postcode, department, targetInputId) => {
-        const finalLabel = department ? `${label} - ${department}` : label;
+        const finalLabel = department ? label + ' - ' + department : label;
         document.getElementById(targetInputId).value = finalLabel;
         document.getElementById(targetInputId === 'eventLieu' ? 'lieuSuggestions' : 'editLieuSuggestions').classList.remove('active');
     };
@@ -381,17 +434,18 @@
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
         const todayStr = dateToKey(new Date());
         let html = '';
-        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
-        for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
+        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += '<div class="weekday-header">' + d + '</div>');
+        for (let i = 0; i < startOffset; i++) html += '<div class="cal-day other-month"></div>';
         for (let d = 1; d <= daysInMonth; d++) {
-            const key = `${currentYear}-${String(currentMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const key = currentYear + '-' + String(currentMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
             const { classes } = getEventClasses(key);
             let allClasses = ['cal-day']; if (key === todayStr) allClasses.push('today');
+            if (classes.length > 1) { allClasses.push('multi-event'); }
             allClasses = allClasses.concat(classes);
-            html += `<div class="${allClasses.join(' ')}" onclick="openPopup('${key}')">${d}</div>`;
+            html += '<div class="' + allClasses.join(' ') + '" onclick="openPopup(\'' + key + '\')">' + d + '</div>';
         }
         document.getElementById('calendarGrid').innerHTML = html;
-        document.getElementById('monthName').textContent = `${monthNames[currentMonth]} ${currentYear}`;
+        document.getElementById('monthName').textContent = monthNames[currentMonth] + ' ' + currentYear;
     }
 
     function renderSelectionCalendar() {
@@ -400,12 +454,12 @@
         const daysInMonth = new Date(selYear, selMonth + 1, 0).getDate();
         const todayStr = dateToKey(new Date());
         let html = '';
-        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += `<div class="weekday-header">${d}</div>`);
-        for (let i = 0; i < startOffset; i++) html += `<div class="cal-day other-month"></div>`;
+        ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += '<div class="weekday-header">' + d + '</div>');
+        for (let i = 0; i < startOffset; i++) html += '<div class="cal-day other-month"></div>';
         let rangeStart = null, rangeEnd = null;
         if (currentMode === 'period' && selectedDates.size >= 2) { const sorted = Array.from(selectedDates).sort(); rangeStart = sorted[0]; rangeEnd = sorted[sorted.length - 1]; }
         for (let d = 1; d <= daysInMonth; d++) {
-            const key = `${selYear}-${String(selMonth+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+            const key = selYear + '-' + String(selMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
             const isSelected = selectedDates.has(key), isToday = key === todayStr;
             const { classes: eventClasses } = getEventClasses(key);
             let classes = ['cal-day']; if (isToday) classes.push('today');
@@ -417,10 +471,10 @@
                 else if (isSelected && rangeEnd && key === rangeEnd) classes.push('range-end');
                 else if (isSelected) classes.push('in-range');
             }
-            html += `<div class="${classes.join(' ')}" onclick="handleSelectionClick(event, '${key}')">${d}</div>`;
+            html += '<div class="' + classes.join(' ') + '" onclick="handleSelectionClick(event, \'' + key + '\')">' + d + '</div>';
         }
         document.getElementById('selectionCalendarGrid').innerHTML = html;
-        document.getElementById('selMonthName').textContent = `${monthNames[selMonth]} ${selYear}`;
+        document.getElementById('selMonthName').textContent = monthNames[selMonth] + ' ' + selYear;
         updateSelectedDatesInfo();
     }
 
@@ -442,22 +496,23 @@
         const sorted = Array.from(selectedDates).sort();
         if (sorted.length === 0) { info.classList.remove('active'); document.getElementById('submitBtn').textContent = '💾 Enregistrer'; return; }
         info.classList.add('active');
-        text.textContent = sorted.length === 1 ? `1 date : ${formatDate(sorted[0])}` : `${sorted.length} dates : du ${formatDate(sorted[0])} au ${formatDate(sorted[sorted.length-1])}`;
-        document.getElementById('submitBtn').textContent = `💾 Enregistrer (${sorted.length} date(s))`;
+        text.textContent = sorted.length === 1 ? '1 date : ' + formatDate(sorted[0]) : sorted.length + ' dates : du ' + formatDate(sorted[0]) + ' au ' + formatDate(sorted[sorted.length-1]);
+        document.getElementById('submitBtn').textContent = '💾 Enregistrer (' + sorted.length + ' date(s))';
     }
 
-    function formatDate(key) { const [y,m,d]=key.split('-'); return `${d}/${m}/${y}`; }
-    function dateToKey(date) { return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`; }
+    function formatDate(key) { const [y,m,d]=key.split('-'); return d + '/' + m + '/' + y; }
+    function dateToKey(date) { return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0'); }
 
     function checkConflicts(dates, titre, excludeEventId = null) {
         const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES"].includes(titre);
         const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
-        for (const dateKey of dates) { if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: `Un spectacle "DU COUP" existe déjà le ${formatDate(dateKey)}.` }; if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: `"DÉLICIEUSEMENT MABOUL" est déjà présent le ${formatDate(dateKey)}.` }; }
+        for (const dateKey of dates) { if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: 'Un spectacle "DU COUP" existe déjà le ' + formatDate(dateKey) + '.' }; if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: '"DÉLICIEUSEMENT MABOUL" est déjà présent le ' + formatDate(dateKey) + '.' }; }
         return { conflict: false };
     }
 
     document.getElementById('eventForm').onsubmit = async (e) => {
         e.preventDefault();
+        if (window.adminRole === 'viewer') { alert('⛔ Accès refusé : rôle viewer.'); return; }
         if (selectedDates.size === 0) { alert('⚠️ Veuillez sélectionner au moins une date.'); return; }
         const type = document.getElementById('eventType').value, titre = document.getElementById('eventTitle').value, lieu = document.getElementById('eventLieu').value.trim();
         if (!titre) { alert('⚠️ Veuillez sélectionner un titre.'); return; }
@@ -469,25 +524,25 @@
         const toInsert = sortedDates.map(dateKey => ({ id: crypto.randomUUID(), event_date: dateKey, type, titre, lieu, period_id: periodId }));
         const { error } = await _supabase.from('events').insert(toInsert);
         if (error) alert("Erreur : " + error.message);
-        else { alert(`✅ ${toInsert.length} événement(s) ajouté(s) !`); document.getElementById('eventForm').reset(); selectedDates = new Set(); selectionAnchor = null; updateTitleDropdown(); await fetchEvents(); }
+        else { alert('✅ ' + toInsert.length + ' événement(s) ajouté(s) !'); document.getElementById('eventForm').reset(); selectedDates = new Set(); selectionAnchor = null; updateTitleDropdown(); await fetchEvents(); }
         btn.disabled = false; btn.textContent = '💾 Enregistrer';
     };
 
     window.openPopup = async (dateKey) => {
         const events = eventsData[dateKey] || [];
-        let html = `<h3 style="margin-bottom:10px;">📅 ${formatDate(dateKey)}</h3>`;
-        if (events.length === 0) html += `<p>Aucun événement.</p>`;
+        let html = '<h3 style="margin-bottom:10px;">📅 ' + formatDate(dateKey) + '</h3>';
+        if (events.length === 0) html += '<p>Aucun événement.</p>';
         else {
             events.forEach(ev => {
                 let borderColor = '#7CB69F';
                 if (ev.titre === "DÉLICIEUSEMENT MABOUL") borderColor = '#4CAF50';
-                if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#FF8A65';
-                if (ev.titre === "DU COUP on revient chez vous") borderColor = '#FFAB91';
-                if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#FFCC80';
-                html += `<div class="popup-event-item" style="border-left-color: ${borderColor};"><div><strong>${ev.titre}</strong><br><small>${ev.lieu || ''}</small></div><div style="display:flex; gap:5px;"><button class="btn btn-primary" onclick="prepareEdit('${ev.id}', '${ev.type}', '${ev.titre.replace(/'/g, "\\'")}', '${(ev.lieu || '').replace(/'/g, "\\'")}', '${ev.event_date}')">✏️</button><button class="btn btn-danger" onclick="deleteEvent('${ev.id}', '${ev.period_id || ''}')">🗑</button></div></div>`;
+                if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#b41979';
+                if (ev.titre === "DU COUP on revient chez vous") borderColor = '#f70202';
+                if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#fffb00';
+                html += '<div class="popup-event-item" style="border-left-color: ' + borderColor + ';"><div><strong>' + ev.titre + '</strong><br><small>' + (ev.lieu || '') + '</small></div><div style="display:flex; gap:5px;">' + (window.adminRole !== 'viewer' ? '<button class="btn btn-primary" onclick="prepareEdit(\'' + ev.id + '\', \'' + ev.type + '\', \'' + ev.titre.replace(/'/g, "\\'") + '\', \'' + (ev.lieu || '').replace(/'/g, "\\'") + '\', \'' + ev.event_date + '\')">✏️</button>' : '') + (window.adminRole === 'superadmin' ? '<button class="btn btn-danger" onclick="deleteEvent(\'' + ev.id + '\', \'' + (ev.period_id || '') + '\')">🗑</button>' : '') + '</div></div>';
             });
         }
-        html += `<div class="edit-form" id="editForm"><select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select><select id="editTitle"></select><div class="lieu-wrapper" style="margin-top:0.5rem;"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div><button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button><p id="editError" style="color:red; display:none; margin-top:5px;"></p></div><button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>`;
+        html += '<div class="edit-form" id="editForm"><select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select><select id="editTitle"></select><div class="lieu-wrapper" style="margin-top:0.5rem;"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div><button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button><p id="editError" style="color:red; display:none; margin-top:5px;"></p></div><button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>';
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
         setTimeout(() => {
@@ -500,6 +555,7 @@
     };
 
     window.prepareEdit = (id, type, titre, lieu, date) => {
+        if (window.adminRole === 'viewer') { alert('⛔ Accès refusé.'); return; }
         editingEventId = id; editingEventDate = date;
         document.getElementById('editType').value = type; updateEditTitleDropdown(type);
         setTimeout(() => { document.getElementById('editTitle').value = titre; document.getElementById('editLieu').value = lieu; }, 50);
@@ -507,6 +563,7 @@
     };
 
     window.saveEdit = async () => {
+        if (window.adminRole === 'viewer') { alert('⛔ Accès refusé.'); return; }
         const newTitre = document.getElementById('editTitle').value, errorEl = document.getElementById('editError');
         errorEl.style.display = 'none';
         if (!newTitre) { errorEl.textContent = '⚠️ Veuillez sélectionner un titre.'; errorEl.style.display = 'block'; return; }
@@ -519,6 +576,7 @@
     };
 
     window.deleteEvent = async (id, periodId) => {
+        if (window.adminRole !== 'superadmin') { alert('⛔ Seul le superadmin peut supprimer.'); return; }
         if (!confirm('Supprimer ?')) return;
         let q = _supabase.from('events').delete();
         if (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') q = q.eq('period_id', periodId);
@@ -528,11 +586,11 @@
 
     function updateTitleDropdown() {
         const list = document.getElementById('eventType').value === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
-        document.getElementById('eventTitle').innerHTML = '<option value="">-- Sélectionnez --</option>' + list.map(x => `<option value="${x}">${x}</option>`).join('');
+        document.getElementById('eventTitle').innerHTML = '<option value="">-- Sélectionnez --</option>' + list.map(x => '<option value="' + x + '">' + x + '</option>').join('');
     }
     window.updateEditTitleDropdown = (type) => {
         const list = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
-        document.getElementById('editTitle').innerHTML = list.map(x => `<option value="${x}">${x}</option>`).join('');
+        document.getElementById('editTitle').innerHTML = list.map(x => '<option value="' + x + '">' + x + '</option>').join('');
     };
 
     function switchMode(m) { currentMode = m; document.getElementById('modeSingle').classList.toggle('active', m === 'single'); document.getElementById('modePeriod').classList.toggle('active', m === 'period'); selectedDates = new Set(); selectionAnchor = null; renderSelectionCalendar(); }
@@ -548,8 +606,8 @@
     document.getElementById('clearSelectionBtn').onclick = () => { selectedDates = new Set(); selectionAnchor = null; renderSelectionCalendar(); };
 
     (async () => {
-        const ySel = document.getElementById('yearSelect'); for(let y=2024; y<=2030; y++) ySel.innerHTML += `<option value="${y}">${y}</option>`; ySel.value = currentYear; ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
-        const sySel = document.getElementById('selYearSelect'); for(let y=2024; y<=2030; y++) sySel.innerHTML += `<option value="${y}">${y}</option>`; sySel.value = selYear; sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
+        const ySel = document.getElementById('yearSelect'); for(let y=2024; y<=2030; y++) ySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; ySel.value = currentYear; ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
+        const sySel = document.getElementById('selYearSelect'); for(let y=2024; y<=2030; y++) sySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; sySel.value = selYear; sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
         updateTitleDropdown();
         await fetchEvents();
     })();

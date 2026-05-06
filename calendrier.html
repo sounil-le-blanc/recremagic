@@ -6,7 +6,6 @@
     <title>Calendrier - Récré Magic</title>
     <link rel="icon" type="image/png" href="images/favicon.png">
     
-    <!-- SUPABASE -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -22,11 +21,10 @@
             --text-light: #ffffff;
             --bg-card: rgba(235, 215, 185, 0.96);
             
-            /* Couleurs des spectacles/expositions - LIÉES À ADMIN */
             --couleur-ducoup1: #b41979;
             --couleur-ducoup2: #f70202;
             --couleur-roulettes: #fffb00;
-            --couleur-maboul: #4CAF50;
+            --couleur-maboul: #098a0d;
             --couleur-expo1: #81D4FA;
             --couleur-expo2: #B39DDB;
         }
@@ -178,7 +176,7 @@
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        .page-header, .calendar-container, .events-summary, .contact-cta, .footer {
+        .page-header, .calendar-wrapper, .events-summary, .contact-cta, .footer {
             position: relative;
             z-index: 2;
         }
@@ -195,11 +193,6 @@
                 0 0 0 3px #bfa055,
                 0 0 0 6px #8b6914,
                 inset 0 0 20px rgba(0,0,0,0.4);
-            background-image:
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
-                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
             transform: perspective(700px) rotateX(2deg);
             animation: floatParchment 6s ease-in-out infinite;
         }
@@ -273,7 +266,82 @@
                 0 0 15px #a5d6a7;
         }
 
-        .calendar-container, .events-summary {
+        .calendar-wrapper {
+            max-width: 1300px;
+            width: 95%;
+            margin: 2rem auto;
+            display: flex;
+            gap: 1.5rem;
+            align-items: flex-start;
+        }
+
+        .calendar-container {
+            flex: 1;
+            min-width: 0;
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border-radius: 40px;
+            padding: 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+        }
+
+        .legend-box {
+            width: 250px;
+            flex-shrink: 0;
+            background: var(--bg-card);
+            backdrop-filter: blur(8px);
+            border-radius: 30px;
+            padding: 1.5rem;
+            border: 4px solid #7a5c3e;
+            outline: 3px solid #5a3e2a;
+            outline-offset: 3px;
+            box-shadow: 0 0 0 6px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+            position: sticky;
+            top: 130px;
+        }
+
+        .legend-box h3 {
+            font-family: 'Fredoka', cursive;
+            color: var(--text-dark);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            text-align: center;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--rose-spectacle);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.5rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+            font-size: 0.8rem;
+            font-weight: 500;
+            color: var(--text-dark);
+        }
+        .legend-item:last-child {
+            border-bottom: none;
+        }
+
+        .legend-color {
+            width: 22px;
+            height: 22px;
+            border-radius: 6px;
+            flex-shrink: 0;
+        }
+
+        .legend-color.ducoup1 { background: var(--couleur-ducoup1); }
+        .legend-color.ducoup2 { background: var(--couleur-ducoup2); }
+        .legend-color.roulettes { background: var(--couleur-roulettes); }
+        .legend-color.maboul { background: var(--couleur-maboul); }
+        .legend-color.expo1 { background: var(--couleur-expo1); }
+        .legend-color.expo2 { background: var(--couleur-expo2); }
+
+        .events-summary {
             max-width: 1000px;
             width: 95%;
             margin: 2rem auto;
@@ -349,112 +417,115 @@
             position: relative; padding: 0.8rem 0; border-radius: 30px;
             cursor: default; transition: transform 0.2s ease; font-weight: 500;
             background: rgba(255, 255, 255, 0.7);
+            min-height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: visible;
         }
         
         .calendar-day.has-event { 
             font-weight: bold; 
-            position: relative;
         }
 
-        /* Couleurs spécifiques par type d'événement */
-        .calendar-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #ffffff; }
-        .calendar-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #ffffff; }
-        .calendar-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #2C1810; }
-        .calendar-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; }
-        .calendar-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; }
+        .calendar-day.spectacle-ducoup1 { background: var(--couleur-ducoup1); color: #ffffff; }
+        .calendar-day.spectacle-ducoup2 { background: var(--couleur-ducoup2); color: #ffffff; }
+        .calendar-day.spectacle-roulettes { background: var(--couleur-roulettes); color: #2C1810; }
+        .calendar-day.spectacle-expo1 { background: var(--couleur-expo1); color: #003049; }
+        .calendar-day.spectacle-expo2 { background: var(--couleur-expo2); color: #1A0033; }
         .calendar-day.spectacle-maboul { 
-            background: rgba(255,255,255,0.9) !important; 
-            box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; 
-            color: #2C5F3F; 
+            background: var(--couleur-maboul); 
+            color: #ffffff; 
         }
 
-        /* Gestion des jours avec plusieurs événements - MÉLANGES DE COULEURS */
-        .calendar-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { 
-            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-ducoup2) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup1.spectacle-roulettes { 
-            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-roulettes) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup1.spectacle-maboul { 
-            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-maboul) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo1 { 
-            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo1) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo2 { 
-            background: linear-gradient(135deg, var(--couleur-ducoup1) 0%, var(--couleur-expo2) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup2.spectacle-roulettes { 
-            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-roulettes) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup2.spectacle-maboul { 
-            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-maboul) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo1 { 
-            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo1) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo2 { 
-            background: linear-gradient(135deg, var(--couleur-ducoup2) 0%, var(--couleur-expo2) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-roulettes.spectacle-maboul { 
-            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-maboul) 100%) !important; 
-            color: #2C1810 !important; 
-        }
-        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo1 { 
-            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo1) 100%) !important; 
-            color: #2C1810 !important; 
-        }
-        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo2 { 
-            background: linear-gradient(135deg, var(--couleur-roulettes) 0%, var(--couleur-expo2) 100%) !important; 
-            color: #2C1810 !important; 
-        }
-        .calendar-day.multi-event.spectacle-maboul.spectacle-expo1 { 
-            background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo1) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-maboul.spectacle-expo2 { 
-            background: linear-gradient(135deg, var(--couleur-maboul) 0%, var(--couleur-expo2) 100%) !important; 
-            color: #ffffff !important; 
-        }
-        .calendar-day.multi-event.spectacle-expo1.spectacle-expo2 { 
-            background: linear-gradient(135deg, var(--couleur-expo1) 0%, var(--couleur-expo2) 100%) !important; 
-            color: #003049 !important; 
-        }
-
-        /* Fallback si plus de 2 événements ou combo non prévu */
         .calendar-day.multi-event {
-            background: linear-gradient(135deg, #e0e0e0 0%, #bdbdbd 100%) !important;
-            color: #2C1810 !important;
-            font-weight: bold;
+            background: transparent !important;
+            box-shadow: none !important;
+            position: relative;
+            overflow: hidden;
         }
+
+        .calendar-day.multi-event::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .calendar-day.multi-event .day-number {
+            position: relative;
+            z-index: 1;
+        }
+
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-ducoup2::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-ducoup2) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { color: #ffffff; }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-roulettes::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-roulettes) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-roulettes { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-maboul) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-maboul { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo1) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo2) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup1.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-roulettes::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-roulettes) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-roulettes { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-maboul) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-maboul { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo1) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo2) 50%); }
+        .calendar-day.multi-event.spectacle-ducoup2.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-maboul) 50%); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-maboul { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo1) 50%); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo1 { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo2) 50%); }
+        .calendar-day.multi-event.spectacle-roulettes.spectacle-expo2 { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo1) 50%); }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo2) 50%); }
+        .calendar-day.multi-event.spectacle-maboul.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .calendar-day.multi-event.spectacle-expo1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%); }
+        .calendar-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
         .calendar-day:hover {
-            transform: scale(1.08); background: var(--jaune-accent);
-            color: var(--text-dark); z-index: 5; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            transform: scale(1.08); 
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+            z-index: 50;
         }
-        .today { background: var(--rose-spectacle) !important; color: white !important; box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); }
+        .today { 
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); 
+        }
         .other-month { opacity: 0.4; }
+
         .edit-card {
-            position: absolute; top: 100%; left: 50%; transform: translateX(-50%);
-            width: 280px; background: white; border-radius: 20px; padding: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); border: 2px solid var(--vert-caravane);
-            z-index: 20; text-align: left; margin-top: 0.5rem; display: none; max-height: 300px; overflow-y: auto;
+            position: absolute; 
+            top: 100%; 
+            left: 50%; 
+            transform: translateX(-50%);
+            width: 300px; 
+            background: white; 
+            border-radius: 20px; 
+            padding: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
+            border: 2px solid var(--vert-caravane);
+            z-index: 100; 
+            text-align: left; 
+            margin-top: 0.5rem; 
+            display: none; 
+            max-height: 350px; 
+            overflow-y: auto;
         }
         .edit-card.visible { display: block; }
-        .edit-card h4 { font-family: 'Fredoka', cursive; color: var(--rose-spectacle); margin-bottom: 0.5rem; font-size: 0.9rem; }
+        .edit-card h4 { font-family: 'Fredoka', cursive; color: var(--rose-spectacle); margin-bottom: 0.5rem; font-size: 0.95rem; }
         .edit-card .event-entry { margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
         .edit-card .event-entry:last-child { border-bottom: none; }
-        .edit-card p { font-size: 0.8rem; margin-bottom: 0.2rem; }
-        .edit-card button { background: #aaa; border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; cursor: pointer; font-size: 0.7rem; margin-top: 0.5rem; }
+        .edit-card p { font-size: 0.85rem; margin-bottom: 0.3rem; }
+        .edit-card button { background: #aaa; border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem; margin-top: 0.5rem; width: 100%; }
         .edit-card button:hover { background: #888; }
 
         .month-section { margin-bottom: 1.5rem; }
@@ -481,7 +552,6 @@
             font-size: 0.9rem; 
         }
         
-        /* Couleurs dans la liste des événements */
         .event-row.ducoup1 { border-left: 5px solid var(--couleur-ducoup1); }
         .event-row.ducoup2 { border-left: 5px solid var(--couleur-ducoup2); }
         .event-row.roulettes { border-left: 5px solid var(--couleur-roulettes); }
@@ -489,12 +559,40 @@
         .event-row.expo1 { border-left: 5px solid var(--couleur-expo1); }
         .event-row.expo2 { border-left: 5px solid var(--couleur-expo2); }
         
-        .event-date { font-weight: bold; color: var(--rose-spectacle); min-width: 140px; }
-        .event-period { color: #E65100; font-weight: bold; }
-        .event-type { background: var(--vert-caravane); color: white; padding: 0.2rem 0.6rem; border-radius: 20px; font-size: 0.7rem; font-weight: bold; white-space: nowrap; }
+        .event-date { 
+            font-weight: bold; 
+            color: #000000; 
+            min-width: 160px; 
+            font-size: 1.1rem; 
+        }
+        .event-period { color: #E65100; font-weight: bold; font-size: 1.1rem; }
+        .event-type { 
+            background: var(--vert-caravane); 
+            color: white; 
+            padding: 0.2rem 0.6rem; 
+            border-radius: 20px; 
+            font-size: 0.7rem; 
+            font-weight: bold; 
+            white-space: nowrap; 
+        }
         .event-type.exposition { background: var(--rose-spectacle); }
-        .event-title { font-weight: 600; flex: 1; }
-        .event-lieu { color: var(--text-dark); opacity: 0.7; }
+        .event-lieu { 
+            color: #000000; 
+            font-weight: bold; 
+            font-size: 1.1rem; 
+            opacity: 1; 
+        }
+        .event-title { 
+            font-weight: 600; 
+            text-align: right; 
+        }
+        .event-title-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            flex: 1;
+            justify-content: flex-end;
+        }
         .no-events { text-align: center; padding: 2rem; color: #888; font-style: italic; }
         
         .error-message {
@@ -542,6 +640,29 @@
             margin-top: 2rem;
             text-align: center;
             font-size: 0.8rem;
+        }
+
+        @media (max-width: 900px) {
+            .calendar-wrapper {
+                flex-direction: column;
+            }
+            .legend-box {
+                width: 100%;
+                position: static;
+                display: flex;
+                flex-wrap: wrap;
+                gap: 0.5rem;
+                justify-content: center;
+                padding: 1rem;
+            }
+            .legend-box h3 {
+                width: 100%;
+                margin-bottom: 0.5rem;
+            }
+            .legend-item {
+                border-bottom: none;
+                padding: 0.3rem 0.5rem;
+            }
         }
 
         @media (max-width: 600px) {
@@ -604,6 +725,51 @@
     </div>
 </div>
 
+<div class="calendar-wrapper">
+    <div class="calendar-container">
+        <div class="calendar-header">
+            <div class="month-year">
+                <button class="nav-btn" id="prevMonthBtn">←</button>
+                <span id="monthName"></span>
+                <button class="nav-btn" id="nextMonthBtn">→</button>
+            </div>
+            <div class="year-selector">
+                <label for="yearSelect">Année :</label>
+                <select id="yearSelect"></select>
+            </div>
+        </div>
+        <div class="calendar-grid" id="calendarGrid"></div>
+    </div>
+
+    <div class="legend-box">
+        <h3>🎨 Légende</h3>
+        <div class="legend-item">
+            <div class="legend-color ducoup1"></div>
+            <span>DU COUP ON VIENT CHEZ VOUS</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color ducoup2"></div>
+            <span>DU COUP on revient chez vous</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color roulettes"></div>
+            <span>COMME SUR DES ROULETTES</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color maboul"></div>
+            <span>DÉLICIEUSEMENT MABOUL</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color expo1"></div>
+            <span>LA FÉERIE DES MARIONNETTES</span>
+        </div>
+        <div class="legend-item">
+            <div class="legend-color expo2"></div>
+            <span>LES GÉANTS DU CARNAVAL</span>
+        </div>
+    </div>
+</div>
+
 <div class="events-summary" id="eventsSummary">
     <div class="events-summary-header">
         <h2><i class="fas fa-list"></i> Liste des événements</h2>
@@ -612,21 +778,6 @@
         </a>
     </div>
     <div id="eventsListContainer"></div>
-</div>
-
-<div class="calendar-container">
-    <div class="calendar-header">
-        <div class="month-year">
-            <button class="nav-btn" id="prevMonthBtn">←</button>
-            <span id="monthName"></span>
-            <button class="nav-btn" id="nextMonthBtn">→</button>
-        </div>
-        <div class="year-selector">
-            <label for="yearSelect">Année :</label>
-            <select id="yearSelect"></select>
-        </div>
-    </div>
-    <div class="calendar-grid" id="calendarGrid"></div>
 </div>
 
 <div class="contact-cta" id="contact">
@@ -753,7 +904,9 @@
     let currentOpenCard = null;
     function showCard(card) {
         if (hideTimeout) clearTimeout(hideTimeout);
-        if (currentOpenCard && currentOpenCard !== card) currentOpenCard.classList.remove('visible');
+        if (currentOpenCard && currentOpenCard !== card) {
+            currentOpenCard.classList.remove('visible');
+        }
         card.classList.add('visible');
         currentOpenCard = card;
     }
@@ -761,9 +914,14 @@
         hideTimeout = setTimeout(() => {
             if (card) card.classList.remove('visible');
             if (currentOpenCard === card) currentOpenCard = null;
-        }, 200);
+        }, 3000);
     }
-    function cancelHide() { if (hideTimeout) clearTimeout(hideTimeout); }
+    function cancelHide() { 
+        if (hideTimeout) {
+            clearTimeout(hideTimeout);
+            hideTimeout = null;
+        }
+    }
 
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
@@ -781,31 +939,39 @@
             const events = loadEventsForDate(currentYear, currentMonth, d);
             const hasEvent = events.length > 0;
 
-            let eventClasses = [];
+            let eventClassesSet = new Set();
             if (hasEvent) {
                 events.forEach(ev => {
                     const cls = getSpectacleClass(ev.titre);
-                    if (cls && !eventClasses.includes(cls)) eventClasses.push(cls);
+                    if (cls) eventClassesSet.add(cls);
                 });
             }
-            // Si plusieurs types : on garde TOUTES les classes pour le mix de couleurs
+            
+            let eventClasses = Array.from(eventClassesSet);
+            let classList = ['calendar-day'];
+            
+            if (isToday) {
+                classList.push('today');
+            }
+            
             if (eventClasses.length > 1) {
-                eventClasses.unshift('has-event', 'multi-event');
+                classList.push('has-event');
+                classList.push('multi-event');
+                classList = classList.concat(eventClasses);
             } else if (eventClasses.length === 1) {
-                eventClasses.unshift('has-event');
+                classList.push('has-event');
+                classList.push(eventClasses[0]);
             } else if (hasEvent) {
-                eventClasses = ['has-event'];
+                classList.push('has-event');
             }
 
-            const classAttr = [
-                'calendar-day',
-                isToday ? 'today' : '',
-                ...eventClasses
-            ].filter(Boolean).join(' ');
+            const classAttr = classList.join(' ');
 
-            let cardContent = `<div class="edit-card"><h4>📋 Événements du ${d}/${currentMonth+1}/${currentYear}</h4>`;
+            let cardContent = `<div class="edit-card" style="display:none;">`;
+            cardContent += `<h4>📋 Événements du ${d} ${monthNames[currentMonth].toLowerCase()} ${currentYear}</h4>`;
+            
             if (events.length === 0) {
-                cardContent += `<p>Aucun événement programmé.</p>`;
+                cardContent += `<p style="text-align:center; color:#888; padding:10px;">Aucun événement programmé.</p>`;
             } else {
                 events.forEach(ev => {
                     const borderColor = 
@@ -816,18 +982,21 @@
                         ev.titre === 'LA FÉERIE DES MARIONNETTES' ? 'var(--couleur-expo1)' :
                         ev.titre === 'LES GÉANTS DU CARNAVAL' ? 'var(--couleur-expo2)' :
                         '#7CB69F';
+                    const emoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
                     cardContent += `
-                        <div class="event-entry" style="border-left: 3px solid ${borderColor}; padding-left: 8px; margin-bottom: 5px;">
-                            <p><strong>${ev.type === 'Exposition' ? '🖼️' : '🎭'} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
-                            <p><strong>📍 Lieu :</strong> ${escapeHtml(ev.lieu) || '—'}</p>
+                        <div class="event-entry" style="border-left: 3px solid ${borderColor}; padding-left: 10px; margin-bottom: 8px;">
+                            <p><strong>${emoji} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
+                            <p><strong>📍 Lieu :</strong> ${escapeHtml(ev.lieu) || 'Non précisé'}</p>
                         </div>`;
                 });
             }
-            cardContent += `<button class="close-card">✖ Fermer</button></div>`;
+            cardContent += `<button class="close-card" onclick="this.parentElement.classList.remove('visible');">✖ Fermer</button>`;
+            cardContent += `</div>`;
 
             calendarHtml += `
                 <div class="${classAttr}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
-                    ${d}${cardContent}
+                    <span class="day-number">${d}</span>
+                    ${cardContent}
                 </div>`;
         }
 
@@ -838,12 +1007,24 @@
         document.querySelectorAll('.calendar-day[data-day]').forEach(dayDiv => {
             const card = dayDiv.querySelector('.edit-card');
             if (!card) return;
-            dayDiv.addEventListener('mouseenter', () => { cancelHide(); showCard(card); });
+            
+            dayDiv.addEventListener('mouseenter', () => { 
+                cancelHide(); 
+                showCard(card); 
+            });
             dayDiv.addEventListener('mouseleave', () => scheduleHideCard(card));
+            
             card.addEventListener('mouseenter', cancelHide);
             card.addEventListener('mouseleave', () => scheduleHideCard(card));
+            
             const closeBtn = card.querySelector('.close-card');
-            if (closeBtn) closeBtn.onclick = (e) => { e.stopPropagation(); card.classList.remove('visible'); if (currentOpenCard === card) currentOpenCard = null; };
+            if (closeBtn) {
+                closeBtn.onclick = (e) => { 
+                    e.stopPropagation(); 
+                    card.classList.remove('visible'); 
+                    if (currentOpenCard === card) currentOpenCard = null; 
+                };
+            }
         });
     }
 
@@ -951,9 +1132,11 @@
                 html += `
                     <div class="event-row ${rowClass}">
                         <div class="event-date">${dateDisplay}</div>
-                        <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(entry.type)}</div>
-                        <div class="event-title">${escapeHtml(entry.titre)}</div>
                         <div class="event-lieu">📍 ${escapeHtml(entry.lieu) || 'Lieu non précisé'}</div>
+                        <div class="event-title-wrapper">
+                            <div class="event-type ${typeClass}">${typeIcon} ${escapeHtml(entry.type)}</div>
+                            <div class="event-title">${escapeHtml(entry.titre)}</div>
+                        </div>
                     </div>`;
             }
             html += '</div></div>';
