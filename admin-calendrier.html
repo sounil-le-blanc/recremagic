@@ -240,7 +240,6 @@
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%); }
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
-        /* Tooltip au hover */
         .cal-day[data-tooltip]:hover::after {
             content: attr(data-tooltip);
             position: absolute;
@@ -294,7 +293,6 @@
         .legend-color.expo1 { background: var(--couleur-expo1); }
         .legend-color.expo2 { background: var(--couleur-expo2); }
 
-        /* Popup */
         .events-popup {
             display: none;
             position: fixed;
@@ -327,7 +325,6 @@
             align-items: center;
         }
 
-        /* Checkbox période */
         .period-checkbox-row {
             display: flex;
             align-items: center;
@@ -620,7 +617,6 @@
 
         let html = '<h3 style="margin-bottom:10px;">📅 ' + formatDate(dateKey) + '</h3>';
 
-        // Événements existants
         if (events.length > 0) {
             html += '<div class="existing-events-list">';
             events.forEach(ev => {
@@ -644,17 +640,15 @@
             html += '</div>';
         }
 
-        // Formulaire
         html += '<div id="editFormContainer">';
         html += '<div id="editPeriodInfo"></div>';
         html += '<div class="form-row"><div><label>Type</label><select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select></div>';
         html += '<div><label>Titre</label><select id="editTitle"><option value="">-- Sélectionnez --</option></select></div></div>';
         html += '<label>Lieu</label><div class="lieu-wrapper"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div>';
 
-        // Checkbox période
-        html += '<div class="period-checkbox-row" onclick="togglePeriodCheckbox()"><input type="checkbox" id="editIsPeriod" onchange="togglePeriodRange()"><label for="editIsPeriod" style="cursor:pointer;">📆 Ajouter en tant que période</label></div>';
+        // ✅ CORRECTION 1 : Checkbox période fluide
+        html += '<div class="period-checkbox-row"><input type="checkbox" id="editIsPeriod" onchange="togglePeriodRange()"><label for="editIsPeriod" style="cursor:pointer;" onclick="event.preventDefault(); document.getElementById(\'editIsPeriod\').click();">📆 Ajouter en tant que période</label></div>';
 
-        // Sélecteurs de dates pour la période
         html += '<div class="period-range-row" id="periodRangeRow"><span>Du</span><input type="date" id="editPeriodStart" value="' + dateToInputValue(dateKey) + '"><span>au</span><input type="date" id="editPeriodEnd" value="' + dateToInputValue(dateKey) + '"></div>';
 
         html += '<button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">💾 Sauvegarder</button>';
@@ -708,11 +702,7 @@
         updatePeriodInfoDisplay();
     };
 
-    window.togglePeriodCheckbox = () => {
-        const cb = document.getElementById('editIsPeriod');
-        cb.checked = !cb.checked;
-        togglePeriodRange();
-    };
+    // ✅ Supprimé : window.togglePeriodCheckbox (plus nécessaire)
 
     window.togglePeriodRange = () => {
         const row = document.getElementById('periodRangeRow');
@@ -734,13 +724,12 @@
         const endVal = document.getElementById('editPeriodEnd')?.value;
 
         if (editingPeriodId && editingAllPeriodDates.length > 1 && !isPeriod) {
-            // On édite une période existante mais la checkbox est décochée → avertissement
             periodInfoDiv.innerHTML = '<div class="period-info-banner" style="background:#FFEBEE; border-color:#EF5350; color:#C62828;"><span class="icon">⚠️</span><div><strong>Attention</strong><br>Cet événement fait partie d\'une période de ' + editingAllPeriodDates.length + ' jours. Décocher "Période" modifiera uniquement ce jour et le détachera de la période.</div></div>';
         } else if (editingPeriodId && editingAllPeriodDates.length > 1) {
             periodInfoDiv.innerHTML = '<div class="period-info-banner"><span class="icon">📆</span><div><strong>Période de ' + editingAllPeriodDates.length + ' jours</strong><br>du ' + formatDate(editingAllPeriodDates[0]) + ' au ' + formatDate(editingAllPeriodDates[editingAllPeriodDates.length - 1]) + '<br><span style="font-size:0.75rem; color:#888;">La modification s\'appliquera à tous les jours de cette période.</span></div></div>';
         } else if (isPeriod && startVal && endVal && startVal !== endVal) {
-            const startKey = startVal.replace(/\//g, '-');
-            const endKey = endVal.replace(/\//g, '-');
+            const startKey = startVal;
+            const endKey = endVal;
             const allDates = getDatesBetween(startKey, endKey);
             periodInfoDiv.innerHTML = '<div class="period-info-banner"><span class="icon">📆</span><div><strong>Nouvelle période de ' + allDates.length + ' jours</strong><br>du ' + formatDate(startKey) + ' au ' + formatDate(endKey) + '</div></div>';
         } else {
@@ -748,7 +737,6 @@
         }
     }
 
-    // Surveiller les changements de dates
     document.addEventListener('change', function(e) {
         if (e.target.id === 'editPeriodStart' || e.target.id === 'editPeriodEnd') {
             updatePeriodInfoDisplay();
@@ -789,22 +777,31 @@
         let errorOccurred = false;
 
         if (editingEventId && editingPeriodId && editingAllPeriodDates.length > 1 && !isPeriod) {
-            // Détacher de la période : mettre à jour uniquement ce jour, period_id = null
             const { error } = await _supabase.from('events').update({ type: newType, titre: newTitre, lieu: newLieu, period_id: null }).eq('id', editingEventId);
             if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
             else { alert('✅ Événement détaché de la période et mis à jour !'); }
         } else if (editingEventId && editingPeriodId && editingAllPeriodDates.length > 1 && isPeriod) {
-            // Mise à jour de toute la période
             const { error } = await _supabase.from('events').update({ type: newType, titre: newTitre, lieu: newLieu }).eq('period_id', editingPeriodId);
             if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
             else { alert('✅ Période de ' + editingAllPeriodDates.length + ' jours mise à jour !'); }
         } else if (editingEventId && !editingPeriodId) {
-            // Mise à jour d'un jour isolé
-            const { error } = await _supabase.from('events').update({ type: newType, titre: newTitre, lieu: newLieu, period_id: null }).eq('id', editingEventId);
-            if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
-            else { alert('✅ Événement mis à jour !'); }
+            // ✅ CORRECTION 2 : Transformation jour isolé → période
+            if (isPeriod && datesToTarget.length > 1) {
+                const periodId = 'p_' + Date.now();
+                const { error: deleteError } = await _supabase.from('events').delete().eq('id', editingEventId);
+                if (deleteError) { errorEl.textContent = 'Erreur suppression : ' + deleteError.message; errorEl.style.display = 'block'; errorOccurred = true; }
+                else {
+                    const toInsert = datesToTarget.map(dateKey => ({ id: crypto.randomUUID(), event_date: dateKey, type: newType, titre: newTitre, lieu: newLieu, period_id: periodId }));
+                    const { error: insertError } = await _supabase.from('events').insert(toInsert);
+                    if (insertError) { errorEl.textContent = 'Erreur création période : ' + insertError.message; errorEl.style.display = 'block'; errorOccurred = true; }
+                    else { alert('✅ Période de ' + toInsert.length + ' jours créée !'); }
+                }
+            } else {
+                const { error } = await _supabase.from('events').update({ type: newType, titre: newTitre, lieu: newLieu, period_id: null }).eq('id', editingEventId);
+                if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
+                else { alert('✅ Événement mis à jour !'); }
+            }
         } else {
-            // Nouvel ajout
             const periodId = isPeriod ? 'p_' + Date.now() : null;
             const toInsert = datesToTarget.map(dateKey => ({ id: crypto.randomUUID(), event_date: dateKey, type: newType, titre: newTitre, lieu: newLieu, period_id: periodId }));
             const { error } = await _supabase.from('events').insert(toInsert);
