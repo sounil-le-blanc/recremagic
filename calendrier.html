@@ -427,31 +427,92 @@
         }
         .other-month { opacity: 0.4; }
 
+        /* BULLE HOVER - Nouveau style inspiré de la liste */
         .edit-card {
             position: absolute; 
             top: 100%; 
             left: 50%; 
             transform: translateX(-50%);
-            width: 300px; 
-            background: white; 
+            width: 380px; 
+            background: rgba(255, 255, 255, 0.98); 
             border-radius: 20px; 
-            padding: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3); 
+            padding: 1.2rem;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
             border: 2px solid var(--vert-caravane);
             z-index: 100; 
             text-align: left; 
             margin-top: 0.5rem; 
             display: none; 
-            max-height: 350px; 
+            max-height: 400px; 
             overflow-y: auto;
         }
         .edit-card.visible { display: block; }
-        .edit-card h4 { font-family: 'Fredoka', cursive; color: var(--rose-spectacle); margin-bottom: 0.5rem; font-size: 0.95rem; }
-        .edit-card .event-entry { margin-bottom: 0.8rem; padding-bottom: 0.5rem; border-bottom: 1px solid #eee; }
-        .edit-card .event-entry:last-child { border-bottom: none; }
-        .edit-card p { font-size: 0.85rem; margin-bottom: 0.3rem; }
-        .edit-card button { background: #aaa; border: none; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; cursor: pointer; font-size: 0.8rem; margin-top: 0.5rem; width: 100%; }
+        .edit-card h4 { 
+            font-family: 'Fredoka', cursive; 
+            color: var(--rose-spectacle); 
+            margin-bottom: 1rem; 
+            font-size: 1.1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--rose-spectacle);
+        }
+        
+        /* Événement dans la bulle - même style que la liste */
+        .edit-card .hover-event {
+            background: rgba(0, 0, 0, 0.03);
+            border-radius: 15px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 0.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            align-items: center;
+            font-size: 0.85rem;
+        }
+        .edit-card .hover-event:last-child { margin-bottom: 0; }
+        
+        .edit-card .hover-event.ducoup1 { border-left: 4px solid var(--couleur-ducoup1); }
+        .edit-card .hover-event.ducoup2 { border-left: 4px solid var(--couleur-ducoup2); }
+        .edit-card .hover-event.roulettes { border-left: 4px solid var(--couleur-roulettes); }
+        .edit-card .hover-event.maboul { border-left: 4px solid var(--couleur-maboul); }
+        .edit-card .hover-event.expo1 { border-left: 4px solid var(--couleur-expo1); }
+        .edit-card .hover-event.expo2 { border-left: 4px solid var(--couleur-expo2); }
+        
+        .edit-card .hover-event-lieu {
+            font-weight: bold;
+            font-size: 0.9rem;
+            color: #000;
+        }
+        .edit-card .hover-event-type {
+            padding: 0.15rem 0.5rem;
+            border-radius: 15px;
+            font-size: 0.7rem;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+        .edit-card .hover-event-type.spectacle { background: var(--vert-caravane); }
+        .edit-card .hover-event-type.exposition { background: var(--rose-spectacle); }
+        
+        .edit-card button { 
+            background: #aaa; 
+            border: none; 
+            color: white; 
+            padding: 0.4rem 1rem; 
+            border-radius: 20px; 
+            cursor: pointer; 
+            font-size: 0.8rem; 
+            margin-top: 0.8rem; 
+            width: 100%; 
+            font-weight: 600;
+        }
         .edit-card button:hover { background: #888; }
+        .edit-card .no-events-hover { 
+            text-align: center; 
+            color: #888; 
+            padding: 1rem; 
+            font-style: italic; 
+            font-size: 0.9rem;
+        }
 
         .month-section { margin-bottom: 1.5rem; }
         .month-title {
@@ -584,7 +645,7 @@
         .legend-color.expo1 { background: var(--couleur-expo1); }
         .legend-color.expo2 { background: var(--couleur-expo2); }
 
-        /* NOUVEAU : Contour fin coloré sur les titres dans la liste */
+        /* Contour fin coloré sur les titres dans la liste */
         .event-title-contour {
             padding: 0.2rem 0.5rem;
             border-radius: 6px;
@@ -657,7 +718,7 @@
             .month-year span { font-size: 1.2rem; min-width: 120px; }
             .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
             .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
-            .edit-card { width: 260px; max-height: 250px; }
+            .edit-card { width: 280px; max-height: 280px; }
             .event-row { flex-direction: column; align-items: flex-start; }
             .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
             .page-header h1 { font-size: 2rem; }
@@ -719,7 +780,6 @@
     </div>
     <div class="calendar-grid" id="calendarGrid"></div>
     
-    <!-- LÉGENDE : texte en noir, comme avant -->
     <div class="legend-inline">
         <span class="legend-title">🎨</span>
         <div class="legend-item">
@@ -895,7 +955,7 @@
         hideTimeout = setTimeout(() => {
             if (card) card.classList.remove('visible');
             if (currentOpenCard === card) currentOpenCard = null;
-        }, 3000);
+        }, 3500);
     }
     function cancelHide() { 
         if (hideTimeout) {
@@ -948,26 +1008,24 @@
 
             const classAttr = classList.join(' ');
 
+            // NOUVELLE BULLE HOVER - Style liste d'événements
             let cardContent = `<div class="edit-card" style="display:none;">`;
-            cardContent += `<h4>📋 Événements du ${d} ${monthNames[currentMonth].toLowerCase()} ${currentYear}</h4>`;
+            cardContent += `<h4>📋 ${d} ${monthNames[currentMonth].toLowerCase()} ${currentYear}</h4>`;
             
             if (events.length === 0) {
-                cardContent += `<p style="text-align:center; color:#888; padding:10px;">Aucun événement programmé.</p>`;
+                cardContent += `<div class="no-events-hover">Aucun événement programmé</div>`;
             } else {
                 events.forEach(ev => {
-                    const borderColor = 
-                        ev.titre === 'DU COUP ON VIENT CHEZ VOUS' ? 'var(--couleur-ducoup1)' :
-                        ev.titre === 'DU COUP on revient chez vous' ? 'var(--couleur-ducoup2)' :
-                        ev.titre === 'COMME SUR DES ROULETTES' ? 'var(--couleur-roulettes)' :
-                        ev.titre === 'DÉLICIEUSEMENT MABOUL' ? 'var(--couleur-maboul)' :
-                        ev.titre === 'LA FÉERIE DES MARIONNETTES' ? 'var(--couleur-expo1)' :
-                        ev.titre === 'LES GÉANTS DU CARNAVAL' ? 'var(--couleur-expo2)' :
-                        '#7CB69F';
-                    const emoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                    const rowClass = getEventRowClass(ev.titre);
+                    const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
+                    const typeEmoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                    const titreContourClass = `event-title-contour ${rowClass}`;
+                    
                     cardContent += `
-                        <div class="event-entry" style="border-left: 3px solid ${borderColor}; padding-left: 10px; margin-bottom: 8px;">
-                            <p><strong>${emoji} ${escapeHtml(ev.type)} :</strong> ${escapeHtml(ev.titre) || '—'}</p>
-                            <p><strong>📍 Lieu :</strong> ${escapeHtml(ev.lieu) || 'Non précisé'}</p>
+                        <div class="hover-event ${rowClass}">
+                            <div class="hover-event-lieu">📍 ${escapeHtml(ev.lieu) || 'Lieu non précisé'}</div>
+                            <div class="hover-event-type ${typeClass}">${typeEmoji} ${escapeHtml(ev.type)}</div>
+                            <div class="${titreContourClass}">${escapeHtml(ev.titre)}</div>
                         </div>`;
                 });
             }
@@ -1110,7 +1168,6 @@
                     dateDisplay = `📅 ${parseInt(dd)} ${monthNames[parseInt(mm)-1].substring(0,3).toLowerCase()}.`;
                 }
 
-                // CONTOUR COLORÉ SUR LE TITRE UNIQUEMENT
                 const titreContourClass = `event-title-contour ${rowClass}`;
                 
                 html += `
