@@ -241,21 +241,24 @@
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
         .cal-day[data-tooltip]:hover::after {
-            content: attr(data-tooltip);
-            position: absolute;
-            bottom: calc(100% + 8px);
-            left: 50%;
-            transform: translateX(-50%);
-            background: #2C1810;
-            color: #fff;
-            padding: 0.5rem 0.8rem;
-            border-radius: 12px;
-            font-size: 0.75rem;
-            white-space: nowrap;
-            z-index: 100;
-            pointer-events: none;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            font-weight: normal;
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 8px);
+    left: 50%;
+    transform: translateX(-50%);
+    background: #2C1810;
+    color: #fff;
+    padding: 0.6rem 0.9rem;
+    border-radius: 12px;
+    font-size: 0.75rem;
+    white-space: pre-line;
+    text-align: left;
+    line-height: 1.4;
+    z-index: 100;
+    pointer-events: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    font-weight: normal;
+    max-width: 220px;
         }
         .cal-day[data-tooltip]:hover::before {
             content: '';
@@ -479,10 +482,15 @@
     }
 
     function getTooltipText(dateKey) {
-        const events = eventsData[dateKey] || [];
-        if (events.length === 0) return '';
-        return events.map(ev => ev.titre + (ev.lieu ? ' - ' + ev.lieu : '')).join(' | ');
-    }
+    const events = eventsData[dateKey] || [];
+    if (events.length === 0) return '';
+    let text = '📅 ' + formatDate(dateKey);
+    events.forEach(ev => {
+        text += '\n' + ev.titre;
+        if (ev.lieu) text += '\n📍 ' + ev.lieu;
+    });
+    return text;
+}
 
     const now = new Date();
     currentMonth = now.getMonth(); currentYear = now.getFullYear();
