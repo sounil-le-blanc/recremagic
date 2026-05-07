@@ -179,7 +179,7 @@
             position: relative; font-weight: 500;
             transition: transform 0.15s;
         }
-        .cal-day:hover { transform: scale(1.08); z-index: 5; }
+        .cal-day:hover { transform: scale(1.08); z-index: 100; }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
         .cal-day.today {
             box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle);
@@ -201,12 +201,13 @@
             background: transparent !important;
             box-shadow: none !important;
             position: relative;
-            overflow: hidden;
+            overflow: visible !important;
         }
         .cal-day.multi-event::before {
             content: '';
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
+            border-radius: 20px;
             z-index: 0; pointer-events: none;
         }
         .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-ducoup2) 50%); }
@@ -240,7 +241,7 @@
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%); }
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
-        /* NOUVEAU : Bulle hover stylée */
+        /* Bulle hover */
         .cal-day .hover-bubble {
             display: none;
             position: absolute;
@@ -251,7 +252,7 @@
             border-radius: 16px;
             padding: 0.8rem 1rem;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            z-index: 200;
+            z-index: 500;
             min-width: 220px;
             max-width: 300px;
             border: 2px solid var(--vert-caravane);
