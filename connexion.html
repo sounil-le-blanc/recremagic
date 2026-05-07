@@ -36,70 +36,88 @@
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
-            background: transparent;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
             z-index: 1000;
+            height: 55px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
         }
         .navbar-container {
-            max-width: 1200px; margin: 0 auto; padding: 0.8rem 2rem;
-            display: flex; justify-content: space-between; align-items: center;
-            flex-wrap: wrap; gap: 1rem;
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
-        .nav-left { display: flex; align-items: center; gap: 1.5rem; }
-        .back-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; cursor: pointer; transition: all 0.2s ease;
-        }
-        .back-wrapper span:first-child {
-            font-size: 1.1rem; font-weight: 600; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s, color 0.2s;
-        }
-        .back-wrapper .back-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
-        }
-        .back-wrapper:hover span:first-child { transform: scale(1.05); color: #FFB300; }
-        .back-wrapper:hover .back-label { opacity: 1; color: #FFB300; }
-
-        .logo-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
         }
         .logo-wrapper img {
-            height: 50px; transition: transform 0.2s;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            height: 120px;
+            margin-top: 60px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            transition: transform 0.25s;
         }
-        .logo-wrapper .logo-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+        .logo-wrapper:hover img { transform: scale(1.08); }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
         }
-        .logo-wrapper:hover img { transform: scale(1.05); }
-        .logo-wrapper:hover .logo-label { opacity: 1; color: #FFB300; }
-
-        .nav-icons { display: flex; gap: 2rem; align-items: center; }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+        }
         .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center; gap: 0.2rem;
-            text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
         .icon-wrapper span {
-            font-size: 1.3rem; color: white;
-            text-shadow: 1px 1px 3px black; transition: transform 0.2s;
+            font-size: 1.3rem;
+            color: white;
+            text-shadow: 1px 1px 3px black;
+            transition: transform 0.2s;
         }
         .icon-wrapper .icon-label {
-            font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 1px;
-            background: rgba(0,0,0,0.6); padding: 0.2rem 0.5rem; border-radius: 20px;
-            opacity: 0; transition: opacity 0.2s ease; color: white; white-space: nowrap;
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
         }
         .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
-        .icon-wrapper:hover .icon-label { opacity: 1; color: #FFB300; }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
 
         .container {
             position: relative;
             z-index: 2;
             max-width: 500px;
             width: 100%;
-            text-align: center;
         }
 
         .form-card {
@@ -112,15 +130,7 @@
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
-        }
-        .form-card::before {
-            content: '';
-            position: absolute;
-            top: 8px; left: 8px; right: 8px; bottom: 8px;
-            border-radius: 40px;
-            border: 1px solid rgba(0,0,0,0.1);
-            pointer-events: none;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
         }
 
         h1 {
@@ -172,12 +182,13 @@
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0,0,0,0.3);
         }
+        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
 
         #message {
             margin-top: 1rem;
             font-weight: 600;
-            font-size: 0.9rem;
-            color: #2C1810;
+            font-size: 0.95rem;
+            min-height: 1.5rem;
         }
 
         .success { color: #7CB69F !important; }
@@ -193,13 +204,13 @@
             font-weight: 700;
             text-decoration: none;
         }
-        .switch-link a:hover {
-            text-decoration: underline;
-        }
+        .switch-link a:hover { text-decoration: underline; }
 
         @media (max-width: 768px) {
             .form-card { padding: 1.5rem; border-radius: 36px; }
             h1 { font-size: 2rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .navbar { height: 48px; }
         }
     </style>
 </head>
@@ -207,22 +218,18 @@
 
 <nav class="navbar">
     <div class="navbar-container">
-        <div class="nav-left">
-            <div class="back-wrapper" onclick="history.back()">
-                <span>← Retour</span>
-                <span class="back-label">Retour</span>
-            </div>
+        <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
                 <img src="images/logo.png" alt="Récré Magic">
-                <span class="logo-label">Accueil</span>
             </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
         <div class="nav-icons">
-            <a href="boutique.html" class="icon-wrapper" title="Boutique">
+            <a href="boutique.html" class="icon-wrapper">
                 <span>💰</span>
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper" title="Abonnement">
+            <a href="Abonnement.html" class="icon-wrapper">
                 <span>🤝</span>
                 <span class="icon-label">Abonnement</span>
             </a>
@@ -235,9 +242,9 @@
         <h1>Connexion</h1>
         <p class="subtitle">Retrouvez votre espace Récré Magic</p>
         <form id="login-form">
-            <input type="email" id="email" placeholder="Email" required>
-            <input type="password" id="password" placeholder="Mot de passe" required>
-            <button type="submit">Se connecter</button>
+            <input type="email" id="email" placeholder="Email" required autocomplete="email">
+            <input type="password" id="password" placeholder="Mot de passe" required autocomplete="current-password">
+            <button type="submit" id="submitBtn">🎪 Se connecter</button>
         </form>
         <div id="message"></div>
         <div class="switch-link">
@@ -248,34 +255,51 @@
 
 <script>
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
-    const SUPABASE_ANON_KEY = 'sb_publishable_gwuNIL4CgVYGOa5lAc46_g_xWRBQxHB';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
 
     const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('login-form');
     const msg = document.getElementById('message');
+    const submitBtn = document.getElementById('submitBtn');
 
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
+        
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
-        msg.textContent = 'Connexion en cours...';
+        submitBtn.disabled = true;
+        submitBtn.textContent = '⏳ Connexion...';
+        msg.textContent = '';
         msg.className = '';
 
+        console.log('🔄 Tentative de connexion pour :', email);
+
         const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
+            email: email,
+            password: password,
         });
 
         if (error) {
-            msg.textContent = 'Erreur : ' + error.message;
+            console.error('❌ Erreur connexion :', error.message);
+            let errorMsg = error.message;
+            if (error.message.includes('Invalid login credentials')) {
+                errorMsg = 'Email ou mot de passe incorrect.';
+            }
+            msg.textContent = '❌ ' + errorMsg;
             msg.className = 'error';
+            submitBtn.disabled = false;
+            submitBtn.textContent = '🎪 Se connecter';
         } else {
+            console.log('✅ Connecté avec succès !', data);
             msg.textContent = '✅ Connecté avec succès ! Redirection...';
             msg.className = 'success';
-            // Tu peux rediriger vers la page d'abonnement ou une page membre
-            // Exemple : window.location.href = 'Abonnement.html';
+            
+            // Redirection après 1 seconde
+            setTimeout(() => {
+                window.location.href = 'index.html';
+            }, 1000);
         }
     });
 </script>
