@@ -12,10 +12,11 @@
             --rose-spectacle: #EC407A;
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
-            --couleur-ducoup1: #b41979;
-            --couleur-ducoup2: #f70202;
-            --couleur-roulettes: #fffb00;
-            --couleur-maboul: #4CAF50;
+            
+            --couleur-ducoup1: #FFB800;
+            --couleur-ducoup2: #006800;
+            --couleur-roulettes: #A100A0;
+            --couleur-maboul: #800000;
             --couleur-expo1: #81D4FA;
             --couleur-expo2: #B39DDB;
         }
@@ -120,17 +121,6 @@
         }
         .logout-btn:hover { background: #b71c1c; }
 
-        .poop-particle {
-            position: absolute;
-            font-size: 1rem;
-            animation: poopFall 1.5s forwards;
-            pointer-events: none;
-        }
-        @keyframes poopFall {
-            0% { opacity: 1; transform: translateY(0) rotate(0deg); }
-            100% { opacity: 0; transform: translateY(40px) rotate(180deg); }
-        }
-
         .btn {
             padding: 0.6rem 1.2rem;
             border-radius: 30px;
@@ -191,6 +181,7 @@
         .month-year-nav { display: flex; align-items: center; gap: 0.8rem; }
         .calendar-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 0.4rem; text-align: center; }
         .weekday-header { font-weight: bold; color: var(--rose-spectacle); padding: 0.6rem 0; font-size: 0.8rem; }
+        
         .cal-day {
             padding: 0.6rem 0; border-radius: 20px; cursor: pointer;
             background: rgba(255,255,255,0.7); font-size: 0.9rem; min-height: 40px;
@@ -198,51 +189,184 @@
             position: relative; font-weight: 500;
         }
         .cal-day.other-month { opacity: 0.3; pointer-events: none; }
+        .cal-day.today { 
+            box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); 
+            font-weight: bold; 
+        }
         
-        .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1) !important; color: #ffffff; font-weight: bold; }
-        .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2) !important; color: #ffffff; font-weight: bold; }
-        .cal-day.spectacle-roulettes { background: var(--couleur-roulettes) !important; color: #2C1810; font-weight: bold; }
-        .cal-day.spectacle-expo1 { background: var(--couleur-expo1) !important; color: #003049; font-weight: bold; }
-        .cal-day.spectacle-expo2 { background: var(--couleur-expo2) !important; color: #1A0033; font-weight: bold; }
-        .cal-day.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; }
-        .cal-day.spectacle-maboul-only { background: rgba(255,255,255,0.9) !important; box-shadow: inset 0 0 0 3px var(--couleur-maboul) !important; font-weight: bold; color: #2C5F3F; }
-        .cal-day.today { box-shadow: inset 0 0 0 2px var(--rose-spectacle); font-weight: bold; }
-        .cal-day.today.spectacle-maboul { box-shadow: inset 0 0 0 3px var(--rose-spectacle), inset 0 0 0 5px var(--couleur-maboul) !important; }
-
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-ducoup2) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-roulettes) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-maboul) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-roulettes) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-maboul) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-maboul) 50%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo1) 50%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo2) 50%) !important; color: #2C1810; }
-        .cal-day.multi-event.spectacle-maboul.spectacle-expo1 { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo1) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-maboul.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo2) 50%) !important; color: #ffffff; }
-        .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%) !important; color: #003049; }
-        .cal-day.multi-event { background: linear-gradient(135deg, #e0e0e0 50%, #bdbdbd 50%) !important; color: #2C1810; }
+        .cal-day.spectacle-ducoup1 { background: var(--couleur-ducoup1); color: #ffffff; font-weight: bold; }
+        .cal-day.spectacle-ducoup2 { background: var(--couleur-ducoup2); color: #ffffff; font-weight: bold; }
+        .cal-day.spectacle-roulettes { background: var(--couleur-roulettes); color: #2C1810; font-weight: bold; }
+        .cal-day.spectacle-expo1 { background: var(--couleur-expo1); color: #003049; font-weight: bold; }
+        .cal-day.spectacle-expo2 { background: var(--couleur-expo2); color: #1A0033; font-weight: bold; }
+        .cal-day.spectacle-maboul { 
+            background: var(--couleur-maboul); 
+            color: #ffffff; 
+            font-weight: bold; 
+        }
+        
+        .cal-day.multi-event {
+            background: transparent !important;
+            box-shadow: none !important;
+            position: relative;
+            overflow: hidden;
+        }
+        .cal-day.multi-event::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: 0; pointer-events: none;
+        }
+        
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-ducoup2) 50%); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-ducoup2 { color: #ffffff; }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-roulettes) 50%); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-roulettes { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-maboul) 50%); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-maboul { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo1) 50%); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-ducoup1) 50%, var(--couleur-expo2) 50%); }
+        .cal-day.multi-event.spectacle-ducoup1.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-roulettes) 50%); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-roulettes { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-maboul) 50%); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-maboul { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo1) 50%); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-ducoup2) 50%, var(--couleur-expo2) 50%); }
+        .cal-day.multi-event.spectacle-ducoup2.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-maboul) 50%); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-maboul { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo1) 50%); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo1 { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-roulettes) 50%, var(--couleur-expo2) 50%); }
+        .cal-day.multi-event.spectacle-roulettes.spectacle-expo2 { color: #2C1810; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo1::before { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo1) 50%); }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo1 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-maboul) 50%, var(--couleur-expo2) 50%); }
+        .cal-day.multi-event.spectacle-maboul.spectacle-expo2 { color: #ffffff; text-shadow: 0 0 2px rgba(0,0,0,0.6); }
+        .cal-day.multi-event.spectacle-expo1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%); }
+        .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
         .selection-calendar .cal-day { cursor: pointer; }
-        .selection-calendar .cal-day.selected { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; transform: scale(1.05); box-shadow: none !important; }
-        .selection-calendar .cal-day.in-range { background: #b8dfca !important; color: #2C5F3F; font-weight: bold; box-shadow: none !important; }
-        .selection-calendar .cal-day.range-start, .selection-calendar .cal-day.range-end { background: var(--vert-caravane) !important; color: white !important; font-weight: bold; box-shadow: none !important; }
-        .selected-dates-info { background: #f0f8f2; padding: 10px 15px; border-radius: 15px; margin: 1rem 0; font-size: 0.9rem; display: none; border-left: 4px solid var(--vert-caravane); }
+        .selection-calendar .cal-day.selected { 
+            background: var(--vert-caravane) !important; 
+            color: white !important; 
+            font-weight: bold; 
+            transform: scale(1.05); 
+            box-shadow: none !important; 
+        }
+        .selection-calendar .cal-day.in-range { 
+            background: #b8dfca !important; 
+            color: #2C5F3F; 
+            font-weight: bold; 
+            box-shadow: none !important; 
+        }
+        .selection-calendar .cal-day.range-start, 
+        .selection-calendar .cal-day.range-end { 
+            background: var(--vert-caravane) !important; 
+            color: white !important; 
+            font-weight: bold; 
+            box-shadow: none !important; 
+        }
+        .selected-dates-info { 
+            background: #f0f8f2; 
+            padding: 10px 15px; 
+            border-radius: 15px; 
+            margin: 1rem 0; 
+            font-size: 0.9rem; 
+            display: none; 
+            border-left: 4px solid var(--vert-caravane); 
+        }
         .selected-dates-info.active { display: block; }
         .hidden { display: none !important; }
-        .legend { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1rem; font-size: 0.8rem; align-items: center; }
-        .legend-item { display: flex; align-items: center; gap: 0.3rem; padding: 0.2rem 0.5rem; background: rgba(255,255,255,0.5); border-radius: 12px; }
+        
+        .legend { 
+            display: flex; 
+            flex-wrap: wrap; 
+            gap: 0.5rem; 
+            margin-top: 1rem; 
+            font-size: 0.8rem; 
+            align-items: center; 
+        }
+        .legend-item { 
+            display: flex; 
+            align-items: center; 
+            gap: 0.3rem; 
+            padding: 0.2rem 0.5rem; 
+            background: rgba(255,255,255,0.5); 
+            border-radius: 12px; 
+        }
         .legend-color { width: 16px; height: 16px; border-radius: 4px; }
-        .legend-outline { width: 14px; height: 14px; border-radius: 4px; border: 3px solid var(--couleur-maboul); background: white; }
-        .events-popup { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1000; justify-content: center; align-items: center; }
+        .legend-color.ducoup1 { background: var(--couleur-ducoup1); }
+        .legend-color.ducoup2 { background: var(--couleur-ducoup2); }
+        .legend-color.roulettes { background: var(--couleur-roulettes); }
+        .legend-color.maboul { background: var(--couleur-maboul); }
+        .legend-color.expo1 { background: var(--couleur-expo1); }
+        .legend-color.expo2 { background: var(--couleur-expo2); }
+
+        .events-popup { 
+            display: none; 
+            position: fixed; 
+            top: 0; left: 0; 
+            width: 100%; height: 100%; 
+            background: rgba(0,0,0,0.6); 
+            z-index: 1000; 
+            justify-content: center; 
+            align-items: center; 
+        }
         .events-popup.active { display: flex; }
-        .popup-content { background: white; border-radius: 25px; padding: 1.5rem; width: 95%; max-width: 500px; border: 4px solid var(--vert-caravane); }
-        .popup-event-item { background: #f9f9f9; padding: 0.8rem; margin-bottom: 0.6rem; border-left: 4px solid var(--vert-caravane); display: flex; justify-content: space-between; align-items: center; }
-        .edit-form { display: none; margin-top: 1rem; border-top: 1px solid #eee; padding-top: 1rem; }
+        .popup-content { 
+            background: white; 
+            border-radius: 25px; 
+            padding: 1.5rem; 
+            width: 95%; 
+            max-width: 500px; 
+            max-height: 85vh;
+            overflow-y: auto;
+            border: 4px solid var(--vert-caravane); 
+        }
+        .popup-event-item { 
+            background: #f9f9f9; 
+            padding: 0.8rem; 
+            margin-bottom: 0.6rem; 
+            border-left: 4px solid var(--vert-caravane); 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+        }
+        .edit-form { 
+            display: none; 
+            margin-top: 1rem; 
+            border-top: 1px solid #eee; 
+            padding-top: 1rem; 
+        }
         .edit-form.active { display: block; }
+        
+        .period-info-banner {
+            background: #FFF3E0;
+            border: 2px solid #FFB300;
+            border-radius: 15px;
+            padding: 0.8rem 1rem;
+            margin-bottom: 1rem;
+            font-size: 0.85rem;
+            color: #E65100;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .period-info-banner .icon { font-size: 1.2rem; }
+        .period-dates-list {
+            background: #f5f5f5;
+            border-radius: 10px;
+            padding: 0.5rem;
+            margin: 0.5rem 0;
+            font-size: 0.75rem;
+            color: #666;
+            max-height: 100px;
+            overflow-y: auto;
+        }
     </style>
 </head>
 <body>
@@ -279,12 +403,12 @@
         <div class="calendar-grid" id="calendarGrid"></div>
         <div class="legend">
             <span style="font-weight:bold;">Légende :</span>
-            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-ducoup1);"></div> DU COUP ON VIENT</div>
-            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-ducoup2);"></div> DU COUP revient</div>
-            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-roulettes);"></div> ROULETTES</div>
-            <div class="legend-item"><div class="legend-outline"></div> MABOUL</div>
-            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-expo1);"></div> FÉERIE</div>
-            <div class="legend-item"><div class="legend-color" style="background:var(--couleur-expo2);"></div> GÉANTS</div>
+            <div class="legend-item"><div class="legend-color ducoup1"></div> DU COUP ON VIENT</div>
+            <div class="legend-item"><div class="legend-color ducoup2"></div> DU COUP revient</div>
+            <div class="legend-item"><div class="legend-color roulettes"></div> ROULETTES</div>
+            <div class="legend-item"><div class="legend-color maboul"></div> MABOUL</div>
+            <div class="legend-item"><div class="legend-color expo1"></div> FÉERIE</div>
+            <div class="legend-item"><div class="legend-color expo2"></div> GÉANTS</div>
         </div>
     </div>
     <div class="card">
@@ -335,7 +459,8 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentMode = 'single', currentMonth, currentYear, selMonth, selYear, eventsData = {};
-    let editingEventId = null, editingEventDate = null, selectedDates = new Set(), selectionAnchor = null;
+    let editingEventId = null, editingEventDate = null, editingPeriodId = null, editingAllPeriodDates = [];
+    let selectedDates = new Set(), selectionAnchor = null;
     let lieuTimeout = null;
 
     const SPECTACLES = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES","DÉLICIEUSEMENT MABOUL"];
@@ -356,15 +481,13 @@
 
     function getEventClasses(dateKey) {
         const events = eventsData[dateKey] || [];
-        if (events.length === 0) return { classes: [], hasMaboul: false, hasOther: false };
-        let hasMaboul = false, hasOther = false, classes = [];
+        if (events.length === 0) return { classes: [] };
+        let classes = [];
         events.forEach(ev => {
-            if (ev.titre === "DÉLICIEUSEMENT MABOUL") hasMaboul = true;
-            else { hasOther = true; const cls = getSpectacleClass(ev.titre); if (cls && !classes.includes(cls)) classes.push(cls); }
+            const cls = getSpectacleClass(ev.titre);
+            if (cls && !classes.includes(cls)) classes.push(cls);
         });
-        if (hasMaboul && !hasOther) classes.push('spectacle-maboul-only');
-        else if (hasMaboul && hasOther) classes.push('spectacle-maboul');
-        return { classes, hasMaboul, hasOther };
+        return { classes };
     }
 
     const now = new Date();
@@ -415,13 +538,36 @@
         renderMainCalendar(); renderSelectionCalendar();
     }
 
+    function getPeriodDates(periodId, excludeEventId = null) {
+        const dates = [];
+        for (let dateKey in eventsData) {
+            const events = eventsData[dateKey];
+            for (let ev of events) {
+                if (ev.period_id === periodId && ev.period_id && ev.period_id !== 'null' && ev.period_id !== 'undefined' && ev.period_id !== '') {
+                    if (!excludeEventId || ev.id !== excludeEventId) {
+                        dates.push(dateKey);
+                    }
+                    break;
+                }
+            }
+        }
+        return dates.sort();
+    }
+
     function hasDuCoupOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
-        return events.some(ev => { if (excludeEventId && ev.id === excludeEventId) return false; return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || ev.titre === "DU COUP on revient chez vous" || ev.titre === "COMME SUR DES ROULETTES"; });
+        return events.some(ev => { 
+            if (excludeEventId && ev.id === excludeEventId) return false; 
+            return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || ev.titre === "DU COUP on revient chez vous" || ev.titre === "COMME SUR DES ROULETTES"; 
+        });
     }
+    
     function hasMaboulOnDate(dateKey, excludeEventId = null) {
         const events = eventsData[dateKey] || [];
-        return events.some(ev => { if (excludeEventId && ev.id === excludeEventId) return false; return ev.titre === "DÉLICIEUSEMENT MABOUL"; });
+        return events.some(ev => { 
+            if (excludeEventId && ev.id === excludeEventId) return false; 
+            return ev.titre === "DÉLICIEUSEMENT MABOUL"; 
+        });
     }
 
     function renderMainCalendar() {
@@ -435,8 +581,9 @@
         for (let d = 1; d <= daysInMonth; d++) {
             const key = currentYear + '-' + String(currentMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
             const { classes } = getEventClasses(key);
-            let allClasses = ['cal-day']; if (key === todayStr) allClasses.push('today');
-            if (classes.length > 1) { allClasses.push('multi-event'); }
+            let allClasses = ['cal-day']; 
+            if (key === todayStr) allClasses.push('today');
+            if (classes.length > 1) allClasses.push('multi-event');
             allClasses = allClasses.concat(classes);
             html += '<div class="' + allClasses.join(' ') + '" onclick="openPopup(\'' + key + '\')">' + d + '</div>';
         }
@@ -453,15 +600,21 @@
         ["Lun","Mar","Mer","Jeu","Ven","Sam","Dim"].forEach(d => html += '<div class="weekday-header">' + d + '</div>');
         for (let i = 0; i < startOffset; i++) html += '<div class="cal-day other-month"></div>';
         let rangeStart = null, rangeEnd = null;
-        if (currentMode === 'period' && selectedDates.size >= 2) { const sorted = Array.from(selectedDates).sort(); rangeStart = sorted[0]; rangeEnd = sorted[sorted.length - 1]; }
+        if (currentMode === 'period' && selectedDates.size >= 2) { 
+            const sorted = Array.from(selectedDates).sort(); 
+            rangeStart = sorted[0]; 
+            rangeEnd = sorted[sorted.length - 1]; 
+        }
         for (let d = 1; d <= daysInMonth; d++) {
             const key = selYear + '-' + String(selMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
             const isSelected = selectedDates.has(key), isToday = key === todayStr;
             const { classes: eventClasses } = getEventClasses(key);
-            let classes = ['cal-day']; if (isToday) classes.push('today');
+            let classes = ['cal-day']; 
+            if (isToday) classes.push('today');
             if (!isSelected) classes = classes.concat(eventClasses);
-            if (currentMode === 'single') { if (isSelected) classes.push('selected'); }
-            else {
+            if (currentMode === 'single') { 
+                if (isSelected) classes.push('selected'); 
+            } else {
                 if (isSelected && key === rangeStart && rangeEnd && key === rangeEnd) classes.push('selected');
                 else if (isSelected && key === rangeStart) classes.push('range-start');
                 else if (isSelected && rangeEnd && key === rangeEnd) classes.push('range-end');
@@ -475,8 +628,19 @@
     }
 
     window.handleSelectionClick = (event, dateKey) => {
-        if (currentMode === 'single') { selectedDates = new Set([dateKey]); selectionAnchor = null; }
-        else { if (selectionAnchor === null) { selectionAnchor = dateKey; selectedDates = new Set([dateKey]); } else { const allDates = getDatesBetween(selectionAnchor, dateKey); selectedDates = new Set(allDates); selectionAnchor = null; } }
+        if (currentMode === 'single') { 
+            selectedDates = new Set([dateKey]); 
+            selectionAnchor = null; 
+        } else { 
+            if (selectionAnchor === null) { 
+                selectionAnchor = dateKey; 
+                selectedDates = new Set([dateKey]); 
+            } else { 
+                const allDates = getDatesBetween(selectionAnchor, dateKey); 
+                selectedDates = new Set(allDates); 
+                selectionAnchor = null; 
+            } 
+        }
         renderSelectionCalendar();
     };
 
@@ -502,7 +666,10 @@
     function checkConflicts(dates, titre, excludeEventId = null) {
         const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES"].includes(titre);
         const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
-        for (const dateKey of dates) { if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: 'Un spectacle "DU COUP" existe déjà le ' + formatDate(dateKey) + '.' }; if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: '"DÉLICIEUSEMENT MABOUL" est déjà présent le ' + formatDate(dateKey) + '.' }; }
+        for (const dateKey of dates) { 
+            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: 'Un spectacle "DU COUP" existe déjà le ' + formatDate(dateKey) + '.' }; 
+            if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: '"DÉLICIEUSEMENT MABOUL" est déjà présent le ' + formatDate(dateKey) + '.' }; 
+        }
         return { conflict: false };
     }
 
@@ -531,14 +698,21 @@
         else {
             events.forEach(ev => {
                 let borderColor = '#7CB69F';
-                if (ev.titre === "DÉLICIEUSEMENT MABOUL") borderColor = '#4CAF50';
-                if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#b41979';
-                if (ev.titre === "DU COUP on revient chez vous") borderColor = '#f70202';
-                if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#fffb00';
-                html += '<div class="popup-event-item" style="border-left-color: ' + borderColor + ';"><div><strong>' + ev.titre + '</strong><br><small>' + (ev.lieu || '') + '</small></div><div style="display:flex; gap:5px;">' + (window.adminRole !== 'viewer' ? '<button class="btn btn-primary" onclick="prepareEdit(\'' + ev.id + '\', \'' + ev.type + '\', \'' + ev.titre.replace(/'/g, "\\'") + '\', \'' + (ev.lieu || '').replace(/'/g, "\\'") + '\', \'' + ev.event_date + '\')">✏️</button>' : '') + (window.adminRole === 'superadmin' ? '<button class="btn btn-danger" onclick="deleteEvent(\'' + ev.id + '\', \'' + (ev.period_id || '') + '\')">🗑</button>' : '') + '</div></div>';
+                if (ev.titre === "DÉLICIEUSEMENT MABOUL") borderColor = '#800000';
+                if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#FFB800';
+                if (ev.titre === "DU COUP on revient chez vous") borderColor = '#006800';
+                if (ev.titre === "COMME SUR DES ROULETTES") borderColor = '#A100A0';
+                if (ev.titre === "LA FÉERIE DES MARIONNETTES") borderColor = '#81D4FA';
+                if (ev.titre === "LES GÉANTS DU CARNAVAL") borderColor = '#B39DDB';
+                
+                const periodInfo = (ev.period_id && ev.period_id !== 'null' && ev.period_id !== 'undefined' && ev.period_id !== '') 
+                    ? ' <span style="font-size:0.7rem; background:#FFB300; color:#2C1810; padding:2px 6px; border-radius:10px;">📆 période</span>' 
+                    : '';
+                
+                html += '<div class="popup-event-item" style="border-left-color: ' + borderColor + ';"><div><strong>' + ev.titre + '</strong>' + periodInfo + '<br><small>' + (ev.lieu || '') + '</small></div><div style="display:flex; gap:5px;">' + (window.adminRole !== 'viewer' ? '<button class="btn btn-primary" onclick="prepareEdit(\'' + ev.id + '\', \'' + ev.type + '\', \'' + ev.titre.replace(/'/g, "\\'") + '\', \'' + (ev.lieu || '').replace(/'/g, "\\'") + '\', \'' + ev.event_date + '\', \'' + (ev.period_id || '') + '\')">✏️</button>' : '') + (window.adminRole === 'superadmin' ? '<button class="btn btn-danger" onclick="deleteEvent(\'' + ev.id + '\', \'' + (ev.period_id || '') + '\')">🗑</button>' : '') + '</div></div>';
             });
         }
-        html += '<div class="edit-form" id="editForm"><select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select><select id="editTitle"></select><div class="lieu-wrapper" style="margin-top:0.5rem;"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div><button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">Sauvegarder</button><p id="editError" style="color:red; display:none; margin-top:5px;"></p></div><button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>';
+        html += '<div class="edit-form" id="editForm"><div id="editPeriodInfo"></div><select id="editType" onchange="updateEditTitleDropdown(this.value)"><option value="Spectacle">🎭 Spectacle</option><option value="Exposition">🖼️ Exposition</option></select><select id="editTitle"></select><div class="lieu-wrapper" style="margin-top:0.5rem;"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div><button class="btn btn-primary" onclick="saveEdit()" style="width:100%; margin-top:5px;">💾 Sauvegarder</button><p id="editError" style="color:red; display:none; margin-top:5px;"></p></div><button class="btn" onclick="closePopup()" style="width:100%; margin-top:10px; background:#ccc;">Fermer</button>';
         document.getElementById('popupContent').innerHTML = html;
         document.getElementById('eventsPopup').classList.add('active');
         setTimeout(() => {
@@ -550,25 +724,79 @@
         }, 100);
     };
 
-    window.prepareEdit = (id, type, titre, lieu, date) => {
+    window.prepareEdit = (id, type, titre, lieu, date, periodId) => {
         if (window.adminRole === 'viewer') { alert('⛔ Accès refusé.'); return; }
-        editingEventId = id; editingEventDate = date;
-        document.getElementById('editType').value = type; updateEditTitleDropdown(type);
-        setTimeout(() => { document.getElementById('editTitle').value = titre; document.getElementById('editLieu').value = lieu; }, 50);
+        editingEventId = id;
+        editingEventDate = date;
+        editingPeriodId = (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') ? periodId : null;
+        
+        if (editingPeriodId) {
+            editingAllPeriodDates = getPeriodDates(editingPeriodId, editingEventId);
+            editingAllPeriodDates.push(date);
+            editingAllPeriodDates = [...new Set(editingAllPeriodDates)].sort();
+        } else {
+            editingAllPeriodDates = [date];
+        }
+        
+        document.getElementById('editType').value = type; 
+        updateEditTitleDropdown(type);
+        setTimeout(() => { 
+            document.getElementById('editTitle').value = titre; 
+            document.getElementById('editLieu').value = lieu; 
+        }, 50);
+        
+        const periodInfoDiv = document.getElementById('editPeriodInfo');
+        if (editingPeriodId && editingAllPeriodDates.length > 1) {
+            periodInfoDiv.innerHTML = '<div class="period-info-banner"><span class="icon">📆</span><div><strong>Période de ' + editingAllPeriodDates.length + ' jours</strong><br>du ' + formatDate(editingAllPeriodDates[0]) + ' au ' + formatDate(editingAllPeriodDates[editingAllPeriodDates.length-1]) + '<br><span style="font-size:0.75rem; color:#888;">La modification s\'appliquera à tous les jours de cette période.</span></div></div>';
+        } else if (editingPeriodId && editingAllPeriodDates.length === 1) {
+            periodInfoDiv.innerHTML = '<div class="period-info-banner" style="background:#f5f5f5; border-color:#aaa; color:#555;"><span class="icon">📅</span><div><strong>Jour isolé</strong><br>Ce jour était le seul restant de sa période.<br><span style="font-size:0.75rem; color:#888;">Il sera traité comme un jour indépendant.</span></div></div>';
+            editingPeriodId = null;
+        } else {
+            periodInfoDiv.innerHTML = '<div style="font-size:0.8rem; color:#888; margin-bottom:0.5rem;">📅 Édition d\'un jour isolé</div>';
+        }
+        
         document.getElementById('editForm').classList.add('active');
     };
 
     window.saveEdit = async () => {
         if (window.adminRole === 'viewer') { alert('⛔ Accès refusé.'); return; }
-        const newTitre = document.getElementById('editTitle').value, errorEl = document.getElementById('editError');
+        const newType = document.getElementById('editType').value;
+        const newTitre = document.getElementById('editTitle').value;
+        const newLieu = document.getElementById('editLieu').value;
+        const errorEl = document.getElementById('editError');
         errorEl.style.display = 'none';
+        
         if (!newTitre) { errorEl.textContent = '⚠️ Veuillez sélectionner un titre.'; errorEl.style.display = 'block'; return; }
-        const conflict = checkConflicts([editingEventDate], newTitre, editingEventId);
+        
+        const datesToUpdate = (editingPeriodId && editingAllPeriodDates.length > 1) ? editingAllPeriodDates : [editingEventDate];
+        
+        const conflict = checkConflicts(datesToUpdate, newTitre, editingEventId);
         if (conflict.conflict) { errorEl.textContent = '⚠️ ' + conflict.message; errorEl.style.display = 'block'; return; }
-        const updates = { type: document.getElementById('editType').value, titre: newTitre, lieu: document.getElementById('editLieu').value };
-        const { error } = await _supabase.from('events').update(updates).eq('id', editingEventId);
-        if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; return; }
-        closePopup(); await fetchEvents();
+        
+        const updates = { type: newType, titre: newTitre, lieu: newLieu };
+        
+        const btn = document.querySelector('#editForm .btn-primary');
+        btn.disabled = true; btn.textContent = '⏳ Sauvegarde...';
+        
+        let errorOccurred = false;
+        
+        if (editingPeriodId && editingAllPeriodDates.length > 1) {
+            const { error } = await _supabase.from('events').update(updates).eq('period_id', editingPeriodId);
+            if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
+            else { alert('✅ Période de ' + editingAllPeriodDates.length + ' jours mise à jour !'); }
+        } else {
+            const finalUpdates = { ...updates, period_id: null };
+            const { error } = await _supabase.from('events').update(finalUpdates).eq('id', editingEventId);
+            if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
+            else { alert('✅ Événement mis à jour !'); }
+        }
+        
+        btn.disabled = false; btn.textContent = '💾 Sauvegarder';
+        
+        if (!errorOccurred) {
+            closePopup(); 
+            await fetchEvents();
+        }
     };
 
     window.deleteEvent = async (id, periodId) => {
@@ -584,13 +812,28 @@
         const list = document.getElementById('eventType').value === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         document.getElementById('eventTitle').innerHTML = '<option value="">-- Sélectionnez --</option>' + list.map(x => '<option value="' + x + '">' + x + '</option>').join('');
     }
+    
     window.updateEditTitleDropdown = (type) => {
         const list = type === 'Spectacle' ? SPECTACLES : EXPOSITIONS;
         document.getElementById('editTitle').innerHTML = list.map(x => '<option value="' + x + '">' + x + '</option>').join('');
     };
 
-    function switchMode(m) { currentMode = m; document.getElementById('modeSingle').classList.toggle('active', m === 'single'); document.getElementById('modePeriod').classList.toggle('active', m === 'period'); selectedDates = new Set(); selectionAnchor = null; renderSelectionCalendar(); }
-    function closePopup() { document.getElementById('eventsPopup').classList.remove('active'); editingEventId = null; editingEventDate = null; }
+    function switchMode(m) { 
+        currentMode = m; 
+        document.getElementById('modeSingle').classList.toggle('active', m === 'single'); 
+        document.getElementById('modePeriod').classList.toggle('active', m === 'period'); 
+        selectedDates = new Set(); 
+        selectionAnchor = null; 
+        renderSelectionCalendar(); 
+    }
+    
+    function closePopup() { 
+        document.getElementById('eventsPopup').classList.remove('active'); 
+        editingEventId = null; 
+        editingEventDate = null;
+        editingPeriodId = null;
+        editingAllPeriodDates = [];
+    }
 
     document.getElementById('modeSingle').onclick = () => switchMode('single');
     document.getElementById('modePeriod').onclick = () => switchMode('period');
@@ -602,8 +845,16 @@
     document.getElementById('clearSelectionBtn').onclick = () => { selectedDates = new Set(); selectionAnchor = null; renderSelectionCalendar(); };
 
     (async () => {
-        const ySel = document.getElementById('yearSelect'); for(let y=2024; y<=2030; y++) ySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; ySel.value = currentYear; ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
-        const sySel = document.getElementById('selYearSelect'); for(let y=2024; y<=2030; y++) sySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; sySel.value = selYear; sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
+        const ySel = document.getElementById('yearSelect'); 
+        for(let y=2024; y<=2030; y++) ySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; 
+        ySel.value = currentYear; 
+        ySel.onchange = (e) => { currentYear = parseInt(e.target.value); renderMainCalendar(); };
+        
+        const sySel = document.getElementById('selYearSelect'); 
+        for(let y=2024; y<=2030; y++) sySel.innerHTML += '<option value="' + y + '">' + y + '</option>'; 
+        sySel.value = selYear; 
+        sySel.onchange = (e) => { selYear = parseInt(e.target.value); renderSelectionCalendar(); };
+        
         updateTitleDropdown();
         await fetchEvents();
     })();
