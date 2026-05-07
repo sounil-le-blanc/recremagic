@@ -367,7 +367,7 @@
             background: transparent !important;
             box-shadow: none !important;
             position: relative;
-            overflow: hidden;
+            overflow: visible !important;
         }
 
         .calendar-day.multi-event::before {
@@ -377,6 +377,7 @@
             left: 0;
             width: 100%;
             height: 100%;
+            border-radius: 30px;
             z-index: 0;
             pointer-events: none;
         }
@@ -420,14 +421,14 @@
         .calendar-day:hover {
             transform: scale(1.08); 
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-            z-index: 50;
+            z-index: 100;
         }
         .today { 
             box-shadow: 0 0 0 2px white, 0 0 0 4px var(--rose-spectacle); 
         }
         .other-month { opacity: 0.4; }
 
-        /* BULLE HOVER - Même système que l'admin */
+        /* BULLE HOVER */
         .calendar-day .hover-bubble {
             display: none;
             position: absolute;
@@ -438,7 +439,7 @@
             border-radius: 16px;
             padding: 0.8rem 1rem;
             box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            z-index: 200;
+            z-index: 500;
             min-width: 220px;
             max-width: 300px;
             border: 2px solid var(--vert-caravane);
@@ -947,7 +948,6 @@
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
-        const todayStr = getDateKey(currentYear, currentMonth, new Date().getDate());
         let calendarHtml = '';
         weekdays.forEach(day => { calendarHtml += `<div class="weekday">${day}</div>`; });
         for (let i = 0; i < startOffset; i++) { calendarHtml += `<div class="calendar-day other-month"></div>`; }
@@ -1180,4 +1180,4 @@
     console.log('🎪 Calendrier connecté à Supabase !');
 </script>
 </body>
-</html>
+    </html>
