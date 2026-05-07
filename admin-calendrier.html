@@ -240,37 +240,101 @@
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2::before { background: linear-gradient(135deg, var(--couleur-expo1) 50%, var(--couleur-expo2) 50%); }
         .cal-day.multi-event.spectacle-expo1.spectacle-expo2 { color: #003049; text-shadow: 0 0 2px rgba(255,255,255,0.6); }
 
-        .cal-day[data-tooltip]:hover::after {
-    content: attr(data-tooltip);
-    position: absolute;
-    bottom: calc(100% + 8px);
-    left: 50%;
-    transform: translateX(-50%);
-    background: #2C1810;
-    color: #fff;
-    padding: 0.6rem 0.9rem;
-    border-radius: 12px;
-    font-size: 0.75rem;
-    white-space: pre-line;
-    text-align: left;
-    line-height: 1.4;
-    z-index: 100;
-    pointer-events: none;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-    font-weight: normal;
-    max-width: 220px;
-        }
-        .cal-day[data-tooltip]:hover::before {
-            content: '';
+        /* NOUVEAU : Bulle hover stylée */
+        .cal-day .hover-bubble {
+            display: none;
             position: absolute;
-            bottom: calc(100% + 2px);
+            bottom: calc(100% + 12px);
             left: 50%;
             transform: translateX(-50%);
-            border: 6px solid transparent;
-            border-top-color: #2C1810;
-            z-index: 100;
-            pointer-events: none;
+            background: white;
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            z-index: 200;
+            min-width: 220px;
+            max-width: 300px;
+            border: 2px solid var(--vert-caravane);
+            text-align: left;
+            font-weight: normal;
+            pointer-events: auto;
         }
+        .cal-day .hover-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+        .cal-day:hover .hover-bubble {
+            display: block;
+        }
+        .cal-day .hover-bubble-title {
+            font-family: 'Quicksand', sans-serif;
+            color: var(--rose-spectacle);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.4rem;
+            border-bottom: 2px solid var(--rose-spectacle);
+        }
+        .cal-day .hover-bubble-event {
+            background: rgba(0,0,0,0.03);
+            border-radius: 10px;
+            padding: 0.5rem 0.7rem;
+            margin-bottom: 0.4rem;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.4rem;
+            align-items: center;
+            font-size: 0.75rem;
+        }
+        .cal-day .hover-bubble-event:last-child { margin-bottom: 0; }
+        .cal-day .hover-bubble-event.ducoup1 { border-left: 4px solid var(--couleur-ducoup1); }
+        .cal-day .hover-bubble-event.ducoup2 { border-left: 4px solid var(--couleur-ducoup2); }
+        .cal-day .hover-bubble-event.roulettes { border-left: 4px solid var(--couleur-roulettes); }
+        .cal-day .hover-bubble-event.maboul { border-left: 4px solid var(--couleur-maboul); }
+        .cal-day .hover-bubble-event.expo1 { border-left: 4px solid var(--couleur-expo1); }
+        .cal-day .hover-bubble-event.expo2 { border-left: 4px solid var(--couleur-expo2); }
+        .cal-day .hover-bubble-lieu {
+            font-weight: bold;
+            color: #000;
+        }
+        .cal-day .hover-bubble-type {
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
+            font-weight: bold;
+            color: white;
+            white-space: nowrap;
+        }
+        .cal-day .hover-bubble-type.spectacle { background: var(--vert-caravane); }
+        .cal-day .hover-bubble-type.exposition { background: var(--rose-spectacle); }
+        .cal-day .hover-bubble-noevent {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            font-size: 0.8rem;
+            padding: 0.5rem;
+        }
+
+        /* Titre avec contour dans la popup */
+        .event-title-contour {
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.9);
+            display: inline-block;
+            font-size: 0.85rem;
+        }
+        .event-title-contour.ducoup1 { border: 2px solid var(--couleur-ducoup1); color: var(--couleur-ducoup1); }
+        .event-title-contour.ducoup2 { border: 2px solid var(--couleur-ducoup2); color: var(--couleur-ducoup2); }
+        .event-title-contour.roulettes { border: 2px solid var(--couleur-roulettes); color: var(--couleur-roulettes); }
+        .event-title-contour.maboul { border: 2px solid var(--couleur-maboul); color: var(--couleur-maboul); }
+        .event-title-contour.expo1 { border: 2px solid var(--couleur-expo1); color: #0288D1; }
+        .event-title-contour.expo2 { border: 2px solid var(--couleur-expo2); color: #6A1B9A; }
 
         .legend {
             display: flex;
@@ -391,6 +455,7 @@
             .cal-day { font-size: 0.75rem; min-height: 32px; border-radius: 12px; }
             .weekday-header { font-size: 0.65rem; }
             .popup-content { padding: 1rem; }
+            .cal-day .hover-bubble { min-width: 180px; max-width: 250px; }
         }
     </style>
 </head>
@@ -470,6 +535,18 @@
         }
     }
 
+    function getRowClass(titre) {
+        switch(titre) {
+            case "DU COUP ON VIENT CHEZ VOUS": return 'ducoup1';
+            case "DU COUP on revient chez vous": return 'ducoup2';
+            case "COMME SUR DES ROULETTES": return 'roulettes';
+            case "DÉLICIEUSEMENT MABOUL": return 'maboul';
+            case "LA FÉERIE DES MARIONNETTES": return 'expo1';
+            case "LES GÉANTS DU CARNAVAL": return 'expo2';
+            default: return '';
+        }
+    }
+
     function getEventClasses(dateKey) {
         const events = eventsData[dateKey] || [];
         if (events.length === 0) return { classes: [] };
@@ -481,16 +558,28 @@
         return { classes };
     }
 
-    function getTooltipText(dateKey) {
-    const events = eventsData[dateKey] || [];
-    if (events.length === 0) return '';
-    let text = '📅 ' + formatDate(dateKey);
-    events.forEach(ev => {
-        text += '\n' + ev.titre;
-        if (ev.lieu) text += '\n📍 ' + ev.lieu;
-    });
-    return text;
-}
+    function buildHoverBubble(dateKey) {
+        const events = eventsData[dateKey] || [];
+        let html = '<div class="hover-bubble">';
+        html += '<div class="hover-bubble-title">📋 ' + formatDate(dateKey) + '</div>';
+        if (events.length === 0) {
+            html += '<div class="hover-bubble-noevent">Aucun événement</div>';
+        } else {
+            events.forEach(ev => {
+                const rowClass = getRowClass(ev.titre);
+                const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
+                const typeEmoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                const titreContourClass = 'event-title-contour ' + rowClass;
+                html += '<div class="hover-bubble-event ' + rowClass + '">';
+                html += '<div class="hover-bubble-lieu">📍 ' + (ev.lieu || 'Lieu non précisé') + '</div>';
+                html += '<div class="hover-bubble-type ' + typeClass + '">' + typeEmoji + ' ' + ev.type + '</div>';
+                html += '<div class="' + titreContourClass + '">' + ev.titre + '</div>';
+                html += '</div>';
+            });
+        }
+        html += '</div>';
+        return html;
+    }
 
     const now = new Date();
     currentMonth = now.getMonth(); currentYear = now.getFullYear();
@@ -582,12 +671,12 @@
         for (let d = 1; d <= daysInMonth; d++) {
             const key = currentYear + '-' + String(currentMonth+1).padStart(2,'0') + '-' + String(d).padStart(2,'0');
             const { classes } = getEventClasses(key);
-            const tooltip = getTooltipText(key);
+            const hoverBubble = buildHoverBubble(key);
             let allClasses = ['cal-day'];
             if (key === todayStr) allClasses.push('today');
             if (classes.length > 1) allClasses.push('multi-event');
             allClasses = allClasses.concat(classes);
-            html += '<div class="' + allClasses.join(' ') + '" data-tooltip="' + tooltip.replace(/"/g, '&quot;') + '" onclick="openEditPopup(\'' + key + '\')">' + d + '</div>';
+            html += '<div class="' + allClasses.join(' ') + '" onclick="openEditPopup(\'' + key + '\')">' + d + hoverBubble + '</div>';
         }
         document.getElementById('calendarGrid').innerHTML = html;
         document.getElementById('monthName').textContent = monthNames[currentMonth] + ' ' + currentYear;
@@ -628,6 +717,7 @@
         if (events.length > 0) {
             html += '<div class="existing-events-list">';
             events.forEach(ev => {
+                const rowClass = getRowClass(ev.titre);
                 let borderColor = '#7CB69F';
                 if (ev.titre === "DÉLICIEUSEMENT MABOUL") borderColor = '#800000';
                 if (ev.titre === "DU COUP ON VIENT CHEZ VOUS") borderColor = '#FFB800';
@@ -640,7 +730,11 @@
                     ? ' <span style="font-size:0.65rem; background:#FFB300; color:#2C1810; padding:1px 5px; border-radius:8px;">📆 période</span>'
                     : '';
 
-                html += '<div class="popup-event-item" style="border-left-color: ' + borderColor + ';"><div><strong>' + ev.titre + '</strong>' + periodBadge + '<br><small>' + (ev.lieu || '') + '</small></div><div style="display:flex; gap:5px;">' +
+                const titreContourClass = 'event-title-contour ' + rowClass;
+                const typeEmoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
+
+                html += '<div class="popup-event-item" style="border-left-color: ' + borderColor + ';"><div><div class="' + titreContourClass + '">' + ev.titre + '</div>' + periodBadge + '<br><small style="display:flex;align-items:center;gap:0.3rem;margin-top:3px;"><span style="background:' + (ev.type === 'Exposition' ? 'var(--rose-spectacle)' : 'var(--vert-caravane)') + '; color:white; padding:0.1rem 0.4rem; border-radius:10px; font-size:0.65rem;">' + typeEmoji + ' ' + ev.type + '</span> 📍 ' + (ev.lieu || '') + '</small></div><div style="display:flex; gap:5px;">' +
                     '<button class="btn btn-primary" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="editExistingEvent(\'' + ev.id + '\', \'' + ev.type + '\', \'' + ev.titre.replace(/'/g, "\\'") + '\', \'' + (ev.lieu || '').replace(/'/g, "\\'") + '\', \'' + ev.event_date + '\', \'' + (ev.period_id || '') + '\')">✏️</button>' +
                     (window.adminRole === 'superadmin' ? '<button class="btn btn-danger" style="padding:0.3rem 0.6rem; font-size:0.75rem;" onclick="deleteEvent(\'' + ev.id + '\', \'' + (ev.period_id || '') + '\')">🗑</button>' : '') +
                     '</div></div>';
@@ -654,7 +748,6 @@
         html += '<div><label>Titre</label><select id="editTitle"><option value="">-- Sélectionnez --</option></select></div></div>';
         html += '<label>Lieu</label><div class="lieu-wrapper"><input type="text" id="editLieu" placeholder="Commune..." autocomplete="off"><div class="suggestions-dropdown" id="editLieuSuggestions"></div></div>';
 
-        // ✅ CORRECTION 1 : Checkbox période fluide
         html += '<div class="period-checkbox-row"><input type="checkbox" id="editIsPeriod" onchange="togglePeriodRange()"><label for="editIsPeriod" style="cursor:pointer;" onclick="event.preventDefault(); document.getElementById(\'editIsPeriod\').click();">📆 Ajouter en tant que période</label></div>';
 
         html += '<div class="period-range-row" id="periodRangeRow"><span>Du</span><input type="date" id="editPeriodStart" value="' + dateToInputValue(dateKey) + '"><span>au</span><input type="date" id="editPeriodEnd" value="' + dateToInputValue(dateKey) + '"></div>';
@@ -709,8 +802,6 @@
 
         updatePeriodInfoDisplay();
     };
-
-    // ✅ Supprimé : window.togglePeriodCheckbox (plus nécessaire)
 
     window.togglePeriodRange = () => {
         const row = document.getElementById('periodRangeRow');
@@ -793,7 +884,6 @@
             if (error) { errorEl.textContent = 'Erreur : ' + error.message; errorEl.style.display = 'block'; errorOccurred = true; }
             else { alert('✅ Période de ' + editingAllPeriodDates.length + ' jours mise à jour !'); }
         } else if (editingEventId && !editingPeriodId) {
-            // ✅ CORRECTION 2 : Transformation jour isolé → période
             if (isPeriod && datesToTarget.length > 1) {
                 const periodId = 'p_' + Date.now();
                 const { error: deleteError } = await _supabase.from('events').delete().eq('id', editingEventId);
