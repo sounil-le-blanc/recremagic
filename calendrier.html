@@ -427,92 +427,101 @@
         }
         .other-month { opacity: 0.4; }
 
-        /* BULLE HOVER - Nouveau style inspiré de la liste */
-        .edit-card {
-            position: absolute; 
-            top: 100%; 
-            left: 50%; 
+        /* BULLE HOVER - Même système que l'admin */
+        .calendar-day .hover-bubble {
+            display: none;
+            position: absolute;
+            bottom: calc(100% + 12px);
+            left: 50%;
             transform: translateX(-50%);
-            width: 380px; 
-            background: rgba(255, 255, 255, 0.98); 
-            border-radius: 20px; 
-            padding: 1.2rem;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4); 
+            background: white;
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            z-index: 200;
+            min-width: 220px;
+            max-width: 300px;
             border: 2px solid var(--vert-caravane);
-            z-index: 100; 
-            text-align: left; 
-            margin-top: 0.5rem; 
-            display: none; 
-            max-height: 400px; 
-            overflow-y: auto;
+            text-align: left;
+            font-weight: normal;
+            pointer-events: auto;
         }
-        .edit-card.visible { display: block; }
-        .edit-card h4 { 
-            font-family: 'Fredoka', cursive; 
-            color: var(--rose-spectacle); 
-            margin-bottom: 1rem; 
-            font-size: 1.1rem;
-            padding-bottom: 0.5rem;
+        .calendar-day .hover-bubble::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            border: 8px solid transparent;
+            border-top-color: white;
+        }
+        .calendar-day:hover .hover-bubble {
+            display: block;
+        }
+        .calendar-day .hover-bubble-title {
+            font-family: 'Fredoka', cursive;
+            color: var(--rose-spectacle);
+            font-weight: 700;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            padding-bottom: 0.4rem;
             border-bottom: 2px solid var(--rose-spectacle);
         }
-        
-        /* Événement dans la bulle - même style que la liste */
-        .edit-card .hover-event {
-            background: rgba(0, 0, 0, 0.03);
-            border-radius: 15px;
-            padding: 0.8rem 1rem;
-            margin-bottom: 0.8rem;
+        .calendar-day .hover-bubble-event {
+            background: rgba(0,0,0,0.03);
+            border-radius: 10px;
+            padding: 0.5rem 0.7rem;
+            margin-bottom: 0.4rem;
             display: flex;
             flex-wrap: wrap;
-            gap: 0.6rem;
+            gap: 0.4rem;
             align-items: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
         }
-        .edit-card .hover-event:last-child { margin-bottom: 0; }
-        
-        .edit-card .hover-event.ducoup1 { border-left: 4px solid var(--couleur-ducoup1); }
-        .edit-card .hover-event.ducoup2 { border-left: 4px solid var(--couleur-ducoup2); }
-        .edit-card .hover-event.roulettes { border-left: 4px solid var(--couleur-roulettes); }
-        .edit-card .hover-event.maboul { border-left: 4px solid var(--couleur-maboul); }
-        .edit-card .hover-event.expo1 { border-left: 4px solid var(--couleur-expo1); }
-        .edit-card .hover-event.expo2 { border-left: 4px solid var(--couleur-expo2); }
-        
-        .edit-card .hover-event-lieu {
+        .calendar-day .hover-bubble-event:last-child { margin-bottom: 0; }
+        .calendar-day .hover-bubble-event.ducoup1 { border-left: 4px solid var(--couleur-ducoup1); }
+        .calendar-day .hover-bubble-event.ducoup2 { border-left: 4px solid var(--couleur-ducoup2); }
+        .calendar-day .hover-bubble-event.roulettes { border-left: 4px solid var(--couleur-roulettes); }
+        .calendar-day .hover-bubble-event.maboul { border-left: 4px solid var(--couleur-maboul); }
+        .calendar-day .hover-bubble-event.expo1 { border-left: 4px solid var(--couleur-expo1); }
+        .calendar-day .hover-bubble-event.expo2 { border-left: 4px solid var(--couleur-expo2); }
+        .calendar-day .hover-bubble-lieu {
             font-weight: bold;
-            font-size: 0.9rem;
             color: #000;
         }
-        .edit-card .hover-event-type {
-            padding: 0.15rem 0.5rem;
-            border-radius: 15px;
-            font-size: 0.7rem;
+        .calendar-day .hover-bubble-type {
+            padding: 0.1rem 0.4rem;
+            border-radius: 10px;
+            font-size: 0.65rem;
             font-weight: bold;
             color: white;
             white-space: nowrap;
         }
-        .edit-card .hover-event-type.spectacle { background: var(--vert-caravane); }
-        .edit-card .hover-event-type.exposition { background: var(--rose-spectacle); }
-        
-        .edit-card button { 
-            background: #aaa; 
-            border: none; 
-            color: white; 
-            padding: 0.4rem 1rem; 
-            border-radius: 20px; 
-            cursor: pointer; 
-            font-size: 0.8rem; 
-            margin-top: 0.8rem; 
-            width: 100%; 
-            font-weight: 600;
+        .calendar-day .hover-bubble-type.spectacle { background: var(--vert-caravane); }
+        .calendar-day .hover-bubble-type.exposition { background: var(--rose-spectacle); }
+        .calendar-day .hover-bubble-noevent {
+            text-align: center;
+            color: #888;
+            font-style: italic;
+            font-size: 0.8rem;
+            padding: 0.5rem;
         }
-        .edit-card button:hover { background: #888; }
-        .edit-card .no-events-hover { 
-            text-align: center; 
-            color: #888; 
-            padding: 1rem; 
-            font-style: italic; 
-            font-size: 0.9rem;
+
+        /* Titre avec contour dans la bulle */
+        .event-title-contour {
+            padding: 0.15rem 0.4rem;
+            border-radius: 6px;
+            font-weight: 700;
+            background: rgba(255,255,255,0.9);
+            display: inline-block;
+            font-size: 0.8rem;
         }
+        .event-title-contour.ducoup1 { border: 2px solid var(--couleur-ducoup1); color: var(--couleur-ducoup1); }
+        .event-title-contour.ducoup2 { border: 2px solid var(--couleur-ducoup2); color: var(--couleur-ducoup2); }
+        .event-title-contour.roulettes { border: 2px solid var(--couleur-roulettes); color: var(--couleur-roulettes); }
+        .event-title-contour.maboul { border: 2px solid var(--couleur-maboul); color: var(--couleur-maboul); }
+        .event-title-contour.expo1 { border: 2px solid var(--couleur-expo1); color: #0288D1; }
+        .event-title-contour.expo2 { border: 2px solid var(--couleur-expo2); color: #6A1B9A; }
 
         .month-section { margin-bottom: 1.5rem; }
         .month-title {
@@ -645,38 +654,6 @@
         .legend-color.expo1 { background: var(--couleur-expo1); }
         .legend-color.expo2 { background: var(--couleur-expo2); }
 
-        /* Contour fin coloré sur les titres dans la liste */
-        .event-title-contour {
-            padding: 0.2rem 0.5rem;
-            border-radius: 6px;
-            font-weight: 700;
-            background: rgba(255,255,255,0.9);
-        }
-        .event-title-contour.ducoup1 { 
-            border: 2px solid var(--couleur-ducoup1); 
-            color: var(--couleur-ducoup1); 
-        }
-        .event-title-contour.ducoup2 { 
-            border: 2px solid var(--couleur-ducoup2); 
-            color: var(--couleur-ducoup2); 
-        }
-        .event-title-contour.roulettes { 
-            border: 2px solid var(--couleur-roulettes); 
-            color: var(--couleur-roulettes); 
-        }
-        .event-title-contour.maboul { 
-            border: 2px solid var(--couleur-maboul); 
-            color: var(--couleur-maboul); 
-        }
-        .event-title-contour.expo1 { 
-            border: 2px solid var(--couleur-expo1); 
-            color: #0288D1; 
-        }
-        .event-title-contour.expo2 { 
-            border: 2px solid var(--couleur-expo2); 
-            color: #6A1B9A; 
-        }
-
         .contact-cta {
             background: rgba(0, 0, 0, 0.5);
             backdrop-filter: blur(5px);
@@ -718,7 +695,7 @@
             .month-year span { font-size: 1.2rem; min-width: 120px; }
             .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
             .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
-            .edit-card { width: 280px; max-height: 280px; }
+            .calendar-day .hover-bubble { min-width: 180px; max-width: 250px; }
             .event-row { flex-direction: column; align-items: flex-start; }
             .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
             .page-header h1 { font-size: 2rem; }
@@ -848,7 +825,6 @@
     const weekdays = ["Lun", "Mar", "Mer", "Jeu", "Ven", "Sam", "Dim"];
 
     let eventsData = {};
-    let hideTimeout = null;
     let isLoading = false;
 
     function showLoading(show) {
@@ -930,7 +906,7 @@
         }
     }
 
-    function getEventRowClass(titre) {
+    function getRowClass(titre) {
         switch(titre) {
             case "DU COUP ON VIENT CHEZ VOUS": return 'ducoup1';
             case "DU COUP on revient chez vous": return 'ducoup2';
@@ -942,32 +918,36 @@
         }
     }
 
-    let currentOpenCard = null;
-    function showCard(card) {
-        if (hideTimeout) clearTimeout(hideTimeout);
-        if (currentOpenCard && currentOpenCard !== card) {
-            currentOpenCard.classList.remove('visible');
+    function buildHoverBubble(dateKey) {
+        const events = eventsData[dateKey] || [];
+        let html = '<div class="hover-bubble">';
+        html += '<div class="hover-bubble-title">📋 ' + formatDate(dateKey) + '</div>';
+        if (events.length === 0) {
+            html += '<div class="hover-bubble-noevent">Aucun événement</div>';
+        } else {
+            events.forEach(ev => {
+                const rowClass = getRowClass(ev.titre);
+                const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
+                const typeEmoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
+                const titreContourClass = 'event-title-contour ' + rowClass;
+                html += '<div class="hover-bubble-event ' + rowClass + '">';
+                html += '<div class="hover-bubble-lieu">📍 ' + (ev.lieu || 'Lieu non précisé') + '</div>';
+                html += '<div class="hover-bubble-type ' + typeClass + '">' + typeEmoji + ' ' + ev.type + '</div>';
+                html += '<div class="' + titreContourClass + '">' + ev.titre + '</div>';
+                html += '</div>';
+            });
         }
-        card.classList.add('visible');
-        currentOpenCard = card;
+        html += '</div>';
+        return html;
     }
-    function scheduleHideCard(card) {
-        hideTimeout = setTimeout(() => {
-            if (card) card.classList.remove('visible');
-            if (currentOpenCard === card) currentOpenCard = null;
-        }, 3500);
-    }
-    function cancelHide() { 
-        if (hideTimeout) {
-            clearTimeout(hideTimeout);
-            hideTimeout = null;
-        }
-    }
+
+    function formatDate(key) { const [y,m,d]=key.split('-'); return d + '/' + m + '/' + y; }
 
     function renderCalendar() {
         const firstDayOfMonth = new Date(currentYear, currentMonth, 1);
         let startOffset = firstDayOfMonth.getDay() === 0 ? 6 : firstDayOfMonth.getDay() - 1;
         const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+        const todayStr = getDateKey(currentYear, currentMonth, new Date().getDate());
         let calendarHtml = '';
         weekdays.forEach(day => { calendarHtml += `<div class="weekday">${day}</div>`; });
         for (let i = 0; i < startOffset; i++) { calendarHtml += `<div class="calendar-day other-month"></div>`; }
@@ -976,6 +956,7 @@
         const isCurrentMonthYear = (today.getMonth() === currentMonth && today.getFullYear() === currentYear);
 
         for (let d = 1; d <= daysInMonth; d++) {
+            const key = getDateKey(currentYear, currentMonth, d);
             const isToday = (isCurrentMonthYear && d === today.getDate());
             const events = loadEventsForDate(currentYear, currentMonth, d);
             const hasEvent = events.length > 0;
@@ -1007,64 +988,18 @@
             }
 
             const classAttr = classList.join(' ');
-
-            // NOUVELLE BULLE HOVER - Style liste d'événements
-            let cardContent = `<div class="edit-card" style="display:none;">`;
-            cardContent += `<h4>📋 ${d} ${monthNames[currentMonth].toLowerCase()} ${currentYear}</h4>`;
-            
-            if (events.length === 0) {
-                cardContent += `<div class="no-events-hover">Aucun événement programmé</div>`;
-            } else {
-                events.forEach(ev => {
-                    const rowClass = getEventRowClass(ev.titre);
-                    const typeClass = ev.type === 'Exposition' ? 'exposition' : 'spectacle';
-                    const typeEmoji = ev.type === 'Exposition' ? '🖼️' : '🎭';
-                    const titreContourClass = `event-title-contour ${rowClass}`;
-                    
-                    cardContent += `
-                        <div class="hover-event ${rowClass}">
-                            <div class="hover-event-lieu">📍 ${escapeHtml(ev.lieu) || 'Lieu non précisé'}</div>
-                            <div class="hover-event-type ${typeClass}">${typeEmoji} ${escapeHtml(ev.type)}</div>
-                            <div class="${titreContourClass}">${escapeHtml(ev.titre)}</div>
-                        </div>`;
-                });
-            }
-            cardContent += `<button class="close-card" onclick="this.parentElement.classList.remove('visible');">✖ Fermer</button>`;
-            cardContent += `</div>`;
+            const hoverBubble = buildHoverBubble(key);
 
             calendarHtml += `
-                <div class="${classAttr}" data-year="${currentYear}" data-month="${currentMonth}" data-day="${d}">
+                <div class="${classAttr}">
                     <span class="day-number">${d}</span>
-                    ${cardContent}
+                    ${hoverBubble}
                 </div>`;
         }
 
         document.getElementById('calendarGrid').innerHTML = calendarHtml;
         document.getElementById('monthName').innerText = `${monthNames[currentMonth]} ${currentYear}`;
         document.getElementById('yearSelect').value = currentYear;
-
-        document.querySelectorAll('.calendar-day[data-day]').forEach(dayDiv => {
-            const card = dayDiv.querySelector('.edit-card');
-            if (!card) return;
-            
-            dayDiv.addEventListener('mouseenter', () => { 
-                cancelHide(); 
-                showCard(card); 
-            });
-            dayDiv.addEventListener('mouseleave', () => scheduleHideCard(card));
-            
-            card.addEventListener('mouseenter', cancelHide);
-            card.addEventListener('mouseleave', () => scheduleHideCard(card));
-            
-            const closeBtn = card.querySelector('.close-card');
-            if (closeBtn) {
-                closeBtn.onclick = (e) => { 
-                    e.stopPropagation(); 
-                    card.classList.remove('visible'); 
-                    if (currentOpenCard === card) currentOpenCard = null; 
-                };
-            }
-        });
     }
 
     function renderEventsSummary() {
@@ -1158,7 +1093,7 @@
                 const [yy, mm, dd] = entry.dateKey.split('-');
                 const typeIcon = entry.type === 'Exposition' ? '🖼️' : '🎭';
                 const typeClass = entry.type === 'Exposition' ? 'exposition' : '';
-                const rowClass = getEventRowClass(entry.titre);
+                const rowClass = getRowClass(entry.titre);
 
                 let dateDisplay;
                 if (entry.isPeriod && entry.endDateKey) {
