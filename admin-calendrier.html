@@ -357,16 +357,6 @@
             gap: 0.5rem;
         }
         .period-info-banner .icon { font-size: 1.2rem; }
-        .period-dates-list {
-            background: #f5f5f5;
-            border-radius: 10px;
-            padding: 0.5rem;
-            margin: 0.5rem 0;
-            font-size: 0.75rem;
-            color: #666;
-            max-height: 100px;
-            overflow-y: auto;
-        }
     </style>
 </head>
 <body>
@@ -459,7 +449,8 @@
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     let currentMode = 'single', currentMonth, currentYear, selMonth, selYear, eventsData = {};
-    let editingEventId = null, editingEventDate = null, editingPeriodId = null, editingAllPeriodDates = [];
+    let editingEventId = null, editingEventDate = null, editingPeriodId = null;
+    let editingAllPeriodDates = [], editingAllPeriodIds = [];
     let selectedDates = new Set(), selectionAnchor = null;
     let lieuTimeout = null;
 
@@ -538,34 +529,36 @@
         renderMainCalendar(); renderSelectionCalendar();
     }
 
-    function getPeriodDates(periodId, excludeEventId = null) {
+    function getPeriodInfo(periodId, excludeEventId = null) {
         const dates = [];
+        const ids = [];
         for (let dateKey in eventsData) {
             const events = eventsData[dateKey];
             for (let ev of events) {
                 if (ev.period_id === periodId && ev.period_id && ev.period_id !== 'null' && ev.period_id !== 'undefined' && ev.period_id !== '') {
                     if (!excludeEventId || ev.id !== excludeEventId) {
-                        dates.push(dateKey);
+                        if (!dates.includes(dateKey)) dates.push(dateKey);
+                        ids.push(ev.id);
                     }
                     break;
                 }
             }
         }
-        return dates.sort();
+        return { dates: dates.sort(), ids: ids };
     }
 
-    function hasDuCoupOnDate(dateKey, excludeEventId = null) {
+    function hasDuCoupOnDate(dateKey, excludeIds = []) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => { 
-            if (excludeEventId && ev.id === excludeEventId) return false; 
+            if (excludeIds.includes(ev.id)) return false; 
             return ev.titre === "DU COUP ON VIENT CHEZ VOUS" || ev.titre === "DU COUP on revient chez vous" || ev.titre === "COMME SUR DES ROULETTES"; 
         });
     }
     
-    function hasMaboulOnDate(dateKey, excludeEventId = null) {
+    function hasMaboulOnDate(dateKey, excludeIds = []) {
         const events = eventsData[dateKey] || [];
         return events.some(ev => { 
-            if (excludeEventId && ev.id === excludeEventId) return false; 
+            if (excludeIds.includes(ev.id)) return false; 
             return ev.titre === "DÉLICIEUSEMENT MABOUL"; 
         });
     }
@@ -663,12 +656,12 @@
     function formatDate(key) { const [y,m,d]=key.split('-'); return d + '/' + m + '/' + y; }
     function dateToKey(date) { return date.getFullYear() + '-' + String(date.getMonth()+1).padStart(2,'0') + '-' + String(date.getDate()).padStart(2,'0'); }
 
-    function checkConflicts(dates, titre, excludeEventId = null) {
+    function checkConflicts(dates, titre, excludeIds = []) {
         const isDuCoup = ["DU COUP ON VIENT CHEZ VOUS","DU COUP on revient chez vous","COMME SUR DES ROULETTES"].includes(titre);
         const isMaboul = titre === "DÉLICIEUSEMENT MABOUL";
         for (const dateKey of dates) { 
-            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: 'Un spectacle "DU COUP" existe déjà le ' + formatDate(dateKey) + '.' }; 
-            if (isMaboul && hasMaboulOnDate(dateKey, excludeEventId)) return { conflict: true, date: dateKey, message: '"DÉLICIEUSEMENT MABOUL" est déjà présent le ' + formatDate(dateKey) + '.' }; 
+            if (isDuCoup && hasDuCoupOnDate(dateKey, excludeIds)) return { conflict: true, date: dateKey, message: 'Un spectacle "DU COUP" existe déjà le ' + formatDate(dateKey) + '.' }; 
+            if (isMaboul && hasMaboulOnDate(dateKey, excludeIds)) return { conflict: true, date: dateKey, message: '"DÉLICIEUSEMENT MABOUL" est déjà présent le ' + formatDate(dateKey) + '.' }; 
         }
         return { conflict: false };
     }
@@ -731,11 +724,12 @@
         editingPeriodId = (periodId && periodId !== 'null' && periodId !== 'undefined' && periodId !== '') ? periodId : null;
         
         if (editingPeriodId) {
-            editingAllPeriodDates = getPeriodDates(editingPeriodId, editingEventId);
-            editingAllPeriodDates.push(date);
-            editingAllPeriodDates = [...new Set(editingAllPeriodDates)].sort();
+            const periodInfo = getPeriodInfo(editingPeriodId, editingEventId);
+            editingAllPeriodDates = [...periodInfo.dates, date].filter((v, i, a) => a.indexOf(v) === i).sort();
+            editingAllPeriodIds = [...periodInfo.ids, editingEventId];
         } else {
             editingAllPeriodDates = [date];
+            editingAllPeriodIds = [editingEventId];
         }
         
         document.getElementById('editType').value = type; 
@@ -751,6 +745,7 @@
         } else if (editingPeriodId && editingAllPeriodDates.length === 1) {
             periodInfoDiv.innerHTML = '<div class="period-info-banner" style="background:#f5f5f5; border-color:#aaa; color:#555;"><span class="icon">📅</span><div><strong>Jour isolé</strong><br>Ce jour était le seul restant de sa période.<br><span style="font-size:0.75rem; color:#888;">Il sera traité comme un jour indépendant.</span></div></div>';
             editingPeriodId = null;
+            editingAllPeriodIds = [editingEventId];
         } else {
             periodInfoDiv.innerHTML = '<div style="font-size:0.8rem; color:#888; margin-bottom:0.5rem;">📅 Édition d\'un jour isolé</div>';
         }
@@ -768,9 +763,10 @@
         
         if (!newTitre) { errorEl.textContent = '⚠️ Veuillez sélectionner un titre.'; errorEl.style.display = 'block'; return; }
         
-        const datesToUpdate = (editingPeriodId && editingAllPeriodDates.length > 1) ? editingAllPeriodDates : [editingEventDate];
+        const datesToCheck = (editingPeriodId && editingAllPeriodDates.length > 1) ? editingAllPeriodDates : [editingEventDate];
+        const idsToExclude = (editingPeriodId && editingAllPeriodDates.length > 1) ? editingAllPeriodIds : [editingEventId];
         
-        const conflict = checkConflicts(datesToUpdate, newTitre, editingEventId);
+        const conflict = checkConflicts(datesToCheck, newTitre, idsToExclude);
         if (conflict.conflict) { errorEl.textContent = '⚠️ ' + conflict.message; errorEl.style.display = 'block'; return; }
         
         const updates = { type: newType, titre: newTitre, lieu: newLieu };
@@ -833,6 +829,7 @@
         editingEventDate = null;
         editingPeriodId = null;
         editingAllPeriodDates = [];
+        editingAllPeriodIds = [];
     }
 
     document.getElementById('modeSingle').onclick = () => switchMode('single');
