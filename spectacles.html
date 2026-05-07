@@ -18,6 +18,7 @@
             --text-light: #ffffff;
             --vert-ombre: #3e6b3a;
             --vert-lumiere: #66bb6a;
+            --rose-formule: #F8BBD0;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,7 +51,6 @@
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
         ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
-        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -76,470 +76,126 @@
             flex-shrink: 0;
             z-index: 2;
         }
-        .logo-wrapper {
-            text-decoration: none;
-            transition: all 0.25s ease;
-            line-height: 0;
-        }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
-        }
-        .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
-        }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-        .nav-icons {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-            z-index: 2;
-        }
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-icon-img {
-            height: 32px;
-            width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-            transition: transform 0.2s;
-        }
-        .icon-wrapper:hover .nav-icon-img {
-            transform: scale(1.15);
-        }
-        .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
+        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
+        .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
+        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
+        .back-arrow { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0; }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
+        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
+        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
+        .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        .page-header, .spectacles-list, .gallery-container, .contact-cta {
-            position: relative;
-            z-index: 2;
-        }
+        .page-header, .spectacles-list, .gallery-container, .contact-cta { position: relative; z-index: 2; }
 
-        /* ========== PARCHEMIN MAGIQUE ========== */
         .parchment-wrapper {
-            display: inline-block;
-            position: relative;
+            display: inline-block; position: relative;
             background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
-            padding: 2.5rem 3.5rem;
-            margin: 1rem auto 2rem auto;
+            padding: 2.5rem 3.5rem; margin: 1rem auto 2rem auto;
             border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
-            box-shadow:
-                0 15px 30px rgba(0,0,0,0.6),
-                0 0 0 3px #bfa055,
-                0 0 0 6px #8b6914,
-                inset 0 0 20px rgba(0,0,0,0.4);
-            background-image:
-                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
-                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
-                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
-                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
-            transform: perspective(700px) rotateX(2deg);
-            animation: floatParchment 6s ease-in-out infinite;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 0 3px #bfa055, 0 0 0 6px #8b6914, inset 0 0 20px rgba(0,0,0,0.4);
+            transform: perspective(700px) rotateX(2deg); animation: floatParchment 6s ease-in-out infinite;
         }
+        @keyframes floatParchment { 0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); } 50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); } }
+        .parchment-wrapper::before { content: ''; position: absolute; top: -12px; left: -12px; width: 36px; height: 36px; border-top: 6px solid #d4af37; border-left: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
+        .parchment-wrapper::after { content: ''; position: absolute; bottom: -12px; right: -12px; width: 36px; height: 36px; border-bottom: 6px solid #d4af37; border-right: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
+        .inner-parchment { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 2px solid rgba(212,175,55,0.5); border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px; pointer-events: none; }
+        .magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: sparkle 2s infinite; pointer-events: none; }
+        @keyframes sparkle { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
 
-        @keyframes floatParchment {
-            0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); }
-            50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); }
-        }
+        .page-header { text-align: center; margin-top: 2rem; margin-bottom: 3rem; }
+        .page-header h1 { font-family: 'MedievalSharp', cursive; font-size: clamp(2.5rem, 5vw, 3.5rem); color: #f5d06b; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0.5rem; text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7; }
+        .page-header p { font-size: 1.3rem; color: #f5d06b; font-weight: 600; letter-spacing: 2px; margin: 0; text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2); }
 
-        .parchment-wrapper::before {
-            content: '';
-            position: absolute;
-            top: -12px; left: -12px;
-            width: 36px; height: 36px;
-            border-top: 6px solid #d4af37;
-            border-left: 6px solid #d4af37;
-            border-radius: 4px;
-            filter: drop-shadow(0 0 8px gold);
-            z-index: 2;
-        }
-        .parchment-wrapper::after {
-            content: '';
-            position: absolute;
-            bottom: -12px; right: -12px;
-            width: 36px; height: 36px;
-            border-bottom: 6px solid #d4af37;
-            border-right: 6px solid #d4af37;
-            border-radius: 4px;
-            filter: drop-shadow(0 0 8px gold);
-            z-index: 2;
-        }
+        .spectacles-list { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem; }
 
-        .inner-parchment {
-            position: absolute;
-            top: 10px; left: 10px; right: 10px; bottom: 10px;
-            border: 2px solid rgba(212, 175, 55, 0.5);
-            border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px;
-            pointer-events: none;
-        }
-
-        .magic-sparks {
-            position: absolute;
-            top: -5px; right: -10px;
-            font-size: 2rem;
-            opacity: 0.8;
-            animation: sparkle 2s infinite;
-            pointer-events: none;
-        }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
-        }
-
-        .page-header {
-            text-align: center;
-            margin-top: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .page-header h1 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2.5rem, 5vw, 3.5rem);
-            color: #f5d06b;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
-        }
-
-        .page-header p {
-            font-size: 1.3rem;
-            color: #f5d06b;
-            font-weight: 600;
-            letter-spacing: 2px;
-            margin: 0;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
-        }
-
-        .spectacles-list {
-            max-width: 1200px;
-            margin: 4rem auto;
-            padding: 0 2rem;
-            display: flex;
-            flex-direction: column;
-            gap: 3rem;
-        }
-
-        /* ========== CARTE SPECTACLE ========== */
         .spectacle-card {
-            background: rgba(235, 215, 185, 0.96);
-            border-radius: 32px;
-            overflow: visible;
-            transition: all 0.35s cubic-bezier(0.2, 0.9, 0.4, 1.1);
-            backdrop-filter: blur(2px);
-            position: relative;
-            border: 5px solid #7a5c3e;
-            outline: 4px solid #5a3e2a;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+            background: rgba(235,215,185,0.96); border-radius: 32px; overflow: visible;
+            transition: all 0.35s cubic-bezier(0.2,0.9,0.4,1.1); backdrop-filter: blur(2px);
+            position: relative; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a;
+            outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
         }
-
-        .spectacle-card::before {
-            content: '';
-            position: absolute;
-            top: 8px; left: 8px; right: 8px; bottom: 8px;
-            border-radius: 24px;
-            border: 1px solid rgba(0,0,0,0.1);
-            pointer-events: none;
-            z-index: 1;
-        }
-
-        .spectacle-card:hover {
-            transform: translateY(-8px);
-            box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55);
-        }
-
-        .spectacle-card-inner {
-            display: grid;
-            grid-template-columns: 500px 1fr;
-            border-radius: 32px 32px 0 0;
-            overflow: hidden;
-        }
-
-        .spectacle-img {
-            height: 100%;
-            min-height: 350px;
-            display: flex; align-items: center; justify-content: center;
-            overflow: hidden;
-            background: linear-gradient(135deg, #5a8f4a, #8bc34a);
-        }
-
-        .spectacle-img img {
-            width: 100%; height: 100%; object-fit: cover;
-            transition: transform 0.5s ease;
-        }
+        .spectacle-card::before { content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px; border-radius: 24px; border: 1px solid rgba(0,0,0,0.1); pointer-events: none; z-index: 1; }
+        .spectacle-card:hover { transform: translateY(-8px); box-shadow: 0 0 0 8px #4a3220, 0 12px 28px rgba(0,0,0,0.55); }
+        .spectacle-card-inner { display: grid; grid-template-columns: 500px 1fr; border-radius: 32px 32px 0 0; overflow: hidden; }
+        .spectacle-img { height: 100%; min-height: 350px; display: flex; align-items: center; justify-content: center; overflow: hidden; background: linear-gradient(135deg, #5a8f4a, #8bc34a); }
+        .spectacle-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
         .spectacle-img img:hover { transform: scale(1.05); }
-
         .spectacle-content { padding: 2.5rem; }
 
-        .spectacle-badge {
-            display: inline-block; padding: 0.5rem 1rem;
-            border-radius: 20px; font-size: 0.85rem; font-weight: 700;
-            color: white; margin-bottom: 1rem; text-transform: uppercase;
-            background: var(--vert-caravane);
-        }
+        .spectacle-badge { display: inline-block; padding: 0.5rem 1rem; border-radius: 20px; font-size: 0.85rem; font-weight: 700; color: white; margin-bottom: 1rem; text-transform: uppercase; background: var(--vert-caravane); }
+        .spectacle-title { font-family: 'MedievalSharp', cursive; font-size: 2rem; color: #000; margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(0,0,0,0.2); }
+        .spectacle-description { line-height: 1.8; margin-bottom: 1.5rem; color: #2C1810; text-align: justify; font-weight: 700; }
 
-        .spectacle-title {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 2rem;
-            color: #000;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-        }
+        .youtube-viewer { width: 100%; border-radius: 0 0 27px 27px; overflow: hidden; box-shadow: inset 0 5px 15px rgba(0,0,0,0.3); border-top: 4px solid #7a5c3e; background: #000; position: relative; z-index: 0; }
+        .youtube-viewer iframe { display: block; width: 100%; height: 400px; border: none; }
 
-        .spectacle-description {
-            line-height: 1.8; margin-bottom: 1.5rem;
-            color: #2C1810; text-align: justify;
-            font-weight: 700;
+        .spectacle-badge-new {
+            display: inline-block; padding: 0.7rem 1.6rem; border-radius: 30px; font-size: 0.95rem;
+            font-weight: 800; color: white; margin-bottom: 1.2rem; text-transform: uppercase;
+            letter-spacing: 2px; background: linear-gradient(135deg, #D32F2F, #EC407A);
+            border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 0 22px rgba(236,64,122,0.7), 0 4px 12px rgba(0,0,0,0.3);
+            animation: pulse 2s infinite; text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
-
-        /* ========== YOUTUBE VIEWER SOUS LA CARTE ========== */
-        .youtube-viewer {
-            width: 100%;
-            border-radius: 0 0 27px 27px;
-            overflow: hidden;
-            box-shadow: inset 0 5px 15px rgba(0,0,0,0.3);
-            border-top: 4px solid #7a5c3e;
-            background: #000;
-            position: relative;
-            z-index: 0;
-        }
-
-        .youtube-viewer iframe {
-            display: block;
-            width: 100%;
-            height: 400px;
-            border: none;
-        }
-
-        @media (max-width: 968px) {
-            .spectacle-card-inner { grid-template-columns: 1fr; }
-            .spectacle-img { min-height: 250px; }
-            .youtube-viewer iframe { height: 300px; }
-        }
-
-        @media (max-width: 600px) {
-            .youtube-viewer iframe { height: 220px; }
-        }
-
-        /* ========== BADGE NOUVEAU SPECTACLE ========== */
-.spectacle-badge-new {
-    display: inline-block;
-    padding: 0.7rem 1.6rem;
-    border-radius: 30px;
-    font-size: 0.95rem;
-    font-weight: 800;
-    color: white;
-    margin-bottom: 1.2rem;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    background: linear-gradient(135deg, #D32F2F, #EC407A);
-    border: 2px solid rgba(255,255,255,0.6);
-    box-shadow: 0 0 22px rgba(236, 64, 122, 0.7), 0 4px 12px rgba(0,0,0,0.3);
-    animation: pulse 2s infinite;
-    text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
-}
-
-@keyframes pulse {
-    0%, 100% { transform: scale(1); box-shadow: 0 0 18px rgba(236, 64, 122, 0.7), 0 4px 12px rgba(0,0,0,0.3); }
-    50% { transform: scale(1.06); box-shadow: 0 0 30px rgba(255, 80, 130, 1), 0 6px 16px rgba(0,0,0,0.4); }
-}
-
-        .btn {
-            display: inline-block; padding: 0.8rem 2rem;
-            border-radius: 50px; text-decoration: none; font-weight: 700;
-            transition: all 0.3s; cursor: pointer; border: none; font-family: inherit;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
-            color: white;
-            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
-        }
-        .btn-primary:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
-        }
+        @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 18px rgba(236,64,122,0.7),0 4px 12px rgba(0,0,0,0.3)} 50%{transform:scale(1.06);box-shadow:0 0 30px rgba(255,80,130,1),0 6px 16px rgba(0,0,0,0.4)} }
 
         .btn-devis {
             background: linear-gradient(135deg, var(--vert-ombre), var(--vert-lumiere));
-            color: white;
-            box-shadow: 0 4px 15px rgba(62, 107, 58, 0.3);
-            padding: 0.8rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            cursor: pointer;
-            border: none;
-            font-family: inherit;
-            display: inline-block;
-            margin-top: 0.5rem;
+            color: white; box-shadow: 0 4px 15px rgba(62,107,58,0.3);
+            padding: 0.8rem 2rem; border-radius: 50px; text-decoration: none;
+            font-weight: 700; transition: all 0.3s; cursor: pointer; border: none;
+            font-family: inherit; display: inline-block; margin-top: 0.5rem;
         }
-        .btn-devis:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(62, 107, 58, 0.4);
+        .btn-devis:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(62,107,58,0.4); }
+
+        .formule-texte {
+            font-size: 0.95rem;
+            color: #EC407A;
+            font-style: italic;
+            font-weight: 700;
+            text-align: justify;
+            background: rgba(236, 64, 122, 0.08);
+            padding: 0.4rem 0.8rem;
+            border-radius: 20px;
+            border: 1px solid rgba(236, 64, 122, 0.2);
         }
 
         .gallery-container { max-width: 1200px; margin: 2rem auto; padding: 0 2rem; }
-
-        .gallery-title {
-            font-family: 'Fredoka', cursive; font-size: 2rem;
-            color: white; text-align: center; margin-bottom: 2rem;
-            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.5);
-        }
-
-        .gallery-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 2rem;
-        }
-
+        .gallery-title { font-family: 'Fredoka', cursive; font-size: 2rem; color: white; text-align: center; margin-bottom: 2rem; text-shadow: 2px 2px 5px rgba(0,0,0,0.5); }
+        .gallery-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 2rem; }
         .gallery-item { text-align: center; transition: transform 0.3s; cursor: pointer; }
         .gallery-item:hover { transform: translateY(-5px); }
+        .gallery-item img { width: 100%; height: 250px; object-fit: cover; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); border: 3px solid rgba(255,255,255,0.5); transition: all 0.3s; }
+        .gallery-item img:hover { transform: scale(1.02); box-shadow: 0 15px 40px rgba(0,0,0,0.3); border-color: var(--jaune-accent); }
 
-        .gallery-item img {
-            width: 100%; height: 250px; object-fit: cover;
-            border-radius: 20px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            border: 3px solid rgba(255, 255, 255, 0.5);
-            transition: all 0.3s;
-        }
-
-        .gallery-item img:hover {
-            transform: scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--jaune-accent);
-        }
-
-        .modal {
-            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); z-index: 2000;
-            justify-content: center; align-items: center; backdrop-filter: blur(5px);
-        }
+        .modal { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 2000; justify-content: center; align-items: center; backdrop-filter: blur(5px); }
         .modal.active { display: flex; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-
-        .modal-content {
-            max-width: 80%; max-height: 80%; object-fit: contain;
-            border-radius: 10px; box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
-            animation: zoomIn 0.3s ease;
-        }
-        @keyframes zoomIn { from { transform: scale(0.8); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-
-        .close-modal {
-            position: absolute; top: 20px; right: 40px;
-            color: white; font-size: 50px; font-weight: bold; cursor: pointer;
-            transition: 0.3s; z-index: 2001;
-        }
+        @keyframes fadeIn { from{opacity:0} to{opacity:1} }
+        .modal-content { max-width: 80%; max-height: 80%; object-fit: contain; border-radius: 10px; box-shadow: 0 0 50px rgba(0,0,0,0.5); animation: zoomIn 0.3s ease; }
+        @keyframes zoomIn { from{transform:scale(0.8);opacity:0} to{transform:scale(1);opacity:1} }
+        .close-modal { position: absolute; top: 20px; right: 40px; color: white; font-size: 50px; font-weight: bold; cursor: pointer; transition: 0.3s; z-index: 2001; }
         .close-modal:hover { color: var(--rose-spectacle); transform: scale(1.1); }
-
-        .nav-arrow {
-            position: absolute; top: 50%; transform: translateY(-50%);
-            color: white; font-size: 60px; cursor: pointer; transition: 0.3s;
-            z-index: 2002; background: rgba(0, 0, 0, 0.5);
-            border-radius: 50%; width: 70px; height: 70px;
-            display: flex; align-items: center; justify-content: center;
-            backdrop-filter: blur(5px);
-        }
-        .nav-arrow:hover { background: rgba(255, 255, 255, 0.3); transform: translateY(-50%) scale(1.1); color: var(--jaune-accent); }
-
+        .nav-arrow { position: absolute; top: 50%; transform: translateY(-50%); color: white; font-size: 60px; cursor: pointer; transition: 0.3s; z-index: 2002; background: rgba(0,0,0,0.5); border-radius: 50%; width: 70px; height: 70px; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(5px); }
+        .nav-arrow:hover { background: rgba(255,255,255,0.3); transform: translateY(-50%) scale(1.1); color: var(--jaune-accent); }
         .prev-arrow { left: 30px; }
         .next-arrow { right: 30px; }
+        .image-counter { position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%); color: white; background: rgba(0,0,0,0.7); padding: 8px 16px; border-radius: 20px; font-size: 14px; z-index: 2002; font-family: monospace; }
 
-        .image-counter {
-            position: absolute; bottom: 30px; left: 50%; transform: translateX(-50%);
-            color: white; background: rgba(0, 0, 0, 0.7);
-            padding: 8px 16px; border-radius: 20px; font-size: 14px;
-            z-index: 2002; font-family: monospace;
-        }
-
-        .contact-cta {
-            background: rgba(0, 0, 0, 0.5); backdrop-filter: blur(5px);
-            color: white; padding: 3rem; border-radius: 20px;
-            text-align: center; margin-top: 2rem;
-            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
-        }
+        .contact-cta { background: rgba(0,0,0,0.5); backdrop-filter: blur(5px); color: white; padding: 3rem; border-radius: 20px; text-align: center; margin-top: 2rem; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
         .contact-cta h2 { font-family: 'Fredoka', cursive; font-size: 2rem; margin-bottom: 1rem; }
         .contact-cta p { font-size: 1.1rem; margin-bottom: 1.5rem; }
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
         .contact-cta a:hover { text-decoration: underline; color: white; }
 
-        @media (max-width: 768px) {
-            .spectacles-list { padding: 0 1rem; }
-            .spectacle-content { padding: 1.5rem; }
-            .spectacle-title { font-size: 1.6rem; }
-            .contact-cta { padding: 2rem; }
-            .contact-cta h2 { font-size: 1.5rem; }
-            .gallery-container { padding: 0 1rem; }
-            .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem; }
-            .gallery-title { font-size: 1.5rem; }
-            .close-modal { top: 15px; right: 20px; font-size: 40px; }
-            .page-header { margin: 0.5rem; }
-            .nav-arrow { width: 50px; height: 50px; font-size: 40px; }
-            .prev-arrow { left: 10px; }
-            .next-arrow { right: 10px; }
-            .modal-content { max-width: 90%; max-height: 70%; }
-        }
+        .footer-text { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem; position: relative; z-index: 2; }
+        .footer-text a { color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s; }
+        .footer-text a:hover { opacity: 1; }
 
-        @media (max-width: 600px) {
-            body { padding-top: 100px; }
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
-            .nav-icons { gap: 0.7rem; }
-            .page-header h1 { font-size: 1.8rem; }
-            .page-header p { font-size: 1rem; }
-            .parchment-wrapper { padding: 1.5rem 1.8rem; margin: 1rem auto 2rem auto; }
-            .spectacle-badge { font-size: 0.7rem; }
-            .btn-primary, .btn-devis { display: block; text-align: center; }
-            .gallery-grid { grid-template-columns: 1fr; }
-            .nav-arrow { width: 40px; height: 40px; font-size: 30px; }
-        }
+        @media (max-width: 968px) { .spectacle-card-inner { grid-template-columns: 1fr; } .spectacle-img { min-height: 250px; } .youtube-viewer iframe { height: 300px; } }
+        @media (max-width: 768px) { .spectacles-list { padding: 0 1rem; } .spectacle-content { padding: 1.5rem; } .spectacle-title { font-size: 1.6rem; } .contact-cta { padding: 2rem; } .contact-cta h2 { font-size: 1.5rem; } .gallery-container { padding: 0 1rem; } .gallery-grid { grid-template-columns: repeat(auto-fit, minmax(250px,1fr)); gap: 1.5rem; } .gallery-title { font-size: 1.5rem; } .close-modal { top: 15px; right: 20px; font-size: 40px; } .page-header { margin: 0.5rem; } .nav-arrow { width: 50px; height: 50px; font-size: 40px; } .prev-arrow { left: 10px; } .next-arrow { right: 10px; } .modal-content { max-width: 90%; max-height: 70%; } }
+        @media (max-width: 600px) { body { padding-top: 100px; } .navbar { height: 48px; } .navbar-container { padding: 0 0.8rem; } .logo-wrapper img { height: 80px; margin-top: 30px; } .page-header h1 { font-size: 1.8rem; } .page-header p { font-size: 1rem; } .parchment-wrapper { padding: 1.5rem 1.8rem; margin: 1rem auto 2rem auto; } .youtube-viewer iframe { height: 220px; } .gallery-grid { grid-template-columns: 1fr; } .nav-arrow { width: 40px; height: 40px; font-size: 30px; } .btn-devis { display: block; text-align: center; } }
     </style>
 </head>
 <body>
@@ -547,153 +203,110 @@
 <nav class="navbar">
     <div class="navbar-container">
         <div class="nav-left-group">
-            <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.png" alt="Récré Magic">
-            </a>
+            <a href="index.html" class="logo-wrapper"><img src="images/logo.png" alt="Récré Magic"></a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-
         <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
-</a>
-            <a href="boutique.html" class="icon-wrapper">
-                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
-                <span class="icon-label">Boutique</span>
-            </a>
-            <a href="Abonnement.html" class="icon-wrapper">
-                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
-                <span class="icon-label">Abonnement</span>
-            </a>
+            <a href="calendrier.html" class="icon-wrapper"><img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img"><span class="icon-label">Calendrier</span></a>
+            <a href="boutique.html" class="icon-wrapper"><img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img"><span class="icon-label">Boutique</span></a>
+            <a href="Abonnement.html" class="icon-wrapper"><img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img"><span class="icon-label">Abonnement</span></a>
         </div>
     </div>
 </nav>
 
 <div class="page-header">
-    <div class="parchment-wrapper">
-        <div class="inner-parchment"></div>
-        <span class="magic-sparks">✨</span>
-        <h1>Nos Spectacles</h1>
-        <p>4 créations itinérantes pour tous publics</p>
-    </div>
+    <div class="parchment-wrapper"><div class="inner-parchment"></div><span class="magic-sparks">✨</span><h1>Nos Spectacles</h1><p>4 créations itinérantes pour tous publics</p></div>
 </div>
 
 <div class="spectacles-list">
+
     <!-- Spectacle 1 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
-            <div class="spectacle-img">
-                <img src="images/Ducoup-on-vien-chez-vous.png" alt="Du coup on vient chez vous - Récré Magic">
-            </div>
+            <div class="spectacle-img"><img src="images/Ducoup-on-vien-chez-vous.png" alt="Du coup on vient chez vous - Récré Magic"></div>
             <div class="spectacle-content">
                 <span class="spectacle-badge">EN TOURNÉE</span>
                 <h2 class="spectacle-title">DU COUP ON VIENT CHEZ VOUS</h2>
-                <p class="spectacle-description" style="text-align: justify;">
+                <p class="spectacle-description">
                     C'est le grand jour ! Flo, l'ami fidèle — et un peu turbulent — de Toto, s'apprête peut-être à réaliser son plus grand rêve : intégrer la prestigieuse troupe du Circus Théâtre Récré Magic.<br><br>
                     Sous l'œil attentif de Monsieur Poupif, le directeur de la troupe, les auditions commencent. Mais pour Toto, rien ne va se passer comme prévu… Car Flo, débordant d'enthousiasme et d'imagination, a une fâcheuse tendance à n'en faire qu'à sa tête.<br><br>
                     Toto parviendra-t-il, malgré tout, à canaliser son brin de folie ? Flo réussira-t-il à trouver sa place au sein de la célèbre troupe ?<br><br>
                     Ce premier opus de la série invite le public à suivre l'aventure Récré Magic, à travers une véritable symbiose entre comédiens, marionnettes, chiens savants — et bien sûr le public — emportés dans un univers où se mêlent musique, magie et théâtre burlesque.
                 </p>
-                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                    <span class="formule-texte">Formule : en extérieur avec nos roulottes ou avec votre scène en intérieur</span>
+                </div>
             </div>
         </div>
-        <div class="youtube-viewer">
-            <iframe src="https://www.youtube.com/embed/HNhvls_XnRg?rel=0&modestbranding=1"
-                    title="Bande-annonce DU COUP ON VIENT CHEZ VOUS"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-            </iframe>
-        </div>
+        <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/HNhvls_XnRg?rel=0&modestbranding=1" title="Bande-annonce DU COUP ON VIENT CHEZ VOUS" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
     <!-- Spectacle 2 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
-            <div class="spectacle-img">
-                <img src="images/Ducoup-on-revient-chez-vous.png" alt="Du coup on revient chez vous - Récré Magic">
-            </div>
+            <div class="spectacle-img"><img src="images/Ducoup-on-revient-chez-vous.png" alt="Du coup on revient chez vous - Récré Magic"></div>
             <div class="spectacle-content">
                 <span class="spectacle-badge-new">🔥 NOUVEAU SPECTACLE 2026 — EN TOURNÉE 🔥</span>
                 <h2 class="spectacle-title">DU COUP on revient chez vous</h2>
-                <p class="spectacle-description" style="text-align: justify;">
+                <p class="spectacle-description">
                     Flo et Toto sillonnent les routes avec leur spectacle, animés par le plaisir de jouer et de faire rêver. Mais cette tournée, qui s'annonçait joyeuse, va basculer lorsqu'une ancienne malédiction se réveille…<br><br>
                     Gros Boulard, redoutable vilain à l'ambition démesurée, n'a qu'une obsession : conquérir le monde. Pour mener à bien son plan aussi machiavélique que farfelu, il enrôle les créatures féériques du royaume magique.<br><br>
                     Flo et Toto parviendront-ils à déjouer ses manigances ?<br><br>
                     Dans ce nouvel opus de la série Ducoup, le public est invité à plonger plus profondément au cœur du royaume de RécréMagic : un monde peuplé d'êtres féériques — marionnettes, chien acrobate, comédiens costumés… — où se rencontrent un univers musical unique, des tours de magie éclatants et des scènes de théâtre burlesque pleines d'énergie et de surprises.
                 </p>
-                <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                    <span class="formule-texte">Formule : en extérieur avec nos roulottes ou avec votre scène en intérieur</span>
+                </div>
             </div>
         </div>
-        <div class="youtube-viewer">
-            <iframe src="https://www.youtube.com/embed/Ocu-1LbdWts?rel=0&modestbranding=1"
-                    title="Bande-annonce DU COUP ON REVIENT CHEZ VOUS"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-            </iframe>
-        </div>
+        <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/Ocu-1LbdWts?rel=0&modestbranding=1" title="Bande-annonce DU COUP ON REVIENT CHEZ VOUS" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
     <!-- Spectacle 3 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
-            <div class="spectacle-img">
-                <img src="images/Comme-sur-des-roulette.png" alt="Comme sur des roulettes - Récré Magic">
-            </div>
+            <div class="spectacle-img"><img src="images/Comme-sur-des-roulette.png" alt="Comme sur des roulettes - Récré Magic"></div>
             <div class="spectacle-content">
                 <span class="spectacle-badge">À LA DEMANDE</span>
                 <h2 class="spectacle-title">COMME SUR DES ROULETTES</h2>
-                <p class="spectacle-description" style="text-align: justify;">
+                <p class="spectacle-description">
                     Monsieur Toto doit malgré lui partager la scène avec Flo, un personnage inattendu, aussi imprévisible qu'attachant.<br><br>
                     Tour après tour, il se montrera gaffeur, farceur et plein de malice. Flo ne peut s'empêcher de semer un vent de folie dans l'univers bien ordonné de Toto.<br><br>
                     Entre humour, illusion, quiproquos et moment de tendresse, ce duo complice embarque petits et grands pour un moment drôle et décalé, où rien ne se passe tout à fait comme prévu, pour le plus grand plaisir du public.
                 </p>
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
-    <span style="font-size: 0.8rem; color: #5a3e2a; font-style: italic;">*spectacle sans nos roulottes</span>
-</div>
+                    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                    <span class="formule-texte">Formule : avec votre scène intérieur/extérieur</span>
+                </div>
             </div>
         </div>
-        <div class="youtube-viewer">
-            <iframe src="https://www.youtube.com/embed/Xje7iAlDU_8?rel=0&modestbranding=1"
-                    title="Bande-annonce COMME SUR DES ROULETTES"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-            </iframe>
-        </div>
+        <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/Xje7iAlDU_8?rel=0&modestbranding=1" title="Bande-annonce COMME SUR DES ROULETTES" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
     <!-- Spectacle 4 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
-            <div class="spectacle-img">
-                <img src="images/ybos.png" alt="Délicieusement Maboul - Récré Magic">
-            </div>
+            <div class="spectacle-img"><img src="images/ybos.png" alt="Délicieusement Maboul - Récré Magic"></div>
             <div class="spectacle-content">
                 <span class="spectacle-badge">INTERACTIF</span>
                 <h2 class="spectacle-title">DÉLICIEUSEMENT MABOUL</h2>
-                <p class="spectacle-description" style="text-align: justify;">
+                <p class="spectacle-description">
                     Récré Magic vous présente un spectacle exceptionnel réalisé par Monsieur YBOS. Ce spectacle magique laissera aux jeunes enfants et aux grands un souvenir inoubliable, en les plongeant dans l'univers à la fois comique et décalé de Monsieur YBOS.<br><br>
                     Monsieur YBOS débarque avec son énergie débordante et son grain de folie communicatif ! Entre gags hilarants, numéros de magie et complicité avec Black (son chien acrobate), ce clown haut en couleurs entraîne le public dans un tourbillon de rires et de surprises.<br><br>
                     Un spectacle rythmé et joyeux, où petits et grands découvrent qu'il est délicieusement bon d'être… un peu maboul.
                 </p>
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
-    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
-    <span style="font-size: 0.8rem; color: #5a3e2a; font-style: italic;">*spectacle sans nos roulottes</span>
-</div>
+                    <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
+                    <span class="formule-texte">Formule : avec votre scène intérieur/extérieur</span>
+                </div>
             </div>
         </div>
-        <div class="youtube-viewer">
-            <iframe src="https://www.youtube.com/embed/bhx0xnXulVg?rel=0&modestbranding=1"
-                    title="Bande-annonce DÉLICIEUSEMENT MABOUL"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-            </iframe>
-        </div>
+        <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/bhx0xnXulVg?rel=0&modestbranding=1" title="Bande-annonce DÉLICIEUSEMENT MABOUL" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 </div>
 
-<!-- GALERIE -->
 <div class="gallery-container">
     <h2 class="gallery-title">🚐 Nos voyages 🚐</h2>
     <div class="gallery-grid">
@@ -709,7 +322,6 @@
     </div>
 </div>
 
-<!-- MODAL -->
 <div id="imageModal" class="modal">
     <span class="close-modal" onclick="closeGallery()">&times;</span>
     <div class="nav-arrow prev-arrow" onclick="prevImage()">❮</div>
@@ -718,74 +330,42 @@
     <div class="image-counter" id="imageCounter"></div>
 </div>
 
-<!-- CONTACT SECTION -->
 <div class="spectacles-list">
     <div class="contact-cta" id="contact">
         <h2>🎪 Intéressé par nos spectacles ?</h2>
         <p>Contactez-nous pour un devis gratuit et personnalisé</p>
-        <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
-            📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
-        <a href="Devis.html" class="btn-primary" style="margin-top: 1rem; display: inline-block; background: linear-gradient(135deg, var(--rouge-spectacle), var(--rose-spectacle));" target="_blank">📩 Demander un devis</a>
+        <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
+        <a href="Devis.html" style="margin-top:1rem;display:inline-block;background:linear-gradient(135deg,var(--rouge-spectacle),var(--rose-spectacle));padding:0.8rem 2rem;border-radius:50px;text-decoration:none;font-weight:700;color:white;" target="_blank">📩 Demander un devis</a>
     </div>
+</div>
+
+<div class="footer-text">
+    <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
+    <span style="opacity:0.5;">•</span>
+    <a href="mentions-legales.html">Mentions légales</a>
 </div>
 
 <script>
     const galleryImages = [
-        'images/Super-photo.png',
-        'images/Super-photo2.png',
-        'images/Super-photo3.png',
-        'images/Super-photo4.png',
-        'images/Super-photo5.png',
-        'images/Super-photo6.png',
-        'images/Super-photo7.png',
-        'images/Super-photo8.png',
-        'images/Super-photo9.png'
+        'images/Super-photo.png','images/Super-photo2.png','images/Super-photo3.png',
+        'images/Super-photo4.png','images/Super-photo5.png','images/Super-photo6.png',
+        'images/Super-photo7.png','images/Super-photo8.png','images/Super-photo9.png'
     ];
-    
     let currentImageIndex = 0;
     const modal = document.getElementById('imageModal');
     const modalImage = document.getElementById('modalImage');
     const imageCounter = document.getElementById('imageCounter');
-    
-    function openGallery(index) {
-        currentImageIndex = index;
-        modal.classList.add('active');
-        updateModalImage();
-        document.body.style.overflow = 'hidden';
-    }
-    
-    function closeGallery() {
-        modal.classList.remove('active');
-        document.body.style.overflow = '';
-    }
-    
-    function updateModalImage() {
-        modalImage.src = galleryImages[currentImageIndex];
-        imageCounter.textContent = `${currentImageIndex + 1} / ${galleryImages.length}`;
-    }
-    
-    function prevImage() {
-        currentImageIndex--;
-        if (currentImageIndex < 0) currentImageIndex = galleryImages.length - 1;
-        updateModalImage();
-    }
-    
-    function nextImage() {
-        currentImageIndex++;
-        if (currentImageIndex >= galleryImages.length) currentImageIndex = 0;
-        updateModalImage();
-    }
-    
-    document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape' && modal.classList.contains('active')) closeGallery();
-        if (e.key === 'ArrowLeft' && modal.classList.contains('active')) prevImage();
-        if (e.key === 'ArrowRight' && modal.classList.contains('active')) nextImage();
+
+    function openGallery(index) { currentImageIndex=index; modal.classList.add('active'); updateModalImage(); document.body.style.overflow='hidden'; }
+    function closeGallery() { modal.classList.remove('active'); document.body.style.overflow=''; }
+    function updateModalImage() { modalImage.src=galleryImages[currentImageIndex]; imageCounter.textContent=(currentImageIndex+1)+' / '+galleryImages.length; }
+    function prevImage() { currentImageIndex--; if(currentImageIndex<0)currentImageIndex=galleryImages.length-1; updateModalImage(); }
+    function nextImage() { currentImageIndex++; if(currentImageIndex>=galleryImages.length)currentImageIndex=0; updateModalImage(); }
+    document.addEventListener('keydown',function(e){
+        if(e.key==='Escape'&&modal.classList.contains('active'))closeGallery();
+        if(e.key==='ArrowLeft'&&modal.classList.contains('active'))prevImage();
+        if(e.key==='ArrowRight'&&modal.classList.contains('active'))nextImage();
     });
 </script>
-    <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem; position: relative; z-index: 2;">
-    <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
-    <span style="opacity: 0.5;">•</span>
-    <a href="mentions-legales.html" style="color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Mentions légales</a>
-    </div>
 </body>
-    </html>
+</html>
