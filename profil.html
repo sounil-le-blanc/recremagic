@@ -12,7 +12,6 @@
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -73,28 +72,15 @@
             justify-content: space-between;
             flex-wrap: nowrap;
         }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
+        .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
         .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
+        .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
         .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
         .back-arrow {
             display: flex; align-items: center; justify-content: center;
             width: 36px; height: 36px; border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white; font-size: 1.1rem;
-            text-decoration: none; cursor: pointer;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer;
             transition: all 0.25s ease; flex-shrink: 0;
         }
         .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
@@ -107,19 +93,15 @@
 
         /* CONTENU PRINCIPAL */
         .main-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            max-width: 650px;
-            width: 100%;
+            position: relative; z-index: 10;
+            text-align: center; padding: 2rem;
+            max-width: 650px; width: 100%;
         }
 
         .message-box {
             background: rgba(235, 215, 185, 0.96);
             backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 3rem 2rem;
+            border-radius: 60px; padding: 3rem 2rem;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
@@ -134,102 +116,67 @@
 
         .profile-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2.8rem;
-            font-weight: 800;
-            color: #2C1810;
-            margin-bottom: 0.5rem;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            font-size: 2.8rem; font-weight: 800;
+            color: #2C1810; margin-bottom: 0.5rem;
+            letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
         .welcome-message {
-            font-size: 1rem;
-            color: #5a3e2a;
-            margin-bottom: 1.5rem;
-            font-style: italic;
+            font-size: 1rem; color: #5a3e2a;
+            margin-bottom: 1.5rem; font-style: italic;
         }
 
         /* Accès rapides */
         .quick-access {
-            display: flex;
-            justify-content: center;
-            gap: 1rem;
-            flex-wrap: wrap;
-            margin-bottom: 1.5rem;
+            display: flex; justify-content: center;
+            gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
         }
 
         .quick-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
+            display: flex; align-items: center; gap: 0.5rem;
             padding: 0.6rem 1.2rem;
             background: rgba(255,255,255,0.7);
-            border-radius: 40px;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 0.9rem;
-            border: 2px solid #7a5c3e;
+            border-radius: 40px; text-decoration: none;
+            color: var(--text-dark); font-weight: 600;
+            font-size: 0.9rem; border: 2px solid #7a5c3e;
             transition: all 0.2s;
         }
 
         .quick-link:hover {
-            background: white;
-            border-color: var(--jaune-accent);
+            background: white; border-color: var(--jaune-accent);
             transform: translateY(-2px);
         }
 
-        .quick-link-icon {
-            font-size: 1.2rem;
-        }
+        .quick-link-icon { font-size: 1.2rem; }
 
         .profile-info {
-            text-align: left;
-            margin-bottom: 1.5rem;
+            text-align: left; margin-bottom: 1.5rem;
         }
 
         .profile-info p {
-            font-size: 1.1rem;
-            color: #2C1810;
-            margin-bottom: 0.6rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.5);
-            border-radius: 30px;
+            font-size: 1.1rem; color: #2C1810;
+            margin-bottom: 0.6rem; padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.5); border-radius: 30px;
         }
 
         .profile-info strong { color: #5a3e2a; }
 
         .status-badge {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.9rem;
+            display: inline-block; padding: 0.3rem 1rem;
+            border-radius: 30px; font-weight: 700; font-size: 0.9rem;
         }
 
-        .status-active {
-            background: var(--vert-caravane);
-            color: white;
-        }
-
-        .status-inactive {
-            background: #D32F2F;
-            color: white;
-        }
+        .status-active { background: var(--vert-caravane); color: white; }
+        .status-inactive { background: #D32F2F; color: white; }
 
         .btn {
-            display: inline-block;
-            padding: 0.8rem 1.8rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
+            display: inline-block; padding: 0.8rem 1.8rem;
+            border-radius: 50px; text-decoration: none;
+            font-weight: bold; font-size: 1rem;
             transition: transform 0.2s, box-shadow 0.2s;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin: 0.5rem;
-            cursor: pointer;
-            border: none;
-            font-family: 'Quicksand', sans-serif;
+            margin: 0.5rem; cursor: pointer;
+            border: none; font-family: 'Quicksand', sans-serif;
         }
 
         .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
@@ -239,19 +186,22 @@
         .btn-warning { background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: #2C1810; }
         .btn-back { background: linear-gradient(135deg, #5a3e2a, #7a5c3e); color: white; }
 
-        #message { margin-top: 1rem; font-weight: 600; font-size: 0.95rem; min-height: 1.5rem; }
-        .success { color: #2E7D32; }
-        .error { color: #D32F2F; }
+        /* Démo badge */
+        .demo-badge {
+            position: fixed; top: 10px; right: 10px;
+            background: rgba(0,0,0,0.7); color: var(--jaune-accent);
+            padding: 0.4rem 1rem; border-radius: 20px;
+            font-size: 0.8rem; font-weight: 700;
+            z-index: 2000; pointer-events: none;
+        }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
             .profile-title { font-size: 2rem; }
             .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
@@ -261,6 +211,9 @@
     </style>
 </head>
 <body>
+
+<!-- Badge démo -->
+<div class="demo-badge">🔧 DÉMO — Données fictives</div>
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -291,123 +244,36 @@
     <div class="message-box">
         <h1 class="profile-title">Mon Profil</h1>
 
-        <div id="loading">
-            <p style="color:#2C1810;">⏳ Chargement de votre profil...</p>
+        <!-- EXEMPLE : Profil Premium -->
+        <p class="welcome-message">Merci de faire partie de la troupe ! 🌟</p>
+
+        <div class="quick-access">
+            <a href="videos.html" class="quick-link">
+                <span class="quick-link-icon">🎬</span> Vidéos
+            </a>
+            <a href="boutique.html" class="quick-link">
+                <span class="quick-link-icon">💰</span> Boutique
+            </a>
+            <a href="calendrier.html" class="quick-link">
+                <span class="quick-link-icon">📅</span> Calendrier
+            </a>
         </div>
 
-        <div id="profile-content" style="display: none;">
-            <p class="welcome-message" id="welcome-message"></p>
-
-            <!-- Accès rapides -->
-            <div class="quick-access">
-                <a href="videos.html" class="quick-link">
-                    <span class="quick-link-icon">🎬</span> Vidéos
-                </a>
-                <a href="boutique.html" class="quick-link">
-                    <span class="quick-link-icon">💰</span> Boutique
-                </a>
-                <a href="calendrier.html" class="quick-link">
-                    <span class="quick-link-icon">📅</span> Calendrier
-                </a>
-            </div>
-
-            <div class="profile-info">
-                <p><strong>📧 Email :</strong> <span id="profile-email"></span></p>
-                <p><strong>📅 Inscrit le :</strong> <span id="profile-created"></span></p>
-                <p>
-                    <strong>🎪 Statut :</strong>
-                    <span id="profile-status" class="status-badge"></span>
-                </p>
-            </div>
-
-            <div id="message"></div>
-
-            <a href="Abonnement.html" class="btn btn-primary" id="btn-subscribe">✨ Gérer mon abonnement</a>
-            <button class="btn btn-warning" onclick="changePassword()">🔑 Changer de mot de passe</button>
-            <button class="btn btn-danger" onclick="logout()">🚪 Se déconnecter</button>
-            <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
+        <div class="profile-info">
+            <p><strong>📧 Email :</strong> marcel.duchamp@email.fr</p>
+            <p><strong>📅 Inscrit le :</strong> 12 janvier 2026</p>
+            <p>
+                <strong>🎪 Statut :</strong>
+                <span class="status-badge status-active">✨ Premium</span>
+            </p>
         </div>
 
-        <div id="not-logged" style="display: none;">
-            <p style="color:#2C1810; margin-bottom: 1.5rem;">🔒 Vous devez être connecté pour accéder à votre profil.</p>
-            <a href="connexion.html" class="btn btn-primary">🎪 Se connecter</a>
-            <a href="inscription.html" class="btn btn-warning">✨ S'inscrire</a>
-        </div>
+        <a href="Abonnement.html" class="btn btn-primary">✨ Gérer mon abonnement Premium</a>
+        <button class="btn btn-warning">🔑 Changer de mot de passe</button>
+        <button class="btn btn-danger">🚪 Se déconnecter</button>
+        <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
     </div>
 </div>
 
-<script>
-    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
-    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-    async function loadProfile() {
-        const { data: { user }, error: authError } = await supabase.auth.getUser();
-
-        if (authError || !user) {
-            document.getElementById('loading').style.display = 'none';
-            document.getElementById('not-logged').style.display = 'block';
-            return;
-        }
-
-        document.getElementById('loading').style.display = 'none';
-        document.getElementById('profile-content').style.display = 'block';
-
-        // Afficher les infos de base
-        document.getElementById('profile-email').textContent = user.email;
-        document.getElementById('profile-created').textContent = new Date(user.created_at).toLocaleDateString('fr-FR');
-
-        // Vérifier le statut d'abonnement dans la table profiles
-        const { data: profile, error: profileError } = await supabase
-            .from('profiles')
-            .select('subscription_status')
-            .eq('id', user.id)
-            .single();
-
-        const statusEl = document.getElementById('profile-status');
-        const btnSubscribe = document.getElementById('btn-subscribe');
-        const welcomeEl = document.getElementById('welcome-message');
-
-        if (profile && profile.subscription_status === 'active') {
-            statusEl.textContent = '✨ Premium';
-            statusEl.className = 'status-badge status-active';
-            btnSubscribe.textContent = '✨ Gérer mon abonnement Premium';
-            welcomeEl.textContent = 'Merci de faire partie de la troupe ! 🌟';
-        } else {
-            statusEl.textContent = 'Spectateur';
-            statusEl.className = 'status-badge status-inactive';
-            btnSubscribe.textContent = '✨ Devenir Premium';
-            welcomeEl.textContent = 'Découvrez nos contenus exclusifs en devenant membre !';
-        }
-    }
-
-    async function changePassword() {
-        const { data: { user } } = await supabase.auth.getUser();
-        if (!user) return;
-
-        const msg = document.getElementById('message');
-        msg.textContent = '';
-        msg.className = '';
-
-        const { error } = await supabase.auth.resetPasswordForEmail(user.email, {
-            redirectTo: window.location.origin + '/connexion.html'
-        });
-
-        if (error) {
-            msg.textContent = '❌ Erreur : ' + error.message;
-            msg.className = 'error';
-        } else {
-            msg.textContent = '✅ Email de réinitialisation envoyé ! Vérifiez votre boîte (et les spams).';
-            msg.className = 'success';
-        }
-    }
-
-    async function logout() {
-        await supabase.auth.signOut();
-        window.location.href = 'index.html';
-    }
-
-    window.addEventListener('load', loadProfile);
-</script>
 </body>
 </html>
