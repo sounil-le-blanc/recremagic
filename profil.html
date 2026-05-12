@@ -80,75 +80,29 @@
             flex-shrink: 0;
             z-index: 2;
         }
-        .logo-wrapper {
-            text-decoration: none;
-            transition: all 0.25s ease;
-            line-height: 0;
-        }
+        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
         .logo-wrapper img {
             height: 120px;
             transition: transform 0.25s;
             filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
             margin-top: 60px;
         }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
-        }
+        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
         .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
+            color: white; font-size: 1.1rem;
+            text-decoration: none; cursor: pointer;
+            transition: all 0.25s ease; flex-shrink: 0;
         }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-        .nav-icons {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-            z-index: 2;
-        }
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-icon-img {
-            height: 32px;
-            width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-            transition: transform 0.2s;
-        }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
+        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
         .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
-        .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
+        .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
         /* CONTENU PRINCIPAL */
@@ -157,7 +111,7 @@
             z-index: 10;
             text-align: center;
             padding: 2rem;
-            max-width: 600px;
+            max-width: 650px;
             width: 100%;
         }
 
@@ -183,9 +137,50 @@
             font-size: 2.8rem;
             font-weight: 800;
             color: #2C1810;
-            margin-bottom: 1.5rem;
+            margin-bottom: 0.5rem;
             letter-spacing: 2px;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+        }
+
+        .welcome-message {
+            font-size: 1rem;
+            color: #5a3e2a;
+            margin-bottom: 1.5rem;
+            font-style: italic;
+        }
+
+        /* Accès rapides */
+        .quick-access {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-bottom: 1.5rem;
+        }
+
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.6rem 1.2rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 40px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.9rem;
+            border: 2px solid #7a5c3e;
+            transition: all 0.2s;
+        }
+
+        .quick-link:hover {
+            background: white;
+            border-color: var(--jaune-accent);
+            transform: translateY(-2px);
+        }
+
+        .quick-link-icon {
+            font-size: 1.2rem;
         }
 
         .profile-info {
@@ -202,9 +197,7 @@
             border-radius: 30px;
         }
 
-        .profile-info strong {
-            color: #5a3e2a;
-        }
+        .profile-info strong { color: #5a3e2a; }
 
         .status-badge {
             display: inline-block;
@@ -239,38 +232,14 @@
             font-family: 'Quicksand', sans-serif;
         }
 
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
+        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
 
-        .btn-primary {
-            background: linear-gradient(135deg, var(--vert-caravane), #5a8f78);
-            color: white;
-        }
+        .btn-primary { background: linear-gradient(135deg, var(--vert-caravane), #5a8f78); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #D32F2F, var(--rose-spectacle)); color: white; }
+        .btn-warning { background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: #2C1810; }
+        .btn-back { background: linear-gradient(135deg, #5a3e2a, #7a5c3e); color: white; }
 
-        .btn-danger {
-            background: linear-gradient(135deg, #D32F2F, var(--rose-spectacle));
-            color: white;
-        }
-
-        .btn-warning {
-            background: linear-gradient(135deg, var(--jaune-accent), #e6a200);
-            color: #2C1810;
-        }
-
-        .btn-back {
-            background: linear-gradient(135deg, #5a3e2a, #7a5c3e);
-            color: white;
-        }
-
-        #message {
-            margin-top: 1rem;
-            font-weight: 600;
-            font-size: 0.95rem;
-            min-height: 1.5rem;
-        }
-
+        #message { margin-top: 1rem; font-weight: 600; font-size: 0.95rem; min-height: 1.5rem; }
         .success { color: #2E7D32; }
         .error { color: #D32F2F; }
 
@@ -287,6 +256,7 @@
             .profile-title { font-size: 2rem; }
             .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
             .btn { display: block; width: 100%; margin: 0.5rem 0; }
+            .quick-access { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -300,7 +270,6 @@
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
                 <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
@@ -327,6 +296,21 @@
         </div>
 
         <div id="profile-content" style="display: none;">
+            <p class="welcome-message" id="welcome-message"></p>
+
+            <!-- Accès rapides -->
+            <div class="quick-access">
+                <a href="videos.html" class="quick-link">
+                    <span class="quick-link-icon">🎬</span> Vidéos
+                </a>
+                <a href="boutique.html" class="quick-link">
+                    <span class="quick-link-icon">💰</span> Boutique
+                </a>
+                <a href="calendrier.html" class="quick-link">
+                    <span class="quick-link-icon">📅</span> Calendrier
+                </a>
+            </div>
+
             <div class="profile-info">
                 <p><strong>📧 Email :</strong> <span id="profile-email"></span></p>
                 <p><strong>📅 Inscrit le :</strong> <span id="profile-created"></span></p>
@@ -382,15 +366,18 @@
 
         const statusEl = document.getElementById('profile-status');
         const btnSubscribe = document.getElementById('btn-subscribe');
+        const welcomeEl = document.getElementById('welcome-message');
 
         if (profile && profile.subscription_status === 'active') {
             statusEl.textContent = '✨ Premium';
             statusEl.className = 'status-badge status-active';
             btnSubscribe.textContent = '✨ Gérer mon abonnement Premium';
+            welcomeEl.textContent = 'Merci de faire partie de la troupe ! 🌟';
         } else {
             statusEl.textContent = 'Spectateur';
             statusEl.className = 'status-badge status-inactive';
             btnSubscribe.textContent = '✨ Devenir Premium';
+            welcomeEl.textContent = 'Découvrez nos contenus exclusifs en devenant membre !';
         }
     }
 
