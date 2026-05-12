@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Récré Magic</title>
     <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -201,7 +201,7 @@
         .error { color: #D32F2F !important; }
 
         .switch-link {
-            margin-top: 1.5rem;
+            margin-top: 0.8rem;
             font-size: 0.9rem;
             color: #4A2E1B;
         }
@@ -211,6 +211,18 @@
             text-decoration: none;
         }
         .switch-link a:hover { text-decoration: underline; }
+
+        .forgot-link {
+            margin-top: 0.3rem;
+            font-size: 0.85rem;
+            color: #4A2E1B;
+        }
+        .forgot-link a {
+            color: #7a5c3e;
+            text-decoration: underline;
+            cursor: pointer;
+        }
+        .forgot-link a:hover { color: #5a3e2a; }
 
         @media (max-width: 768px) {
             .form-card { padding: 1.5rem; border-radius: 36px; }
@@ -253,6 +265,9 @@
             <button type="submit" id="submitBtn">🎪 Se connecter</button>
         </form>
         <div id="message"></div>
+        <div class="forgot-link">
+            <a onclick="resetPassword()">Mot de passe oublié ?</a>
+        </div>
         <div class="switch-link">
             Pas encore inscrit ? <a href="inscription.html">S'inscrire</a>
         </div>
@@ -269,6 +284,7 @@
     const msg = document.getElementById('message');
     const submitBtn = document.getElementById('submitBtn');
 
+    // ========== CONNEXION ==========
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -280,15 +296,12 @@
         msg.textContent = '';
         msg.className = '';
 
-        console.log('🔄 Tentative de connexion pour :', email);
-
         const { data, error } = await supabase.auth.signInWithPassword({
             email: email,
             password: password,
         });
 
         if (error) {
-            console.error('❌ Erreur connexion :', error.message);
             let errorMsg = error.message;
             if (error.message.includes('Invalid login credentials')) {
                 errorMsg = 'Email ou mot de passe incorrect.';
@@ -298,16 +311,34 @@
             submitBtn.disabled = false;
             submitBtn.textContent = '🎪 Se connecter';
         } else {
-            console.log('✅ Connecté avec succès !', data);
             msg.textContent = '✅ Connecté avec succès ! Redirection...';
             msg.className = 'success';
-            
-            // Redirection après 1 seconde
             setTimeout(() => {
                 window.location.href = 'index.html';
             }, 1000);
         }
     });
+
+    // ========== MOT DE PASSE OUBLIÉ ==========
+    async function resetPassword() {
+        const email = prompt("Entrez votre email pour réinitialiser votre mot de passe :");
+        if (!email) return;
+
+        msg.textContent = '';
+        msg.className = '';
+
+        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+            redirectTo: window.location.origin + '/connexion.html'
+        });
+
+        if (error) {
+            msg.textContent = '❌ Erreur : ' + error.message;
+            msg.className = 'error';
+        } else {
+            msg.textContent = '✅ Email envoyé ! Vérifiez votre boîte (et les spams).';
+            msg.className = 'success';
+        }
+    }
 </script>
 </body>
 </html>
