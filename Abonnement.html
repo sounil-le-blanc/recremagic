@@ -5,20 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abonnement - Récré Magic</title>
     <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
-            --text-light: #ffffff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -42,6 +42,7 @@
             position: relative;
             overflow-x: hidden;
             padding-top: 120px;
+            padding-bottom: 2rem;
         }
 
         body::before {
@@ -55,123 +56,71 @@
 
         /* ========== NAVBAR ========== */
         .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
+            position: fixed; top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 55px;
+            backdrop-filter: blur(10px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 55px;
         }
         .navbar-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
+            width: 100%; height: 100%; padding: 0 1.2rem;
+            display: flex; align-items: center; justify-content: space-between; flex-wrap: nowrap;
         }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-        .logo-wrapper {
-            text-decoration: none;
-            transition: all 0.25s ease;
-            line-height: 0;
-        }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
-        }
+        .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
+        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
+        .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
+        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
         .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer;
+            transition: all 0.25s ease; flex-shrink: 0;
         }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-        .nav-icons {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-            z-index: 2;
-        }
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-icon-img {
-            height: 32px;
-            width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-            transition: transform 0.2s;
-        }
-        .icon-wrapper:hover .nav-icon-img {
-            transform: scale(1.15);
-        }
-        .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
+        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
+        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
+        .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
         /* CONTENU PRINCIPAL */
         .main-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            width: 100%;
+            position: relative; z-index: 10;
+            text-align: center; padding: 2rem;
+            max-width: 900px; width: 100%;
         }
 
-        .message-box {
+        .page-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 3rem; font-weight: 800;
+            color: white; text-align: center;
+            margin-bottom: 2rem; letter-spacing: 2px;
+            text-shadow: 2px 2px 0 rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.2);
+        }
+
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .plan-card {
             background: rgba(235, 215, 185, 0.96);
-            backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 3rem 2rem;
+            border-radius: 48px; padding: 2rem 1.5rem;
+            text-align: center;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
+            display: flex; flex-direction: column; justify-content: space-between;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        .plan-card.premium {
+            border-color: var(--jaune-accent);
+            box-shadow: 0 0 0 8px #3e2a1a, 0 20px 40px rgba(255,179,0,0.3);
+            transform: scale(1.03);
         }
 
         @keyframes fadeInUp {
@@ -179,53 +128,91 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .soon-title {
+        .plan-name {
             font-family: 'MedievalSharp', cursive;
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #2C1810;
+            font-size: 2rem; color: var(--text-dark);
+            margin-bottom: 0.5rem; letter-spacing: 1px;
+        }
+
+        .plan-price {
+            font-size: 2.5rem; font-weight: 800; color: var(--text-dark);
             margin-bottom: 1rem;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
         }
 
-        .soon-subtitle {
-            font-size: 1.3rem;
-            color: #2C1810;
-            margin-bottom: 2rem;
+        .plan-price span { font-size: 1rem; font-weight: 400; }
+
+        .plan-features {
+            list-style: none; text-align: left;
+            margin-bottom: 1.5rem; flex-grow: 1;
         }
 
-        .btn-back {
-            display: inline-block;
-            background: linear-gradient(135deg, #D32F2F, #EC407A);
+        .plan-features li {
+            padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);
+            color: var(--text-dark); font-size: 0.95rem;
+        }
+
+        .plan-features li::before { content: "✓ "; color: var(--vert-caravane); font-weight: bold; }
+
+        .btn-subscribe {
+            display: block; width: 100%; padding: 1rem;
+            border-radius: 50px; border: none;
+            font-family: 'Fredoka', cursive; font-size: 1.2rem; font-weight: 700;
+            cursor: pointer; transition: all 0.3s;
             color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 1rem;
+            background: linear-gradient(135deg, var(--rose-spectacle), #c62828);
         }
-        .btn-back:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+
+        .btn-subscribe.premium-btn {
+            background: linear-gradient(135deg, var(--jaune-accent), #e6a200);
+            color: var(--text-dark);
         }
+
+        .btn-subscribe:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+        .btn-subscribe:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+        #message {
+            margin-top: 2rem; font-weight: 600; font-size: 1rem;
+            min-height: 1.5rem; color: white;
+        }
+
+        .success { color: var(--vert-caravane); }
+        .error { color: var(--rose-spectacle); }
+
+        /* Not logged */
+        .not-logged-box {
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 48px; padding: 2.5rem;
+            text-align: center;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
+        }
+
+        .not-logged-box p { color: var(--text-dark); margin-bottom: 1.5rem; font-size: 1.1rem; }
+
+        .btn-login {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--rose-spectacle), #c62828);
+            color: white; padding: 0.8rem 1.8rem; border-radius: 50px;
+            text-decoration: none; font-weight: bold; font-size: 1rem;
+            transition: transform 0.2s;
+        }
+
+        .btn-login:hover { transform: translateY(-3px); }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
-            .soon-title { font-size: 2.2rem; }
-            .soon-subtitle { font-size: 1rem; }
-            .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
+            .page-title { font-size: 2rem; }
+            .plan-card { padding: 1.5rem; }
+            .plan-card.premium { transform: none; }
+            .plan-price { font-size: 2rem; }
         }
     </style>
 </head>
@@ -239,12 +226,11 @@
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
-</a>
+                <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
+                <span class="icon-label">Calendrier</span>
+            </a>
             <a href="boutique.html" class="icon-wrapper">
                 <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
@@ -258,12 +244,111 @@
 </nav>
 
 <div class="main-content">
-    <div class="message-box">
-        <h1 class="soon-title">Bientôt disponible</h1>
-        <p class="soon-subtitle">Les formules d'abonnement arrivent très bientôt !</p>
-        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+    <h1 class="page-title">✨ Rejoignez la troupe</h1>
+
+    <!-- Non connecté -->
+    <div id="not-logged" style="display: none;">
+        <div class="not-logged-box">
+            <p>🔒 Connectez-vous pour choisir votre formule.</p>
+            <a href="connexion.html" class="btn-login">🎪 Se connecter</a>
+            <a href="inscription.html" class="btn-login" style="background: linear-gradient(135deg, var(--vert-caravane), #5a8f78); margin-left: 0.5rem;">✨ S'inscrire</a>
+        </div>
+    </div>
+
+    <!-- Plans -->
+    <div id="plans-content">
+        <div class="plans-grid">
+
+            <!-- Plan Spectateur -->
+            <div class="plan-card">
+                <h2 class="plan-name">🎟️ Spectateur</h2>
+                <p class="plan-price">Gratuit</p>
+                <ul class="plan-features">
+                    <li>Accès au calendrier</li>
+                    <li>Boutique</li>
+                    <li>Contenus gratuits</li>
+                    <li>Newsletter</li>
+                </ul>
+                <p style="color: var(--text-dark); font-style: italic; margin-bottom: 1rem;">Déjà inclus</p>
+            </div>
+
+            <!-- Plan Premium -->
+            <div class="plan-card premium">
+                <h2 class="plan-name">✨ Premium</h2>
+                <p class="plan-price">10€ <span>/ mois</span></p>
+                <ul class="plan-features">
+                    <li>🎬 Vidéos exclusives</li>
+                    <li>🎪 Contenus behind-the-scenes</li>
+                    <li>💰 Réductions boutique</li>
+                    <li>🌟 Badge membre troupe</li>
+                    <li>📅 Réservation prioritaire</li>
+                </ul>
+                <button class="btn-subscribe premium-btn" id="btn-premium" onclick="subscribe('premium_monthly')">
+                    ✨ Devenir Premium
+                </button>
+            </div>
+
+            <!-- Plan Premium Annuel -->
+            <div class="plan-card">
+                <h2 class="plan-name">🌟 Premium Annuel</h2>
+                <p class="plan-price">96€ <span>/ an</span></p>
+                <ul class="plan-features">
+                    <li>Tout le plan Premium</li>
+                    <li>🎁 2 mois offerts</li>
+                    <li>🖼️ Print exclusif</li>
+                    <li>🎫 Invitation événement privé</li>
+                </ul>
+                <button class="btn-subscribe" id="btn-premium-annual" onclick="subscribe('premium_annual')">
+                    🌟 Devenir Membre
+                </button>
+            </div>
+        </div>
+
+        <div id="message"></div>
     </div>
 </div>
 
+<script>
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function checkAuth() {
+        const { data: { user }, error } = await supabase.auth.getUser();
+        
+        if (error || !user) {
+            document.getElementById('not-logged').style.display = 'block';
+            document.getElementById('plans-content').style.display = 'none';
+            return null;
+        }
+        
+        document.getElementById('not-logged').style.display = 'none';
+        document.getElementById('plans-content').style.display = 'block';
+        return user;
+    }
+
+    async function subscribe(plan) {
+        const user = await checkAuth();
+        if (!user) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        const msg = document.getElementById('message');
+        msg.textContent = '⏳ Redirection vers le paiement...';
+        msg.className = '';
+
+        // Simulation Stripe — à remplacer par la vraie intégration
+        // const response = await fetch('/api/create-checkout', { ... });
+        // window.location.href = data.url;
+
+        setTimeout(() => {
+            msg.textContent = '✅ Paiement simulé ! (Stripe sera intégré prochainement)';
+            msg.className = 'success';
+        }, 1500);
+    }
+
+    window.addEventListener('load', checkAuth);
+</script>
 </body>
 </html>
