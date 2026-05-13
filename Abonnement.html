@@ -12,6 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -53,7 +54,6 @@
             pointer-events: none;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar {
             position: fixed; top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.35);
@@ -83,16 +83,13 @@
         .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* CONTENU PRINCIPAL */
         .main-content {
             position: relative; z-index: 10;
             text-align: center; padding: 2rem;
             max-width: 900px; width: 100%;
         }
 
-        .page-header {
-            margin-bottom: 2.5rem;
-        }
+        .page-header { margin-bottom: 2.5rem; }
 
         .page-title {
             font-family: 'MedievalSharp', cursive;
@@ -107,24 +104,30 @@
             color: rgba(255,255,255,0.8);
         }
 
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            position: relative;
-        }
-
-        /* Sticker "Bientôt disponible" */
+        /* ========== INTERRUPTEUR ========== */
         .plans-wrapper {
             position: relative;
         }
 
-        .sticker {
+        /* Voile gris + sticker */
+        .overlay {
             position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%) rotate(-15deg);
+            inset: -20px;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+            border-radius: 60px;
             z-index: 20;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            pointer-events: all;
+        }
+
+        .overlay.hidden {
+            display: none;
+        }
+
+        .sticker {
             background: var(--rose-spectacle);
             color: white;
             padding: 1rem 2.5rem;
@@ -140,14 +143,15 @@
         }
 
         @keyframes pulseSticker {
-            0%, 100% { transform: translate(-50%, -50%) rotate(-15deg) scale(1); }
-            50% { transform: translate(-50%, -50%) rotate(-15deg) scale(1.05); }
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
         }
 
-        /* Cartes semi-transparentes */
-        .plans-grid.dimmed .plan-card {
-            opacity: 0.4;
-            pointer-events: none;
+        .plans-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            position: relative;
         }
 
         .plan-card {
@@ -175,10 +179,23 @@
 
         .plan-price {
             font-size: 2.5rem; font-weight: 800; color: var(--text-dark);
-            margin-bottom: 1rem;
+            margin-bottom: 0.5rem;
         }
 
         .plan-price span { font-size: 1rem; font-weight: 400; }
+
+        .plan-badge {
+            display: inline-block;
+            background: var(--jaune-accent);
+            color: var(--text-dark);
+            font-size: 0.7rem;
+            font-weight: 700;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
 
         .plan-features {
             list-style: none; text-align: left;
@@ -203,6 +220,15 @@
         }
 
         .btn-subscribe:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
+
+        .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        #message {
+            margin-top: 2rem; font-weight: 600; font-size: 1rem;
+            min-height: 1.5rem; color: white; text-align: center;
+        }
+        .success { color: var(--vert-caravane); }
+        .error { color: var(--rose-spectacle); }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
@@ -252,11 +278,14 @@
         <p class="page-subtitle">Créez un compte gratuit et accédez à l'univers Récré Magic</p>
     </div>
 
-    <div class="plans-wrapper">
-        <!-- Sticker bientôt disponible -->
-        <div class="sticker">Bientôt disponible</div>
+    <div class="plans-wrapper" id="plansWrapper">
 
-        <div class="plans-grid dimmed">
+        <!-- Voile gris + sticker (caché quand Stripe sera prêt) -->
+        <div class="overlay" id="overlay">
+            <div class="sticker">Bientôt disponible</div>
+        </div>
+
+        <div class="plans-grid">
 
             <!-- Plan Gratuit -->
             <div class="plan-card">
@@ -271,10 +300,11 @@
                 <a href="inscription.html" class="btn-subscribe">✨ Créer un compte gratuit</a>
             </div>
 
-            <!-- Plan Premium -->
+            <!-- Plan Premium Mensuel -->
             <div class="plan-card">
                 <h2 class="plan-name">✨ Premium</h2>
-                <p class="plan-price">10€ <span>/ mois</span></p>
+                <p class="plan-price">4€ <span>/ mois</span></p>
+                <div class="plan-badge">🌟 Prix de lancement — Premiers abonnés</div>
                 <ul class="plan-features">
                     <li>🎬 Vidéos exclusives</li>
                     <li>🎪 Contenus behind-the-scenes</li>
@@ -282,29 +312,89 @@
                     <li>🌟 Badge membre troupe</li>
                     <li>📅 Réservation prioritaire</li>
                 </ul>
-                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: var(--text-dark);" disabled>
-                    🌟 Bientôt disponible
+                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: var(--text-dark);" id="btn-premium-monthly" disabled>
+                    🌟 S'abonner — 4€/mois
                 </button>
             </div>
 
             <!-- Plan Premium Annuel -->
             <div class="plan-card">
                 <h2 class="plan-name">🌟 Premium Annuel</h2>
-                <p class="plan-price">96€ <span>/ an</span></p>
+                <p class="plan-price">39€ <span>/ an</span></p>
+                <div class="plan-badge">🎁 Prix de lancement — Première saison</div>
                 <ul class="plan-features">
                     <li>Tout le plan Premium</li>
-                    <li>🎁 2 mois offerts</li>
+                    <li>🎁 3 mois offerts</li>
                     <li>🖼️ Print exclusif</li>
                     <li>🎫 Invitation événement privé</li>
                 </ul>
-                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--rose-spectacle), #c62828);" disabled>
-                    🎪 Bientôt disponible
+                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--rose-spectacle), #c62828);" id="btn-premium-annual" disabled>
+                    🎪 S'abonner — 39€/an
                 </button>
             </div>
 
         </div>
     </div>
+
+    <div id="message"></div>
 </div>
 
+<script>
+    // ========== INTERRUPTEUR ==========
+    // Mettre STRIPE_READY = true quand la clé Stripe sera configurée
+    const STRIPE_READY = false;
+
+    if (STRIPE_READY) {
+        document.getElementById('overlay').classList.add('hidden');
+        document.getElementById('btn-premium-monthly').disabled = false;
+        document.getElementById('btn-premium-annual').disabled = false;
+    }
+
+    // ========== SUPABASE ==========
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function subscribe(priceId) {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) {
+            window.location.href = 'connexion.html';
+            return;
+        }
+
+        const btn = document.querySelectorAll('button');
+        btn.forEach(b => b.disabled = true);
+        document.getElementById('message').textContent = '⏳ Redirection vers le paiement...';
+        document.getElementById('message').className = '';
+
+        try {
+            const response = await fetch('/api/create-subscription-checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    priceId: priceId,
+                    email: user.email,
+                }),
+            });
+
+            const data = await response.json();
+
+            if (data.url) {
+                window.location.href = data.url;
+            } else {
+                document.getElementById('message').textContent = 'Erreur : ' + (data.error || 'Paiement indisponible.');
+                document.getElementById('message').className = 'error';
+                btn.forEach(b => b.disabled = false);
+            }
+        } catch (error) {
+            document.getElementById('message').textContent = 'Erreur réseau. Réessaie.';
+            document.getElementById('message').className = 'error';
+            btn.forEach(b => b.disabled = false);
+        }
+    }
+
+    document.getElementById('btn-premium-monthly').addEventListener('click', () => subscribe('price_1TWlm72M72Oz5mwZgoJXDE01'));
+    document.getElementById('btn-premium-annual').addEventListener('click', () => subscribe('price_1TWlnv2M72Oz5mwZXkA1nJxH'));
+</script>
 </body>
 </html>
