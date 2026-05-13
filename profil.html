@@ -12,6 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -53,23 +54,15 @@
             pointer-events: none;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
+            position: fixed; top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 55px;
+            backdrop-filter: blur(10px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 55px;
         }
         .navbar-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
+            width: 100%; height: 100%; padding: 0 1.2rem;
+            display: flex; align-items: center; justify-content: space-between;
             flex-wrap: nowrap;
         }
         .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
@@ -91,7 +84,6 @@
         .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* CONTENU PRINCIPAL */
         .main-content {
             position: relative; z-index: 10;
             text-align: center; padding: 2rem;
@@ -126,7 +118,6 @@
             margin-bottom: 1.5rem; font-style: italic;
         }
 
-        /* Accès rapides */
         .quick-access {
             display: flex; justify-content: center;
             gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
@@ -186,14 +177,12 @@
         .btn-warning { background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: #2C1810; }
         .btn-back { background: linear-gradient(135deg, #5a3e2a, #7a5c3e); color: white; }
 
-        /* Démo badge */
-        .demo-badge {
-            position: fixed; top: 10px; right: 10px;
-            background: rgba(0,0,0,0.7); color: var(--jaune-accent);
-            padding: 0.4rem 1rem; border-radius: 20px;
-            font-size: 0.8rem; font-weight: 700;
-            z-index: 2000; pointer-events: none;
+        #message {
+            margin-top: 1rem; font-weight: 600;
+            font-size: 0.9rem; min-height: 1.5rem;
         }
+        .success { color: #2E7D32; }
+        .error { color: #D32F2F; }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
@@ -211,9 +200,6 @@
     </style>
 </head>
 <body>
-
-<!-- Badge démo -->
-<div class="demo-badge">🔧 DÉMO — Données fictives</div>
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -241,39 +227,85 @@
 </nav>
 
 <div class="main-content">
-    <div class="message-box">
+    <div class="message-box" id="profile-box">
         <h1 class="profile-title">Mon Profil</h1>
-
-        <!-- EXEMPLE : Profil Premium -->
-        <p class="welcome-message">Merci de faire partie de la troupe ! 🌟</p>
-
-        <div class="quick-access">
-            <a href="videos.html" class="quick-link">
-                <span class="quick-link-icon">🎬</span> Vidéos
-            </a>
-            <a href="boutique.html" class="quick-link">
-                <span class="quick-link-icon">💰</span> Boutique
-            </a>
-            <a href="calendrier.html" class="quick-link">
-                <span class="quick-link-icon">📅</span> Calendrier
-            </a>
-        </div>
-
-        <div class="profile-info">
-            <p><strong>📧 Email :</strong> marcel.duchamp@email.fr</p>
-            <p><strong>📅 Inscrit le :</strong> 12 janvier 2026</p>
-            <p>
-                <strong>🎪 Statut :</strong>
-                <span class="status-badge status-active">✨ Premium</span>
-            </p>
-        </div>
-
-        <a href="Abonnement.html" class="btn btn-primary">✨ Gérer mon abonnement Premium</a>
-        <button class="btn btn-warning">🔑 Changer de mot de passe</button>
-        <button class="btn btn-danger">🚪 Se déconnecter</button>
-        <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
+        <p style="color:#2C1810;">⏳ Chargement de votre profil...</p>
     </div>
 </div>
 
+<script>
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function loadProfile() {
+        const box = document.getElementById('profile-box');
+        const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
+
+        if (authError || !user) {
+            box.innerHTML = `
+                <h1 class="profile-title">Mon Profil</h1>
+                <p style="color:#2C1810; margin-bottom:1.5rem;">🔒 Vous devez être connecté pour accéder à votre profil.</p>
+                <a href="connexion.html" class="btn btn-primary">🎪 Se connecter</a>
+                <a href="inscription.html" class="btn btn-warning">✨ S'inscrire</a>
+            `;
+            return;
+        }
+
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('subscription_status')
+            .eq('id', user.id)
+            .single();
+
+        const status = (profile && profile.subscription_status === 'active') ? 'Premium' : 'Spectateur';
+        const statusClass = (status === 'Premium') ? 'status-active' : 'status-inactive';
+        const welcomeMsg = (status === 'Premium') ? 'Merci de faire partie de la troupe ! 🌟' : 'Découvrez nos contenus exclusifs en devenant membre !';
+        const btnText = (status === 'Premium') ? '✨ Gérer mon abonnement Premium' : '✨ Devenir Premium';
+
+        box.innerHTML = `
+            <h1 class="profile-title">Mon Profil</h1>
+            <p class="welcome-message">${welcomeMsg}</p>
+
+            <div class="quick-access">
+                <a href="videos.html" class="quick-link"><span class="quick-link-icon">🎬</span> Vidéos</a>
+                <a href="boutique.html" class="quick-link"><span class="quick-link-icon">💰</span> Boutique</a>
+                <a href="calendrier.html" class="quick-link"><span class="quick-link-icon">📅</span> Calendrier</a>
+            </div>
+
+            <div class="profile-info">
+                <p><strong>📧 Email :</strong> ${user.email}</p>
+                <p><strong>📅 Inscrit le :</strong> ${new Date(user.created_at).toLocaleDateString('fr-FR')}</p>
+                <p><strong>🎪 Statut :</strong> <span class="status-badge ${statusClass}">✨ ${status}</span></p>
+            </div>
+
+            <div id="message"></div>
+
+            <a href="Abonnement.html" class="btn btn-primary">${btnText}</a>
+            <button class="btn btn-warning" onclick="changePassword()">🔑 Changer de mot de passe</button>
+            <button class="btn btn-danger" onclick="logout()">🚪 Se déconnecter</button>
+            <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
+        `;
+    }
+
+    async function changePassword() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return;
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(user.email, {
+            redirectTo: window.location.origin + '/connexion.html'
+        });
+        const msg = document.getElementById('message');
+        if (msg) {
+            msg.textContent = error ? '❌ Erreur : ' + error.message : '✅ Email envoyé ! Vérifiez votre boîte.';
+        }
+    }
+
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    }
+
+    window.addEventListener('load', loadProfile);
+</script>
 </body>
 </html>

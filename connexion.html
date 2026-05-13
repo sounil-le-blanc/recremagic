@@ -278,13 +278,12 @@
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
 
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('login-form');
     const msg = document.getElementById('message');
     const submitBtn = document.getElementById('submitBtn');
 
-    // ========== CONNEXION ==========
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
         
@@ -296,7 +295,7 @@
         msg.textContent = '';
         msg.className = '';
 
-        const { data, error } = await supabase.auth.signInWithPassword({
+        const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: email,
             password: password,
         });
@@ -311,15 +310,14 @@
             submitBtn.disabled = false;
             submitBtn.textContent = '🎪 Se connecter';
         } else {
-            msg.textContent = '✅ Connecté avec succès ! Redirection...';
+            msg.textContent = '✅ Connecté ! Redirection...';
             msg.className = 'success';
             setTimeout(() => {
-                window.location.href = 'index.html';
+                window.location.href = 'profil.html';
             }, 1000);
         }
     });
 
-    // ========== MOT DE PASSE OUBLIÉ ==========
     async function resetPassword() {
         const email = prompt("Entrez votre email pour réinitialiser votre mot de passe :");
         if (!email) return;
@@ -327,7 +325,7 @@
         msg.textContent = '';
         msg.className = '';
 
-        const { error } = await supabase.auth.resetPasswordForEmail(email.trim(), {
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(email.trim(), {
             redirectTo: window.location.origin + '/connexion.html'
         });
 
@@ -335,7 +333,7 @@
             msg.textContent = '❌ Erreur : ' + error.message;
             msg.className = 'error';
         } else {
-            msg.textContent = '✅ Email envoyé ! Vérifiez votre boîte (et les spams).';
+            msg.textContent = '✅ Email envoyé ! Vérifiez votre boîte.';
             msg.className = 'success';
         }
     }
