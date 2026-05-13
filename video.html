@@ -12,6 +12,7 @@
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         :root {
             --vert-caravane: #7CB69F;
@@ -45,146 +46,94 @@
             pointer-events: none;
         }
 
-        /* ========== NAVBAR ========== */
         .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
+            position: fixed; top: 0; left: 0; width: 100%;
             background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 55px;
+            backdrop-filter: blur(10px); z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); height: 55px;
         }
         .navbar-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
+            width: 100%; height: 100%; padding: 0 1.2rem;
+            display: flex; align-items: center; justify-content: space-between;
         }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
-        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
+        .nav-left-group { display: flex; align-items: center; gap: 0.6rem; }
+        .logo-wrapper { text-decoration: none; }
+        .logo-wrapper img { height: 120px; margin-top: 60px; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); }
         .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px; height: 36px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white; font-size: 1.1rem;
-            text-decoration: none; cursor: pointer;
-            transition: all 0.25s ease; flex-shrink: 0;
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
+            background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
+            color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer;
         }
-        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
-        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
-        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
-        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
-        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
-        .icon-wrapper .icon-label { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap; }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; text-decoration: none; }
+        .nav-icon-img { height: 32px; }
+        .icon-label { font-size: 0.6rem; color: rgba(255,255,255,0.7); }
 
-        /* CONTENU */
         .main-content {
-            position: relative;
-            z-index: 10;
-            max-width: 900px;
-            width: 100%;
-            margin: 0 auto;
-            padding: 1rem;
+            position: relative; z-index: 10;
+            max-width: 900px; width: 100%; margin: 0 auto; padding: 1rem;
         }
 
         .video-box {
             background: rgba(235, 215, 185, 0.96);
-            border-radius: 48px;
-            padding: 2rem;
-            text-align: center;
-            border: 5px solid #7a5c3e;
-            outline: 4px solid #5a3e2a;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
+            border-radius: 48px; padding: 2rem; text-align: center;
+            border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a;
+            outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
             margin-bottom: 2rem;
         }
 
         .video-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2.2rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            font-size: 2.2rem; color: var(--text-dark); margin-bottom: 1rem;
         }
 
         .video-wrapper {
-            position: relative;
-            padding-bottom: 56.25%;
-            height: 0;
-            overflow: hidden;
-            border-radius: 24px;
-            border: 3px solid #7a5c3e;
+            position: relative; padding-bottom: 56.25%; height: 0;
+            overflow: hidden; border-radius: 24px; border: 3px solid #7a5c3e;
         }
 
         .video-wrapper iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            border-radius: 21px;
+            position: absolute; top: 0; left: 0;
+            width: 100%; height: 100%; border-radius: 21px;
         }
 
         .video-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1rem;
-            margin-top: 1.5rem;
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem; margin-top: 1.5rem;
         }
 
         .video-thumb {
             background: rgba(235, 215, 185, 0.8);
-            border-radius: 24px;
-            padding: 1rem;
-            cursor: pointer;
-            border: 3px solid #7a5c3e;
+            border-radius: 24px; padding: 1rem; cursor: pointer;
+            border: 3px solid #7a5c3e; text-align: center;
+            font-weight: 600; color: var(--text-dark);
             transition: transform 0.2s, box-shadow 0.2s;
-            text-align: center;
-            font-weight: 600;
-            color: var(--text-dark);
         }
 
-        .video-thumb:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
-            border-color: var(--jaune-accent);
+        .video-thumb:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0,0,0,0.3); border-color: var(--jaune-accent); }
+        .video-thumb.active { border-color: var(--rose-spectacle); background: rgba(255,255,255,0.9); }
+
+        .locked-box {
+            background: rgba(235, 215, 185, 0.96);
+            border-radius: 48px; padding: 3rem 2rem; text-align: center;
+            border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a;
+            outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
         }
 
-        .video-thumb.active {
-            border-color: var(--rose-spectacle);
-            background: rgba(255,255,255,0.9);
+        .locked-box h2 { font-family: 'MedievalSharp', cursive; font-size: 2rem; color: var(--text-dark); margin-bottom: 1rem; }
+        .locked-box p { color: var(--text-dark); margin-bottom: 1.5rem; }
+
+        .btn {
+            display: inline-block; padding: 0.8rem 1.8rem; border-radius: 50px;
+            text-decoration: none; font-weight: bold; font-size: 1rem;
+            background: linear-gradient(135deg, var(--jaune-accent), #e6a200);
+            color: var(--text-dark); transition: transform 0.2s;
         }
+        .btn:hover { transform: translateY(-3px); }
 
         @media (max-width: 600px) {
-            body { padding-top: 100px; }
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .nav-icons { gap: 0.7rem; }
             .video-title { font-size: 1.5rem; }
             .video-box { padding: 1.5rem 1rem; border-radius: 36px; }
         }
@@ -217,49 +166,81 @@
     </div>
 </nav>
 
-<div class="main-content">
-    <div class="video-box">
-        <h1 class="video-title">🎬 Vidéos exclusives</h1>
-        
-        <!-- VIDÉO PRINCIPALE -->
-        <div class="video-wrapper" id="main-video">
-            <iframe 
-                id="video-iframe"
-                src="https://www.youtube.com/embed/VIDEO_ID_1"
-                title="Vidéo Récré Magic"
-                frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                allowfullscreen>
-            </iframe>
-        </div>
-
-        <!-- LISTE DE VIDÉOS -->
-        <div class="video-list" id="video-list">
-            <div class="video-thumb active" onclick="changeVideo('8HG9JIBX5Aw', this)">
-                🎪 Spectacle 1
-            </div>
-            <div class="video-thumb" onclick="changeVideo('dVG5k0hDPmE', this)">
-                🎭 Spectacle 2
-            </div>
-            <div class="video-thumb" onclick="changeVideo('ZkMfCRk1GAs', this)">
-                ✨ Spectacle 3
-            </div>
-        </div>
-    </div>
+<div class="main-content" id="main-content">
+    <!-- Rempli dynamiquement -->
 </div>
 
 <script>
-    function changeVideo(videoId, element) {
-        // Change la vidéo principale
-        document.getElementById('video-iframe').src = 
-            'https://www.youtube.com/embed/' + videoId;
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-        // Met à jour la classe active
-        document.querySelectorAll('.video-thumb').forEach(thumb => {
-            thumb.classList.remove('active');
-        });
-        element.classList.add('active');
+    async function checkAccess() {
+        const container = document.getElementById('main-content');
+        const { data: { user } } = await supabaseClient.auth.getUser();
+
+        // Pas connecté
+        if (!user) {
+            container.innerHTML = `
+                <div class="locked-box">
+                    <h2>🔒 Contenu réservé aux membres</h2>
+                    <p>Connectez-vous pour accéder aux vidéos exclusives.</p>
+                    <a href="connexion.html" class="btn">🎪 Se connecter</a>
+                </div>
+            `;
+            return;
+        }
+
+        // Connecté — vérifier le statut Premium
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('subscription_status')
+            .eq('id', user.id)
+            .single();
+
+        const isPremium = (profile && profile.subscription_status === 'active');
+
+        if (!isPremium) {
+            container.innerHTML = `
+                <div class="locked-box">
+                    <h2>🌟 Contenu réservé aux membres Premium</h2>
+                    <p>Passez à l'abonnement Premium pour débloquer toutes les vidéos exclusives.</p>
+                    <a href="Abonnement.html" class="btn">✨ Devenir Premium</a>
+                </div>
+            `;
+            return;
+        }
+
+        // ✅ Premium — afficher les vidéos
+        container.innerHTML = `
+            <div class="video-box">
+                <h1 class="video-title">🎬 Vidéos exclusives</h1>
+                
+                <div class="video-wrapper" id="main-video">
+                    <iframe id="video-iframe" src="https://www.youtube.com/embed/8HG9JIBX5Aw"
+                        title="Vidéo Récré Magic" frameborder="0"
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        allowfullscreen>
+                    </iframe>
+                </div>
+
+                <div class="video-list" id="video-list">
+                    <div class="video-thumb active" onclick="changeVideo('8HG9JIBX5Aw', this)">🎪 Spectacle 1</div>
+                    <div class="video-thumb" onclick="changeVideo('dVG5k0hDPmE', this)">🎭 Spectacle 2</div>
+                    <div class="video-thumb" onclick="changeVideo('ZkMfCRk1GAs', this)">✨ Spectacle 3</div>
+                </div>
+            </div>
+        `;
+
+        // Réattacher la fonction changeVideo
+        window.changeVideo = function(videoId, element) {
+            document.getElementById('video-iframe').src = 'https://www.youtube.com/embed/' + videoId;
+            document.querySelectorAll('.video-thumb').forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+        };
     }
+
+    window.addEventListener('load', checkAccess);
 </script>
 </body>
 </html>
