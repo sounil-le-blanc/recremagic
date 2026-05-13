@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abonnement confirmé — Récré Magic</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body style="background:#1a2e18; color:#fff; font-family:Quicksand,sans-serif; text-align:center; padding-top:100px;">
+    <h1>✅ Abonnement confirmé</h1>
+    <p id="status">Activation de ton compte Premium...</p>
+    <p><a href="profil.html" style="color:#FFB300;">Accéder à mon profil</a></p>
+
+    <script>
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get('email');
+        const plan = params.get('plan');
+
+        if (email) {
+            const supabaseClient = supabase.createClient(
+                'https://ilpnwxuecooxthnoxyws.supabase.co',
+                'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY'
+            );
+
+            supabaseClient
+                .from('profiles')
+                .update({ subscription_status: 'active' })
+                .eq('email', email)
+                .then(() => {
+                    document.getElementById('status').textContent = 'Ton compte Premium est activé. Bienvenue dans la troupe ! 🌟';
+                });
+        }
+    </script>
+</body>
+</html>

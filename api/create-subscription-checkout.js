@@ -7,7 +7,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  const { priceId, email } = req.body;
+  const { priceId, email, plan } = req.body;
 
   try {
     const session = await stripe.checkout.sessions.create({
@@ -19,8 +19,8 @@ export default async function handler(req, res) {
         },
       ],
       mode: 'subscription',
-      success_url: 'https://recremagic.com/profil.html?session_id={CHECKOUT_SESSION_ID}',
-      cancel_url: 'https://recremagic.com/Abonnement.html',
+      success_url: 'https://www.recremagic.com/succes-abonnement.html?plan=' + plan + '&email=' + encodeURIComponent(email),
+      cancel_url: 'https://www.recremagic.com/Abonnement.html',
       customer_email: email || undefined,
     });
 

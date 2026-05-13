@@ -393,8 +393,13 @@
         }
     }
 
-    document.getElementById('btn-premium-monthly').addEventListener('click', () => subscribe('price_1TWlm72M72Oz5mwZgoJXDE01'));
-    document.getElementById('btn-premium-annual').addEventListener('click', () => subscribe('price_1TWlnv2M72Oz5mwZXkA1nJxH'));
+    document.getElementById('btn-premium-monthly').addEventListener('click', () => {
+    window.location.href = 'inscription.html?plan=premium_monthly';
+});
+
+document.getElementById('btn-premium-annual').addEventListener('click', () => {
+    window.location.href = 'inscription.html?plan=premium_annual';
+});
 </script>
 </body>
 </html>
