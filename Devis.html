@@ -63,6 +63,7 @@
         .conditions .highlight { background: rgba(124,182,159,0.2); padding: 1rem; border-radius: 10px; margin: 1rem 0; border-left: 3px solid #7CB69F; font-size: 1.05rem; }
         .calendar-btn { display: inline-block; background: linear-gradient(135deg, #D32F2F, #EC407A); color: white; padding: 0.9rem 1.5rem; border-radius: 50px; text-decoration: none; font-weight: bold; margin-top: 1.5rem; text-align: center; width: 100%; font-size: 1.05rem; }
         .calendar-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .dimension-img { width: 100%; max-width: 100%; margin-top: 1.5rem; border-radius: 20px; border: 3px solid #7a5c3e; }
 
         .devis-form { flex: 1.2; background: rgba(235,215,185,0.96); backdrop-filter: blur(8px); border-radius: 60px; padding: 2rem; border: 5px solid #7a5c3e; outline: 4px solid #5a3e2a; outline-offset: 4px; box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3); }
         .devis-form h1 { font-size: 1.8rem; color: #2C1810; text-align: center; margin-bottom: 0.5rem; }
@@ -116,7 +117,7 @@
         <ul><li>📍 un emplacement de <strong>6m de façade sur 4m de profondeur</strong></li><li>🔌 une prise de courant <strong>16A</strong></li></ul>
         <h3><i class="fas fa-tree"></i> FORMULE SPECTACLE EN EXTÉRIEUR :</h3>
         <ul>
-            <li>📍 Avec nos roulottes <strong>15m/façade + 6m/profondeur (espace scénique compris)</strong></li>
+            <li>📍 Avec nos roulottes <strong>13m/façade + 6m/profondeur (espace scénique compris)</strong></li>
             <li>🎤 Sur votre scène ou podium : <strong>6m/façade + 4m/profondeur</strong></li>
             <li>🔌 une prise de courant <strong>16A</strong></li>
             <li>🚧 6 barrières de sécurité</li>
@@ -125,6 +126,7 @@
         <ul><li>🏢 en lieu sécurisé</li><li>🏠 en intérieur</li><li>⚡ un point électrique par vitrine</li><li>📐 sol plat</li></ul>
         <div class="highlight"><i class="fas fa-info-circle"></i> <strong>Besoin d'aide ?</strong> Contactez-nous pour adapter nos prestations.</div>
         <a href="calendrier.html" class="calendar-btn">📅 Calendrier</a>
+        <img src="images/image-dimension.webp" alt="Dimensions techniques Récré Magic" class="dimension-img">
     </div>
 
     <div class="devis-form">
@@ -213,7 +215,6 @@
     var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-    // AFFICHAGE/MASQUAGE BLOCS
     document.querySelectorAll('.check-spectacle-3').forEach(function(cb) {
         cb.addEventListener('change', function() {
             document.getElementById('extraDateSpectacle').style.display = document.querySelectorAll('.check-spectacle-3:checked').length > 0 ? 'block' : 'none';
@@ -239,7 +240,6 @@
         });
     });
 
-    // FLATPICKR
     async function initFlatpickr() {
         var TABLE_NAME = 'events';
         var response = await supabaseClient.from(TABLE_NAME).select('*');
@@ -250,7 +250,6 @@
         flatpickr("#dateExpo", { locale: "fr", dateFormat: "Y-m-d", disable: allEvents.filter(function(ev) { return ev.type === 'Exposition'; }).map(function(ev) { return ev.event_date; }) });
     }
 
-    // ENVOI VIA EDGE FUNCTION
     document.getElementById('devisForm').addEventListener('submit', async function(e) {
         e.preventDefault();
         var btn = document.getElementById('submitBtn');
