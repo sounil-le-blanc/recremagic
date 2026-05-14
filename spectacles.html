@@ -97,13 +97,25 @@
         .page-header, .spectacles-list, .gallery-container, .contact-cta { position: relative; z-index: 2; }
 
         .parchment-wrapper {
-    display: inline-block; position: relative;
-    background: none;
-    padding: 2.5rem 3.5rem; margin: 1rem auto 2rem auto;
-    border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
-    box-shadow: none;
-    transform: none; animation: none;
-}
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
+            padding: 3rem 4rem;
+            margin: 0 auto 2rem auto;
+            border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
+            box-shadow:
+                0 15px 30px rgba(0,0,0,0.6),
+                0 0 0 3px #bfa055,
+                0 0 0 6px #8b6914,
+                inset 0 0 20px rgba(0,0,0,0.4);
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
+                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
+            transform: perspective(700px) rotateX(2deg);
+            animation: floatParchment 6s ease-in-out infinite;
+        }
         @keyframes floatParchment { 0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); } 50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); } }
         .parchment-wrapper::before { content: ''; position: absolute; top: -12px; left: -12px; width: 36px; height: 36px; border-top: 6px solid #d4af37; border-left: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
         .parchment-wrapper::after { content: ''; position: absolute; bottom: -12px; right: -12px; width: 36px; height: 36px; border-bottom: 6px solid #d4af37; border-right: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
