@@ -43,7 +43,7 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            justify-content: flex-start;
+            justify-content: center;
             overflow: hidden;
             position: fixed;
             top: 0;
@@ -54,7 +54,7 @@
             user-select: none;
             -webkit-user-select: none;
             -webkit-tap-highlight-color: transparent;
-            padding-top: 180px;
+            padding-top: 55px;
         }
 
         body::before {
@@ -199,65 +199,17 @@
             color: #FFB300;
         }
 
-        /* ===== TITRE STYLE MÉDIÉVAL DORÉ ===== */
-        .gallery-title {
-            text-align: center;
-            margin-bottom: 1rem;
-            z-index: 30;
-            position: relative;
-            animation: fadeInDown 0.8s ease-out;
-        }
-
-        @keyframes fadeInDown {
-            from {
-                opacity: 0;
-                transform: translateY(-30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .gallery-title h1 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: clamp(2rem, 5vw, 3.5rem);
-            color: #f5d06b;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            text-shadow: 
-                2px 2px 0 #3e6b3a, 
-                -1px -1px 0 #3e6b3a, 
-                0 0 8px #66bb6a, 
-                0 0 15px #a5d6a7,
-                0 0 25px rgba(245, 208, 107, 0.5);
-            margin: 0;
-            line-height: 1.2;
-        }
-
-        .gallery-title p {
-            font-size: clamp(1rem, 2.5vw, 1.3rem);
-            color: #f5d06b;
-            font-weight: 600;
-            letter-spacing: 2px;
-            text-shadow: 
-                2px 2px 0px rgba(0,0,0,0.6),
-                0 0 10px rgba(245, 208, 107, 0.4);
-            margin-top: 0.5rem;
-        }
-
         /* ===== CAROUSEL CONTAINER ===== */
         .carousel-wrapper {
             position: relative;
             width: 100%;
-            flex: 1;
+            flex: 0 1 auto;
+            height: calc(100vh - 55px - 80px);
             display: flex;
             align-items: center;
             justify-content: center;
             perspective: 2000px;
             z-index: 10;
-            min-height: 0;
-            margin-top: -40px;
         }
 
         .carousel-container {
@@ -283,10 +235,10 @@
         /* ===== CARTES EN PAYSAGE ===== */
         .card {
             position: absolute;
-            width: min(90vw, 800px);
-            height: min(55vw, 500px);
-            max-width: 800px;
-            max-height: 500px;
+            width: min(85vw, 750px);
+            height: min(50vw, 450px);
+            max-width: 750px;
+            max-height: 450px;
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -385,23 +337,23 @@
         /* ===== COUNTER ===== */
         .carousel-info {
             position: fixed;
-            bottom: 50px;
-            bottom: max(50px, env(safe-area-inset-bottom));
+            bottom: 20px;
+            bottom: max(20px, env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 12px;
             z-index: 20;
         }
 
         .counter {
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1.5rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 50px;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
@@ -469,10 +421,6 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
-            body {
-                padding-top: 160px;
-            }
-
             .card {
                 width: min(85vw, 600px);
                 height: min(50vw, 380px);
@@ -481,10 +429,6 @@
         }
 
         @media (max-width: 768px) {
-            body {
-                padding-top: 140px;
-            }
-
             .navbar {
                 height: 48px;
             }
@@ -520,20 +464,6 @@
                 gap: 0.7rem;
             }
 
-            .gallery-title {
-                margin-bottom: 0.5rem;
-            }
-
-            .gallery-title h1 {
-                font-size: 1.6rem;
-                letter-spacing: 2px;
-            }
-
-            .gallery-title p {
-                font-size: 0.9rem;
-                letter-spacing: 1px;
-            }
-
             .card {
                 width: min(88vw, 450px);
                 height: min(55vw, 300px);
@@ -556,14 +486,13 @@
             }
 
             .counter {
-                font-size: 0.9rem;
-                padding: 0.4rem 1.2rem;
+                font-size: 0.85rem;
+                padding: 0.3rem 1rem;
             }
 
             .carousel-info {
-                bottom: 35px;
-                bottom: max(35px, env(safe-area-inset-bottom));
-                gap: 12px;
+                bottom: 15px;
+                gap: 10px;
             }
 
             .dots-ring {
@@ -584,24 +513,6 @@
         }
 
         @media (max-width: 480px) {
-            body {
-                padding-top: 120px;
-            }
-
-            .gallery-title {
-                margin-bottom: 0.3rem;
-            }
-
-            .gallery-title h1 {
-                font-size: 1.3rem;
-                letter-spacing: 1.5px;
-            }
-
-            .gallery-title p {
-                font-size: 0.75rem;
-                letter-spacing: 1px;
-            }
-
             .card {
                 width: min(92vw, 350px);
                 height: min(60vw, 250px);
@@ -615,9 +526,8 @@
             }
 
             .carousel-info {
-                bottom: 25px;
-                bottom: max(25px, env(safe-area-inset-bottom));
-                gap: 10px;
+                bottom: 10px;
+                gap: 8px;
             }
         }
     </style>
@@ -650,12 +560,6 @@
             </div>
         </div>
     </nav>
-
-    <!-- TITRE -->
-    <div class="gallery-title">
-        <h1>Galerie photos</h1>
-        <p>Découvrez notre exposition en images</p>
-    </div>
 
     <!-- CAROUSEL -->
     <div class="carousel-wrapper">
