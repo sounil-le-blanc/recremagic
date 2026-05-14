@@ -27,13 +27,13 @@
         }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body {
+                zoom: 150%;
+            }
+            body::before {
+                zoom: 0.6667;
+            }
+        }
 
         /* ===== FOND FIXE ===== */
         body {
@@ -202,7 +202,7 @@
         /* ===== TITRE STYLE MÉDIÉVAL DORÉ ===== */
         .gallery-title {
             text-align: center;
-            margin-bottom: 1.5rem;
+            margin-bottom: 1rem;
             z-index: 30;
             position: relative;
             animation: fadeInDown 0.8s ease-out;
@@ -257,6 +257,7 @@
             perspective: 2000px;
             z-index: 10;
             min-height: 0;
+            margin-top: -40px;
         }
 
         .carousel-container {
@@ -282,10 +283,10 @@
         /* ===== CARTES EN PAYSAGE ===== */
         .card {
             position: absolute;
-            width: min(72vw, 620px);
-            height: min(40vw, 350px);
-            max-width: 620px;
-            max-height: 350px;
+            width: min(90vw, 800px);
+            height: min(55vw, 500px);
+            max-width: 800px;
+            max-height: 500px;
             border-radius: 20px;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -473,8 +474,8 @@
             }
 
             .card {
-                width: min(68vw, 500px);
-                height: min(38vw, 280px);
+                width: min(85vw, 600px);
+                height: min(50vw, 380px);
                 border-radius: 16px;
             }
         }
@@ -520,7 +521,7 @@
             }
 
             .gallery-title {
-                margin-bottom: 1rem;
+                margin-bottom: 0.5rem;
             }
 
             .gallery-title h1 {
@@ -534,8 +535,8 @@
             }
 
             .card {
-                width: min(78vw, 380px);
-                height: min(45vw, 220px);
+                width: min(88vw, 450px);
+                height: min(55vw, 300px);
                 border-radius: 14px;
             }
 
@@ -588,7 +589,7 @@
             }
 
             .gallery-title {
-                margin-bottom: 0.8rem;
+                margin-bottom: 0.3rem;
             }
 
             .gallery-title h1 {
@@ -602,8 +603,8 @@
             }
 
             .card {
-                width: min(82vw, 280px);
-                height: min(50vw, 170px);
+                width: min(92vw, 350px);
+                height: min(60vw, 250px);
                 border-radius: 12px;
             }
 
@@ -747,7 +748,7 @@
 
                 const absOffset = Math.abs(offset);
                 
-                const translateX = offset * 75;
+                const translateX = offset * 85;
                 const scale = 1 - absOffset * 0.1;
                 const translateZ = -absOffset * 200;
                 const rotateY = offset * 10;
@@ -848,11 +849,11 @@
                 if (offset > totalCards / 2) offset -= totalCards;
                 if (offset < -totalCards / 2) offset += totalCards;
                 
-                const translateX = offset * 75 + dragOffset;
-                const absOffset = Math.abs(offset + dragOffset / 75);
+                const translateX = offset * 85 + dragOffset;
+                const absOffset = Math.abs(offset + dragOffset / 85);
                 const scale = 1 - absOffset * 0.1;
                 const translateZ = -absOffset * 200;
-                const rotateY = (offset + dragOffset / 75) * 10;
+                const rotateY = (offset + dragOffset / 85) * 10;
                 const opacity = 1 - absOffset * 0.35;
                 const zIndex = 10 - Math.floor(absOffset);
                 const blur = absOffset > 1 ? `blur(${(absOffset - 1) * 4}px)` : 'none';
@@ -932,10 +933,10 @@
         function handleImageError(imgElement, index) {
             console.error(`Image introuvable : ${photos[index]}`);
             imgElement.src = 'data:image/svg+xml,' + encodeURIComponent(`
-                <svg xmlns="http://www.w3.org/2000/svg" width="620" height="350" fill="%232a2a2a">
-                    <rect width="620" height="350"/>
-                    <text x="310" y="175" text-anchor="middle" fill="white" font-size="20" font-family="sans-serif">Image non trouvée</text>
-                    <text x="310" y="205" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">Photo ${index + 1}</text>
+                <svg xmlns="http://www.w3.org/2000/svg" width="800" height="500" fill="%232a2a2a">
+                    <rect width="800" height="500"/>
+                    <text x="400" y="250" text-anchor="middle" fill="white" font-size="20" font-family="sans-serif">Image non trouvée</text>
+                    <text x="400" y="280" text-anchor="middle" fill="%23999" font-size="14" font-family="sans-serif">Photo ${index + 1}</text>
                 </svg>
             `);
         }
