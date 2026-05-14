@@ -26,15 +26,15 @@
         }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body {
+                zoom: 150%;
+            }
+            body::before {
+                zoom: 0.6667;
+            }
+        }
 
-        /* ===== FOND FIXE QUI NE BOUGE PAS ===== */
+        /* ===== FOND FIXE ===== */
         body {
             font-family: 'Quicksand', sans-serif;
             min-height: 100vh;
@@ -199,17 +199,22 @@
 
         /* ===== CAROUSEL CONTAINER ===== */
         .carousel-wrapper {
-            position: relative;
-            width: 100%;
-            height: 80vh;
-            height: 80dvh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            perspective: 2000px;
-            z-index: 10;
-            margin-top: 50px;
-        }
+    position: relative;
+    width: 100%;
+    flex: 0 1 auto;
+    height: calc(100vh - 55px - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 2000px;
+    z-index: 10;
+}
+
+@media (min-width: 1024px) {
+    .carousel-wrapper {
+        margin-top: -480px;
+    }
+}
 
         .carousel-container {
             position: relative;
@@ -234,10 +239,10 @@
         /* ===== CARTES EN PORTRAIT ===== */
         .card {
             position: absolute;
-            width: min(55vw, 320px);
-            height: min(78vw, 460px);
-            max-width: 320px;
-            max-height: 460px;
+            width: min(55vw, 400px);
+            height: min(78vw, 560px);
+            max-width: 400px;
+            max-height: 560px;
             border-radius: 24px;
             overflow: hidden;
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
@@ -336,23 +341,23 @@
         /* ===== COUNTER ===== */
         .carousel-info {
             position: fixed;
-            bottom: 50px;
-            bottom: max(50px, env(safe-area-inset-bottom));
+            bottom: 20px;
+            bottom: max(20px, env(safe-area-inset-bottom));
             left: 50%;
             transform: translateX(-50%);
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 18px;
+            gap: 12px;
             z-index: 20;
         }
 
         .counter {
             color: white;
-            font-size: 1.1rem;
+            font-size: 1rem;
             font-weight: 600;
             background: rgba(0, 0, 0, 0.6);
-            padding: 0.5rem 1.5rem;
+            padding: 0.4rem 1.2rem;
             border-radius: 50px;
             letter-spacing: 2px;
             backdrop-filter: blur(10px);
@@ -420,9 +425,12 @@
 
         /* ===== RESPONSIVE ===== */
         @media (max-width: 1024px) {
+            .carousel-wrapper {
+                margin-top: -200px;
+            }
             .card {
-                width: min(50vw, 280px);
-                height: min(72vw, 400px);
+                width: min(50vw, 320px);
+                height: min(72vw, 460px);
                 border-radius: 20px;
             }
         }
@@ -464,14 +472,12 @@
             }
 
             .carousel-wrapper {
-                height: 65vh;
-                height: 65dvh;
-                margin-top: 40px;
+                margin-top: -100px;
             }
 
             .card {
-                width: min(55vw, 240px);
-                height: min(80vw, 350px);
+                width: min(55vw, 260px);
+                height: min(80vw, 380px);
                 border-radius: 18px;
             }
 
@@ -491,14 +497,13 @@
             }
 
             .counter {
-                font-size: 0.9rem;
-                padding: 0.4rem 1.2rem;
+                font-size: 0.85rem;
+                padding: 0.3rem 1rem;
             }
 
             .carousel-info {
-                bottom: 35px;
-                bottom: max(35px, env(safe-area-inset-bottom));
-                gap: 12px;
+                bottom: 15px;
+                gap: 10px;
             }
 
             .dots-ring {
@@ -520,13 +525,12 @@
 
         @media (max-width: 480px) {
             .carousel-wrapper {
-                height: 55vh;
-                height: 55dvh;
+                margin-top: -50px;
             }
 
             .card {
-                width: min(60vw, 200px);
-                height: min(85vw, 300px);
+                width: min(60vw, 220px);
+                height: min(85vw, 320px);
                 border-radius: 16px;
             }
 
@@ -537,9 +541,8 @@
             }
 
             .carousel-info {
-                bottom: 25px;
-                bottom: max(25px, env(safe-area-inset-bottom));
-                gap: 10px;
+                bottom: 10px;
+                gap: 8px;
             }
         }
     </style>
