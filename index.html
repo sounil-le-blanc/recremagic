@@ -37,14 +37,11 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
     @media (min-width: 1024px) {
-    html {
+    body {
         zoom: 150%;
     }
     body::before {
-        transform: scale(0.6667); /* 1 / 1.5 = 0.6667 */
-        transform-origin: top left;
-        width: 150%;
-        height: 150%;
+        zoom: 0.6667; /* annule le zoom sur le fond */
     }
 }
 
