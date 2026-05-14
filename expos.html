@@ -27,6 +27,15 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
+        @media (min-width: 1024px) {
+    body {
+        zoom: 150%;
+    }
+    body::before {
+        zoom: 0.6667; /* annule le zoom sur le fond */
+    }
+}
+
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.webp');

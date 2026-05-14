@@ -27,6 +27,16 @@
             --couleur-expo2: #B39DDB;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+@media (min-width: 1024px) {
+    body {
+        zoom: 150%;
+    }
+    body::before {
+        zoom: 0.6667; /* annule le zoom sur le fond */
+    }
+}
+
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: var(--vert-caravane); border-radius: 10px; }
