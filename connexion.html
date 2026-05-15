@@ -17,13 +17,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body {
+                zoom: 150%;
+            }
+            body::before {
+                zoom: 0.6667;
+            }
+        }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -111,11 +111,14 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
-        .icon-wrapper span {
-            font-size: 1.3rem;
-            color: white;
-            text-shadow: 1px 1px 3px black;
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
             transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
         }
         .icon-wrapper .icon-label {
             font-size: 0.6rem;
@@ -124,8 +127,8 @@
             letter-spacing: 1px;
             color: rgba(255,255,255,0.7);
             transition: color 0.2s;
+            white-space: nowrap;
         }
-        .icon-wrapper:hover span { transform: scale(1.1); color: #FFB300; }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
         .container {
@@ -247,22 +250,22 @@
     <div class="navbar-container">
         <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.webp" alt="Récré Magic">
+                <img src="images/logo.png" alt="Récré Magic">
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
 
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
-</a>
+                <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
+                <span class="icon-label">Calendrier</span>
+            </a>
             <a href="boutique.html" class="icon-wrapper">
-                <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
+                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
             <a href="Abonnement.html" class="icon-wrapper">
-                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
+                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
         </div>
