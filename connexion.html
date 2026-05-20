@@ -69,7 +69,7 @@
             padding: 0 1rem;
         }
 
-        /* ===== NAVBAR (identique à index.html) ===== */
+        /* ===== NAVBAR ===== */
         .navbar {
             position: fixed;
             top: 0;
@@ -397,12 +397,16 @@
             <a id="forgotPasswordBtn">Mot de passe oublié ?</a>
         </div>
         <div class="switch-link">
-            Pas encore inscrit ? <a href="Abonnement.html">S'inscrire</a>
+            Pas encore inscrit ? <a href="inscription.html">S'inscrire</a>
         </div>
     </div>
 </div>
 
 <script>
+    // ========== RÉCUPÉRER LE REDIRECT ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectUrl = urlParams.get('redirect');
+
     // ========== SUPABASE ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
@@ -453,8 +457,13 @@
         msg.textContent = '✅ Connexion réussie ! Redirection...';
         msg.className = 'success';
 
+        // Redirection vers la page demandée ou profil par défaut
         setTimeout(() => {
-            window.location.href = 'profil.html';
+            if (redirectUrl) {
+                window.location.href = redirectUrl;
+            } else {
+                window.location.href = 'profil.html';
+            }
         }, 1000);
     });
 

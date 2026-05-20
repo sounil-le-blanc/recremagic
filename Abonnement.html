@@ -429,7 +429,7 @@
 
         try {
             // 2. Appeler la Edge Function pour créer la session Stripe Checkout
-            const response = await fetch('/api/create-checkout-session', {
+            const response = await fetch('https://ilpnwxuecooxthnoxyws.supabase.co/functions/v1/create-checkout-session',{
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
