@@ -23,18 +23,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body { zoom: 150%; }
+            body::before { zoom: 0.6667; }
+        }
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -76,7 +71,7 @@
         .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
         .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
         .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
-        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
+        .logo-wrapper:hover img { transform: scale(1.08); }
         .back-arrow {
             display: flex; align-items: center; justify-content: center;
             width: 36px; height: 36px; border-radius: 50%;
@@ -99,7 +94,6 @@
         }
 
         .page-header { margin-bottom: 2.5rem; }
-
         .page-title {
             font-family: 'MedievalSharp', cursive;
             font-size: 3rem; font-weight: 800;
@@ -107,58 +101,14 @@
             margin-bottom: 0.5rem; letter-spacing: 2px;
             text-shadow: 2px 2px 0 rgba(0,0,0,0.6), 0 0 20px rgba(255,255,255,0.2);
         }
-
         .page-subtitle {
             font-size: 1.2rem;
             color: rgba(255,255,255,0.8);
         }
 
-        /* ========== INTERRUPTEUR ========== */
-        .plans-wrapper {
-            position: relative;
-        }
-
-        /* Voile gris + sticker */
-        .overlay {
-            position: absolute;
-            inset: -20px;
-            background: rgba(0,0,0,0.5);
-            backdrop-filter: blur(3px);
-            border-radius: 60px;
-            z-index: 20;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            pointer-events: all;
-        }
-
-        .overlay.hidden {
-            display: none;
-        }
-
-        .sticker {
-            background: var(--rose-spectacle);
-            color: white;
-            padding: 1rem 2.5rem;
-            border-radius: 16px;
-            font-family: 'Fredoka', cursive;
-            font-size: 1.8rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5), 0 0 0 4px white;
-            animation: pulseSticker 2s ease-in-out infinite;
-            white-space: nowrap;
-        }
-
-        @keyframes pulseSticker {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-        }
-
         .plans-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
             gap: 1.5rem;
             position: relative;
         }
@@ -190,7 +140,6 @@
             font-size: 2.5rem; font-weight: 800; color: var(--text-dark);
             margin-bottom: 0.5rem;
         }
-
         .plan-price span { font-size: 1rem; font-weight: 400; }
 
         .plan-badge {
@@ -203,19 +152,16 @@
             border-radius: 20px;
             margin-bottom: 1rem;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
         }
 
         .plan-features {
             list-style: none; text-align: left;
             margin-bottom: 1.5rem; flex-grow: 1;
         }
-
         .plan-features li {
             padding: 0.5rem 0; border-bottom: 1px solid rgba(0,0,0,0.1);
             color: var(--text-dark); font-size: 0.95rem;
         }
-
         .plan-features li::before { content: "✓ "; color: var(--vert-caravane); font-weight: bold; }
 
         .btn-subscribe {
@@ -227,10 +173,8 @@
             background: linear-gradient(135deg, var(--vert-caravane), #5a8f78);
             text-decoration: none;
         }
-
         .btn-subscribe:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-
-        .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn-subscribe:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
 
         #message {
             margin-top: 2rem; font-weight: 600; font-size: 1rem;
@@ -238,6 +182,92 @@
         }
         .success { color: var(--vert-caravane); }
         .error { color: var(--rose-spectacle); }
+
+        /* MODALE STYLE */
+        .modal-overlay {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        .modal-container {
+            background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 100%);
+            border-radius: 48px;
+            padding: 2.5rem;
+            max-width: 450px;
+            width: 90%;
+            text-align: center;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 20px 40px rgba(0,0,0,0.5);
+            animation: zoomIn 0.3s ease;
+        }
+        @keyframes zoomIn {
+            from { transform: scale(0.9); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+        .modal-container h3 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2rem;
+            color: #2C1810;
+            margin-bottom: 0.5rem;
+        }
+        .modal-container p {
+            color: #2C1810;
+            margin-bottom: 1.5rem;
+            font-size: 1rem;
+        }
+        .modal-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+        }
+        .modal-btn {
+            padding: 0.8rem 1.5rem;
+            border-radius: 40px;
+            font-family: 'Fredoka', cursive;
+            font-weight: 700;
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .modal-btn-primary {
+            background: #7CB69F;
+            color: white;
+        }
+        .modal-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .modal-btn-secondary {
+            background: #EC407A;
+            color: white;
+        }
+        .modal-btn-secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+        }
+        .modal-close {
+            background: none;
+            border: none;
+            color: #5a3e2a;
+            cursor: pointer;
+            font-size: 0.9rem;
+            text-decoration: underline;
+            margin-top: 0.5rem;
+        }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
@@ -250,7 +280,9 @@
             .page-title { font-size: 2rem; }
             .plan-card { padding: 1.5rem; }
             .plan-price { font-size: 2rem; }
-            .sticker { font-size: 1.2rem; padding: 0.8rem 1.5rem; white-space: nowrap; }
+            .modal-container { padding: 1.8rem; }
+            .modal-container h3 { font-size: 1.5rem; }
+            .modal-buttons { flex-direction: column; }
         }
     </style>
 </head>
@@ -284,64 +316,39 @@
 <div class="main-content">
     <div class="page-header">
         <h1 class="page-title">✨ Rejoignez la troupe</h1>
-        <p class="page-subtitle">Créez un compte gratuit et accédez à l'univers Récré Magic</p>
+        <p class="page-subtitle">Abonnement annuel — 5€/an</p>
     </div>
 
-    <div class="plans-wrapper" id="plansWrapper">
-
-        <!-- Voile gris + sticker (caché quand Stripe sera prêt) -->
-        <div class="overlay" id="overlay">
-            <div class="sticker">Bientôt disponible</div>
+    <div class="plans-grid">
+        <!-- Plan Gratuit -->
+        <div class="plan-card">
+            <h2 class="plan-name">🎟️ Spectateur</h2>
+            <p class="plan-price">Gratuit</p>
+            <ul class="plan-features">
+                <li>Accès au calendrier</li>
+                <li>Boutique</li>
+                <li>Contenus gratuits</li>
+                <li>Newsletter</li>
+            </ul>
+            <a href="inscription.html" class="btn-subscribe">✨ Créer un compte gratuit</a>
         </div>
 
-        <div class="plans-grid">
-
-            <!-- Plan Gratuit -->
-            <div class="plan-card">
-                <h2 class="plan-name">🎟️ Spectateur</h2>
-                <p class="plan-price">Gratuit</p>
-                <ul class="plan-features">
-                    <li>Accès au calendrier</li>
-                    <li>Boutique</li>
-                    <li>Contenus gratuits</li>
-                    <li>Newsletter</li>
-                </ul>
-                <a href="inscription.html" class="btn-subscribe">✨ Créer un compte gratuit</a>
-            </div>
-
-            <!-- Plan Premium Mensuel -->
-            <div class="plan-card">
-                <h2 class="plan-name">✨ Premium</h2>
-                <p class="plan-price">4€ <span>/ mois</span></p>
-                <div class="plan-badge">🌟 Prix de lancement — Premiers abonnés</div>
-                <ul class="plan-features">
-                    <li>🎬 Vidéos exclusives</li>
-                    <li>🎪 Contenus behind-the-scenes</li>
-                    <li>💰 Réductions boutique</li>
-                    <li>🌟 Badge membre troupe</li>
-                    <li>📅 Réservation prioritaire</li>
-                </ul>
-                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: var(--text-dark);" id="btn-premium-monthly" disabled>
-                    🌟 S'abonner — 4€/mois
-                </button>
-            </div>
-
-            <!-- Plan Premium Annuel -->
-            <div class="plan-card">
-                <h2 class="plan-name">🌟 Premium Annuel</h2>
-                <p class="plan-price">39€ <span>/ an</span></p>
-                <div class="plan-badge">🎁 Prix de lancement — Première saison</div>
-                <ul class="plan-features">
-                    <li>Tout le plan Premium</li>
-                    <li>🎁 3 mois offerts</li>
-                    <li>🖼️ Print exclusif</li>
-                    <li>🎫 Invitation événement privé</li>
-                </ul>
-                <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--rose-spectacle), #c62828);" id="btn-premium-annual" disabled>
-                    🎪 S'abonner — 39€/an
-                </button>
-            </div>
-
+        <!-- Plan Premium Annuel (5€) -->
+        <div class="plan-card">
+            <h2 class="plan-name">🌟 Premium Annuel</h2>
+            <p class="plan-price">5€ <span>/ an</span></p>
+            <div class="plan-badge">🎁 Accès complet — Première année</div>
+            <ul class="plan-features">
+                <li>🎬 Vidéos exclusives</li>
+                <li>🎪 Contenus behind-the-scenes</li>
+                <li>💰 Réductions boutique</li>
+                <li>🌟 Badge membre troupe</li>
+                <li>📅 Réservation prioritaire</li>
+                <li>🖼️ Print exclusif</li>
+            </ul>
+            <button class="btn-subscribe" style="background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: var(--text-dark);" id="btn-subscribe">
+                🎪 S'abonner — 5€/an
+            </button>
         </div>
     </div>
 
@@ -349,66 +356,110 @@
 </div>
 
 <script>
-    // ========== INTERRUPTEUR ==========
-    // Mettre STRIPE_READY = true quand la clé Stripe sera configurée
-    const STRIPE_READY = false;
-
-    if (STRIPE_READY) {
-        document.getElementById('overlay').classList.add('hidden');
-        document.getElementById('btn-premium-monthly').disabled = false;
-        document.getElementById('btn-premium-annual').disabled = false;
-    }
-
     // ========== SUPABASE ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    async function subscribe(priceId) {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) {
-            window.location.href = 'connexion.html';
+    // ========== STRIPE ==========
+    const PRICE_ID = 'price_1TZFKo2M72Oz5mwZs4KoWrZK';  // Ton Price ID 5€/an
+
+    const subscribeBtn = document.getElementById('btn-subscribe');
+    const messageDiv = document.getElementById('message');
+
+    // ========== FONCTION MODALE ==========
+    function showAuthModal() {
+        // Vérifier si la modale existe déjà
+        if (document.getElementById('authModal')) return;
+        
+        const modalHtml = `
+            <div id="authModal" class="modal-overlay">
+                <div class="modal-container">
+                    <h3>🎪 Bienvenue !</h3>
+                    <p>Pour vous abonner à l'offre Premium, vous devez d'abord avoir un compte Récré Magic.</p>
+                    <div class="modal-buttons">
+                        <a href="inscription.html?plan=premium_annual" class="modal-btn modal-btn-primary">✨ Créer un compte</a>
+                        <a href="connexion.html?redirect=Abonnement.html" class="modal-btn modal-btn-secondary">🔑 Se connecter</a>
+                    </div>
+                    <button class="modal-close" onclick="closeAuthModal()">Fermer</button>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        
+        // Empêcher le scroll derrière la modale
+        document.body.style.overflow = 'hidden';
+    }
+
+    window.closeAuthModal = function() {
+        const modal = document.getElementById('authModal');
+        if (modal) modal.remove();
+        document.body.style.overflow = '';
+    };
+
+    // Fermer la modale en cliquant à l'extérieur
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('authModal');
+        if (modal && e.target === modal) {
+            closeAuthModal();
+        }
+    });
+
+    // ========== CHECKOUT ==========
+    async function startCheckout() {
+        // Désactiver le bouton
+        subscribeBtn.disabled = true;
+        subscribeBtn.textContent = '⏳ Vérification...';
+        messageDiv.textContent = '';
+        messageDiv.className = '';
+
+        // 1. Vérifier si l'utilisateur est connecté
+        const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
+
+        if (userError || !user) {
+            // Afficher la modale au lieu de rediriger
+            subscribeBtn.disabled = false;
+            subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+            showAuthModal();
             return;
         }
 
-        const btn = document.querySelectorAll('button');
-        btn.forEach(b => b.disabled = true);
-        document.getElementById('message').textContent = '⏳ Redirection vers le paiement...';
-        document.getElementById('message').className = '';
+        messageDiv.textContent = '⏳ Création de la session de paiement...';
+        messageDiv.className = '';
 
         try {
-            const response = await fetch('/api/create-subscription-checkout', {
+            // 2. Appeler la Edge Function pour créer la session Stripe Checkout
+            const response = await fetch('/api/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
-                    priceId: priceId,
-                    email: user.email,
-                }),
+                    priceId: PRICE_ID,
+                    userId: user.id,
+                    email: user.email
+                })
             });
 
             const data = await response.json();
 
             if (data.url) {
+                // Rediriger vers Stripe Checkout
                 window.location.href = data.url;
             } else {
-                document.getElementById('message').textContent = 'Erreur : ' + (data.error || 'Paiement indisponible.');
-                document.getElementById('message').className = 'error';
-                btn.forEach(b => b.disabled = false);
+                messageDiv.textContent = '❌ Erreur: ' + (data.error || 'Impossible de créer la session');
+                messageDiv.className = 'error';
+                subscribeBtn.disabled = false;
+                subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
             }
         } catch (error) {
-            document.getElementById('message').textContent = 'Erreur réseau. Réessaie.';
-            document.getElementById('message').className = 'error';
-            btn.forEach(b => b.disabled = false);
+            console.error('Erreur:', error);
+            messageDiv.textContent = '❌ Erreur réseau. Réessayez plus tard.';
+            messageDiv.className = 'error';
+            subscribeBtn.disabled = false;
+            subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
         }
     }
 
-    document.getElementById('btn-premium-monthly').addEventListener('click', () => {
-    window.location.href = 'inscription.html?plan=premium_monthly';
-});
-
-document.getElementById('btn-premium-annual').addEventListener('click', () => {
-    window.location.href = 'inscription.html?plan=premium_annual';
-});
+    subscribeBtn.addEventListener('click', startCheckout);
 </script>
 </body>
 </html>
