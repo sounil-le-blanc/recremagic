@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion - Récré Magic</title>
+
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -11,11 +12,19 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
+
+    <!-- Fonts & Supabase -->
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
 
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* ===== ZOOM UNIQUEMENT SUR DESKTOP ===== */
         @media (min-width: 1024px) {
             body {
                 zoom: 150%;
@@ -25,38 +34,54 @@
             }
         }
 
+        /* ===== STRUCTURE GÉNÉRALE ===== */
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.webp');
             background-size: cover;
             background-attachment: fixed;
             min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 2rem;
-            padding-top: 100px;
+            padding-top: 120px;
+            padding-bottom: 2rem;
             position: relative;
+            display: flex;
+            justify-content: center;
         }
 
         body::before {
             content: '';
             position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background: rgba(0, 0, 0, 0.45);
             z-index: 0;
             pointer-events: none;
         }
 
+        .container {
+            position: relative;
+            z-index: 2;
+            max-width: 500px;
+            width: 100%;
+            text-align: center;
+            padding: 0 1rem;
+        }
+
+        /* ===== NAVBAR (identique à index.html) ===== */
         .navbar {
             position: fixed;
-            top: 0; left: 0; width: 100%;
+            top: 0;
+            left: 0;
+            width: 100%;
             background: rgba(0, 0, 0, 0.35);
             backdrop-filter: blur(10px);
             z-index: 1000;
-            height: 55px;
             border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
         }
+
         .navbar-container {
             width: 100%;
             height: 100%;
@@ -64,19 +89,34 @@
             display: flex;
             align-items: center;
             justify-content: space-between;
+            flex-wrap: nowrap;
         }
+
         .nav-left-group {
             display: flex;
             align-items: center;
             gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
         }
+
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+
         .logo-wrapper img {
             height: 120px;
-            margin-top: 60px;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
             transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0, 0, 0, 0.8));
+            margin-top: 60px;
         }
-        .logo-wrapper:hover img { transform: scale(1.08); }
+
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+        }
+
         .back-arrow {
             display: flex;
             align-items: center;
@@ -84,25 +124,32 @@
             width: 36px;
             height: 36px;
             border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
             color: white;
             font-size: 1.1rem;
             text-decoration: none;
             cursor: pointer;
             transition: all 0.25s ease;
+            flex-shrink: 0;
         }
+
         .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-color: #FFB300;
             color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+            box-shadow: 0 0 12px rgba(255, 179, 0, 0.3);
         }
+
         .nav-icons {
             display: flex;
             gap: 1.2rem;
             align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
         }
+
         .icon-wrapper {
             display: flex;
             flex-direction: column;
@@ -111,33 +158,33 @@
             text-decoration: none;
             transition: all 0.2s ease;
         }
+
         .nav-icon-img {
             height: 32px;
             width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.6));
             transition: transform 0.2s;
         }
+
         .icon-wrapper:hover .nav-icon-img {
             transform: scale(1.15);
         }
+
         .icon-wrapper .icon-label {
             font-size: 0.6rem;
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
+            color: rgba(255, 255, 255, 0.7);
             transition: color 0.2s;
             white-space: nowrap;
         }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        .container {
-            position: relative;
-            z-index: 2;
-            max-width: 500px;
-            width: 100%;
+        .icon-wrapper:hover .icon-label {
+            color: #FFB300;
         }
 
+        /* ===== FORMULAIRE CARTE ===== */
         .form-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
@@ -148,7 +195,7 @@
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0, 0, 0, 0.5);
         }
 
         h1 {
@@ -156,7 +203,7 @@
             font-size: 2.5rem;
             color: #000;
             margin-bottom: 0.5rem;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            text-shadow: 2px 2px 0px rgba(0, 0, 0, 0.2);
         }
 
         .subtitle {
@@ -176,10 +223,11 @@
             background: #fff;
             transition: 0.2s;
         }
+
         input:focus {
             outline: none;
             border-color: #5a3e2a;
-            box-shadow: 0 0 0 3px rgba(122,92,62,0.2);
+            box-shadow: 0 0 0 3px rgba(122, 92, 62, 0.2);
         }
 
         button {
@@ -196,11 +244,18 @@
             transition: 0.3s;
             margin-top: 0.5rem;
         }
+
         button:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
         }
-        button:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+
+        button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
 
         #message {
             margin-top: 1rem;
@@ -209,38 +264,94 @@
             min-height: 1.5rem;
         }
 
-        .success { color: #7CB69F !important; }
-        .error { color: #D32F2F !important; }
+        .success {
+            color: #2E7D32 !important;
+        }
+
+        .error {
+            color: #D32F2F !important;
+        }
+
+        .info {
+            color: #FF8C00 !important;
+        }
 
         .switch-link {
-            margin-top: 0.8rem;
+            margin-top: 1.5rem;
             font-size: 0.9rem;
             color: #4A2E1B;
         }
+
         .switch-link a {
             color: #D32F2F;
             font-weight: 700;
             text-decoration: none;
         }
-        .switch-link a:hover { text-decoration: underline; }
+
+        .switch-link a:hover {
+            text-decoration: underline;
+        }
 
         .forgot-link {
-            margin-top: 0.3rem;
-            font-size: 0.85rem;
-            color: #4A2E1B;
+            margin-top: 0.5rem;
+            font-size: 0.8rem;
         }
+
         .forgot-link a {
-            color: #7a5c3e;
-            text-decoration: underline;
+            color: #5a3e2a;
+            text-decoration: none;
             cursor: pointer;
         }
-        .forgot-link a:hover { color: #5a3e2a; }
 
+        .forgot-link a:hover {
+            text-decoration: underline;
+        }
+
+        /* ===== RESPONSIVE ===== */
         @media (max-width: 768px) {
-            .form-card { padding: 1.5rem; border-radius: 36px; }
-            h1 { font-size: 2rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .navbar { height: 48px; }
+            .form-card {
+                padding: 1.8rem;
+                border-radius: 36px;
+            }
+            h1 {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding-top: 100px;
+            }
+            .navbar {
+                height: 48px;
+            }
+            .navbar-container {
+                padding: 0 0.8rem;
+            }
+            .logo-wrapper img {
+                height: 80px;
+                margin-top: 30px;
+            }
+            .back-arrow {
+                width: 32px;
+                height: 32px;
+                font-size: 1rem;
+            }
+            .nav-icons {
+                gap: 0.7rem;
+            }
+            .nav-icon-img {
+                height: 28px;
+            }
+            .icon-wrapper .icon-label {
+                font-size: 0.55rem;
+            }
+            .form-card {
+                padding: 1.5rem;
+            }
+            h1 {
+                font-size: 1.8rem;
+            }
         }
     </style>
 </head>
@@ -250,22 +361,21 @@
     <div class="navbar-container">
         <div class="nav-left-group">
             <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.png" alt="Récré Magic">
+                <img src="images/logo.webp" alt="Récré Magic">
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
-                <img src="images/icone-calendrier.png" alt="Calendrier" class="nav-icon-img">
+                <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
                 <span class="icon-label">Calendrier</span>
             </a>
             <a href="boutique.html" class="icon-wrapper">
-                <img src="images/icone-boutique.png" alt="Boutique" class="nav-icon-img">
+                <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
             <a href="Abonnement.html" class="icon-wrapper">
-                <img src="images/icone-abonnement.png" alt="Abonnement" class="nav-icon-img">
+                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
         </div>
@@ -276,6 +386,7 @@
     <div class="form-card">
         <h1>Connexion</h1>
         <p class="subtitle">Retrouvez votre espace Récré Magic</p>
+
         <form id="login-form">
             <input type="email" id="email" placeholder="Email" required autocomplete="email">
             <input type="password" id="password" placeholder="Mot de passe" required autocomplete="current-password">
@@ -283,7 +394,7 @@
         </form>
         <div id="message"></div>
         <div class="forgot-link">
-            <a onclick="resetPassword()">Mot de passe oublié ?</a>
+            <a id="forgotPasswordBtn">Mot de passe oublié ?</a>
         </div>
         <div class="switch-link">
             Pas encore inscrit ? <a href="Abonnement.html">S'inscrire</a>
@@ -292,55 +403,75 @@
 </div>
 
 <script>
+    // ========== SUPABASE ==========
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     const form = document.getElementById('login-form');
     const msg = document.getElementById('message');
     const submitBtn = document.getElementById('submitBtn');
 
+    // ========== CONNEXION ==========
     form.addEventListener('submit', async (e) => {
         e.preventDefault();
-        
+
         const email = document.getElementById('email').value.trim();
         const password = document.getElementById('password').value;
 
+        if (!email || !password) {
+            msg.textContent = '❌ Veuillez remplir tous les champs.';
+            msg.className = 'error';
+            return;
+        }
+
         submitBtn.disabled = true;
-        submitBtn.textContent = '⏳ Connexion...';
+        submitBtn.textContent = '⏳ Connexion en cours...';
         msg.textContent = '';
         msg.className = '';
 
         const { data, error } = await supabaseClient.auth.signInWithPassword({
             email: email,
-            password: password,
+            password: password
         });
 
         if (error) {
             let errorMsg = error.message;
             if (error.message.includes('Invalid login credentials')) {
                 errorMsg = 'Email ou mot de passe incorrect.';
+            } else if (error.message.includes('Email not confirmed')) {
+                errorMsg = 'Veuillez confirmer votre email avant de vous connecter. Vérifiez vos spams.';
             }
             msg.textContent = '❌ ' + errorMsg;
             msg.className = 'error';
             submitBtn.disabled = false;
             submitBtn.textContent = '🎪 Se connecter';
-        } else {
-            msg.textContent = '✅ Connecté ! Redirection...';
-            msg.className = 'success';
-            setTimeout(() => {
-                window.location.href = 'profil.html';
-            }, 1000);
+            return;
         }
+
+        // Succès
+        msg.textContent = '✅ Connexion réussie ! Redirection...';
+        msg.className = 'success';
+
+        setTimeout(() => {
+            window.location.href = 'profil.html';
+        }, 1000);
     });
 
-    async function resetPassword() {
-        const email = prompt("Entrez votre email pour réinitialiser votre mot de passe :");
-        if (!email) return;
+    // ========== MOT DE PASSE OUBLIÉ ==========
+    const forgotBtn = document.getElementById('forgotPasswordBtn');
 
-        msg.textContent = '';
-        msg.className = '';
+    forgotBtn.addEventListener('click', async () => {
+        const email = prompt('Entrez votre adresse email pour réinitialiser votre mot de passe :');
+        
+        if (!email || !email.trim()) {
+            msg.textContent = '❌ Veuillez entrer une adresse email.';
+            msg.className = 'error';
+            return;
+        }
+
+        msg.textContent = '⏳ Envoi en cours...';
+        msg.className = 'info';
 
         const { error } = await supabaseClient.auth.resetPasswordForEmail(email.trim(), {
             redirectTo: window.location.origin + '/connexion.html'
@@ -350,10 +481,10 @@
             msg.textContent = '❌ Erreur : ' + error.message;
             msg.className = 'error';
         } else {
-            msg.textContent = '✅ Email envoyé ! Vérifiez votre boîte.';
+            msg.textContent = '✅ Email de réinitialisation envoyé ! Vérifiez votre boîte (et vos spams).';
             msg.className = 'success';
         }
-    }
+    });
 </script>
 </body>
 </html>
