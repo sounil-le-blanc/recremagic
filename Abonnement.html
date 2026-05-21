@@ -369,7 +369,47 @@
     
     let isProcessing = false; // Éviter les doubles clics
 
-        // ========== RÉACTIVER LE BOUTON AU CHARGEMENT + VÉRIFICATION PREMIUM ==========
+    // ========== MODALE DÉJÀ PREMIUM ==========
+    function showPremiumModal() {
+        // Vérifier si la modale existe déjà
+        if (document.getElementById('premiumModal')) return;
+        
+        const modalHtml = `
+            <div id="premiumModal" class="modal-overlay">
+                <div class="modal-container">
+                    <h3>🌟 Déjà membre premium !</h3>
+                    <p>Vous avez déjà un abonnement actif chez Récré Magic.</p>
+                    <p style="font-size: 0.9rem;">Vous allez être redirigé vers votre espace personnel.</p>
+                    <div class="modal-buttons">
+                        <a href="profil.html" class="modal-btn modal-btn-primary">🎪 Accéder à mon profil</a>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+        document.body.style.overflow = 'hidden';
+        
+        // Redirection automatique après 3 secondes
+        setTimeout(() => {
+            window.location.href = 'profil.html';
+        }, 3000);
+    }
+    
+    window.closePremiumModal = function() {
+        const modal = document.getElementById('premiumModal');
+        if (modal) modal.remove();
+        document.body.style.overflow = '';
+    };
+    
+    // Fermer la modale en cliquant à l'extérieur
+    document.addEventListener('click', function(e) {
+        const modal = document.getElementById('premiumModal');
+        if (modal && e.target === modal) {
+            window.location.href = 'profil.html';
+        }
+    });
+
+    // ========== RÉACTIVER LE BOUTON AU CHARGEMENT + VÉRIFICATION PREMIUM ==========
     window.addEventListener('load', async () => {
         // Réactiver le bouton si on revient de Stripe
         subscribeBtn.disabled = false;
@@ -399,11 +439,10 @@
                 .single();
             
             if (profile?.subscription_status === 'active') {
-                messageDiv.textContent = '🌟 Vous êtes déjà membre premium ! Redirection...';
-                messageDiv.className = 'success';
+                showPremiumModal();
                 subscribeBtn.disabled = true;
                 subscribeBtn.textContent = '✅ Déjà premium';
-                setTimeout(() => window.location.href = 'profil.html', 2000);
+                return;
             }
         }
     });
@@ -446,7 +485,7 @@
         }
     });
 
-        // ========== CHECKOUT ==========
+    // ========== CHECKOUT ==========
     async function startCheckout() {
         // Éviter les clics multiples
         if (isProcessing) return;
@@ -476,10 +515,8 @@
             .single();
         
         if (profile?.subscription_status === 'active') {
-            messageDiv.textContent = '✅ Vous êtes déjà premium ! Redirection...';
-            messageDiv.className = 'success';
+            showPremiumModal();
             subscribeBtn.disabled = false;
-            setTimeout(() => window.location.href = 'profil.html', 1500);
             return;
         }
 
