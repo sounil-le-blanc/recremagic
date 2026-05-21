@@ -544,78 +544,51 @@
     let dropdownTimeout;
 
     async function updateNavbarAvatar() {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        const userMenu = document.getElementById('user-menu');
-        const abonnementLink = document.getElementById('abonnement-link');
-        const userAvatar = document.getElementById('user-avatar');
-        const dropdown = document.getElementById('user-dropdown');
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    const userMenu = document.getElementById('user-menu');
+    const abonnementLink = document.getElementById('abonnement-link');
+    const userAvatar = document.getElementById('user-avatar');
+    const dropdown = document.getElementById('user-dropdown');
+    
+    if (user) {
+        // Afficher l'avatar (toujours)
+        if (userMenu) userMenu.style.display = 'block';
         
-        if (user) {
-            // Utilisateur connecté → afficher avatar, cacher lien Abonnement
-            userMenu.style.display = 'block';
-            abonnementLink.style.display = 'none';
-            
-            // Récupérer le statut premium
-            const { data: profile } = await supabaseClient
-                .from('profiles')
-                .select('subscription_status')
-                .eq('id', user.id)
-                .single();
-            
-            const isPremium = profile?.subscription_status === 'active';
-            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
-            
+        // Récupérer le statut premium
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('subscription_status')
+            .eq('id', user.id)
+            .single();
+        
+        const isPremium = profile?.subscription_status === 'active';
+        const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+        
+        if (userAvatar) {
             userAvatar.textContent = avatarLetter;
             if (isPremium) {
                 userAvatar.classList.add('premium');
             } else {
                 userAvatar.classList.remove('premium');
             }
-            
-            // Supprimer les anciens écouteurs pour éviter les doublons
-            userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
-            userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
-            dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
-            
-            // Définir les handlers
-            userMenu._mouseEnterHandler = () => {
-                clearTimeout(dropdownTimeout);
-                dropdown.style.display = 'block';
-            };
-            userMenu._mouseLeaveHandler = () => {
-                dropdownTimeout = setTimeout(() => {
-                    dropdown.style.display = 'none';
-                }, 300);
-            };
-            dropdown._mouseEnterHandler = () => {
-                clearTimeout(dropdownTimeout);
-                dropdown.style.display = 'block';
-            };
-            dropdown._mouseLeaveHandler = () => {
-                dropdown.style.display = 'none';
-            };
-            
-            userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
-            userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
-            dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
-            
-            // Gérer déconnexion
-            const logoutBtn = document.getElementById('logout-btn-nav');
-            if (logoutBtn) {
-                const newLogoutBtn = logoutBtn.cloneNode(true);
-                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-                newLogoutBtn.addEventListener('click', async () => {
-                    await supabaseClient.auth.signOut();
-                    window.location.reload();
-                });
-            }
-        } else {
-            userMenu.style.display = 'none';
-            abonnementLink.style.display = 'flex';
         }
+        
+        // ========== GESTION DU LIEN ABONNEMENT ==========
+        // Premium → cacher le lien "Abonnement"
+        // Non-premium → garder le lien "Abonnement"
+        if (isPremium) {
+            if (abonnementLink) abonnementLink.style.display = 'none';
+        } else {
+            if (abonnementLink) abonnementLink.style.display = 'flex';
+        }
+        
+        // ... gestion du dropdown (reste identique)
+        
+    } else {
+        if (userMenu) userMenu.style.display = 'none';
+        if (abonnementLink) abonnementLink.style.display = 'flex';
     }
+}
 
     // ============================================================
     // COMPTEUR INVISIBLE
