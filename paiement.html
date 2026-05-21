@@ -8,6 +8,17 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        /* ===== ZOOM UNIQUEMENT SUR DESKTOP (comme les autres pages) ===== */
+        @media (min-width: 1024px) {
+            body {
+                zoom: 150%;
+            }
+            body::before {
+                zoom: 0.6667;
+            }
+        }
+
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.webp');
@@ -217,13 +228,22 @@
     const payBtn = document.getElementById('payBtn');
     const messageDiv = document.getElementById('message');
 
-    // ========== GESTION DU RETOUR STRIPE ==========
-    window.addEventListener('load', () => {
-        // Réinitialiser le bouton
-        payBtn.disabled = false;
+    // ========== RÉINITIALISATION TOTALE AU CHARGEMENT ==========
+    function resetButton() {
+        payBtn.disabled = !checkbox.checked;
         payBtn.innerHTML = '💳 Payer 5€';
         messageDiv.innerHTML = '';
         messageDiv.className = '';
+        // Réinitialiser le texte du bouton s'il était bloqué
+        if (payBtn.innerHTML !== '💳 Payer 5€') {
+            payBtn.innerHTML = '💳 Payer 5€';
+        }
+    }
+
+    // ========== GESTION DU RETOUR STRIPE ==========
+    window.addEventListener('load', () => {
+        // Réinitialisation complète
+        resetButton();
         
         // Vérifier si on revient d'un paiement annulé
         const urlParams = new URLSearchParams(window.location.search);
@@ -234,7 +254,7 @@
             window.history.replaceState({}, document.title, window.location.pathname);
         }
         
-        // Restaurer l'état de la checkbox (si elle était cochée avant redirection)
+        // Restaurer l'état de la checkbox
         const savedCheckboxState = localStorage.getItem('cgv_accepted_temp');
         if (savedCheckboxState === 'true') {
             checkbox.checked = true;
@@ -243,7 +263,7 @@
         }
     });
 
-    // ========== SAUVEGARDER L'ÉTAT DE LA CHECKBOX ==========
+    // Sauvegarder l'état de la checkbox
     checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
             localStorage.setItem('cgv_accepted_temp', 'true');
@@ -251,6 +271,10 @@
             localStorage.removeItem('cgv_accepted_temp');
         }
         payBtn.disabled = !checkbox.checked;
+        // Réinitialiser le texte du bouton si nécessaire
+        if (payBtn.innerHTML !== '💳 Payer 5€') {
+            payBtn.innerHTML = '💳 Payer 5€';
+        }
     });
 
     // ========== PAIEMENT ==========
@@ -275,7 +299,7 @@
             return;
         }
 
-        // 2. Vérifier si l'utilisateur est DÉJÀ premium (éviter double paiement)
+        // 2. Vérifier si l'utilisateur est DÉJÀ premium
         const { data: profile, error: profileError } = await supabaseClient
             .from('profiles')
             .select('subscription_status')
@@ -283,7 +307,7 @@
             .single();
         
         if (profile && profile.subscription_status === 'active') {
-            messageDiv.innerHTML = '🌟 Vous êtes déjà membre premium ! Redirection vers votre profil...';
+            messageDiv.innerHTML = '🌟 Vous êtes déjà membre premium ! Redirection...';
             messageDiv.className = 'success';
             setTimeout(() => {
                 window.location.href = 'profil.html';
@@ -291,7 +315,7 @@
             return;
         }
 
-        // 3. Créer la session Stripe Checkout
+        // 3. Créer la session Stripe
         payBtn.innerHTML = '<span class="loading-spinner"></span> Création de la session...';
         
         try {
@@ -308,20 +332,17 @@
             const data = await response.json();
 
             if (data.url) {
-                // Rediriger vers Stripe Checkout
                 window.location.href = data.url;
             } else {
-                messageDiv.innerHTML = '❌ ' + (data.error || 'Impossible de créer la session de paiement');
+                messageDiv.innerHTML = '❌ ' + (data.error || 'Impossible de créer la session');
                 messageDiv.className = 'error';
-                payBtn.disabled = false;
-                payBtn.innerHTML = '💳 Payer 5€';
+                resetButton();
             }
         } catch (error) {
             console.error('Erreur:', error);
-            messageDiv.innerHTML = '❌ Erreur réseau. Veuillez réessayer.';
+            messageDiv.innerHTML = '❌ Erreur réseau. Réessayez.';
             messageDiv.className = 'error';
-            payBtn.disabled = false;
-            payBtn.innerHTML = '💳 Payer 5€';
+            resetButton();
         }
     });
 </script>
