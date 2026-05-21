@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Calendrier - Récré Magic</title>
     <!-- Favicons -->
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
@@ -353,6 +353,8 @@
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
             box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+            /* 💡 Le correctif magique est ici : */
+            overflow-x: auto; 
         }
 
         .events-summary { margin-bottom: 0; }
