@@ -758,44 +758,48 @@
         }
 
         /* ========== CORRECTIONS MOBILE ========== */
-        @media (max-width: 600px) {
-            body { padding-top: 100px; }
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 70px !important; margin-top: 35px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            
-            .nav-icon-img { height: 28px !important; }
-            .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
-            .nav-icons { gap: 0.8rem; }
-            
-            .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
-            .user-dropdown { top: 40px; min-width: 160px; }
-            .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
-            
-            .calendar-container, .events-summary, .contact-cta { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
-            .month-year span { font-size: 1.2rem; min-width: 120px; }
-            .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
-            .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
-            .calendar-day .hover-bubble { min-width: 180px; max-width: 250px; }
-            .event-row { flex-direction: column; align-items: flex-start; }
-            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
-            .page-header h1 { font-size: 2rem; }
-            .contact-cta p { font-size: 0.9rem; }
-            .contact-cta a { font-size: 1rem; }
-            .event-date { min-width: auto; }
-            .events-summary-logo { height: 50px; }
-            .legend-inline { gap: 0.4rem; }
-            .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
-        }
+@media (max-width: 600px) {
+    body { 
+        padding-top: 100px;
+        zoom: 1 !important;
+        transform: none !important;
+    }
+    .navbar { height: 48px; }
+    .navbar-container { padding: 0 0.8rem; }
+    .nav-left-group { gap: 0.4rem; }
+    .logo-wrapper img { height: 70px !important; margin-top: 35px; }
+    .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+    
+    .nav-icon-img { height: 28px !important; }
+    .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
+    .nav-icons { gap: 0.8rem; }
+    
+    .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+    .user-dropdown { top: 40px; min-width: 160px; }
+    .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+    
+    .calendar-container, .events-summary, .contact-cta { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
+    .month-year span { font-size: 1.2rem; min-width: 120px; }
+    .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
+    .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
+    .calendar-day .hover-bubble { min-width: 180px; max-width: 250px; }
+    .event-row { flex-direction: column; align-items: flex-start; }
+    .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
+    .page-header h1 { font-size: 2rem; }
+    .contact-cta p { font-size: 0.9rem; }
+    .contact-cta a { font-size: 1rem; }
+    .event-date { min-width: auto; }
+    .events-summary-logo { height: 50px; }
+    .legend-inline { gap: 0.4rem; }
+    .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
+}
 
-        @media (max-width: 450px) {
-            .icon-label { font-size: 0.5rem !important; }
-            .nav-icon-img { height: 26px !important; }
-            .nav-icons { gap: 0.6rem; }
-            .navbar-container { padding: 0 0.5rem; }
-        }
+@media (max-width: 450px) {
+    .icon-label { font-size: 0.5rem !important; }
+    .nav-icon-img { height: 26px !important; }
+    .nav-icons { gap: 0.6rem; }
+    .navbar-container { padding: 0 0.5rem; }
+}
     </style>
 </head>
 <body id="calendrier-page">
