@@ -30,13 +30,14 @@
         .container {
             position: relative;
             z-index: 2;
-            max-width: 500px;
+            max-width: 750px;
             width: 100%;
+            margin: 0 auto;
         }
         .payment-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
-            padding: 2rem;
+            padding: 2.5rem;
             text-align: center;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
@@ -45,41 +46,61 @@
         }
         h1 {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2rem;
+            font-size: 2.2rem;
             color: #2C1810;
             margin-bottom: 0.5rem;
         }
         .plan-details {
             background: rgba(255,255,255,0.7);
             border-radius: 24px;
-            padding: 1rem;
+            padding: 1.2rem;
             margin: 1rem 0;
             text-align: left;
         }
         .plan-price {
-            font-size: 2rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: #2C1810;
             text-align: center;
         }
+        .plan-price span { font-size: 1rem; }
+        .plan-details ul {
+            margin-top: 0.8rem;
+            padding-left: 1.5rem;
+        }
+        .plan-details li {
+            margin-bottom: 0.3rem;
+        }
         .cgv-box {
             background: rgba(255,255,255,0.5);
-            border-radius: 16px;
-            padding: 1rem;
+            border-radius: 20px;
+            padding: 1.2rem;
             margin: 1rem 0;
             text-align: left;
-            max-height: 200px;
+            max-height: 350px;
             overflow-y: auto;
             font-size: 0.8rem;
+            line-height: 1.4;
         }
-        .cgv-box h3 { font-size: 0.9rem; margin-bottom: 0.5rem; }
-        .cgv-box p { margin-bottom: 0.5rem; }
+        .cgv-box h3 { 
+            font-size: 1rem; 
+            margin-bottom: 0.8rem; 
+            text-align: center;
+            font-weight: bold;
+        }
+        .cgv-box p { 
+            margin-bottom: 0.6rem;
+        }
+        .cgv-box strong {
+            color: #2C1810;
+        }
         .checkbox {
             display: flex;
             align-items: center;
             gap: 0.5rem;
-            margin: 1rem 0;
+            margin: 1.2rem 0;
             font-size: 0.9rem;
+            justify-content: center;
         }
         button {
             width: 100%;
@@ -94,15 +115,15 @@
             transition: 0.3s;
         }
         button:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.3); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; transform: none; }
         .back-link {
             display: inline-block;
             margin-top: 1rem;
             color: #5a3e2a;
             text-decoration: none;
         }
-        .error { color: #D32F2F; margin-top: 0.5rem; }
-        .success { color: #2E7D32; margin-top: 0.5rem; }
+        .error { color: #D32F2F; margin-top: 0.8rem; }
+        .success { color: #2E7D32; margin-top: 0.8rem; }
         .loading-spinner {
             display: inline-block;
             width: 16px;
@@ -112,9 +133,15 @@
             border-radius: 50%;
             animation: spin 0.6s linear infinite;
             margin-right: 8px;
+            vertical-align: middle;
         }
         @keyframes spin {
             to { transform: rotate(360deg); }
+        }
+        @media (max-width: 600px) {
+            .payment-card { padding: 1.5rem; }
+            h1 { font-size: 1.6rem; }
+            .plan-price { font-size: 1.8rem; }
         }
     </style>
 </head>
@@ -124,29 +151,54 @@
         <h1>🎪 Récapitulatif</h1>
         
         <div class="plan-details">
-            <div class="plan-price">5€ <span style="font-size: 1rem;">/ an</span></div>
+            <div class="plan-price">5€ <span>/ an</span></div>
             <p style="text-align: center;"><strong>Abonnement Premium Annuel</strong></p>
-            <p style="text-align: center;">Accès aux vidéos exclusives des spectacles</p>
-            <ul style="margin-top: 0.5rem; padding-left: 1.5rem;">
+            <p style="text-align: center;">Accès aux vidéos exclusives des spectacles Récré Magic</p>
+            <ul>
                 <li>🎬 Vidéos complètes des spectacles</li>
                 <li>🎪 Contenus behind-the-scenes</li>
-                <li>💰 Réductions boutique</li>
-                <li>🌟 Badge membre troupe</li>
+                <li>💰 Réductions en boutique</li>
+                <li>🌟 Badge membre de la troupe</li>
+                <li>📅 Réservation prioritaire</li>
             </ul>
         </div>
 
         <div class="cgv-box">
-            <h3>📜 Conditions Générales</h3>
-            <p><strong>1. Abonnement</strong> — Valable 1 an, reconductible tacitement. Tarif : 5€ TTC par an.</p>
-            <p><strong>2. Paiement</strong> — Sécurisé par Stripe. Aucune carte bancaire conservée.</p>
-            <p><strong>3. Rétractation</strong> — Délai de 14 jours conforme à la loi.</p>
-            <p><strong>4. Accès</strong> — Contenu vidéo accessible uniquement aux abonnés actifs.</p>
-            <p><strong>5. Propriété</strong> — Tous droits réservés à Récré Magic.</p>
+            <h3>📜 Conditions Générales de Vente</h3>
+            
+            <p><strong>Article 1 – Abonnement</strong><br>
+            L'abonnement Premium est valable 1 an à compter du paiement. Tarif : 5€ TTC. Renouvellement tacite sauf dénonciation par l'utilisateur avant l'échéance.</p>
+            
+            <p><strong>Article 2 – Paiement</strong><br>
+            Le paiement est effectué en ligne via Stripe. Aucune information bancaire n'est conservée par Récré Magic.</p>
+            
+            <p><strong>Article 3 – Droit de rétractation</strong><br>
+            Conformément à l'article L221-18 du Code de la consommation, vous disposez d'un délai de 14 jours pour vous rétracter sans motif.</p>
+            
+            <p><strong>Article 4 – Accès au contenu</strong><br>
+            Les vidéos exclusives sont accessibles uniquement aux abonnés actifs, sur le site recremagic.com. Toute tentative de partage ou de téléchargement est interdite.</p>
+            
+            <p><strong>Article 5 – Propriété intellectuelle</strong><br>
+            L'ensemble des contenus (vidéos, textes, images) reste la propriété exclusive de Récré Magic.</p>
+            
+            <p><strong>Article 6 – Résiliation</strong><br>
+            L'abonné peut résilier à tout moment depuis son espace client. Aucun remboursement partiel n'est dû.</p>
+            
+            <p><strong>Article 7 – Responsabilité</strong><br>
+            Récré Magic s'efforce d'assurer un accès continu aux contenus, mais ne saurait être tenu responsable d'une indisponibilité technique indépendante de sa volonté.</p>
+            
+            <p><strong>Article 8 – Données personnelles</strong><br>
+            Les données collectées sont utilisées uniquement pour la gestion de l'abonnement. Conformément à la loi Informatique et Libertés, vous disposez d'un droit d'accès et de rectification.</p>
+            
+            <p><strong>Article 9 – Loi applicable</strong><br>
+            Les présentes CGV sont régies par le droit français.</p>
+            
+            <p><em>Dernière mise à jour : 21 mai 2026</em></p>
         </div>
 
         <div class="checkbox">
             <input type="checkbox" id="cgvCheckbox">
-            <label for="cgvCheckbox">J'accepte les <a href="#" id="openCGV" style="color:#D32F2F;">Conditions Générales</a></label>
+            <label for="cgvCheckbox">J'accepte les Conditions Générales</label>
         </div>
 
         <button id="payBtn" disabled>💳 Payer 5€</button>
@@ -165,17 +217,43 @@
     const payBtn = document.getElementById('payBtn');
     const messageDiv = document.getElementById('message');
 
-    // Activer/désactiver le bouton selon la checkbox
+    // ========== GESTION DU RETOUR STRIPE ==========
+    window.addEventListener('load', () => {
+        // Réinitialiser le bouton
+        payBtn.disabled = false;
+        payBtn.innerHTML = '💳 Payer 5€';
+        messageDiv.innerHTML = '';
+        messageDiv.className = '';
+        
+        // Vérifier si on revient d'un paiement annulé
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('canceled') === 'true') {
+            messageDiv.innerHTML = '❌ Paiement annulé. Vous pouvez réessayer.';
+            messageDiv.className = 'error';
+            // Nettoyer l'URL
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // Restaurer l'état de la checkbox (si elle était cochée avant redirection)
+        const savedCheckboxState = localStorage.getItem('cgv_accepted_temp');
+        if (savedCheckboxState === 'true') {
+            checkbox.checked = true;
+            payBtn.disabled = false;
+            localStorage.removeItem('cgv_accepted_temp');
+        }
+    });
+
+    // ========== SAUVEGARDER L'ÉTAT DE LA CHECKBOX ==========
     checkbox.addEventListener('change', () => {
+        if (checkbox.checked) {
+            localStorage.setItem('cgv_accepted_temp', 'true');
+        } else {
+            localStorage.removeItem('cgv_accepted_temp');
+        }
         payBtn.disabled = !checkbox.checked;
     });
 
-    // Afficher les CGV complètes dans une alerte (ou modale)
-    document.getElementById('openCGV').addEventListener('click', (e) => {
-        e.preventDefault();
-        alert("📜 CONDITIONS GÉNÉRALES\n\n1. Abonnement annuel 5€, reconductible tacitement.\n2. Paiement sécurisé par Stripe.\n3. Délai de rétractation 14 jours.\n4. Accès aux vidéos exclusives réservé aux abonnés actifs.\n5. Contenu protégé par droit d'auteur.");
-    });
-
+    // ========== PAIEMENT ==========
     payBtn.addEventListener('click', async () => {
         if (!checkbox.checked) return;
         
