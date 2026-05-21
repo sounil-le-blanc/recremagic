@@ -441,39 +441,47 @@
 
         /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
-            body { padding-top: 100px; }
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.5rem; }
-            .nav-left-group { gap: 0.3rem; }
-            .logo-wrapper img { height: 60px !important; margin-top: 30px; }
-            .back-arrow { width: 28px; height: 28px; font-size: 0.9rem; }
-            
-            /* Réduction des icônes */
-            .nav-icon-img { height: 20px !important; }
-            .icon-label { font-size: 0.45rem !important; letter-spacing: 0px; }
-            .nav-icons { gap: 0.5rem; }
-            
-            /* Réduction de l'avatar */
-            .user-avatar { width: 28px; height: 28px; font-size: 0.7rem; }
-            .user-dropdown { top: 35px; min-width: 150px; }
-            .user-dropdown a, .user-dropdown button { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
-            
-            /* Ajustements cards */
-            .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
-            .choice-icon img { height: 90px; }
-            .choice-title { font-size: 1.3rem; }
-            .welcome-title { font-size: 1.4rem; }
-            .welcome-subtitle { font-size: 0.9rem; }
-            .parchment-wrapper { padding: 1.2rem 1rem; }
-        }
+    body { padding-top: 100px; }
+    .navbar { height: 48px; }
+    .navbar-container { padding: 0 0.6rem; }
+    .nav-left-group { gap: 0.4rem; }
+    .logo-wrapper img { height: 70px !important; margin-top: 35px; }
+    .back-arrow { width: 30px; height: 30px; font-size: 1rem; }
+    
+    /* Icônes un peu réduites mais texte lisible */
+    .nav-icon-img { height: 24px !important; }
+    .icon-label { font-size: 0.5rem !important; letter-spacing: 0.5px; }
+    .nav-icons { gap: 0.7rem; }
+    
+    /* Avatar légèrement réduit */
+    .user-avatar { width: 32px; height: 32px; font-size: 0.85rem; }
+    .user-dropdown { top: 38px; min-width: 160px; }
+    .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+    
+    /* Ajustements cards */
+    .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
+    .choice-icon img { height: 100px; }
+    .choice-title { font-size: 1.4rem; }
+    .welcome-title { font-size: 1.5rem; }
+    .welcome-subtitle { font-size: 0.95rem; }
+    .parchment-wrapper { padding: 1.5rem 1.2rem; }
+}
 
         /* Pour les très petits écrans (moins de 400px) */
-        @media (max-width: 400px) {
-            .icon-label { display: none; }
-            .nav-icon-img { height: 22px !important; }
-            .nav-icons { gap: 0.8rem; }
-            .navbar-container { padding: 0 0.3rem; }
-        }
+@media (max-width: 400px) {
+    .icon-label { 
+        font-size: 0.45rem !important; 
+    }
+    .nav-icon-img { 
+        height: 20px !important; 
+    }
+    .nav-icons { 
+        gap: 0.5rem; 
+    }
+    .navbar-container { 
+        padding: 0 0.4rem; 
+    }
+}
     </style>
 </head>
 <body>
