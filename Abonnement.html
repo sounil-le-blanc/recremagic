@@ -540,7 +540,7 @@
 
             if (data.url) {
                 // Rediriger vers Stripe Checkout
-                window.location.href = data.url;
+                window.location.href = 'paiement.html';
             } else {
                 messageDiv.textContent = '❌ Erreur: ' + (data.error || 'Impossible de créer la session');
                 messageDiv.className = 'error';
