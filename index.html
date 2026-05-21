@@ -146,25 +146,6 @@
             z-index: 1001;
             border: 1px solid rgba(255,255,255,0.2);
         }
-        .user-dropdown a, .user-dropdown button {
-            display: block;
-            width: 100%;
-            padding: 0.6rem 1rem;
-            color: white;
-            text-decoration: none;
-            text-align: left;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-family: 'Quicksand', sans-serif;
-        }
-        .user-dropdown a:hover, .user-dropdown button:hover {
-            background: rgba(255,255,255,0.1);
-        }
-        .user-menu:hover .user-dropdown {
-            display: block;
-        }
 
         .nav-icons {
             display: flex;
@@ -480,7 +461,7 @@
             <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
-                <div class="user-dropdown">
+                <div class="user-dropdown" id="user-dropdown">
                     <a href="profil.html">👤 Mon profil</a>
                     <a href="Abonnement.html">✨ Abonnement</a>
                     <button id="logout-btn-nav">🚪 Déconnexion</button>
@@ -541,16 +522,19 @@
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ============================================================
-    // AVATAR & MENU UTILISATEUR
+    // AVATAR & MENU UTILISATEUR (avec délai)
     // ============================================================
+    let dropdownTimeout;
+
     async function updateNavbarAvatar() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         const userMenu = document.getElementById('user-menu');
         const abonnementLink = document.getElementById('abonnement-link');
         const userAvatar = document.getElementById('user-avatar');
+        const dropdown = document.getElementById('user-dropdown');
         
         if (user) {
-            // Utilisateur connecté → afficher avatar
+            // Utilisateur connecté → afficher avatar, cacher lien Abonnement
             userMenu.style.display = 'block';
             abonnementLink.style.display = 'none';
             
@@ -571,10 +555,31 @@
                 userAvatar.classList.remove('premium');
             }
             
+            // Gestion du dropdown avec délai (évite fermeture brutale)
+            userMenu.addEventListener('mouseenter', () => {
+                clearTimeout(dropdownTimeout);
+                dropdown.style.display = 'block';
+            });
+            userMenu.addEventListener('mouseleave', () => {
+                dropdownTimeout = setTimeout(() => {
+                    dropdown.style.display = 'none';
+                }, 300);
+            });
+            dropdown.addEventListener('mouseenter', () => {
+                clearTimeout(dropdownTimeout);
+                dropdown.style.display = 'block';
+            });
+            dropdown.addEventListener('mouseleave', () => {
+                dropdown.style.display = 'none';
+            });
+            
             // Gérer déconnexion
             const logoutBtn = document.getElementById('logout-btn-nav');
             if (logoutBtn) {
-                logoutBtn.addEventListener('click', async () => {
+                // Éviter les doublons d'écouteurs
+                const newLogoutBtn = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                newLogoutBtn.addEventListener('click', async () => {
                     await supabaseClient.auth.signOut();
                     window.location.reload();
                 });
