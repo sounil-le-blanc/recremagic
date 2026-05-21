@@ -369,23 +369,44 @@
     
     let isProcessing = false; // Éviter les doubles clics
 
-    // ========== RÉACTIVER LE BOUTON AU CHARGEMENT ==========
-    // Remplacer window.addEventListener('load', ...) par :
-window.addEventListener('pageshow', function(event) {
-    // Réactiver le bouton (même si la page vient du cache)
-    subscribeBtn.disabled = false;
-    subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
-    messageDiv.textContent = '';
-    isProcessing = false;
-    
-    // Vérifier le paramètre canceled dans l'URL
-    const urlParams = new URLSearchParams(window.location.search);
-    if (urlParams.get('canceled') === 'true') {
-        messageDiv.textContent = '❌ Paiement annulé. Vous pouvez réessayer.';
-        messageDiv.className = 'error';
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
-});
+        // ========== RÉACTIVER LE BOUTON AU CHARGEMENT + VÉRIFICATION PREMIUM ==========
+    window.addEventListener('load', async () => {
+        // Réactiver le bouton si on revient de Stripe
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+        messageDiv.textContent = '';
+        isProcessing = false;
+        
+        // Vérifier si on revient d'un paiement annulé
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('canceled') === 'true') {
+            messageDiv.textContent = '❌ Paiement annulé. Vous pouvez réessayer.';
+            messageDiv.className = 'error';
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (urlParams.get('success') === 'true') {
+            messageDiv.textContent = '✅ Paiement réussi ! Votre compte est maintenant premium.';
+            messageDiv.className = 'success';
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+        
+        // ========== VÉRIFICATION SI DÉJÀ PREMIUM ==========
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (user) {
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            if (profile?.subscription_status === 'active') {
+                messageDiv.textContent = '🌟 Vous êtes déjà membre premium ! Redirection...';
+                messageDiv.className = 'success';
+                subscribeBtn.disabled = true;
+                subscribeBtn.textContent = '✅ Déjà premium';
+                setTimeout(() => window.location.href = 'profil.html', 2000);
+            }
+        }
+    });
 
     // ========== FONCTION MODALE ==========
     function showAuthModal() {
@@ -425,7 +446,7 @@ window.addEventListener('pageshow', function(event) {
         }
     });
 
-    // ========== CHECKOUT ==========
+        // ========== CHECKOUT ==========
     async function startCheckout() {
         // Éviter les clics multiples
         if (isProcessing) return;
@@ -444,6 +465,21 @@ window.addEventListener('pageshow', function(event) {
             subscribeBtn.disabled = false;
             subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
             showAuthModal();
+            return;
+        }
+
+        // ========== VÉRIFICATION SI DÉJÀ PREMIUM ==========
+        const { data: profile } = await supabaseClient
+            .from('profiles')
+            .select('subscription_status')
+            .eq('id', user.id)
+            .single();
+        
+        if (profile?.subscription_status === 'active') {
+            messageDiv.textContent = '✅ Vous êtes déjà premium ! Redirection...';
+            messageDiv.className = 'success';
+            subscribeBtn.disabled = false;
+            setTimeout(() => window.location.href = 'profil.html', 1500);
             return;
         }
 
