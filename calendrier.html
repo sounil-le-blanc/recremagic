@@ -2,7 +2,7 @@
 <html lang="fr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
     <title>Calendrier - Récré Magic</title>
     <!-- Favicons -->
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
@@ -37,10 +37,10 @@
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-        @media (min-width: 1024px) {
-            body { zoom: 150%; }
-            body::before { zoom: 0.6667; }
-        }
+        @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
+    body { zoom: 150%; }
+    body::before { zoom: 0.6667; }
+}
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -353,8 +353,6 @@
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
             box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
-            /* 💡 Le correctif magique est ici : */
-            overflow-x: auto; 
         }
 
         .events-summary { margin-bottom: 0; }
@@ -759,75 +757,44 @@
             font-size: 0.8rem;
         }
 
-        /* ========== CORRECTIONS MOBILE NETTES & SANS SCROLLBAR ========== */
+        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
-            body { 
-                padding-top: 90px; 
-                overflow-x: hidden; /* Empêche physiquement le défilement latéral sur tout le site */
-            }
-            .navbar { height: 50px; }
-            .navbar-container { 
-                padding: 0 0.5rem; 
-                overflow: hidden;
-            }
-            .nav-left-group { gap: 0.3rem; }
-            .logo-wrapper img { height: 65px !important; margin-top: 30px; }
-            .back-arrow { width: 30px; height: 30px; font-size: 0.9rem; }
+            body { padding-top: 100px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 70px !important; margin-top: 35px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             
-            /* Ajustement serré des icônes pour que tout tienne sur une seule ligne */
-            .nav-icons { 
-                gap: 0.5rem; 
-            }
-            .nav-icon-img { height: 24px !important; }
-            .icon-label { font-size: 0.5rem !important; letter-spacing: 0px; }
+            .nav-icon-img { height: 28px !important; }
+            .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
+            .nav-icons { gap: 0.8rem; }
             
-            /* Avatar */
-            .user-avatar { width: 32px; height: 32px; font-size: 0.85rem; }
-            .user-dropdown { top: 38px; min-width: 150px; }
+            .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+            .user-dropdown { top: 40px; min-width: 160px; }
+            .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
             
-            /* Ajustements des cartes et conteneurs */
-            .calendar-container, .events-summary, .contact-cta { 
-                padding: 1rem 0.6rem; 
-                width: 95%; 
-                margin-left: auto; 
-                margin-right: auto; 
-                border-width: 4px; 
-                outline-width: 3px; 
-                box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); 
-            }
-            
-            /* Évite que le titre en parchemin ne pousse l'écran */
-            .parchment-wrapper { 
-                padding: 1.2rem 1.5rem; 
-                max-width: 95%;
-            }
-            .page-header h1 { 
-                font-size: 1.6rem; 
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 0.5rem;
-            }
-            .page-header h1 img { 
-                height: 40px !important; /* On réduit l'icône calendrier sur téléphone */
-            }
-            
-            .month-year span { font-size: 1.1rem; min-width: 100px; }
-            .weekday, .calendar-day { font-size: 0.7rem; padding: 0.4rem 0; min-height: 38px; }
-            .nav-btn { width: 30px; height: 30px; font-size: 0.9rem; }
-            .event-row { flex-direction: column; align-items: flex-start; gap: 0.4rem; }
+            .calendar-container, .events-summary, .contact-cta { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
+            .month-year span { font-size: 1.2rem; min-width: 120px; }
+            .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
+            .nav-btn { width: 32px; height: 32px; font-size: 1rem; }
+            .calendar-day .hover-bubble { min-width: 180px; max-width: 250px; }
+            .event-row { flex-direction: column; align-items: flex-start; }
+            .parchment-wrapper { padding: 1.5rem 2rem; margin: 1rem auto 2rem auto; }
+            .page-header h1 { font-size: 2rem; }
+            .contact-cta p { font-size: 0.9rem; }
+            .contact-cta a { font-size: 1rem; }
             .event-date { min-width: auto; }
-            .events-summary-logo { height: 45px; }
-            .legend-inline { gap: 0.3rem; }
-            .legend-inline .legend-item { font-size: 0.6rem; padding: 0.15rem 0.3rem; }
+            .events-summary-logo { height: 50px; }
+            .legend-inline { gap: 0.4rem; }
+            .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
         }
 
-        /* Pour les téléphones ultra-petits (iPhone SE, etc.) */
-        @media (max-width: 380px) {
-            .logo-wrapper { display: none; } /* On cache le mini logo si l'écran est minuscule pour sauver la barre */
-            .nav-icons { gap: 0.4rem; }
-            .icon-label { display: none; } /* On cache le texte sous les icônes, les images suffisent */
+        @media (max-width: 450px) {
+            .icon-label { font-size: 0.5rem !important; }
             .nav-icon-img { height: 26px !important; }
+            .nav-icons { gap: 0.6rem; }
+            .navbar-container { padding: 0 0.5rem; }
         }
     </style>
 </head>
