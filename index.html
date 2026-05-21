@@ -36,14 +36,10 @@
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-    @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+        @media (min-width: 1024px) {
+            body { zoom: 150%; }
+            body::before { zoom: 0.6667; }
+        }
 
         .navbar {
             position: fixed;
@@ -107,6 +103,69 @@
             color: #FFB300;
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
+
+        /* ========== AVATAR & MENU UTILISATEUR ========== */
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            text-decoration: none;
+            transition: all 0.2s;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .user-avatar.premium {
+            background: linear-gradient(135deg, #FFB300, #e6a200);
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            z-index: 1001;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-dropdown a, .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            color: white;
+            text-decoration: none;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-dropdown a:hover, .user-dropdown button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
         .nav-icons {
             display: flex;
             gap: 1.2rem;
@@ -395,6 +454,7 @@
             .choice-title { font-size: 1.5rem; }
             .welcome-title { font-size: 1.6rem; }
             .welcome-subtitle { font-size: 1rem; }
+            .user-avatar { width: 32px; height: 32px; font-size: 0.8rem; }
         }
     </style>
 </head>
@@ -408,16 +468,26 @@
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
         </div>
-        <div class="nav-icons">
+        <div class="nav-icons" id="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
+                <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
+                <span class="icon-label">Calendrier</span>
             </a>
             <a href="boutique.html" class="icon-wrapper">
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper">
+            <!-- Avatar utilisateur (caché par défaut) -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-dropdown">
+                    <a href="profil.html">👤 Mon profil</a>
+                    <a href="Abonnement.html">✨ Abonnement</a>
+                    <button id="logout-btn-nav">🚪 Déconnexion</button>
+                </div>
+            </div>
+            <!-- Lien Abonnement par défaut (caché si connecté) -->
+            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
@@ -454,23 +524,69 @@
         </a>
     </div>
     <div class="footer-note" style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem;">
-    <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
-    <span style="opacity: 0.5;">•</span>
-    <a href="mentions-legales.html" style="color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Mentions légales</a>
+        <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
+        <span style="opacity: 0.5;">•</span>
+        <a href="mentions-legales.html" style="color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Mentions légales</a>
     </div>
 
-<div id="confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
+    <div id="confetti" style="position:fixed; top:0; left:0; width:100%; height:100%; pointer-events:none; z-index:1;"></div>
+</div>
 
 <script>
     // ============================================================
     // CONFIGURATION SUPABASE
     // ============================================================
-    var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
-    var SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
-    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
     // ============================================================
-    // COMPTEUR INVISIBLE : incrémente le compteur de compte.html
+    // AVATAR & MENU UTILISATEUR
+    // ============================================================
+    async function updateNavbarAvatar() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const userMenu = document.getElementById('user-menu');
+        const abonnementLink = document.getElementById('abonnement-link');
+        const userAvatar = document.getElementById('user-avatar');
+        
+        if (user) {
+            // Utilisateur connecté → afficher avatar
+            userMenu.style.display = 'block';
+            abonnementLink.style.display = 'none';
+            
+            // Récupérer le statut premium
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            const isPremium = profile?.subscription_status === 'active';
+            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+            
+            userAvatar.textContent = avatarLetter;
+            if (isPremium) {
+                userAvatar.classList.add('premium');
+            } else {
+                userAvatar.classList.remove('premium');
+            }
+            
+            // Gérer déconnexion
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            }
+        } else {
+            userMenu.style.display = 'none';
+            abonnementLink.style.display = 'flex';
+        }
+    }
+
+    // ============================================================
+    // COMPTEUR INVISIBLE
     // ============================================================
     async function incrementerVisiteIndex() {
         var dejaCompte = localStorage.getItem('visite_index_comptee');
@@ -518,11 +634,19 @@
         document.head.appendChild(style);
     }
 
-    window.addEventListener('load', function() {
+    // ============================================================
+    // INITIALISATION
+    // ============================================================
+    window.addEventListener('load', async function() {
+        await updateNavbarAvatar();
         createConfetti();
         incrementerVisiteIndex();
     });
-</script>
     
+    // Mettre à jour l'avatar quand l'état d'authentification change
+    supabaseClient.auth.onAuthStateChange(() => {
+        updateNavbarAvatar();
+    });
+</script>
 </body>
 </html>
