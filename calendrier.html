@@ -38,13 +38,9 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body { zoom: 150%; }
+            body::before { zoom: 0.6667; }
+        }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -155,6 +151,70 @@
             color: #FFB300;
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
+
+        /* ========== AVATAR & MENU UTILISATEUR ========== */
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.2s;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .user-avatar.premium {
+            background: linear-gradient(135deg, #FFB300, #e6a200);
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            z-index: 1001;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-dropdown a, .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            color: white !important;
+            text-decoration: none !important;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-dropdown a:hover, .user-dropdown button:hover {
+            background: rgba(255,255,255,0.1);
+            color: white !important;
+            text-decoration: none !important;
+        }
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
         .nav-icons {
             display: flex;
             gap: 1.2rem;
@@ -697,16 +757,23 @@
             font-size: 0.8rem;
         }
 
+        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
             .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .logo-wrapper img { height: 70px !important; margin-top: 35px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
-            .nav-icons { gap: 0.7rem; }
+            
+            .nav-icon-img { height: 28px !important; }
+            .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
+            .nav-icons { gap: 0.8rem; }
+            
+            .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+            .user-dropdown { top: 40px; min-width: 160px; }
+            .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+            
             .calendar-container, .events-summary, .contact-cta { padding: 1rem; width: 95%; margin-left: auto; margin-right: auto; border-width: 4px; outline-width: 3px; box-shadow: 0 0 0 6px #3e2a1a, 0 6px 15px rgba(0,0,0,0.5); }
             .month-year span { font-size: 1.2rem; min-width: 120px; }
             .weekday, .calendar-day { font-size: 0.7rem; padding: 0.5rem 0; }
@@ -722,9 +789,16 @@
             .legend-inline { gap: 0.4rem; }
             .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
         }
+
+        @media (max-width: 450px) {
+            .icon-label { font-size: 0.5rem !important; }
+            .nav-icon-img { height: 26px !important; }
+            .nav-icons { gap: 0.6rem; }
+            .navbar-container { padding: 0 0.5rem; }
+        }
     </style>
 </head>
-<body>
+<body id="calendrier-page">
 
 <div class="confetti-container" id="confetti"></div>
 <div class="loading-indicator" id="loadingIndicator">🔄 Chargement...</div>
@@ -743,10 +817,23 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper">
+            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
+            <!-- Bouton Connexion (visible quand non connecté) -->
+            <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
+                <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
+                <span class="icon-label">Connexion</span>
+            </a>
+            <!-- Avatar utilisateur (caché par défaut) -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <a href="profil.html">👤 Mon profil</a>
+                    <button id="logout-btn-nav">🚪 Déconnexion</button>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -829,7 +916,7 @@
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const TABLE_NAME = 'events';
-    supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
@@ -842,6 +929,54 @@
 
     let eventsData = {};
     let isLoading = false;
+
+    // ========== AVATAR & MENU UTILISATEUR ==========
+    async function updateNavbarAvatar() {
+        const { data: { user } } = await supabase.auth.getUser();
+        const userMenu = document.getElementById('user-menu');
+        const connexionBtn = document.getElementById('connexion-btn');
+        const abonnementLink = document.getElementById('abonnement-link');
+        const userAvatar = document.getElementById('user-avatar');
+        
+        if (user) {
+            if (connexionBtn) connexionBtn.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'block';
+            
+            const { data: profile } = await supabase
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            const isPremium = profile?.subscription_status === 'active';
+            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+            
+            if (userAvatar) {
+                userAvatar.textContent = avatarLetter;
+                if (isPremium) {
+                    userAvatar.classList.add('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'none';
+                } else {
+                    userAvatar.classList.remove('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'flex';
+                }
+            }
+            
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            if (logoutBtn) {
+                const newLogoutBtn = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                newLogoutBtn.addEventListener('click', async () => {
+                    await supabase.auth.signOut();
+                    window.location.reload();
+                });
+            }
+        } else {
+            if (userMenu) userMenu.style.display = 'none';
+            if (connexionBtn) connexionBtn.style.display = 'flex';
+            if (abonnementLink) abonnementLink.style.display = 'flex';
+        }
+    }
 
     function showLoading(show) {
         document.getElementById('loadingIndicator').classList.toggle('active', show);
@@ -1184,6 +1319,7 @@
     }
 
     async function init() {
+        await updateNavbarAvatar();
         populateYearSelect();
         renderCalendar();
         await loadEventsFromSupabase();
@@ -1192,7 +1328,10 @@
 
     init();
     window.addEventListener('load', createConfetti);
+    supabase.auth.onAuthStateChange(() => {
+        updateNavbarAvatar();
+    });
     console.log('🎪 Calendrier connecté à Supabase !');
 </script>
 </body>
-    </html>
+</html>

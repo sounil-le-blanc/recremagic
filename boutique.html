@@ -5,24 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Boutique - Récré Magic</title>
     <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body { zoom: 150%; }
+            body::before { zoom: 0.6667; }
+        }
 
         body {
             font-family: 'Quicksand', sans-serif;
@@ -92,16 +89,89 @@
             border-color: #FFB300; color: #FFB300;
             box-shadow: 0 0 12px rgba(255,179,0,0.3);
         }
+
+        /* ========== AVATAR & MENU UTILISATEUR ========== */
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.2s;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .user-avatar.premium {
+            background: linear-gradient(135deg, #FFB300, #e6a200);
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            z-index: 1001;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-dropdown a, .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            color: white !important;
+            text-decoration: none !important;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-dropdown a:hover, .user-dropdown button:hover {
+            background: rgba(255,255,255,0.1);
+            color: white !important;
+            text-decoration: none !important;
+        }
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
         .nav-icons {
-            display: flex; gap: 1.2rem; align-items: center;
-            flex-shrink: 0; flex-wrap: nowrap; z-index: 2;
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
         }
         .icon-wrapper {
-            display: flex; flex-direction: column; align-items: center;
-            gap: 0.1rem; text-decoration: none; transition: all 0.2s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
         }
         .nav-icon-img {
-            height: 32px; width: auto;
+            height: 32px;
+            width: auto;
             filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
             transition: transform 0.2s;
         }
@@ -129,21 +199,36 @@
             text-shadow: 1px 1px 3px black;
         }
 
+        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
             .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .logo-wrapper img { height: 70px !important; margin-top: 35px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
-            .nav-icons { gap: 0.7rem; }
+            
+            .nav-icon-img { height: 28px !important; }
+            .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
+            .nav-icons { gap: 0.8rem; }
+            
+            .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+            .user-dropdown { top: 40px; min-width: 160px; }
+            .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+            
             .soon-title { font-size: 2rem; }
+            .soon-subtitle { font-size: 1rem; }
+        }
+
+        @media (max-width: 450px) {
+            .icon-label { font-size: 0.5rem !important; }
+            .nav-icon-img { height: 26px !important; }
+            .nav-icons { gap: 0.6rem; }
+            .navbar-container { padding: 0 0.5rem; }
         }
     </style>
 </head>
-<body>
+<body id="boutique-page">
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -156,13 +241,26 @@
 
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
-</a>
-            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
+                <span class="icon-label">Calendrier</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
+            <!-- Bouton Connexion (visible quand non connecté) -->
+            <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
+                <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
+                <span class="icon-label">Connexion</span>
+            </a>
+            <!-- Avatar utilisateur (caché par défaut) -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-dropdown" id="user-dropdown">
+                    <a href="profil.html">👤 Mon profil</a>
+                    <button id="logout-btn-nav">🚪 Déconnexion</button>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -172,5 +270,70 @@
     <p class="soon-subtitle">La boutique en ligne arrive bientôt !</p>
 </div>
 
+<script>
+    // ========== SUPABASE ==========
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // ========== AVATAR & MENU UTILISATEUR ==========
+    async function updateNavbarAvatar() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const userMenu = document.getElementById('user-menu');
+        const connexionBtn = document.getElementById('connexion-btn');
+        const abonnementLink = document.getElementById('abonnement-link');
+        const userAvatar = document.getElementById('user-avatar');
+        const dropdown = document.getElementById('user-dropdown');
+        
+        if (user) {
+            if (connexionBtn) connexionBtn.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'block';
+            
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            const isPremium = profile?.subscription_status === 'active';
+            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+            
+            if (userAvatar) {
+                userAvatar.textContent = avatarLetter;
+                if (isPremium) {
+                    userAvatar.classList.add('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'none';
+                } else {
+                    userAvatar.classList.remove('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'flex';
+                }
+            }
+            
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            if (logoutBtn) {
+                const newLogoutBtn = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                newLogoutBtn.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            }
+        } else {
+            if (userMenu) userMenu.style.display = 'none';
+            if (connexionBtn) connexionBtn.style.display = 'flex';
+            if (abonnementLink) abonnementLink.style.display = 'flex';
+        }
+    }
+
+    // ========== INITIALISATION ==========
+    window.addEventListener('load', async function() {
+        await updateNavbarAvatar();
+    });
+    
+    // Mettre à jour l'avatar quand l'état d'authentification change
+    supabaseClient.auth.onAuthStateChange(() => {
+        updateNavbarAvatar();
+    });
+</script>
 </body>
 </html>
