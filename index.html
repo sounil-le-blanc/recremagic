@@ -475,12 +475,17 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <!-- Lien Abonnement par défaut (caché si connecté) -->
+            <!-- Lien Abonnement -->
             <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
-            <!-- Avatar utilisateur (caché par défaut) -->
+            <!-- Bouton Connexion (visible quand non connecté) -->
+            <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
+                <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
+                <span class="icon-label">Connexion</span>
+            </a>
+            <!-- Avatar utilisateur (caché par défaut, prioritaire sur connexion) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown" id="user-dropdown">
@@ -488,7 +493,6 @@
                     <button id="logout-btn-nav">🚪 Déconnexion</button>
                 </div>
             </div>
-            
         </div>
     </div>
 </nav>
@@ -543,15 +547,17 @@
     // ============================================================
     let dropdownTimeout;
 
-    async function updateNavbarAvatar() {
+   async function updateNavbarAvatar() {
     const { data: { user } } = await supabaseClient.auth.getUser();
     const userMenu = document.getElementById('user-menu');
+    const connexionBtn = document.getElementById('connexion-btn');
     const abonnementLink = document.getElementById('abonnement-link');
     const userAvatar = document.getElementById('user-avatar');
     const dropdown = document.getElementById('user-dropdown');
     
     if (user) {
-        // Afficher l'avatar (toujours)
+        // Connecté → cacher bouton Connexion, afficher avatar
+        if (connexionBtn) connexionBtn.style.display = 'none';
         if (userMenu) userMenu.style.display = 'block';
         
         // Récupérer le statut premium
@@ -626,7 +632,9 @@
             });
         }
     } else {
+        // Non connecté → cacher avatar, afficher bouton Connexion
         if (userMenu) userMenu.style.display = 'none';
+        if (connexionBtn) connexionBtn.style.display = 'flex';
         if (abonnementLink) abonnementLink.style.display = 'flex';
     }
 }
