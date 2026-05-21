@@ -116,7 +116,6 @@
             font-weight: bold;
             font-size: 1rem;
             color: white;
-            text-decoration: none;
             transition: all 0.2s;
             border: 2px solid rgba(255,255,255,0.5);
             cursor: pointer;
@@ -145,6 +144,24 @@
             min-width: 180px;
             z-index: 1001;
             border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-dropdown a, .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            color: white !important;
+            text-decoration: none !important;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-dropdown a:hover, .user-dropdown button:hover {
+            background: rgba(255,255,255,0.1);
+            color: white !important;
+            text-decoration: none !important;
         }
 
         .nav-icons {
@@ -555,28 +572,38 @@
                 userAvatar.classList.remove('premium');
             }
             
-            // Gestion du dropdown avec délai (évite fermeture brutale)
-            userMenu.addEventListener('mouseenter', () => {
+            // Supprimer les anciens écouteurs pour éviter les doublons
+            userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
+            userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
+            dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
+            dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
+            
+            // Définir les handlers
+            userMenu._mouseEnterHandler = () => {
                 clearTimeout(dropdownTimeout);
                 dropdown.style.display = 'block';
-            });
-            userMenu.addEventListener('mouseleave', () => {
+            };
+            userMenu._mouseLeaveHandler = () => {
                 dropdownTimeout = setTimeout(() => {
                     dropdown.style.display = 'none';
                 }, 300);
-            });
-            dropdown.addEventListener('mouseenter', () => {
+            };
+            dropdown._mouseEnterHandler = () => {
                 clearTimeout(dropdownTimeout);
                 dropdown.style.display = 'block';
-            });
-            dropdown.addEventListener('mouseleave', () => {
+            };
+            dropdown._mouseLeaveHandler = () => {
                 dropdown.style.display = 'none';
-            });
+            };
+            
+            userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
+            userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
+            dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
+            dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
             
             // Gérer déconnexion
             const logoutBtn = document.getElementById('logout-btn-nav');
             if (logoutBtn) {
-                // Éviter les doublons d'écouteurs
                 const newLogoutBtn = logoutBtn.cloneNode(true);
                 logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
                 newLogoutBtn.addEventListener('click', async () => {
