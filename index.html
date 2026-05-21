@@ -480,7 +480,6 @@
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown" id="user-dropdown">
                     <a href="profil.html">👤 Mon profil</a>
-                    <a href="Abonnement.html">✨ Abonnement</a>
                     <button id="logout-btn-nav">🚪 Déconnexion</button>
                 </div>
             </div>
@@ -551,7 +550,7 @@
     const dropdown = document.getElementById('user-dropdown');
     
     if (user) {
-        // Afficher l'avatar (toujours)
+        // Afficher l'avatar
         if (userMenu) userMenu.style.display = 'block';
         
         // Récupérer le statut premium
@@ -575,56 +574,15 @@
         
         // Gestion du lien Abonnement
         if (isPremium) {
+            // Premium : cacher le lien Abonnement
             if (abonnementLink) abonnementLink.style.display = 'none';
         } else {
+            // Non-premium connecté : garder le lien
             if (abonnementLink) abonnementLink.style.display = 'flex';
         }
         
-        // Supprimer les anciens écouteurs
-        if (userMenu._mouseEnterHandler) {
-            userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
-            userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
-        }
-        if (dropdown && dropdown._mouseEnterHandler) {
-            dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
-        }
+        // ... gestion dropdown (sans Abonnement)
         
-        // Définir les handlers
-        userMenu._mouseEnterHandler = () => {
-            clearTimeout(dropdownTimeout);
-            if (dropdown) dropdown.style.display = 'block';
-        };
-        userMenu._mouseLeaveHandler = () => {
-            dropdownTimeout = setTimeout(() => {
-                if (dropdown) dropdown.style.display = 'none';
-            }, 300);
-        };
-        if (dropdown) {
-            dropdown._mouseEnterHandler = () => {
-                clearTimeout(dropdownTimeout);
-                dropdown.style.display = 'block';
-            };
-            dropdown._mouseLeaveHandler = () => {
-                dropdown.style.display = 'none';
-            };
-            dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
-        }
-        
-        userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
-        userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
-        
-        // Gérer déconnexion
-        const logoutBtn = document.getElementById('logout-btn-nav');
-        if (logoutBtn) {
-            const newLogoutBtn = logoutBtn.cloneNode(true);
-            logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-            newLogoutBtn.addEventListener('click', async () => {
-                await supabaseClient.auth.signOut();
-                window.location.reload();
-            });
-        }
     } else {
         if (userMenu) userMenu.style.display = 'none';
         if (abonnementLink) abonnementLink.style.display = 'flex';
