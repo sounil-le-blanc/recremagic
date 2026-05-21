@@ -24,25 +24,18 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+            body { zoom: 150%; }
+            body::before { zoom: 0.6667; }
+        }
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
         body {
             font-family: 'Quicksand', sans-serif;
             background-image: url('images/fond-image.webp');
             background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
             background-attachment: fixed;
             min-height: 100vh;
             display: flex;
@@ -50,8 +43,8 @@
             align-items: center;
             justify-content: center;
             position: relative;
-            overflow-x: hidden;
-            padding-top: 100px;
+            padding-top: 120px;
+            padding-bottom: 2rem;
         }
 
         body::before {
@@ -77,7 +70,7 @@
         .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
         .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
         .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
-        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
+        .logo-wrapper:hover img { transform: scale(1.08); }
         .back-arrow {
             display: flex; align-items: center; justify-content: center;
             width: 36px; height: 36px; border-radius: 50%;
@@ -95,116 +88,172 @@
 
         .main-content {
             position: relative; z-index: 10;
-            text-align: center; padding: 2rem;
-            max-width: 650px; width: 100%;
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 1rem;
         }
 
-        .message-box {
+        /* Profil Card */
+        .profile-card {
             background: rgba(235, 215, 185, 0.96);
-            backdrop-filter: blur(8px);
-            border-radius: 60px; padding: 3rem 2rem;
+            border-radius: 48px;
+            padding: 2rem;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
         }
 
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        .profile-header {
+            text-align: center;
+            margin-bottom: 2rem;
         }
 
         .profile-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 2.8rem; font-weight: 800;
-            color: #2C1810; margin-bottom: 0.5rem;
-            letter-spacing: 2px; text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            font-size: 2.5rem;
+            color: #2C1810;
+            margin-bottom: 0.5rem;
+        }
+
+        .avatar {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--vert-caravane), #5a8f78);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            font-size: 2rem;
+            font-weight: bold;
+            color: white;
+            border: 3px solid var(--jaune-accent);
         }
 
         .welcome-message {
-            font-size: 1rem; color: #5a3e2a;
-            margin-bottom: 1.5rem; font-style: italic;
+            font-size: 1rem;
+            color: #5a3e2a;
+            font-style: italic;
         }
 
-        .quick-access {
-            display: flex; justify-content: center;
-            gap: 1rem; flex-wrap: wrap; margin-bottom: 1.5rem;
+        /* Grid layout */
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
         }
 
-        .quick-link {
-            display: flex; align-items: center; gap: 0.5rem;
-            padding: 0.6rem 1.2rem;
-            background: rgba(255,255,255,0.7);
-            border-radius: 40px; text-decoration: none;
-            color: var(--text-dark); font-weight: 600;
-            font-size: 0.9rem; border: 2px solid #7a5c3e;
-            transition: all 0.2s;
+        .info-section {
+            background: rgba(255,255,255,0.5);
+            border-radius: 24px;
+            padding: 1.2rem;
         }
 
-        .quick-link:hover {
-            background: white; border-color: var(--jaune-accent);
-            transform: translateY(-2px);
+        .info-section h3 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #2C1810;
+            border-bottom: 2px solid var(--jaune-accent);
+            display: inline-block;
         }
 
-        .quick-link-icon { font-size: 1.2rem; }
-
-        .profile-info {
-            text-align: left; margin-bottom: 1.5rem;
+        .info-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.1);
         }
 
-        .profile-info p {
-            font-size: 1.1rem; color: #2C1810;
-            margin-bottom: 0.6rem; padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.5); border-radius: 30px;
+        .info-label {
+            font-weight: bold;
+            color: #5a3e2a;
         }
-
-        .profile-info strong { color: #5a3e2a; }
 
         .status-badge {
-            display: inline-block; padding: 0.3rem 1rem;
-            border-radius: 30px; font-weight: 700; font-size: 0.9rem;
+            display: inline-block;
+            padding: 0.3rem 1rem;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 0.85rem;
         }
-
         .status-active { background: var(--vert-caravane); color: white; }
         .status-inactive { background: #D32F2F; color: white; }
 
-        .btn {
-            display: inline-block; padding: 0.8rem 1.8rem;
-            border-radius: 50px; text-decoration: none;
-            font-weight: bold; font-size: 1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin: 0.5rem; cursor: pointer;
-            border: none; font-family: 'Quicksand', sans-serif;
+        .quick-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.8rem;
+            margin-top: 1rem;
+        }
+        .quick-link {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: rgba(255,255,255,0.7);
+            border-radius: 40px;
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 600;
+            font-size: 0.85rem;
+            transition: all 0.2s;
+        }
+        .quick-link:hover {
+            background: white;
+            transform: translateY(-2px);
         }
 
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3); }
-
+        .actions {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .btn {
+            padding: 0.7rem 1.5rem;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.9rem;
+            transition: all 0.2s;
+            cursor: pointer;
+            border: none;
+            font-family: 'Quicksand', sans-serif;
+        }
         .btn-primary { background: linear-gradient(135deg, var(--vert-caravane), #5a8f78); color: white; }
-        .btn-danger { background: linear-gradient(135deg, #D32F2F, var(--rose-spectacle)); color: white; }
         .btn-warning { background: linear-gradient(135deg, var(--jaune-accent), #e6a200); color: #2C1810; }
-        .btn-back { background: linear-gradient(135deg, #5a3e2a, #7a5c3e); color: white; }
+        .btn-danger { background: linear-gradient(135deg, #D32F2F, var(--rose-spectacle)); color: white; }
+        .btn-secondary { background: rgba(255,255,255,0.7); color: #2C1810; }
+        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
         #message {
-            margin-top: 1rem; font-weight: 600;
-            font-size: 0.9rem; min-height: 1.5rem;
+            text-align: center;
+            margin-top: 1rem;
+            font-weight: 600;
         }
         .success { color: #2E7D32; }
         .error { color: #D32F2F; }
+
+        @media (max-width: 768px) {
+            .profile-grid { grid-template-columns: 1fr; }
+            .profile-card { padding: 1.5rem; }
+            .profile-title { font-size: 1.8rem; }
+            .actions { flex-direction: column; align-items: stretch; }
+            .btn { text-align: center; }
+        }
 
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
             .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
             .nav-icon-img { height: 26px; }
             .nav-icons { gap: 0.7rem; }
-            .profile-title { font-size: 2rem; }
-            .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
-            .btn { display: block; width: 100%; margin: 0.5rem 0; }
-            .quick-access { flex-direction: column; align-items: center; }
         }
     </style>
 </head>
@@ -236,9 +285,10 @@
 </nav>
 
 <div class="main-content">
-    <div class="message-box" id="profile-box">
-        <h1 class="profile-title">Mon Profil</h1>
-        <p style="color:#2C1810;">⏳ Chargement de votre profil...</p>
+    <div class="profile-card" id="profile-card">
+        <div style="text-align: center; padding: 2rem;">
+            <p>⏳ Chargement de votre profil...</p>
+        </div>
     </div>
 </div>
 
@@ -247,16 +297,55 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+    // Stripe Customer Portal
+    async function manageSubscription() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return;
+        
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe-portal`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ userId: user.id, email: user.email })
+        });
+        const data = await response.json();
+        if (data.url) {
+            window.location.href = data.url;
+        } else {
+            alert('Erreur : ' + (data.error || 'Impossible d\'accéder au portail'));
+        }
+    }
+
+    async function changePassword() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        if (!user) return;
+        const { error } = await supabaseClient.auth.resetPasswordForEmail(user.email, {
+            redirectTo: window.location.origin + '/connexion.html'
+        });
+        const msgDiv = document.getElementById('message');
+        if (msgDiv) {
+            msgDiv.innerHTML = error ? '❌ ' + error.message : '✅ Email envoyé ! Vérifiez votre boîte.';
+            msgDiv.className = error ? 'error' : 'success';
+            setTimeout(() => { msgDiv.innerHTML = ''; }, 5000);
+        }
+    }
+
+    async function logout() {
+        await supabaseClient.auth.signOut();
+        window.location.href = 'index.html';
+    }
+
     async function loadProfile() {
-        const box = document.getElementById('profile-box');
+        const card = document.getElementById('profile-card');
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
 
         if (authError || !user) {
-            box.innerHTML = `
-                <h1 class="profile-title">Mon Profil</h1>
-                <p style="color:#2C1810; margin-bottom:1.5rem;">🔒 Vous devez être connecté pour accéder à votre profil.</p>
-                <a href="connexion.html" class="btn btn-primary">🎪 Se connecter</a>
-                <a href="inscription.html" class="btn btn-warning">✨ S'inscrire</a>
+            card.innerHTML = `
+                <div style="text-align: center; padding: 2rem;">
+                    <h1 class="profile-title">Mon Profil</h1>
+                    <p style="margin-bottom: 1.5rem;">🔒 Vous devez être connecté</p>
+                    <a href="connexion.html" class="btn btn-primary">🎪 Se connecter</a>
+                    <a href="inscription.html" class="btn btn-warning">✨ S'inscrire</a>
+                </div>
             `;
             return;
         }
@@ -267,54 +356,66 @@
             .eq('id', user.id)
             .single();
 
-        const status = (profile && profile.subscription_status === 'active') ? 'Premium' : 'Spectateur';
-        const statusClass = (status === 'Premium') ? 'status-active' : 'status-inactive';
-        const welcomeMsg = (status === 'Premium') ? 'Merci de faire partie de la troupe ! 🌟' : 'Découvrez nos contenus exclusifs en devenant membre !';
-        const btnText = (status === 'Premium') ? '✨ Gérer mon abonnement Premium' : '✨ Devenir Premium';
+        const isPremium = profile && profile.subscription_status === 'active';
+        const statusText = isPremium ? 'Premium' : 'Spectateur';
+        const statusClass = isPremium ? 'status-active' : 'status-inactive';
+        const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
 
-        box.innerHTML = `
-            <h1 class="profile-title">Mon Profil</h1>
-            <p class="welcome-message">${welcomeMsg}</p>
-
-            <div class="quick-access">
-                <a href="video.html" class="quick-link"><span class="quick-link-icon">🎬</span> Vidéos</a>
-                <a href="boutique.html" class="quick-link"><span class="quick-link-icon">💰</span> Boutique</a>
-                <a href="calendrier.html" class="quick-link"><span class="quick-link-icon">📅</span> Calendrier</a>
+        card.innerHTML = `
+            <div class="profile-header">
+                <div class="avatar">${avatarLetter}</div>
+                <h1 class="profile-title">Mon Compte</h1>
+                <p class="welcome-message">${isPremium ? '🌟 Merci de faire partie de la troupe !' : '✨ Découvrez nos vidéos exclusives'}</p>
             </div>
 
-            <div class="profile-info">
-                <p><strong>📧 Email :</strong> ${user.email}</p>
-                <p><strong>📅 Inscrit le :</strong> ${new Date(user.created_at).toLocaleDateString('fr-FR')}</p>
-                <p><strong>🎪 Statut :</strong> <span class="status-badge ${statusClass}">✨ ${status}</span></p>
+            <div class="profile-grid">
+                <div class="info-section">
+                    <h3>📋 Informations</h3>
+                    <div class="info-row">
+                        <span class="info-label">📧 Email</span>
+                        <span>${user.email}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">📅 Inscrit le</span>
+                        <span>${new Date(user.created_at).toLocaleDateString('fr-FR')}</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="info-label">🎪 Statut</span>
+                        <span><span class="status-badge ${statusClass}">✨ ${statusText}</span></span>
+                    </div>
+                </div>
+
+                <div class="info-section">
+                    <h3>🔗 Accès rapide</h3>
+                    <div class="quick-links">
+                        <a href="video.html" class="quick-link">🎬 Vidéos</a>
+                        <a href="boutique.html" class="quick-link">💰 Boutique</a>
+                        <a href="calendrier.html" class="quick-link">📅 Calendrier</a>
+                    </div>
+                    <div style="margin-top: 1rem;">
+                        <div class="info-row">
+                            <span class="info-label">🎁 Réduction</span>
+                            <span>${isPremium ? '5% sur la boutique' : 'Devenez premium'}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="actions">
+                ${isPremium ? '<button class="btn btn-primary" onclick="manageSubscription()">🎪 Gérer mon abonnement</button>' : '<a href="Abonnement.html" class="btn btn-primary">✨ Devenir Premium</a>'}
+                <button class="btn btn-warning" onclick="changePassword()">🔑 Changer de mot de passe</button>
+                <button class="btn btn-danger" onclick="logout()">🚪 Se déconnecter</button>
+                <a href="index.html" class="btn btn-secondary">← Retour à l'accueil</a>
             </div>
 
             <div id="message"></div>
-
-            <a href="Abonnement.html" class="btn btn-primary">${btnText}</a>
-            <button class="btn btn-warning" onclick="changePassword()">🔑 Changer de mot de passe</button>
-            <button class="btn btn-danger" onclick="logout()">🚪 Se déconnecter</button>
-            <a href="index.html" class="btn btn-back">← Retour à l'accueil</a>
         `;
     }
 
-    async function changePassword() {
-        const { data: { user } } = await supabaseClient.auth.getUser();
-        if (!user) return;
-        const { error } = await supabaseClient.auth.resetPasswordForEmail(user.email, {
-            redirectTo: window.location.origin + '/connexion.html'
-        });
-        const msg = document.getElementById('message');
-        if (msg) {
-            msg.textContent = error ? '❌ Erreur : ' + error.message : '✅ Email envoyé ! Vérifiez votre boîte.';
-        }
-    }
-
-    async function logout() {
-        await supabaseClient.auth.signOut();
-        window.location.href = 'index.html';
-    }
-
     window.addEventListener('load', loadProfile);
+    window.manageSubscription = manageSubscription;
+    window.changePassword = changePassword;
+    window.logout = logout;
 </script>
 </body>
 </html>
