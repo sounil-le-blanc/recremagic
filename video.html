@@ -174,7 +174,10 @@
 </nav>
 
 <div class="main-content" id="main-content">
-    <!-- Rempli dynamiquement -->
+    <div class="locked-box" style="text-align: center;">
+        <h2>⏳ Chargement...</h2>
+        <p>Vérification de votre accès.</p>
+    </div>
 </div>
 
 <script>
@@ -182,10 +185,8 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ID de ta librairie Bunny
     const BUNNY_LIBRARY_ID = 666723;
 
-    // Liste des vidéos (IDs Bunny)
     const videos = [
         { id: 'f9bc8349-ce59-4bbe-a1cd-d68e8be3ac38', title: '🎪 Spectacle 1' }
         // Ajoute les autres vidéos ici
@@ -209,16 +210,24 @@
     }
 
     async function changeVideo(videoId, videoTitle, thumbElement) {
+        const titleEl = document.querySelector('.video-title');
+        const iframe = document.getElementById('video-iframe');
+        
+        titleEl.innerHTML = `🎬 ${videoTitle} (chargement...)`;
+        
         const url = await getSignedUrl(videoId);
+        
         if (url) {
-            document.getElementById('video-iframe').src = url;
-            document.querySelector('.video-title').innerHTML = `🎬 ${videoTitle}`;
+            iframe.src = url;
+            titleEl.innerHTML = `🎬 ${videoTitle}`;
             
-            // Mise à jour de la classe active
             document.querySelectorAll('.video-thumb').forEach(thumb => {
                 thumb.classList.remove('active');
             });
             thumbElement.classList.add('active');
+        } else {
+            titleEl.innerHTML = `🎬 ${videoTitle} (erreur de chargement)`;
+            console.error("Impossible de charger la vidéo", videoId);
         }
     }
 
@@ -256,7 +265,6 @@
             return;
         }
 
-        // Générer le HTML de la page vidéo
         let thumbsHtml = '';
         videos.forEach((video, index) => {
             const activeClass = index === 0 ? 'active' : '';
@@ -269,9 +277,9 @@
 
         container.innerHTML = `
             <div class="video-box">
-                <h1 class="video-title">🎬 ${videos[0].title}</h1>
+                <h1 class="video-title">🎬 Chargement...</h1>
                 <div class="video-wrapper">
-                    <iframe id="video-iframe" src="" allowfullscreen></iframe>
+                    <iframe id="video-iframe" src="about:blank" allowfullscreen></iframe>
                 </div>
                 <div class="video-list">
                     ${thumbsHtml}
@@ -279,11 +287,18 @@
             </div>
         `;
 
-        // Charger la première vidéo avec token
-        const firstUrl = await getSignedUrl(videos[0].id);
-        document.getElementById('video-iframe').src = firstUrl;
+        const firstVideo = videos[0];
+        const firstUrl = await getSignedUrl(firstVideo.id);
+        const iframe = document.getElementById('video-iframe');
+        const titleEl = document.querySelector('.video-title');
+        
+        if (firstUrl) {
+            iframe.src = firstUrl;
+            titleEl.innerHTML = `🎬 ${firstVideo.title}`;
+        } else {
+            titleEl.innerHTML = `🎬 ${firstVideo.title} (erreur)`;
+        }
 
-        // Ajouter les événements sur les thumbs
         document.querySelectorAll('.video-thumb').forEach(thumb => {
             thumb.addEventListener('click', () => {
                 const videoId = thumb.getAttribute('data-id');
