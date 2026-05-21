@@ -439,20 +439,40 @@
             .parchment-wrapper { padding: 1.8rem 1.5rem; margin: 0 auto 1.5rem auto; }
         }
 
+        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icons { gap: 0.7rem; }
+            .navbar-container { padding: 0 0.5rem; }
+            .nav-left-group { gap: 0.3rem; }
+            .logo-wrapper img { height: 60px !important; margin-top: 30px; }
+            .back-arrow { width: 28px; height: 28px; font-size: 0.9rem; }
+            
+            /* Réduction des icônes */
+            .nav-icon-img { height: 20px !important; }
+            .icon-label { font-size: 0.45rem !important; letter-spacing: 0px; }
+            .nav-icons { gap: 0.5rem; }
+            
+            /* Réduction de l'avatar */
+            .user-avatar { width: 28px; height: 28px; font-size: 0.7rem; }
+            .user-dropdown { top: 35px; min-width: 150px; }
+            .user-dropdown a, .user-dropdown button { padding: 0.4rem 0.8rem; font-size: 0.75rem; }
+            
+            /* Ajustements cards */
             .choice-card { border-radius: 36px; padding: 1.5rem; border-width: 4px; }
-            .choice-icon img { height: 110px; }
-            .choice-title { font-size: 1.5rem; }
-            .welcome-title { font-size: 1.6rem; }
-            .welcome-subtitle { font-size: 1rem; }
-            .user-avatar { width: 32px; height: 32px; font-size: 0.8rem; }
+            .choice-icon img { height: 90px; }
+            .choice-title { font-size: 1.3rem; }
+            .welcome-title { font-size: 1.4rem; }
+            .welcome-subtitle { font-size: 0.9rem; }
+            .parchment-wrapper { padding: 1.2rem 1rem; }
+        }
+
+        /* Pour les très petits écrans (moins de 400px) */
+        @media (max-width: 400px) {
+            .icon-label { display: none; }
+            .nav-icon-img { height: 22px !important; }
+            .nav-icons { gap: 0.8rem; }
+            .navbar-container { padding: 0 0.3rem; }
         }
     </style>
 </head>
@@ -547,97 +567,97 @@
     // ============================================================
     let dropdownTimeout;
 
-   async function updateNavbarAvatar() {
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    const userMenu = document.getElementById('user-menu');
-    const connexionBtn = document.getElementById('connexion-btn');
-    const abonnementLink = document.getElementById('abonnement-link');
-    const userAvatar = document.getElementById('user-avatar');
-    const dropdown = document.getElementById('user-dropdown');
-    
-    if (user) {
-        // Connecté → cacher bouton Connexion, afficher avatar
-        if (connexionBtn) connexionBtn.style.display = 'none';
-        if (userMenu) userMenu.style.display = 'block';
+    async function updateNavbarAvatar() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const userMenu = document.getElementById('user-menu');
+        const connexionBtn = document.getElementById('connexion-btn');
+        const abonnementLink = document.getElementById('abonnement-link');
+        const userAvatar = document.getElementById('user-avatar');
+        const dropdown = document.getElementById('user-dropdown');
         
-        // Récupérer le statut premium
-        const { data: profile } = await supabaseClient
-            .from('profiles')
-            .select('subscription_status')
-            .eq('id', user.id)
-            .single();
-        
-        const isPremium = profile?.subscription_status === 'active';
-        const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
-        
-        if (userAvatar) {
-            userAvatar.textContent = avatarLetter;
-            if (isPremium) {
-                userAvatar.classList.add('premium');
-            } else {
-                userAvatar.classList.remove('premium');
+        if (user) {
+            // Connecté → cacher bouton Connexion, afficher avatar
+            if (connexionBtn) connexionBtn.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'block';
+            
+            // Récupérer le statut premium
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            const isPremium = profile?.subscription_status === 'active';
+            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+            
+            if (userAvatar) {
+                userAvatar.textContent = avatarLetter;
+                if (isPremium) {
+                    userAvatar.classList.add('premium');
+                } else {
+                    userAvatar.classList.remove('premium');
+                }
             }
-        }
-        
-        // Gestion du lien Abonnement
-        if (isPremium) {
-            if (abonnementLink) abonnementLink.style.display = 'none';
+            
+            // Gestion du lien Abonnement
+            if (isPremium) {
+                if (abonnementLink) abonnementLink.style.display = 'none';
+            } else {
+                if (abonnementLink) abonnementLink.style.display = 'flex';
+            }
+            
+            // Supprimer les anciens écouteurs
+            if (userMenu._mouseEnterHandler) {
+                userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
+                userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
+            }
+            if (dropdown && dropdown._mouseEnterHandler) {
+                dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
+                dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
+            }
+            
+            // Définir les handlers
+            userMenu._mouseEnterHandler = () => {
+                clearTimeout(dropdownTimeout);
+                if (dropdown) dropdown.style.display = 'block';
+            };
+            userMenu._mouseLeaveHandler = () => {
+                dropdownTimeout = setTimeout(() => {
+                    if (dropdown) dropdown.style.display = 'none';
+                }, 300);
+            };
+            if (dropdown) {
+                dropdown._mouseEnterHandler = () => {
+                    clearTimeout(dropdownTimeout);
+                    dropdown.style.display = 'block';
+                };
+                dropdown._mouseLeaveHandler = () => {
+                    dropdown.style.display = 'none';
+                };
+                dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
+                dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
+            }
+            
+            userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
+            userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
+            
+            // Gérer déconnexion
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            if (logoutBtn) {
+                const newLogoutBtn = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                newLogoutBtn.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            }
         } else {
+            // Non connecté → cacher avatar, afficher bouton Connexion
+            if (userMenu) userMenu.style.display = 'none';
+            if (connexionBtn) connexionBtn.style.display = 'flex';
             if (abonnementLink) abonnementLink.style.display = 'flex';
         }
-        
-        // Supprimer les anciens écouteurs
-        if (userMenu._mouseEnterHandler) {
-            userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
-            userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
-        }
-        if (dropdown && dropdown._mouseEnterHandler) {
-            dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
-        }
-        
-        // Définir les handlers
-        userMenu._mouseEnterHandler = () => {
-            clearTimeout(dropdownTimeout);
-            if (dropdown) dropdown.style.display = 'block';
-        };
-        userMenu._mouseLeaveHandler = () => {
-            dropdownTimeout = setTimeout(() => {
-                if (dropdown) dropdown.style.display = 'none';
-            }, 300);
-        };
-        if (dropdown) {
-            dropdown._mouseEnterHandler = () => {
-                clearTimeout(dropdownTimeout);
-                dropdown.style.display = 'block';
-            };
-            dropdown._mouseLeaveHandler = () => {
-                dropdown.style.display = 'none';
-            };
-            dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
-            dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
-        }
-        
-        userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
-        userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
-        
-        // Gérer déconnexion
-        const logoutBtn = document.getElementById('logout-btn-nav');
-        if (logoutBtn) {
-            const newLogoutBtn = logoutBtn.cloneNode(true);
-            logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-            newLogoutBtn.addEventListener('click', async () => {
-                await supabaseClient.auth.signOut();
-                window.location.reload();
-            });
-        }
-    } else {
-        // Non connecté → cacher avatar, afficher bouton Connexion
-        if (userMenu) userMenu.style.display = 'none';
-        if (connexionBtn) connexionBtn.style.display = 'flex';
-        if (abonnementLink) abonnementLink.style.display = 'flex';
     }
-}
 
     // ============================================================
     // COMPTEUR INVISIBLE
