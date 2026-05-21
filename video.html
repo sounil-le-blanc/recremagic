@@ -23,9 +23,13 @@
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         @media (min-width: 1024px) {
-            body { zoom: 150%; }
-            body::before { zoom: 0.6667; }
-        }
+    body {
+        zoom: 150%;
+    }
+    body::before {
+        zoom: 0.6667; /* annule le zoom sur le fond */
+    }
+}
 
         ::-webkit-scrollbar { width: 12px; }
         ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
@@ -180,14 +184,6 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========== VIDÉOS (ID YouTube) ==========
-    const videos = [
-        { id: 'SWL1YxW7d3c', title: '🎪 Spectacle 1' },
-        { id: 'AoEzbO5BIkw', title: '🎭 Spectacle 2' },
-        { id: '8DKVvbLOqq8', title: '✨ Spectacle 3' },
-        { id: 'kwDnnIMUXV0', title: '🌟 Spectacle 4' }
-    ];
-
     async function checkAccess() {
         const container = document.getElementById('main-content');
         const { data: { user } } = await supabaseClient.auth.getUser();
@@ -216,8 +212,8 @@
         if (!isPremium) {
             container.innerHTML = `
                 <div class="locked-box">
-                    <h2>🌟 Devenez membre Premium</h2>
-                    <p>Abonnez-vous à 5€/an pour accéder à toutes nos vidéos exclusives.</p>
+                    <h2>🌟 Contenu réservé aux membres Premium</h2>
+                    <p>Passez à l'abonnement Premium pour débloquer toutes les vidéos exclusives.</p>
                     <a href="Abonnement.html" class="btn">✨ Devenir Premium</a>
                 </div>
             `;
@@ -225,23 +221,12 @@
         }
 
         // ✅ Premium — afficher les vidéos
-        // Générer la liste des vidéos
-        let videoListHtml = '';
-        videos.forEach((video, index) => {
-            const activeClass = index === 0 ? 'active' : '';
-            videoListHtml += `
-                <div class="video-thumb ${activeClass}" data-video-id="${video.id}" data-video-title="${video.title}">
-                    ${video.title}
-                </div>
-            `;
-        });
-
         container.innerHTML = `
             <div class="video-box">
                 <h1 class="video-title">🎬 Vidéos exclusives</h1>
                 
                 <div class="video-wrapper" id="main-video">
-                    <iframe id="video-iframe" src="https://www.youtube.com/embed/${videos[0].id}?rel=0&modestbranding=1"
+                    <iframe id="video-iframe" src="https://www.youtube.com/embed/SWL1YxW7d3c"
                         title="Vidéo Récré Magic" frameborder="0"
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                         allowfullscreen>
@@ -249,31 +234,20 @@
                 </div>
 
                 <div class="video-list" id="video-list">
-                    ${videoListHtml}
+                    <div class="video-thumb active" onclick="changeVideo('SWL1YxW7d3c', this)">🎪 Spectacle 1</div>
+                    <div class="video-thumb" onclick="changeVideo('AoEzbO5BIkw ', this)">🎭 Spectacle 2</div>
+                    <div class="video-thumb" onclick="changeVideo('8DKVvbLOqq8', this)">✨ Spectacle 3</div>
+                    <div class="video-thumb" onclick="changeVideo('kwDnnIMUXV0', this)">✨ Spectacle 4</div>
                 </div>
             </div>
         `;
 
-        // Réattacher les événements aux vidéos
-        document.querySelectorAll('.video-thumb').forEach(thumb => {
-            thumb.addEventListener('click', () => {
-                const videoId = thumb.getAttribute('data-video-id');
-                const videoTitle = thumb.getAttribute('data-video-title');
-                
-                // Changer la vidéo
-                document.getElementById('video-iframe').src = `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1`;
-                
-                // Mettre à jour le titre
-                const titleElement = document.querySelector('.video-title');
-                if (titleElement) {
-                    titleElement.innerHTML = `🎬 ${videoTitle}`;
-                }
-                
-                // Mettre à jour la classe active
-                document.querySelectorAll('.video-thumb').forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
-            });
-        });
+        // Réattacher la fonction changeVideo
+        window.changeVideo = function(videoId, element) {
+            document.getElementById('video-iframe').src = 'https://www.youtube.com/embed/' + videoId;
+            document.querySelectorAll('.video-thumb').forEach(thumb => thumb.classList.remove('active'));
+            element.classList.add('active');
+        };
     }
 
     window.addEventListener('load', checkAccess);
