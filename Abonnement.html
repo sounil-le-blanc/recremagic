@@ -370,26 +370,22 @@
     let isProcessing = false; // Éviter les doubles clics
 
     // ========== RÉACTIVER LE BOUTON AU CHARGEMENT ==========
-    window.addEventListener('load', () => {
-        // Réactiver le bouton si on revient de Stripe
-        subscribeBtn.disabled = false;
-        subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
-        messageDiv.textContent = '';
-        isProcessing = false;
-        
-        // Vérifier si on revient d'un paiement annulé
-        const urlParams = new URLSearchParams(window.location.search);
-        if (urlParams.get('canceled') === 'true') {
-            messageDiv.textContent = '❌ Paiement annulé. Vous pouvez réessayer.';
-            messageDiv.className = 'error';
-            // Nettoyer l'URL pour enlever le paramètre
-            window.history.replaceState({}, document.title, window.location.pathname);
-        } else if (urlParams.get('success') === 'true') {
-            messageDiv.textContent = '✅ Paiement réussi ! Votre compte est maintenant premium.';
-            messageDiv.className = 'success';
-            window.history.replaceState({}, document.title, window.location.pathname);
-        }
-    });
+    // Remplacer window.addEventListener('load', ...) par :
+window.addEventListener('pageshow', function(event) {
+    // Réactiver le bouton (même si la page vient du cache)
+    subscribeBtn.disabled = false;
+    subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+    messageDiv.textContent = '';
+    isProcessing = false;
+    
+    // Vérifier le paramètre canceled dans l'URL
+    const urlParams = new URLSearchParams(window.location.search);
+    if (urlParams.get('canceled') === 'true') {
+        messageDiv.textContent = '❌ Paiement annulé. Vous pouvez réessayer.';
+        messageDiv.className = 'error';
+        window.history.replaceState({}, document.title, window.location.pathname);
+    }
+});
 
     // ========== FONCTION MODALE ==========
     function showAuthModal() {
