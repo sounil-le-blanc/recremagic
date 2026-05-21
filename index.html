@@ -475,6 +475,11 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
+            <!-- Lien Abonnement par défaut (caché si connecté) -->
+            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
+                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
             <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
@@ -483,11 +488,7 @@
                     <button id="logout-btn-nav">🚪 Déconnexion</button>
                 </div>
             </div>
-            <!-- Lien Abonnement par défaut (caché si connecté) -->
-            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
-                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
-                <span class="icon-label">Abonnement</span>
-            </a>
+            
         </div>
     </div>
 </nav>
@@ -547,10 +548,13 @@
     const userMenu = document.getElementById('user-menu');
     const abonnementLink = document.getElementById('abonnement-link');
     const userAvatar = document.getElementById('user-avatar');
+    const dropdown = document.getElementById('user-dropdown');
     
     if (user) {
-        userMenu.style.display = 'block';
+        // Afficher l'avatar (toujours)
+        if (userMenu) userMenu.style.display = 'block';
         
+        // Récupérer le statut premium
         const { data: profile } = await supabaseClient
             .from('profiles')
             .select('subscription_status')
@@ -558,27 +562,72 @@
             .single();
         
         const isPremium = profile?.subscription_status === 'active';
-        userAvatar.textContent = user.email?.charAt(0).toUpperCase() || '?';
+        const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
         
-        if (isPremium) {
-            userAvatar.classList.add('premium');
-            abonnementLink.style.display = 'none';
-        } else {
-            userAvatar.classList.remove('premium');
-            abonnementLink.style.display = 'flex';
+        if (userAvatar) {
+            userAvatar.textContent = avatarLetter;
+            if (isPremium) {
+                userAvatar.classList.add('premium');
+            } else {
+                userAvatar.classList.remove('premium');
+            }
         }
         
-        // Déconnexion
+        // Gestion du lien Abonnement
+        if (isPremium) {
+            if (abonnementLink) abonnementLink.style.display = 'none';
+        } else {
+            if (abonnementLink) abonnementLink.style.display = 'flex';
+        }
+        
+        // Supprimer les anciens écouteurs
+        if (userMenu._mouseEnterHandler) {
+            userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
+            userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
+        }
+        if (dropdown && dropdown._mouseEnterHandler) {
+            dropdown.removeEventListener('mouseenter', dropdown._mouseEnterHandler);
+            dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
+        }
+        
+        // Définir les handlers
+        userMenu._mouseEnterHandler = () => {
+            clearTimeout(dropdownTimeout);
+            if (dropdown) dropdown.style.display = 'block';
+        };
+        userMenu._mouseLeaveHandler = () => {
+            dropdownTimeout = setTimeout(() => {
+                if (dropdown) dropdown.style.display = 'none';
+            }, 300);
+        };
+        if (dropdown) {
+            dropdown._mouseEnterHandler = () => {
+                clearTimeout(dropdownTimeout);
+                dropdown.style.display = 'block';
+            };
+            dropdown._mouseLeaveHandler = () => {
+                dropdown.style.display = 'none';
+            };
+            dropdown.addEventListener('mouseenter', dropdown._mouseEnterHandler);
+            dropdown.addEventListener('mouseleave', dropdown._mouseLeaveHandler);
+        }
+        
+        userMenu.addEventListener('mouseenter', userMenu._mouseEnterHandler);
+        userMenu.addEventListener('mouseleave', userMenu._mouseLeaveHandler);
+        
+        // Gérer déconnexion
         const logoutBtn = document.getElementById('logout-btn-nav');
         if (logoutBtn) {
-            logoutBtn.onclick = async () => {
+            const newLogoutBtn = logoutBtn.cloneNode(true);
+            logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+            newLogoutBtn.addEventListener('click', async () => {
                 await supabaseClient.auth.signOut();
                 window.location.reload();
-            };
+            });
         }
     } else {
-        userMenu.style.display = 'none';
-        abonnementLink.style.display = 'flex';
+        if (userMenu) userMenu.style.display = 'none';
+        if (abonnementLink) abonnementLink.style.display = 'flex';
     }
 }
 
