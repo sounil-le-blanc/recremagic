@@ -366,6 +366,30 @@
 
     const subscribeBtn = document.getElementById('btn-subscribe');
     const messageDiv = document.getElementById('message');
+    
+    let isProcessing = false; // Éviter les doubles clics
+
+    // ========== RÉACTIVER LE BOUTON AU CHARGEMENT ==========
+    window.addEventListener('load', () => {
+        // Réactiver le bouton si on revient de Stripe
+        subscribeBtn.disabled = false;
+        subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+        messageDiv.textContent = '';
+        isProcessing = false;
+        
+        // Vérifier si on revient d'un paiement annulé
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('canceled') === 'true') {
+            messageDiv.textContent = '❌ Paiement annulé. Vous pouvez réessayer.';
+            messageDiv.className = 'error';
+            // Nettoyer l'URL pour enlever le paramètre
+            window.history.replaceState({}, document.title, window.location.pathname);
+        } else if (urlParams.get('success') === 'true') {
+            messageDiv.textContent = '✅ Paiement réussi ! Votre compte est maintenant premium.';
+            messageDiv.className = 'success';
+            window.history.replaceState({}, document.title, window.location.pathname);
+        }
+    });
 
     // ========== FONCTION MODALE ==========
     function showAuthModal() {
@@ -407,6 +431,9 @@
 
     // ========== CHECKOUT ==========
     async function startCheckout() {
+        // Éviter les clics multiples
+        if (isProcessing) return;
+        
         // Désactiver le bouton
         subscribeBtn.disabled = true;
         subscribeBtn.textContent = '⏳ Vérification...';
@@ -424,12 +451,13 @@
             return;
         }
 
+        isProcessing = true;
         messageDiv.textContent = '⏳ Création de la session de paiement...';
         messageDiv.className = '';
 
         try {
             // 2. Appeler la Edge Function pour créer la session Stripe Checkout
-            const response = await fetch('https://ilpnwxuecooxthnoxyws.supabase.co/functions/v1/create-checkout-session',{
+            const response = await fetch('https://ilpnwxuecooxthnoxyws.supabase.co/functions/v1/create-checkout-session', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -449,6 +477,7 @@
                 messageDiv.className = 'error';
                 subscribeBtn.disabled = false;
                 subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+                isProcessing = false;
             }
         } catch (error) {
             console.error('Erreur:', error);
@@ -456,6 +485,7 @@
             messageDiv.className = 'error';
             subscribeBtn.disabled = false;
             subscribeBtn.textContent = '🎪 S\'abonner — 5€/an';
+            isProcessing = false;
         }
     }
 
