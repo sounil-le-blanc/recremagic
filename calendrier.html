@@ -916,7 +916,9 @@
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const TABLE_NAME = 'events';
-    const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+    
+    // Initialisation globale propre (sans re-déclaration conflictuelle)
+    window.supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
     let currentDate = new Date();
     let currentMonth = currentDate.getMonth();
@@ -932,54 +934,61 @@
 
     // ========== AVATAR & MENU UTILISATEUR ==========
     async function updateNavbarAvatar() {
-        const { data: { user } } = await supabase.auth.getUser();
-        const userMenu = document.getElementById('user-menu');
-        const connexionBtn = document.getElementById('connexion-btn');
-        const abonnementLink = document.getElementById('abonnement-link');
-        const userAvatar = document.getElementById('user-avatar');
-        
-        if (user) {
-            if (connexionBtn) connexionBtn.style.display = 'none';
-            if (userMenu) userMenu.style.display = 'block';
+        try {
+            const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
+            const userMenu = document.getElementById('user-menu');
+            const connexionBtn = document.getElementById('connexion-btn');
+            const abonnementLink = document.getElementById('abonnement-link');
+            const userAvatar = document.getElementById('user-avatar');
             
-            const { data: profile } = await supabase
-                .from('profiles')
-                .select('subscription_status')
-                .eq('id', user.id)
-                .single();
-            
-            const isPremium = profile?.subscription_status === 'active';
-            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
-            
-            if (userAvatar) {
-                userAvatar.textContent = avatarLetter;
-                if (isPremium) {
-                    userAvatar.classList.add('premium');
-                    if (abonnementLink) abonnementLink.style.display = 'none';
-                } else {
-                    userAvatar.classList.remove('premium');
-                    if (abonnementLink) abonnementLink.style.display = 'flex';
+            if (authError) return;
+
+            if (user) {
+                if (connexionBtn) connexionBtn.style.display = 'none';
+                if (userMenu) userMenu.style.display = 'block';
+                
+                const { data: profile } = await window.supabaseClient
+                    .from('profiles')
+                    .select('subscription_status')
+                    .eq('id', user.id)
+                    .single();
+                
+                const isPremium = profile?.subscription_status === 'active';
+                const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+                
+                if (userAvatar) {
+                    userAvatar.textContent = avatarLetter;
+                    if (isPremium) {
+                        userAvatar.classList.add('premium');
+                        if (abonnementLink) abonnementLink.style.display = 'none';
+                    } else {
+                        userAvatar.classList.remove('premium');
+                        if (abonnementLink) abonnementLink.style.display = 'flex';
+                    }
                 }
+                
+                const logoutBtn = document.getElementById('logout-btn-nav');
+                if (logoutBtn) {
+                    const newLogoutBtn = logoutBtn.cloneNode(true);
+                    logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                    newLogoutBtn.addEventListener('click', async () => {
+                        await window.supabaseClient.auth.signOut();
+                        window.location.reload();
+                    });
+                }
+            } else {
+                if (userMenu) userMenu.style.display = 'none';
+                if (connexionBtn) connexionBtn.style.display = 'flex';
+                if (abonnementLink) abonnementLink.style.display = 'flex';
             }
-            
-            const logoutBtn = document.getElementById('logout-btn-nav');
-            if (logoutBtn) {
-                const newLogoutBtn = logoutBtn.cloneNode(true);
-                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
-                newLogoutBtn.addEventListener('click', async () => {
-                    await supabase.auth.signOut();
-                    window.location.reload();
-                });
-            }
-        } else {
-            if (userMenu) userMenu.style.display = 'none';
-            if (connexionBtn) connexionBtn.style.display = 'flex';
-            if (abonnementLink) abonnementLink.style.display = 'flex';
+        } catch (e) {
+            console.error("Erreur d'avatar navbar :", e);
         }
     }
 
     function showLoading(show) {
-        document.getElementById('loadingIndicator').classList.toggle('active', show);
+        const loader = document.getElementById('loadingIndicator');
+        if (loader) loader.classList.toggle('active', show);
         isLoading = show;
     }
 
@@ -988,16 +997,18 @@
         showLoading(true);
         console.log('🔄 Chargement des événements depuis Supabase...');
         try {
-            const { data, error } = await supabase
+            const { data, error } = await window.supabaseClient
                 .from(TABLE_NAME)
                 .select('*')
                 .order('event_date', { ascending: true });
+                
             if (error) {
                 console.error('❌ Erreur Supabase :', error.message);
                 showError('Impossible de charger les événements.');
                 showLoading(false);
                 return;
             }
+            
             eventsData = {};
             if (data && data.length > 0) {
                 data.forEach(ev => {
@@ -1016,18 +1027,21 @@
             showLoading(false);
             renderAll();
         } catch (e) {
-            console.error('❌ Erreur :', e);
+            console.error('❌ Erreur technique :', e);
             showError('Erreur de connexion à Supabase.');
             showLoading(false);
         }
     }
 
     function showError(message) {
-        document.getElementById('eventsListContainer').innerHTML = `
-            <div class="error-message">
-                <p>⚠️ ${message}</p>
-                <button class="retry-btn" onclick="loadEventsFromSupabase()">🔄 Réessayer</button>
-            </div>`;
+        const container = document.getElementById('eventsListContainer');
+        if (container) {
+            container.innerHTML = `
+                <div class="error-message">
+                    <p>⚠️ ${message}</p>
+                    <button class="retry-btn" onclick="loadEventsFromSupabase()">🔄 Réessayer</button>
+                </div>`;
+        }
     }
 
     function getDateKey(year, month, day) { 
@@ -1122,17 +1136,13 @@
             let eventClasses = Array.from(eventClassesSet);
             let classList = ['calendar-day'];
             
-            if (isToday) {
-                classList.push('today');
-            }
+            if (isToday) classList.push('today');
             
             if (eventClasses.length > 1) {
-                classList.push('has-event');
-                classList.push('multi-event');
+                classList.push('has-event', 'multi-event');
                 classList = classList.concat(eventClasses);
             } else if (eventClasses.length === 1) {
-                classList.push('has-event');
-                classList.push(eventClasses[0]);
+                classList.push('has-event', eventClasses[0]);
             } else if (hasEvent) {
                 classList.push('has-event');
             }
@@ -1278,6 +1288,7 @@
 
     function populateYearSelect() {
         const yearSelect = document.getElementById('yearSelect');
+        if (!yearSelect) return;
         yearSelect.innerHTML = '';
         for (let y = 2026; y <= 2028; y++) {
             const option = document.createElement('option');
@@ -1319,18 +1330,22 @@
     }
 
     async function init() {
-        await updateNavbarAvatar();
         populateYearSelect();
         renderCalendar();
+        await updateNavbarAvatar();
         await loadEventsFromSupabase();
+        
+        // Surveillance des changements de connexion
+        window.supabaseClient.auth.onAuthStateChange(() => {
+            updateNavbarAvatar();
+        });
+
         setInterval(loadEventsFromSupabase, 30000);
     }
 
+    // Lancement propre après définition de toutes les fonctions
     init();
     window.addEventListener('load', createConfetti);
-    supabase.auth.onAuthStateChange(() => {
-        updateNavbarAvatar();
-    });
     console.log('🎪 Calendrier connecté à Supabase !');
 </script>
 </body>
