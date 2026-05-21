@@ -547,13 +547,10 @@
     const userMenu = document.getElementById('user-menu');
     const abonnementLink = document.getElementById('abonnement-link');
     const userAvatar = document.getElementById('user-avatar');
-    const dropdown = document.getElementById('user-dropdown');
     
     if (user) {
-        // Afficher l'avatar
-        if (userMenu) userMenu.style.display = 'block';
+        userMenu.style.display = 'block';
         
-        // Récupérer le statut premium
         const { data: profile } = await supabaseClient
             .from('profiles')
             .select('subscription_status')
@@ -561,31 +558,27 @@
             .single();
         
         const isPremium = profile?.subscription_status === 'active';
-        const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+        userAvatar.textContent = user.email?.charAt(0).toUpperCase() || '?';
         
-        if (userAvatar) {
-            userAvatar.textContent = avatarLetter;
-            if (isPremium) {
-                userAvatar.classList.add('premium');
-            } else {
-                userAvatar.classList.remove('premium');
-            }
-        }
-        
-        // Gestion du lien Abonnement
         if (isPremium) {
-            // Premium : cacher le lien Abonnement
-            if (abonnementLink) abonnementLink.style.display = 'none';
+            userAvatar.classList.add('premium');
+            abonnementLink.style.display = 'none';
         } else {
-            // Non-premium connecté : garder le lien
-            if (abonnementLink) abonnementLink.style.display = 'flex';
+            userAvatar.classList.remove('premium');
+            abonnementLink.style.display = 'flex';
         }
         
-        // ... gestion dropdown (sans Abonnement)
-        
+        // Déconnexion
+        const logoutBtn = document.getElementById('logout-btn-nav');
+        if (logoutBtn) {
+            logoutBtn.onclick = async () => {
+                await supabaseClient.auth.signOut();
+                window.location.reload();
+            };
+        }
     } else {
-        if (userMenu) userMenu.style.display = 'none';
-        if (abonnementLink) abonnementLink.style.display = 'flex';
+        userMenu.style.display = 'none';
+        abonnementLink.style.display = 'flex';
     }
 }
 
