@@ -182,19 +182,45 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Configuration Bunny
-    const LIBRARY_ID = 666723;
-    
-    // ⚠️ IMPORTANT: Pour le test, je n'ai utilisé que ta première vidéo
-    // Pour la version finale, il faudra :
-    // 1. Uploader les 4 vidéos Baptiste dans ta librairie Bunny
-    // 2. Remplacer les IDs ci-dessous
+    // ID de ta librairie Bunny
+    const BUNNY_LIBRARY_ID = 666723;
+
+    // Liste des vidéos (IDs Bunny)
     const videos = [
         { id: 'f9bc8349-ce59-4bbe-a1cd-d68e8be3ac38', title: '🎪 Spectacle 1' }
-        // { id: 'ID_VIDEO_2', title: '🎭 Spectacle 2' },
-        // { id: 'ID_VIDEO_3', title: '✨ Spectacle 3' },
-        // { id: 'ID_VIDEO_4', title: '🌟 Spectacle 4' }
+        // Ajoute les autres vidéos ici
     ];
+
+    async function getSignedUrl(videoId) {
+        const { data: { session } } = await supabaseClient.auth.getSession();
+        if (!session) return null;
+
+        const response = await fetch(`${SUPABASE_URL}/functions/v1/bunny-token`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${session.access_token}`
+            },
+            body: JSON.stringify({ videoId })
+        });
+        
+        const data = await response.json();
+        return data.url;
+    }
+
+    async function changeVideo(videoId, videoTitle, thumbElement) {
+        const url = await getSignedUrl(videoId);
+        if (url) {
+            document.getElementById('video-iframe').src = url;
+            document.querySelector('.video-title').innerHTML = `🎬 ${videoTitle}`;
+            
+            // Mise à jour de la classe active
+            document.querySelectorAll('.video-thumb').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            thumbElement.classList.add('active');
+        }
+    }
 
     async function checkAccess() {
         const container = document.getElementById('main-content');
@@ -230,54 +256,39 @@
             return;
         }
 
-        let videoListHtml = '';
+        // Générer le HTML de la page vidéo
+        let thumbsHtml = '';
         videos.forEach((video, index) => {
             const activeClass = index === 0 ? 'active' : '';
-            videoListHtml += `
-                <div class="video-thumb ${activeClass}" data-video-id="${video.id}" data-video-title="${video.title}">
+            thumbsHtml += `
+                <div class="video-thumb ${activeClass}" data-id="${video.id}" data-title="${video.title}">
                     ${video.title}
                 </div>
             `;
         });
 
-        // Construction de l'iframe Bunny (sans token pour le test initial)
-        const firstVideoId = videos[0].id;
-        const iframeSrc = `https://iframe.mediadelivery.net/embed/${LIBRARY_ID}/${firstVideoId}`;
-
         container.innerHTML = `
             <div class="video-box">
-                <h1 class="video-title">🎬 Vidéos exclusives</h1>
-                
-                <div class="video-wrapper" id="main-video">
-                    <iframe id="video-iframe" 
-                        src="${iframeSrc}" 
-                        loading="lazy" 
-                        allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture; fullscreen"
-                        title="Vidéo Récré Magic">
-                    </iframe>
+                <h1 class="video-title">🎬 ${videos[0].title}</h1>
+                <div class="video-wrapper">
+                    <iframe id="video-iframe" src="" allowfullscreen></iframe>
                 </div>
-
-                <div class="video-list" id="video-list">
-                    ${videoListHtml}
+                <div class="video-list">
+                    ${thumbsHtml}
                 </div>
             </div>
         `;
 
+        // Charger la première vidéo avec token
+        const firstUrl = await getSignedUrl(videos[0].id);
+        document.getElementById('video-iframe').src = firstUrl;
+
+        // Ajouter les événements sur les thumbs
         document.querySelectorAll('.video-thumb').forEach(thumb => {
             thumb.addEventListener('click', () => {
-                const videoId = thumb.getAttribute('data-video-id');
-                const videoTitle = thumb.getAttribute('data-video-title');
-                
-                // Mise à jour de l'iframe Bunny
-                document.getElementById('video-iframe').src = `https://iframe.mediadelivery.net/embed/${LIBRARY_ID}/${videoId}`;
-                
-                const titleElement = document.querySelector('.video-title');
-                if (titleElement) {
-                    titleElement.innerHTML = `🎬 ${videoTitle}`;
-                }
-                
-                document.querySelectorAll('.video-thumb').forEach(t => t.classList.remove('active'));
-                thumb.classList.add('active');
+                const videoId = thumb.getAttribute('data-id');
+                const videoTitle = thumb.getAttribute('data-title');
+                changeVideo(videoId, videoTitle, thumb);
             });
         });
     }
