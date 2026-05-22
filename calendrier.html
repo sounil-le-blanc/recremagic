@@ -748,6 +748,30 @@
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
         .contact-cta a:hover { text-decoration: underline; color: white; }
 
+        .social-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+            position: relative;
+            z-index: 2;
+        }
+        .social-links a {
+            display: inline-block;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+        }
+        .social-links img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
         .footer {
             background: rgba(44, 24, 16, 0.95);
             color: var(--text-light);
@@ -792,6 +816,8 @@
     .events-summary-logo { height: 50px; }
     .legend-inline { gap: 0.4rem; }
     .legend-inline .legend-item { font-size: 0.65rem; padding: 0.2rem 0.4rem; }
+    .social-links img { height: 32px; }
+    .social-links { gap: 1rem; }
 }
 
 @media (max-width: 450px) {
@@ -825,12 +851,10 @@
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
-            <!-- Bouton Connexion (visible quand non connecté) -->
             <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
                 <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
                 <span class="icon-label">Connexion</span>
             </a>
-            <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown" id="user-dropdown">
@@ -908,6 +932,21 @@
     <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 
         📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
     <a href="Devis.html" class="btn btn-primary" style="margin-top: 1rem; display: inline-block;" target="_blank">📩 Demander un devis</a>
+    
+    <div class="social-links">
+        <a href="https://www.instagram.com/recremagic/" target="_blank" title="Instagram">
+            <img src="images/instagram.webp" alt="Instagram">
+        </a>
+        <a href="https://www.tiktok.com/@recremagic" target="_blank" title="TikTok">
+            <img src="images/tiktok.webp" alt="TikTok">
+        </a>
+        <a href="https://www.youtube.com/@recremagic" target="_blank" title="YouTube">
+            <img src="images/youtubevrai.webp" alt="YouTube">
+        </a>
+        <a href="https://www.facebook.com/recremagic" target="_blank" title="Facebook">
+            <img src="images/facebook.webp" alt="Facebook">
+        </a>
+    </div>
 </div>
 
 <div style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem; position: relative; z-index: 2;">
@@ -935,10 +974,8 @@
     let eventsData = {};
     let isLoading = false;
     
-    // 💡 Variable de temps pour empêcher le menu de se fermer trop vite
     let dropdownTimeout;
 
-    // ========== AVATAR & MENU UTILISATEUR (SYNCHRONISÉ INDEX) ==========
     async function updateNavbarAvatar() {
         try {
             const { data: { user }, error: authError } = await window.supabaseClient.auth.getUser();
@@ -974,7 +1011,6 @@
                     }
                 }
                 
-                // Nettoyage des anciens écouteurs pour éviter les doublons de mémoire
                 if (userMenu._mouseEnterHandler) {
                     userMenu.removeEventListener('mouseenter', userMenu._mouseEnterHandler);
                     userMenu.removeEventListener('mouseleave', userMenu._mouseLeaveHandler);
@@ -984,7 +1020,6 @@
                     dropdown.removeEventListener('mouseleave', dropdown._mouseLeaveHandler);
                 }
                 
-                // Injection de la logique de temporisation (comme sur index.html)
                 userMenu._mouseEnterHandler = () => {
                     clearTimeout(dropdownTimeout);
                     if (dropdown) dropdown.style.display = 'block';
@@ -992,7 +1027,7 @@
                 userMenu._mouseLeaveHandler = () => {
                     dropdownTimeout = setTimeout(() => {
                         if (dropdown) dropdown.style.display = 'none';
-                    }, 300); // Délai de tolérance de 300ms
+                    }, 300);
                 };
 
                 if (dropdown) {
@@ -1102,7 +1137,6 @@
         return str.replace(/[&<>]/g, m => m === '&' ? '&amp;' : (m === '<' ? '&lt;' : '&gt;')); 
     }
 
-    // [Les fonctions getSpectacleClass, getRowClass, buildHoverBubble, formatDate restent identiques]
     function getSpectacleClass(titre) {
         switch(titre) {
             case "DU COUP ON VIENT CHEZ VOUS": return 'spectacle-ducoup1';

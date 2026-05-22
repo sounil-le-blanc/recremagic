@@ -448,6 +448,48 @@
         .contact-note a { color: var(--jaune-accent); text-decoration: none; font-weight: bold; }
         .contact-note a:hover { text-decoration: underline; }
 
+        .social-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            display: inline-block;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+        }
+        .social-links img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
+        .footer-note {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 2rem;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+            font-size: 0.9rem;
+        }
+        .footer-note a {
+            color: #ffffff;
+            text-decoration: none;
+            font-weight: 500;
+            opacity: 0.7;
+            transition: opacity 0.2s;
+        }
+        .footer-note a:hover { opacity: 1; }
+
         /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 1100px) {
             .prestations-grid { gap: 1rem; }
@@ -482,6 +524,8 @@
             .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 auto 1rem auto; }
             .choice-icon img { height: 110px; }
             .welcome-title { font-size: 2rem; }
+            .social-links img { height: 32px; }
+            .social-links { gap: 1rem; }
         }
 
         @media (max-width: 450px) {
@@ -512,17 +556,14 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <!-- Lien Abonnement -->
             <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
-            <!-- Bouton Connexion (visible quand non connecté) -->
             <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
                 <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
                 <span class="icon-label">Connexion</span>
             </a>
-            <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown">
@@ -579,14 +620,30 @@
     </div>
 
     <p class="contact-note">
-    Une question ? Contactez-nous :<br>
-    📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
-    📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
+        Une question ? Contactez-nous :<br>
+        📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
+        📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
     </p>
-    <div class="footer-note" style="display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem;">
+
+    <div class="social-links">
+        <a href="https://www.instagram.com/recremagic/" target="_blank" title="Instagram">
+            <img src="images/instagram.webp" alt="Instagram">
+        </a>
+        <a href="https://www.tiktok.com/@recremagic" target="_blank" title="TikTok">
+            <img src="images/tiktok.webp" alt="TikTok">
+        </a>
+        <a href="https://www.youtube.com/@recremagic" target="_blank" title="YouTube">
+            <img src="images/youtubevrai.webp" alt="YouTube">
+        </a>
+        <a href="https://www.facebook.com/recremagic" target="_blank" title="Facebook">
+            <img src="images/facebook.webp" alt="Facebook">
+        </a>
+    </div>
+
+    <div class="footer-note">
         <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
         <span style="opacity: 0.5;">•</span>
-        <a href="mentions-legales.html" style="color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.7'">Mentions légales</a>
+        <a href="mentions-legales.html">Mentions légales</a>
     </div>
 </div>
 
@@ -656,4 +713,4 @@
     });
 </script>
 </body>
-                </html>
+</html>
