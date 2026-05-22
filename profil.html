@@ -68,6 +68,7 @@
             flex-wrap: nowrap;
         }
         .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
+        .nav-center-group { display: flex; align-items: center; justify-content: center; flex: 1; }
         .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
         .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
         .logo-wrapper:hover img { transform: scale(1.08); }
@@ -79,6 +80,24 @@
             transition: all 0.25s ease; flex-shrink: 0;
         }
         .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
+
+        .admin-nav-btn {
+            background: #D32F2F;
+            color: white !important;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-weight: bold;
+            font-size: 0.8rem;
+            text-decoration: none;
+            transition: all 0.2s;
+            white-space: nowrap;
+            display: none;
+        }
+        .admin-nav-btn:hover {
+            background: #b71c1c;
+            transform: scale(1.05);
+        }
+
         .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
         .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
         .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
@@ -94,7 +113,6 @@
             padding: 1rem;
         }
 
-        /* Profil Card */
         .profile-card {
             background: rgba(235, 215, 185, 0.96);
             border-radius: 48px;
@@ -105,124 +123,41 @@
             box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.5);
         }
 
-        .profile-header {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-
-        .profile-title {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 2.5rem;
-            color: #2C1810;
-            margin-bottom: 0.5rem;
-        }
-
+        .profile-header { text-align: center; margin-bottom: 2rem; }
+        .profile-title { font-family: 'MedievalSharp', cursive; font-size: 2.5rem; color: #2C1810; margin-bottom: 0.5rem; }
         .avatar {
-            width: 80px;
-            height: 80px;
+            width: 80px; height: 80px;
             background: linear-gradient(135deg, var(--vert-caravane), #5a8f78);
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto 1rem;
-            font-size: 2rem;
-            font-weight: bold;
-            color: white;
+            border-radius: 50%; display: flex; align-items: center; justify-content: center;
+            margin: 0 auto 1rem; font-size: 2rem; font-weight: bold; color: white;
             border: 3px solid var(--jaune-accent);
         }
+        .welcome-message { font-size: 1rem; color: #5a3e2a; font-style: italic; }
 
-        .welcome-message {
-            font-size: 1rem;
-            color: #5a3e2a;
-            font-style: italic;
-        }
-
-        /* Grid layout */
-        .profile-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-section {
-            background: rgba(255,255,255,0.5);
-            border-radius: 24px;
-            padding: 1.2rem;
-        }
-
-        .info-section h3 {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-            color: #2C1810;
-            border-bottom: 2px solid var(--jaune-accent);
-            display: inline-block;
-        }
-
-        .info-row {
-            display: flex;
-            justify-content: space-between;
-            padding: 0.6rem 0;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
-        }
-
-        .info-label {
-            font-weight: bold;
-            color: #5a3e2a;
-        }
-
-        .status-badge {
-            display: inline-block;
-            padding: 0.3rem 1rem;
-            border-radius: 30px;
-            font-weight: 700;
-            font-size: 0.85rem;
-        }
+        .profile-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin-bottom: 1.5rem; }
+        .info-section { background: rgba(255,255,255,0.5); border-radius: 24px; padding: 1.2rem; }
+        .info-section h3 { font-family: 'MedievalSharp', cursive; font-size: 1.3rem; margin-bottom: 1rem; color: #2C1810; border-bottom: 2px solid var(--jaune-accent); display: inline-block; }
+        .info-row { display: flex; justify-content: space-between; padding: 0.6rem 0; border-bottom: 1px solid rgba(0,0,0,0.1); }
+        .info-label { font-weight: bold; color: #5a3e2a; }
+        .status-badge { display: inline-block; padding: 0.3rem 1rem; border-radius: 30px; font-weight: 700; font-size: 0.85rem; }
         .status-active { background: var(--vert-caravane); color: white; }
         .status-inactive { background: #D32F2F; color: white; }
 
-        .quick-links {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.8rem;
-            margin-top: 1rem;
-        }
+        .quick-links { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-top: 1rem; }
         .quick-link {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            padding: 0.5rem 1rem;
-            background: rgba(255,255,255,0.7);
-            border-radius: 40px;
-            text-decoration: none;
-            color: var(--text-dark);
-            font-weight: 600;
-            font-size: 0.85rem;
+            display: flex; align-items: center; gap: 0.5rem;
+            padding: 0.5rem 1rem; background: rgba(255,255,255,0.7);
+            border-radius: 40px; text-decoration: none;
+            color: var(--text-dark); font-weight: 600; font-size: 0.85rem;
             transition: all 0.2s;
         }
-        .quick-link:hover {
-            background: white;
-            transform: translateY(-2px);
-        }
+        .quick-link:hover { background: white; transform: translateY(-2px); }
 
-        .actions {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-            margin-top: 1.5rem;
-        }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 1.5rem; }
         .btn {
-            padding: 0.7rem 1.5rem;
-            border-radius: 40px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            cursor: pointer;
-            border: none;
+            padding: 0.7rem 1.5rem; border-radius: 40px;
+            text-decoration: none; font-weight: bold; font-size: 0.9rem;
+            transition: all 0.2s; cursor: pointer; border: none;
             font-family: 'Quicksand', sans-serif;
         }
         .btn-primary { background: linear-gradient(135deg, var(--vert-caravane), #5a8f78); color: white; }
@@ -231,11 +166,7 @@
         .btn-secondary { background: rgba(255,255,255,0.7); color: #2C1810; }
         .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(0,0,0,0.2); }
 
-        #message {
-            text-align: center;
-            margin-top: 1rem;
-            font-weight: 600;
-        }
+        #message { text-align: center; margin-top: 1rem; font-weight: 600; }
         .success { color: #2E7D32; }
         .error { color: #D32F2F; }
 
@@ -254,6 +185,7 @@
             .logo-wrapper img { height: 80px; margin-top: 30px; }
             .nav-icon-img { height: 26px; }
             .nav-icons { gap: 0.7rem; }
+            .admin-nav-btn { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
         }
     </style>
 </head>
@@ -266,6 +198,9 @@
                 <img src="images/logo.webp" alt="Récré Magic">
             </a>
             <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        </div>
+        <div class="nav-center-group">
+            <a href="admin-login.html" id="admin-btn" class="admin-nav-btn">⚙️ ADMIN</a>
         </div>
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper">
@@ -297,11 +232,9 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // Stripe Customer Portal
     async function manageSubscription() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         if (!user) return;
-        
         const response = await fetch(`${SUPABASE_URL}/functions/v1/stripe-portal`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -334,6 +267,19 @@
         window.location.href = 'index.html';
     }
 
+    async function checkAdminAccess(userEmail) {
+        // Vérifier si l'email est dans la table admin_users
+        const { data: adminData } = await supabaseClient
+            .from('admin_users')
+            .select('role')
+            .eq('email', userEmail)
+            .single();
+
+        if (adminData && (adminData.role === 'admin' || adminData.role === 'superadmin' || adminData.role === 'editor')) {
+            document.getElementById('admin-btn').style.display = 'inline-block';
+        }
+    }
+
     async function loadProfile() {
         const card = document.getElementById('profile-card');
         const { data: { user }, error: authError } = await supabaseClient.auth.getUser();
@@ -349,6 +295,9 @@
             `;
             return;
         }
+
+        // Vérifier si l'utilisateur est admin
+        await checkAdminAccess(user.email);
 
         const { data: profile } = await supabaseClient
             .from('profiles')

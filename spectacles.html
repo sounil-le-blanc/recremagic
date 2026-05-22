@@ -94,7 +94,6 @@
         .back-arrow { display: flex; align-items: center; justify-content: center; width: 36px; height: 36px; border-radius: 50%; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer; transition: all 0.25s ease; flex-shrink: 0; }
         .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
 
-        /* ========== AVATAR & MENU UTILISATEUR ========== */
         .user-avatar {
             display: flex;
             align-items: center;
@@ -115,13 +114,8 @@
             border: 2px solid #FFD700;
             box-shadow: 0 0 10px rgba(255,215,0,0.5);
         }
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-        .user-menu {
-            position: relative;
-            display: inline-block;
-        }
+        .user-avatar:hover { transform: scale(1.05); }
+        .user-menu { position: relative; display: inline-block; }
         .user-dropdown {
             display: none;
             position: absolute;
@@ -153,9 +147,7 @@
             color: white !important;
             text-decoration: none !important;
         }
-        .user-menu:hover .user-dropdown {
-            display: block;
-        }
+        .user-menu:hover .user-dropdown { display: block; }
 
         .nav-icons {
             display: flex;
@@ -291,11 +283,32 @@
         .contact-cta a { color: var(--jaune-accent); text-decoration: none; font-weight: 700; font-size: 1.2rem; transition: all 0.3s; }
         .contact-cta a:hover { text-decoration: underline; color: white; }
 
+        .social-links {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        .social-links a {
+            display: inline-block;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+        .social-links a:hover {
+            transform: scale(1.2);
+            filter: drop-shadow(0 0 10px rgba(255,255,255,0.6));
+        }
+        .social-links img {
+            height: 40px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5));
+        }
+
         .footer-text { display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap; margin-top: 3rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem; position: relative; z-index: 2; }
         .footer-text a { color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s; }
         .footer-text a:hover { opacity: 1; }
 
-        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 968px) { 
             .spectacle-card-inner { grid-template-columns: 1fr; } 
             .spectacle-img { min-height: 250px; } 
@@ -316,6 +329,8 @@
             .prev-arrow { left: 10px; } 
             .next-arrow { right: 10px; } 
             .modal-content { max-width: 90%; max-height: 70%; } 
+            .social-links img { height: 32px; }
+            .social-links { gap: 1rem; }
         }
         @media (max-width: 600px) { 
             body { padding-top: 100px; } 
@@ -360,11 +375,8 @@
         <div class="nav-icons">
             <a href="calendrier.html" class="icon-wrapper"><img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img"><span class="icon-label">Calendrier</span></a>
             <a href="boutique.html" class="icon-wrapper"><img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img"><span class="icon-label">Boutique</span></a>
-            <!-- Lien Abonnement -->
             <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link"><img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img"><span class="icon-label">Abonnement</span></a>
-            <!-- Bouton Connexion (visible quand non connecté) -->
             <a href="connexion.html" class="icon-wrapper" id="connexion-btn"><img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img"><span class="icon-label">Connexion</span></a>
-            <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown">
@@ -382,7 +394,6 @@
 
 <div class="spectacles-list">
 
-    <!-- Spectacle 1 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
             <div class="spectacle-img"><img src="images/Ducoup-on-vien-chez-vous.webp" alt="Du coup on vient chez vous - Récré Magic"></div>
@@ -404,7 +415,6 @@
         <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/HNhvls_XnRg?rel=0&modestbranding=1" title="Bande-annonce DU COUP ON VIENT CHEZ VOUS" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
-    <!-- Spectacle 2 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
             <div class="spectacle-img"><img src="images/Ducoup-on-revient-chez-vous.webp" alt="Du coup on revient chez vous - Récré Magic"></div>
@@ -426,7 +436,6 @@
         <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/Ocu-1LbdWts?rel=0&modestbranding=1" title="Bande-annonce DU COUP ON REVIENT CHEZ VOUS" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
-    <!-- Spectacle 3 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
             <div class="spectacle-img"><img src="images/Comme-sur-des-roulette.webp" alt="Comme sur des roulettes - Récré Magic"></div>
@@ -447,7 +456,6 @@
         <div class="youtube-viewer"><iframe src="https://www.youtube.com/embed/Xje7iAlDU_8?rel=0&modestbranding=1" title="Bande-annonce COMME SUR DES ROULETTES" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe></div>
     </div>
 
-    <!-- Spectacle 4 -->
     <div class="spectacle-card">
         <div class="spectacle-card-inner">
             <div class="spectacle-img"><img src="images/ybos.webp" alt="Délicieusement Maboul - Récré Magic"></div>
@@ -498,6 +506,21 @@
         <p>Contactez-nous pour un devis gratuit et personnalisé</p>
         <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
         <a href="Devis.html" style="margin-top:1rem;display:inline-block;background:linear-gradient(135deg,var(--rouge-spectacle),var(--rose-spectacle));padding:0.8rem 2rem;border-radius:50px;text-decoration:none;font-weight:700;color:white;" target="_blank">📩 Demander un devis</a>
+        
+        <div class="social-links">
+            <a href="https://www.instagram.com/recremagic/" target="_blank" title="Instagram">
+                <img src="images/instagram.webp" alt="Instagram">
+            </a>
+            <a href="https://www.tiktok.com/@recremagic" target="_blank" title="TikTok">
+                <img src="images/tiktok.webp" alt="TikTok">
+            </a>
+            <a href="https://www.youtube.com/@recremagic" target="_blank" title="YouTube">
+                <img src="images/youtubevrai.webp" alt="YouTube">
+            </a>
+            <a href="https://www.facebook.com/recremagic" target="_blank" title="Facebook">
+                <img src="images/facebook.webp" alt="Facebook">
+            </a>
+        </div>
     </div>
 </div>
 
@@ -512,7 +535,6 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========== AVATAR & MENU UTILISATEUR ==========
     let dropdownTimeout;
 
     async function updateNavbarAvatar() {
@@ -563,7 +585,6 @@
         }
     }
 
-    // ========== GALERIE PHOTOS ==========
     const galleryImages = [
         'images/Super-photo.webp','images/Super-photo2.webp','images/Super-photo3.webp',
         'images/Super-photo4.webp','images/Super-photo5.webp','images/Super-photo6.webp',
@@ -585,7 +606,6 @@
         if(e.key==='ArrowRight'&&modal.classList.contains('active'))nextImage();
     });
 
-    // ========== INITIALISATION ==========
     window.addEventListener('load', async function() {
         await updateNavbarAvatar();
     });
