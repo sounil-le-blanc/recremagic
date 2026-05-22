@@ -69,6 +69,70 @@
             background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2);
             color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer;
         }
+
+        /* ========== AVATAR & MENU UTILISATEUR ========== */
+        .user-avatar {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            border-radius: 50%;
+            font-weight: bold;
+            font-size: 1rem;
+            color: white;
+            transition: all 0.2s;
+            border: 2px solid rgba(255,255,255,0.5);
+            cursor: pointer;
+        }
+        .user-avatar.premium {
+            background: linear-gradient(135deg, #FFB300, #e6a200);
+            border: 2px solid #FFD700;
+            box-shadow: 0 0 10px rgba(255,215,0,0.5);
+        }
+        .user-avatar:hover {
+            transform: scale(1.05);
+        }
+        .user-menu {
+            position: relative;
+            display: inline-block;
+        }
+        .user-dropdown {
+            display: none;
+            position: absolute;
+            right: 0;
+            top: 45px;
+            background: rgba(0,0,0,0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 16px;
+            padding: 0.5rem 0;
+            min-width: 180px;
+            z-index: 1001;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .user-dropdown a, .user-dropdown button {
+            display: block;
+            width: 100%;
+            padding: 0.6rem 1rem;
+            color: white !important;
+            text-decoration: none !important;
+            text-align: left;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: 'Quicksand', sans-serif;
+        }
+        .user-dropdown a:hover, .user-dropdown button:hover {
+            background: rgba(255,255,255,0.1);
+            color: white !important;
+            text-decoration: none !important;
+        }
+        .user-menu:hover .user-dropdown {
+            display: block;
+        }
+
         .nav-icons { display: flex; gap: 1.2rem; align-items: center; }
         .icon-wrapper { display: flex; flex-direction: column; align-items: center; text-decoration: none; }
         .nav-icon-img { height: 32px; }
@@ -138,10 +202,32 @@
         }
         .btn:hover { transform: translateY(-3px); }
 
+        /* ========== CORRECTIONS MOBILE ========== */
         @media (max-width: 600px) {
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            body { padding-top: 80px; }
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 70px !important; margin-top: 35px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            
+            .nav-icon-img { height: 28px !important; }
+            .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
+            .nav-icons { gap: 0.8rem; }
+            
+            .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
+            .user-dropdown { top: 40px; min-width: 160px; }
+            .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
+            
             .video-title { font-size: 1.5rem; }
             .video-box { padding: 1.5rem 1rem; border-radius: 36px; }
+        }
+
+        @media (max-width: 450px) {
+            .icon-label { font-size: 0.5rem !important; }
+            .nav-icon-img { height: 26px !important; }
+            .nav-icons { gap: 0.6rem; }
+            .navbar-container { padding: 0 0.5rem; }
         }
     </style>
 </head>
@@ -164,10 +250,24 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <a href="Abonnement.html" class="icon-wrapper">
+            <!-- Lien Abonnement -->
+            <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
+            <!-- Bouton Connexion (visible quand non connecté) -->
+            <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
+                <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
+                <span class="icon-label">Connexion</span>
+            </a>
+            <!-- Avatar utilisateur (caché par défaut) -->
+            <div class="user-menu" id="user-menu" style="display: none;">
+                <div class="user-avatar" id="user-avatar">?</div>
+                <div class="user-dropdown">
+                    <a href="profil.html">👤 Mon profil</a>
+                    <button id="logout-btn-nav">🚪 Déconnexion</button>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
@@ -186,7 +286,7 @@
 
     const BUNNY_LIBRARY_ID = 666723;
 
-    // Liste des 4 vidéos Baptiste
+    // Liste des vidéos Baptiste
     const videos = [
         { id: 'bf3f48b2-1be1-4d5d-8fe4-c64ab062c1a5', title: '🎪 Spectacle 1' },
         { id: '7727be43-154f-4350-bb62-b26dd8ca0a8b', title: '🎭 Spectacle 2' },
@@ -194,6 +294,57 @@
         { id: '8be709e8-2068-4f47-a1d6-7c5ce4614a3a', title: '🌟 Spectacle 4' },
         { id: 'abbaf945-39e1-4485-8b1a-006d7d0a99c8', title: '🌟 Spectacle 5' }
     ];
+
+    // ========== AVATAR & MENU UTILISATEUR ==========
+    let dropdownTimeout;
+
+    async function updateNavbarAvatar() {
+        const { data: { user } } = await supabaseClient.auth.getUser();
+        const userMenu = document.getElementById('user-menu');
+        const connexionBtn = document.getElementById('connexion-btn');
+        const abonnementLink = document.getElementById('abonnement-link');
+        const userAvatar = document.getElementById('user-avatar');
+        const dropdown = document.querySelector('.user-dropdown');
+        
+        if (user) {
+            if (connexionBtn) connexionBtn.style.display = 'none';
+            if (userMenu) userMenu.style.display = 'block';
+            
+            const { data: profile } = await supabaseClient
+                .from('profiles')
+                .select('subscription_status')
+                .eq('id', user.id)
+                .single();
+            
+            const isPremium = profile?.subscription_status === 'active';
+            const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
+            
+            if (userAvatar) {
+                userAvatar.textContent = avatarLetter;
+                if (isPremium) {
+                    userAvatar.classList.add('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'none';
+                } else {
+                    userAvatar.classList.remove('premium');
+                    if (abonnementLink) abonnementLink.style.display = 'flex';
+                }
+            }
+            
+            const logoutBtn = document.getElementById('logout-btn-nav');
+            if (logoutBtn) {
+                const newLogoutBtn = logoutBtn.cloneNode(true);
+                logoutBtn.parentNode.replaceChild(newLogoutBtn, logoutBtn);
+                newLogoutBtn.addEventListener('click', async () => {
+                    await supabaseClient.auth.signOut();
+                    window.location.reload();
+                });
+            }
+        } else {
+            if (userMenu) userMenu.style.display = 'none';
+            if (connexionBtn) connexionBtn.style.display = 'flex';
+            if (abonnementLink) abonnementLink.style.display = 'flex';
+        }
+    }
 
     async function getSignedUrl(videoId) {
         const { data: { session } } = await supabaseClient.auth.getSession();
@@ -311,7 +462,14 @@
         });
     }
 
-    window.addEventListener('load', checkAccess);
+    window.addEventListener('load', async function() {
+        await updateNavbarAvatar();
+        await checkAccess();
+    });
+    
+    supabaseClient.auth.onAuthStateChange(() => {
+        updateNavbarAvatar();
+    });
 </script>
 </body>
 </html>
