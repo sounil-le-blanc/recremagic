@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Contrats - Récré Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Favicons -->
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
+    <style>
+        :root {
+            --couleur-contrat1: #1e0e49;
+            --couleur-contrat2: #2c6e2c;
+            --fond-overlay: rgba(0, 0, 0, 0.55);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.webp');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            padding: 2rem;
+            position: relative;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: var(--fond-overlay);
+            z-index: 0;
+            pointer-events: none;
+        }
+        .app-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1100px;
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+        .carte-magique {
+            background: rgba(245, 235, 215, 0.96);
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 1.5rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 15px 30px rgba(0,0,0,0.3);
+        }
+        .bandeau {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+        }
+        .titre-principal {
+            font-family: 'Quicksand', sans-serif;
+            font-size: 2.2rem;
+            font-weight: 900;
+            color: black;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            text-align: center;
+        }
+        .contrat-selector {
+            text-align: center;
+            margin: 0 auto;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .btn-accueil {
+            background: #5a3e2a;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-accueil:hover {
+            background: #3e2a1a;
+            transform: scale(1.02);
+        }
+        .btn-presentation {
+            background: #2c6e2c;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-presentation:hover {
+            background: #1e4e1e;
+            transform: scale(1.02);
+        }
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        .btn-contrat {
+            background: #7a5c3e;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+        }
+        .btn-contrat:hover {
+            background: #5a3e2a;
+            transform: scale(1.02);
+        }
+        .btn-facture {
+            background: #1e0e49;
+            color: white;
+            border: none;
+            padding: 0.8rem 2rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-facture:hover {
+            background: #2d1a66;
+            transform: scale(1.02);
+        }
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f0e0;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+            border-radius: 20px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dropdown-content a {
+            color: #2C1810;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .dropdown-content a:hover {
+            background-color: #e8dccc;
+        }
+        .show {
+            display: block;
+        }
+        .carte-contrat {
+            background: rgba(255, 250, 235, 0.98);
+            border-radius: 45px;
+            padding: 1.8rem;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+            border-left: 12px solid;
+        }
+        .document-reel {
+            background: #fffef7;
+            border-radius: 30px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #d4b48c;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #2C1810;
+            position: relative;
+            min-height: 300px;
+            text-align: justify;
+        }
+        .logo-coin {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            height: 190px;
+            width: auto;
+            border-radius: 12px;
+            border: 2px solid #c0a080;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+            z-index: 5;
+        }
+        .contenu-avec-logo {
+            padding-top: 100px;
+        }
+        .header-contrat {
+            text-align: center;
+            margin-top: -30px;
+            margin-bottom: 25px;
+        }
+        .contrat-badge {
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            background: #1e0e49;
+            display: inline-block;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            color: white;
+            margin-bottom: 15px;
+        }
+        .titre-spectacle {
+            cursor: pointer;
+            background: #fff9ef;
+            display: inline-block;
+            padding: 0.6rem 1.8rem;
+            border-radius: 60px;
+            transition: 0.2s;
+            border: 2px solid #c0a080;
+            font-size: 1.9rem;
+            font-weight: 800;
+            margin: 0;
+            text-align: center;
+            letter-spacing: 2px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        .titre-spectacle:hover {
+            background: #f5e6cc;
+            border-color: #1e0e49;
+            transform: scale(1.02);
+        }
+        .doc-section {
+            margin-bottom: 1.2rem;
+            border-left: 3px solid;
+            padding-left: 0.8rem;
+            text-align: justify;
+        }
+        .doc-section p strong {
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #b22222;
+            text-underline-offset: 4px;
+        }
+        .doc-ligne {
+            margin-bottom: 0.8rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            text-align: justify;
+        }
+        .doc-label {
+            font-weight: 700;
+            min-width: 180px;
+            color: #5a3e2a;
+        }
+        .doc-champ {
+            flex: 1;
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #c0a080;
+            padding: 6px 8px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            cursor: text;
+            transition: all 0.2s ease;
+            color: #2C1810;
+        }
+        .doc-champ:hover {
+            border-bottom-color: currentColor;
+            background: rgba(0,0,0,0.03);
+        }
+        .doc-champ:focus {
+            outline: none;
+            border-bottom-width: 2px;
+            background: rgba(0,0,0,0.05);
+        }
+        .doc-champ:empty:before {
+            content: attr(placeholder);
+            color: #b0a088;
+            font-style: italic;
+        }
+        .texte-fixe {
+            margin: 0.5rem 0;
+            color: #2C1810;
+            padding: 8px 0;
+            text-align: justify;
+        }
+        .select-style {
+            display: inline-block;
+            padding: 4px 8px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 500;
+            background: #fff9ef;
+            border: 1px solid #c0a080;
+            border-radius: 8px;
+            cursor: pointer;
+            margin: 0 4px;
+            color: #2C1810;
+        }
+        .signature-container {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+        .signature-box {
+            flex: 1;
+            background: white;
+            border: 1px solid #c0a080;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+        .signature-box h4 {
+            color: #5a3e2a;
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+        canvas {
+            border: 1px solid #d4b48c;
+            border-radius: 12px;
+            background: white;
+            cursor: crosshair;
+            width: 100%;
+            height: auto;
+            background-color: #fff;
+            touch-action: none;
+        }
+        .signature-img {
+            border: 1px solid #d4b48c;
+            border-radius: 12px;
+            background: white;
+            width: 100%;
+            height: auto;
+            max-height: 150px;
+            object-fit: contain;
+        }
+        .sign-actions {
+            margin-top: 0.5rem;
+            display: flex;
+            gap: 0.5rem;
+            justify-content: center;
+        }
+        .sign-btn {
+            background: #e8dccc;
+            border: 1px solid #c0a080;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: 600;
+        }
+        .validation-block {
+            background: #f9f0e0;
+            border-radius: 25px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border: 1px solid #d4b48c;
+        }
+        .checkbox-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            cursor: pointer;
+        }
+        .checkbox-line input {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+        }
+        .checkbox-line label {
+            font-weight: 700;
+            color: #2C1810;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .legal-mention {
+            font-size: 0.75rem;
+            color: #5a3e2a;
+            background: #fff9ef;
+            padding: 10px;
+            border-radius: 16px;
+            margin-top: 8px;
+            border-left: 3px solid;
+        }
+        .timestamp {
+            font-size: 0.7rem;
+            color: #8b6946;
+            text-align: right;
+            margin-top: 8px;
+            font-family: monospace;
+        }
+        .btn-save {
+            background: #7a5c3e;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            margin-top: 20px;
+            width: 100%;
+            transition: 0.2s;
+        }
+        .btn-save:hover {
+            background: #5a3e2a;
+        }
+        .pied-page {
+            text-align: center;
+            padding-top: 1rem;
+            color: #eeddbb;
+            font-size: 0.75rem;
+        }
+        hr { margin: 15px 0; border-color: #e0c8a8; }
+        .dropdown-titre {
+            position: absolute;
+            background-color: #f9f0e0;
+            min-width: 220px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 20;
+            border-radius: 20px;
+            overflow: hidden;
+            display: none;
+        }
+        .dropdown-titre a {
+            color: #2C1810;
+            padding: 10px 16px;
+            text-decoration: none;
+            display: block;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.85rem;
+            cursor: pointer;
+        }
+        .dropdown-titre a:hover {
+            background-color: #e8dccc;
+        }
+        .relative {
+            position: relative;
+            display: inline-block;
+        }
+        .message-succes {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c6e2c;
+            color: white;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            z-index: 100;
+            animation: fadeOut 3s ease forwards;
+        }
+        @keyframes fadeOut {
+            0% { opacity: 1; transform: translateY(0); }
+            70% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(20px); visibility: hidden; }
+        }
+        .infos-legales {
+            font-size: 0.65rem;
+            text-align: center;
+            line-height: 1.4;
+            margin-top: 1rem;
+            color: #4a3520;
+            border-top: 1px solid #d4b48c;
+            padding-top: 0.8rem;
+        }
+        .artiste-ligne {
+            margin: 15px 0 10px 0;
+            text-align: justify;
+        }
+        .date-ligne {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            gap: 1rem;
+        }
+        .date-ligne .gauche {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .date-ligne .droite {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 8px;
+        }
+        .heure-ligne {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+            gap: 1rem;
+        }
+        .heure-ligne .gauche {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .heure-ligne .droite {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            gap: 8px;
+        }
+        .arrivee-ligne {
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .inline-champ-simple {
+            background: transparent;
+            border: none;
+            border-bottom: 1px solid #c0a080;
+            padding: 6px 8px;
+            font-family: inherit;
+            font-size: 0.85rem;
+            min-width: 140px;
+            color: #2C1810;
+            flex-shrink: 1;
+        }
+        .inline-champ-simple:focus {
+            outline: none;
+            border-bottom-width: 2px;
+        }
+        .titre-achat {
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #b22222;
+            text-underline-offset: 4px;
+        }
+        .conditions-titre {
+            font-weight: 700;
+            text-decoration: underline;
+            text-decoration-color: #b22222;
+            text-underline-offset: 4px;
+            margin: 0.5rem 0;
+            display: inline-block;
+        }
+        .conditions-techniques {
+            font-weight: bold;
+            color: #b22222;
+        }
+        @media (max-width: 800px) {
+            body { padding: 1rem; }
+            .titre-principal { font-size: 1.5rem; }
+            .doc-label { min-width: 130px; }
+            .signature-container { flex-direction: column; }
+            .logo-coin { height: 100px; top: 10px; left: 10px; }
+            .contenu-avec-logo { padding-top: 70px; }
+            .titre-spectacle { font-size: 1.3rem; padding: 0.5rem 1rem; }
+            .contrat-badge { font-size: 0.75rem; padding: 0.2rem 1rem; }
+            .header-contrat { margin-top: -15px; margin-bottom: 15px; }
+            .infos-legales { font-size: 0.55rem; }
+            .select-style { font-size: 0.75rem; }
+            .date-ligne { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .date-ligne .droite { justify-content: flex-start; }
+            .heure-ligne { flex-direction: column; align-items: flex-start; gap: 0.5rem; }
+            .heure-ligne .droite { justify-content: flex-start; }
+            .arrivee-ligne { flex-wrap: wrap; }
+            .contrat-selector { flex-direction: column; align-items: center; }
+            .inline-champ-simple { min-width: 100px; }
+        }
+    </style>
+</head>
+<body>
+<div class="app-wrapper">
+    <div class="carte-magique bandeau">
+        <div class="titre-principal">GESTION CONTRATS</div>
+    </div>
+
+    <div class="contrat-selector">
+        <div class="dropdown">
+            <button class="btn-contrat" onclick="toggleDropdown()">📑 CHOISIR UN CONTRAT ▼</button>
+            <div id="contratDropdown" class="dropdown-content">
+                <a onclick="chargerContrat(1)">CONTRAT SANS ROULOTTE</a>
+                <a onclick="chargerContrat(2)">CONTRAT ROULOTTE</a>
+            </div>
+        </div>
+        <a href="facture.html" class="btn-facture">📄 FACTURE</a>
+        <a href="presentation.html" class="btn-presentation">🎪 PRÉSENTATION</a>
+    </div>
+
+    <div id="zoneContrat" class="carte-contrat" style="border-left-color: var(--couleur-contrat1);">
+        <div style="text-align:center; padding:2rem;">Choisissez un contrat dans le menu ci-dessus.</div>
+    </div>
+    <div class="pied-page">Choisissez un contrat, remplissez les champs, signez, cochez la case, validez.</div>
+</div>
+
+<script>
+    let currentContrat = 0;
+    let signatureCanvas = {};
+    let currentTitre = "";
+
+    let signaturesSauvegardees = {};
+
+    const titresPossibles = [
+        "DU COUP on vient chez vous",
+        "DU COUP on revient chez vous",
+        "COMME SUR DES ROULETTES",
+        "DÉLICIEUSEMENT MABOUL"
+    ];
+
+    const nbArtistesPossibles = ["1", "2", "3", "4", "5"];
+
+    function toggleDropdown() {
+        document.getElementById("contratDropdown").classList.toggle("show");
+    }
+    window.onclick = function(e) {
+        if (!e.target.matches('.btn-contrat')) {
+            let drop = document.getElementById("contratDropdown");
+            if (drop.classList.contains('show')) drop.classList.remove('show');
+        }
+    }
+
+    function initSignatureCanvas(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        
+        if (signaturesSauvegardees[canvasId]) {
+            const img = new Image();
+            img.onload = function() {
+                const ctx = canvas.getContext('2d');
+                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+            };
+            img.src = signaturesSauvegardees[canvasId];
+        }
+        
+        const ctx = canvas.getContext('2d');
+        const rect = canvas.getBoundingClientRect();
+        canvas.width = rect.width;
+        canvas.height = rect.height;
+        
+        if (!signaturesSauvegardees[canvasId]) {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        ctx.strokeStyle = '#2C1810';
+        ctx.lineWidth = 2;
+        ctx.lineCap = 'round';
+        
+        let drawing = false;
+
+        function startDraw(e) {
+            drawing = true;
+            const pos = getPos(canvas, e);
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+            e.preventDefault();
+        }
+        function draw(e) {
+            if (!drawing) return;
+            const pos = getPos(canvas, e);
+            ctx.lineTo(pos.x, pos.y);
+            ctx.stroke();
+            ctx.beginPath();
+            ctx.moveTo(pos.x, pos.y);
+        }
+        function stopDraw() { drawing = false; }
+        function getPos(canvas, evt) {
+            const rect = canvas.getBoundingClientRect();
+            const scaleX = canvas.width / rect.width;
+            const scaleY = canvas.height / rect.height;
+            let clientX, clientY;
+            if (evt.touches) {
+                clientX = evt.touches[0].clientX;
+                clientY = evt.touches[0].clientY;
+            } else {
+                clientX = evt.clientX;
+                clientY = evt.clientY;
+            }
+            return { x: (clientX - rect.left) * scaleX, y: (clientY - rect.top) * scaleY };
+        }
+        
+        canvas.removeEventListener('mousedown', startDraw);
+        canvas.removeEventListener('mousemove', draw);
+        canvas.removeEventListener('mouseup', stopDraw);
+        canvas.removeEventListener('mouseleave', stopDraw);
+        canvas.removeEventListener('touchstart', startDraw);
+        canvas.removeEventListener('touchmove', draw);
+        canvas.removeEventListener('touchend', stopDraw);
+        
+        canvas.addEventListener('mousedown', startDraw);
+        canvas.addEventListener('mousemove', draw);
+        canvas.addEventListener('mouseup', stopDraw);
+        canvas.addEventListener('mouseleave', stopDraw);
+        canvas.addEventListener('touchstart', startDraw);
+        canvas.addEventListener('touchmove', draw);
+        canvas.addEventListener('touchend', stopDraw);
+        
+        signatureCanvas[canvasId] = { canvas, ctx, clear: function() {
+            ctx.fillStyle = 'white';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.beginPath();
+            delete signaturesSauvegardees[canvasId];
+        }};
+    }
+
+    window.clearSignature = function(canvasId) {
+        if (signatureCanvas[canvasId]) {
+            signatureCanvas[canvasId].clear();
+            delete signaturesSauvegardees[canvasId];
+        }
+    };
+    
+    function sauvegarderSignature(canvasId) {
+        const canvas = document.getElementById(canvasId);
+        if (canvas) {
+            signaturesSauvegardees[canvasId] = canvas.toDataURL('image/png');
+        }
+    }
+    
+    function sauvegarderToutesSignatures(contratNum) {
+        if (contratNum === 1) {
+            sauvegarderSignature('sig1_org');
+        } else {
+            sauvegarderSignature('sig2_org');
+        }
+    }
+    
+    function recupererDonneesContrat(contratNum) {
+        const donnees = {
+            contrat: contratNum,
+            titre: document.getElementById(`titreSpectacle${contratNum}`)?.innerText || '',
+            horodatage: document.getElementById(`ts${contratNum}`)?.innerHTML || '',
+            organisateur: {
+                nom: document.querySelectorAll('.doc-champ')[0]?.innerText || '',
+                adresse: document.querySelectorAll('.doc-champ')[1]?.innerText || '',
+                telephone: document.querySelectorAll('.doc-champ')[2]?.innerText || '',
+                email: document.querySelectorAll('.doc-champ')[3]?.innerText || '',
+                qualite: document.querySelectorAll('.doc-champ')[4]?.innerText || ''
+            },
+            artiste: document.getElementById(`artisteNom${contratNum}`)?.innerText || '',
+            spectacle: document.getElementById(`selectSpectacle${contratNum}`)?.value || '',
+            lieu: document.querySelector('.doc-champ[placeholder="Salle, adresse"]')?.innerText || '',
+            date: document.querySelector('.doc-champ[placeholder="JJ/MM/AAAA"]')?.innerText || '',
+            heureArrivee: document.querySelector('.doc-champ[placeholder="HH:MM"]')?.innerText || '',
+            heureDebut: document.querySelectorAll('.doc-champ[placeholder="HH:MM"]')[1]?.innerText || '',
+            montantHT: document.querySelector('.doc-champ[placeholder="0,00"]')?.innerText || '0',
+            tva: document.querySelectorAll('.doc-champ[placeholder="0,00"]')[1]?.innerText || '0',
+            totalTTC: document.querySelectorAll('.doc-champ[placeholder="0,00"]')[2]?.innerText || '0',
+            modeReglement: document.querySelector('.doc-champ[placeholder="Chèque, virement"]')?.innerText || '',
+            lieuFait: document.querySelectorAll('.doc-champ')[5]?.innerText || '',
+            dateFait: document.querySelectorAll('.doc-champ')[6]?.innerText || '',
+            signatures: signaturesSauvegardees
+        };
+        
+        return donnees;
+    }
+    
+    function sauvegarderDonneesPourFacture(contratNum) {
+        const donnees = recupererDonneesContrat(contratNum);
+        localStorage.setItem('factureData', JSON.stringify(donnees));
+        console.log('📄 Données sauvegardées pour la facture :', donnees);
+        return donnees;
+    }
+    
+    function afficherMessage(message, type = 'succes') {
+        const msgDiv = document.createElement('div');
+        msgDiv.className = 'message-succes';
+        msgDiv.style.backgroundColor = type === 'succes' ? '#2c6e2c' : '#8b0000';
+        msgDiv.innerText = message;
+        document.body.appendChild(msgDiv);
+        setTimeout(() => {
+            msgDiv.remove();
+        }, 3000);
+    }
+
+    function updateTimestamp(contratNum) {
+        const now = new Date();
+        const formatted = now.toLocaleString('fr-FR', { day:'2-digit', month:'2-digit', year:'numeric', hour:'2-digit', minute:'2-digit', second:'2-digit' });
+        const tsElem = document.getElementById(`ts${contratNum}`);
+        if (tsElem) tsElem.innerHTML = `Horodatage : ${formatted}`;
+    }
+    
+    window.toggleCheckbox = function(contratNum) {
+        const cb = document.getElementById(`check${contratNum}`);
+        if (cb) {
+            cb.checked = !cb.checked;
+            if (cb.checked) {
+                updateTimestamp(contratNum);
+                sauvegarderToutesSignatures(contratNum);
+                afficherMessage('✍️ Signature sauvegardée !');
+            }
+        }
+    };
+    
+    setInterval(() => {
+        if (document.getElementById('check1')?.checked) updateTimestamp(1);
+        if (document.getElementById('check2')?.checked) updateTimestamp(2);
+    }, 1000);
+
+    function changerTitre(nouveauTitre, contratNum) {
+        const titreSpan = document.getElementById(`titreSpectacle${contratNum}`);
+        if (titreSpan) titreSpan.innerText = nouveauTitre;
+        const dropTitre = document.getElementById(`dropdownTitre${contratNum}`);
+        if (dropTitre) dropTitre.style.display = 'none';
+        
+        const selectSpectacle = document.getElementById(`selectSpectacle${contratNum}`);
+        if (selectSpectacle && selectSpectacle.querySelector(`option[value="${nouveauTitre}"]`)) {
+            selectSpectacle.value = nouveauTitre;
+        }
+        const selectSpectacleBis = document.getElementById(`selectSpectacle${contratNum}_bis`);
+        if (selectSpectacleBis && selectSpectacleBis.querySelector(`option[value="${nouveauTitre}"]`)) {
+            selectSpectacleBis.value = nouveauTitre;
+        }
+    }
+
+    function toggleTitreDropdown(contratNum) {
+        const drop = document.getElementById(`dropdownTitre${contratNum}`);
+        if (drop.style.display === 'block') drop.style.display = 'none';
+        else drop.style.display = 'block';
+    }
+
+    function chargerContrat(num) {
+        currentContrat = num;
+        const zone = document.getElementById('zoneContrat');
+        const card = document.getElementById('zoneContrat');
+        
+        const optionsTitres = `<option value="" selected disabled>-- Choisir un spectacle --</option>` + titresPossibles.map(t => `<option value="${t.replace(/"/g, '&quot;')}">${t}</option>`).join('');
+        const optionsArtistes = `<option value="" selected disabled>-- Choisir --</option>` + nbArtistesPossibles.map(n => `<option value="${n}">${n}</option>`).join('');
+        
+        const article1HTML = `
+            <div class="doc-section" style="border-left-color: var(--couleur-contrat${num});">
+                <p><strong>DATE ET LIEU</strong></p>
+                <div class="date-ligne">
+                    <span class="gauche"><strong>Date :</strong> <span class="inline-champ-simple" contenteditable="true" data-label="Date" placeholder="JJ/MM/AAAA"></span></span>
+                    <span class="droite"><strong>Nombre de représentations :</strong> <span class="inline-champ-simple" contenteditable="true" data-label="Nombre représentations" placeholder="1"></span></span>
+                </div>
+                <div class="heure-ligne">
+                    <span class="gauche"><strong>Durée :</strong> <span class="inline-champ-simple" contenteditable="true" data-label="Durée" placeholder="ex: 1h30"></span></span>
+                    <span class="droite"><strong>Heure de passage :</strong> <span class="inline-champ-simple" contenteditable="true" data-label="Heure passage" placeholder="15H30"></span></span>
+                </div>
+                <div class="arrivee-ligne">
+                    <strong>Arrivée des artistes :</strong> <span class="inline-champ-simple" contenteditable="true" data-label="Arrivée artistes" placeholder="HH:MM"></span>
+                </div>
+            </div>
+        `;
+
+        const conditionsFinancieresHTML = `
+            <div class="doc-section" style="border-left-color: var(--couleur-contrat${num});">
+                <p><strong>CONDITIONS FINANCIÈRES</strong></p>
+                <div class="doc-ligne"><span class="doc-label">Montant HT :</span> <div class="doc-champ" contenteditable="true" placeholder="0,00"> €</div></div>
+                <div class="doc-ligne"><span class="doc-label">TVA 5,5% :</span> <div class="doc-champ" contenteditable="true" placeholder="0,00"> €</div></div>
+                <div class="doc-ligne"><span class="doc-label">Total TTC :</span> <div class="doc-champ" contenteditable="true" placeholder="0,00"> €</div></div>
+                <div class="doc-ligne"><span class="doc-label">Mode de règlement :</span> <div class="doc-champ" contenteditable="true" placeholder="Chèque, virement"></div></div>
+            </div>
+        `;
+
+        const conditionsParticulieresStandard = `
+            <div class="doc-section" style="border-left-color: var(--couleur-contrat${num});">
+                <p><strong>CONDITIONS PARTICULIERES</strong></p>
+                <div class="texte-fixe">
+                    Toute annulation par l’Organisateur moins de 30 jours avant la date de la représentation entraînera le paiement intégral du montant prévu aux <strong class="conditions-titre">conditions financières</strong>, sauf cas de force majeure dûment reconnu par la législation française.<br>
+                    En cas d’annulation par l’Artiste (ou la compagnie), celui-ci s’engage à proposer une date de report dans un délai raisonnable. À défaut d’accord, le contrat sera résilié sans indemnité.<br>
+                    Tout litige relatif à l’exécution ou à l’interprétation du présent contrat sera soumis aux tribunaux compétents du Tarn, même en cas de pluralité de défendeurs ou d’appel en garantie.
+                </div>
+            </div>
+        `;
+
+        const conditionsParticulieresRoulotte = `
+            <div class="doc-section" style="border-left-color: var(--couleur-contrat${num});">
+                <p><strong>CONDITIONS PARTICULIERES</strong></p>
+                <div class="texte-fixe">
+                    Une attention particulière sera portée à la stabilité et à l’accessibilité de l’emplacement prévu pour accueillir la roulotte et son espace scénique.<br>
+                    Toute annulation par l’Organisateur moins de 30 jours avant la date de la représentation entraînera le paiement intégral du montant prévu aux <strong class="conditions-titre">conditions financières</strong>, sauf cas de force majeure dûment reconnu par la législation française.<br>
+                    En cas d’annulation par l’Artiste (ou la compagnie), celui-ci s’engage à proposer une date de report dans un délai raisonnable. À défaut d’accord, le contrat sera résilié sans indemnité.<br>
+                    Tout litige relatif à l’exécution ou à l’interprétation du présent contrat sera soumis aux tribunaux compétents du Tarn, même en cas de pluralité de défendeurs ou d’appel en garantie.
+                </div>
+            </div>
+        `;
+        
+        if (num === 1) {
+            card.style.borderLeftColor = 'var(--couleur-contrat1)';
+            zone.innerHTML = `<!-- CONTRAT 1 - SANS ROULOTTE -->
+            <div class="document-reel">
+                <img src="images/Logo.png" alt="Logo association" class="logo-coin">
+                <div class="contenu-avec-logo">
+                    <div class="header-contrat">
+                        <div class="contrat-badge">✦ CONTRAT ✦</div>
+                        <div>
+                            <span id="titreSpectacle1" class="titre-spectacle relative" onclick="toggleTitreDropdown(1)">DU COUP on vient chez vous</span>
+                            <div id="dropdownTitre1" class="dropdown-titre" style="display:none;">
+                                ${titresPossibles.map(t => `<a onclick="changerTitre('${t.replace(/'/g, "\\'")}', 1)">${t}</a>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
+                        <p><strong>ENTRE LES SOUSSIGNÉS</strong></p>
+                        <div class="doc-ligne"><span class="doc-label">Organisateur :</span> <div class="doc-champ" contenteditable="true" placeholder="Nom, prénom"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Adresse :</span> <div class="doc-champ" contenteditable="true" placeholder="Numéro, rue, code postal"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Téléphone :</span> <div class="doc-champ" contenteditable="true" placeholder="06 XX XX XX XX"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Email :</span> <div class="doc-champ" contenteditable="true" placeholder="exemple@email.com"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Qualité :</span> <div class="doc-champ" contenteditable="true" placeholder="Président, trésorier..."></div></div>
+                    </div>
+                    <div class="artiste-ligne">
+                        <strong>Artiste :</strong> <span id="artisteNom1" style="font-weight:500;">À définir</span>
+                    </div>
+                    <div class="texte-fixe">
+                        Thomas FABRE, responsable du spectacle « <select id="selectSpectacle1" class="select-style">${optionsTitres}</select> » produit par l'Association CAPIS qui règlera les charges sociales et fiscales des artistes.
+                    </div>
+                    <div class="texte-fixe">
+                        <strong>D'autre part.</strong>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
+                        <p class="titre-achat"><strong>L'ORGANISATEUR fait l'achat du spectacle « <select id="selectSpectacle1_bis" class="select-style">${optionsTitres}</select> » présenté por <select id="selectArtistes1" class="select-style">${optionsArtistes}</select> artistes aux conditions suivantes :</strong></p>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
+                        <p><strong>Lieu de la représentation :</strong> <span class="doc-champ" contenteditable="true" placeholder="à remplir" style="display: inline-block; min-width: 250px;"></span></p>
+                    </div>
+                    ${article1HTML}
+                    ${conditionsFinancieresHTML}
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
+                        <p><strong>CONDITIONS TECHNIQUES</strong></p>
+                        <div class="texte-fixe conditions-techniques">Sur votre scène ou podium de 6 mètres de façade sur 5 mètres de profondeur minimum. Une prise de 16 A.</div>
+                    </div>
+                    ${conditionsParticulieresStandard}
+                    <div class="doc-ligne"><span class="doc-label">Fait à :</span> <div class="doc-champ" contenteditable="true" placeholder="Ville"></div> <span class="doc-label">le :</span> <div class="doc-champ" contenteditable="true" placeholder="Date"></div></div>
+                    <div class="signature-container">
+                        <div class="signature-box"><h4>Signature Organisateur</h4><canvas id="sig1_org" width="400" height="150"></canvas><div class="sign-actions"><button class="sign-btn" onclick="clearSignature('sig1_org')">Effacer</button></div></div>
+                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="image/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
+                    </div>
+                    <div class="validation-block">
+                        <div class="checkbox-line" onclick="toggleCheckbox(1)"><input type="checkbox" id="check1"><label>LU ET APPROUVÉ – J'accepte les conditions.</label></div>
+                        <div class="legal-mention" style="border-left-color: var(--couleur-contrat1);">Signature + case cochée valent acceptation électronique (art. 1366 Code civil).</div>
+                        <div class="timestamp" id="ts1">Horodatage : --/--/---- --:--</div>
+                    </div>
+                    <hr>
+                    <div class="infos-legales">
+                        Productions Récré Magic de l'Association CAPIS enregistré sous le n° 4464 le 27/05/1987 Préfecture d'Albi<br>
+                        140, chemin du Dévez - 81400 - LABASTIDE GABAUSSE - Licence de spectacle - L-R-25-1318<br>
+                        Siret 382 713 766 00014 - APE 9001 Z - N° URSSAF 810 12457 1 - Centre de Recouvrement 80000 10855 TP 02<br>
+                        AUDIENS 355 320 0200 - Congés Spectacle 674 94 001 U - TVA intracommunautaire FR 34 713 766 – www.recremagic.com
+                    </div>
+                </div>
+            </div>
+            <button class="btn-save" id="saveBtn">💾 Valider le contrat</button>`;
+            
+            setTimeout(() => {
+                const select1 = document.getElementById('selectSpectacle1');
+                const select1bis = document.getElementById('selectSpectacle1_bis');
+                if (select1 && select1bis) {
+                    select1.addEventListener('change', () => { if(select1.value) select1bis.value = select1.value; });
+                    select1bis.addEventListener('change', () => { if(select1bis.value) select1.value = select1bis.value; });
+                }
+                initSignatureCanvas('sig1_org');
+            }, 50);
+        } else {
+            card.style.borderLeftColor = 'var(--couleur-contrat2)';
+            zone.innerHTML = `<!-- CONTRAT 2 - ROULOTTE -->
+            <div class="document-reel">
+                <img src="images/Logo.png" alt="Logo association" class="logo-coin">
+                <div class="contenu-avec-logo">
+                    <div class="header-contrat">
+                        <div class="contrat-badge">✦ CONTRAT ✦</div>
+                        <div>
+                            <span id="titreSpectacle2" class="titre-spectacle relative" onclick="toggleTitreDropdown(2)">DU COUP on revient chez vous</span>
+                            <div id="dropdownTitre2" class="dropdown-titre" style="display:none;">
+                                ${titresPossibles.map(t => `<a onclick="changerTitre('${t.replace(/'/g, "\\'")}', 2)">${t}</a>`).join('')}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat2);">
+                        <p><strong>ENTRE LES SOUSSIGNÉS</strong></p>
+                        <div class="doc-ligne"><span class="doc-label">Organisateur :</span> <div class="doc-champ" contenteditable="true" placeholder="Nom, prénom"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Adresse :</span> <div class="doc-champ" contenteditable="true" placeholder="Numéro, rue, code postal"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Téléphone :</span> <div class="doc-champ" contenteditable="true" placeholder="06 XX XX XX XX"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Email :</span> <div class="doc-champ" contenteditable="true" placeholder="exemple@email.com"></div></div>
+                        <div class="doc-ligne"><span class="doc-label">Qualité :</span> <div class="doc-champ" contenteditable="true" placeholder="Président, trésorier..."></div></div>
+                    </div>
+                    <div class="artiste-ligne">
+                        <strong>Artiste :</strong> <span id="artisteNom2" style="font-weight:500;">À définir</span>
+                    </div>
+                    <div class="texte-fixe">
+                        Thomas FABRE, responsable du spectacle « <select id="selectSpectacle2" class="select-style">${optionsTitres}</select> » produit par l'Association CAPIS qui règlera les charges sociales et fiscales des artistes.
+                    </div>
+                    <div class="texte-fixe">
+                        <strong>D'autre part.</strong>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat2);">
+                        <p class="titre-achat"><strong>L'ORGANISATEUR fait l'achat du spectacle « <select id="selectSpectacle2_bis" class="select-style">${optionsTitres}</select> » présenté par <select id="selectArtistes2" class="select-style">${optionsArtistes}</select> artistes avec nos roulottes et son espace scénique :</strong></p>
+                    </div>
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat2);">
+                        <p><strong>Lieu de la représentation :</strong> <span class="doc-champ" contenteditable="true" placeholder="à remplir" style="display: inline-block; min-width: 250px;"></span></p>
+                    </div>
+                    ${article1HTML}
+                    ${conditionsFinancieresHTML}
+                    <div class="doc-section" style="border-left-color: var(--couleur-contrat2);">
+                        <p><strong>CONDITIONS TECHNIQUES</strong></p>
+                        <div class="texte-fixe conditions-techniques">Emplacement plat de 15m par 20m, prise 16A.</div>
+                    </div>
+                    ${conditionsParticulieresRoulotte}
+                    <div class="doc-ligne"><span class="doc-label">Fait à :</span> <div class="doc-champ" contenteditable="true" placeholder="Ville"></div> <span class="doc-label">le :</span> <div class="doc-champ" contenteditable="true" placeholder="Date"></div></div>
+                    <div class="signature-container">
+                        <div class="signature-box"><h4>Signature Organisateur</h4><canvas id="sig2_org" width="400" height="150"></canvas><div class="sign-actions"><button class="sign-btn" onclick="clearSignature('sig2_org')">Effacer</button></div></div>
+                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="image/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
+                    </div>
+                    <div class="validation-block">
+                        <div class="checkbox-line" onclick="toggleCheckbox(2)"><input type="checkbox" id="check2"><label>LU ET APPROUVÉ – J'accepte les conditions.</label></div>
+                        <div class="legal-mention" style="border-left-color: var(--couleur-contrat2);">Signature + case cochée valent acceptation électronique (art. 1366 Code civil).</div>
+                        <div class="timestamp" id="ts2">Horodatage : --/--/---- --:--</div>
+                    </div>
+                    <hr>
+                    <div class="infos-legales">
+                        Productions Récré Magic de l'Association CAPIS enregistré sous le n° 4464 le 27/05/1987 Préfecture d'Albi<br>
+                        140, chemin du Dévez - 81400 - LABASTIDE GABAUSSE - Licence de spectacle - L-R-25-1318<br>
+                        Siret 382 713 766 00014 - APE 9001 Z - N° URSSAF 810 12457 1 - Centre de Recouvrement 80000 10855 TP 02<br>
+                        AUDIENS 355 320 0200 - Congés Spectacle 674 94 001 U - TVA intracommunautaire FR 34 713 766 – www.recremagic.com
+                    </div>
+                </div>
+            </div>
+            <button class="btn-save" id="saveBtn">💾 Valider et sauvegarder le contrat</button>`;
+            
+            setTimeout(() => {
+                const select1 = document.getElementById('selectSpectacle2');
+                const select1bis = document.getElementById('selectSpectacle2_bis');
+                if (select1 && select1bis) {
+                    select1.addEventListener('change', () => { if(select1.value) select1bis.value = select1.value; });
+                    select1bis.addEventListener('change', () => { if(select1bis.value) select1.value = select1bis.value; });
+                }
+                initSignatureCanvas('sig2_org');
+            }, 50);
+        }
+        
+        setTimeout(() => {
+            const saveBtn = document.getElementById('saveBtn');
+            if (saveBtn) {
+                saveBtn.onclick = () => {
+                    if (num === 1 && !document.getElementById('check1')?.checked) { 
+                        afficherMessage('❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider', 'erreur');
+                        return; 
+                    }
+                    if (num === 2 && !document.getElementById('check2')?.checked) { 
+                        afficherMessage('❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider', 'erreur');
+                        return; 
+                    }
+                    
+                    sauvegarderToutesSignatures(num);
+                    const donneesFacture = sauvegarderDonneesPourFacture(num);
+                    
+                    afficherMessage(`✅ Contrat ${num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE'} validé ! Les données ont été sauvegardées pour la facture.`);
+                };
+            }
+        }, 150);
+        
+        document.getElementById("contratDropdown").classList.remove('show');
+    }
+</script>
+</body>
+</html>

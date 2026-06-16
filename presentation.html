@@ -1,0 +1,1252 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Présentation - Récré Magic</title>
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/fr.js"></script>
+    <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+            --fond-overlay: rgba(0, 0, 0, 0.55);
+            --couleur-contrat1: #1e0e49;
+            --couleur-contrat2: #2c6e2c;
+            --fond-carte: rgba(245, 235, 215, 0.96);
+            --fond-tableau: rgba(255, 250, 235, 0.9);
+            --bordure-tableau: #7a5c3e;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.webp');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+            padding: 2rem;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--fond-overlay);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 1000px;
+            width: 90%;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 2rem;
+        }
+
+        .carte-magique {
+            background: var(--fond-carte);
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3);
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-bottom: 1rem;
+            color: #5a4a3a;
+            text-decoration: none;
+            font-weight: 600;
+            transition: 0.2s;
+        }
+        .back-link:hover {
+            color: #1e0e49;
+            transform: translateX(-4px);
+        }
+
+        /* ===== LOGO À GAUCHE ===== */
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        .logo-header {
+            flex-shrink: 0;
+        }
+        .logo-header img {
+            max-width: 120px;
+            height: auto;
+            border-radius: 16px;
+            border: 3px solid #7a5c3e;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        .header-presentation {
+            text-align: center;
+            flex: 1;
+        }
+        .header-presentation .badge {
+            font-size: 1rem;
+            font-weight: bold;
+            letter-spacing: 3px;
+            background: #1e0e49;
+            display: inline-block;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            color: white;
+            margin-bottom: 10px;
+        }
+        .header-presentation h1 {
+            font-family: 'Fredoka', cursive;
+            font-size: 2.5rem;
+            color: #2C1810;
+            font-weight: 700;
+        }
+
+        .devis-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+        }
+
+        /* ===== GRAND CADRE DE TEXTE POUR LA DESCRIPTION ===== */
+        .description-spectacles textarea {
+            width: 100%;
+            min-height: 150px;
+            padding: 0.8rem 1rem;
+            border: 2px solid #c4a882;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            background: var(--fond-tableau);
+            transition: 0.2s;
+            resize: vertical;
+            color: #2C1810;
+            line-height: 1.6;
+        }
+        .description-spectacles textarea:focus {
+            outline: none;
+            border-color: #7CB69F;
+            box-shadow: 0 0 0 3px rgba(124,182,159,0.2);
+        }
+        .description-spectacles textarea::placeholder {
+            color: #b0a088;
+            font-style: italic;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.2rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .form-group label {
+            font-weight: 600;
+            color: #2C1810;
+            font-size: 0.85rem;
+            margin-bottom: 0.4rem;
+        }
+        .form-group label .obligatoire {
+            color: #c62828;
+            font-weight: 700;
+        }
+        .form-group input,
+        .form-group select,
+        .form-group textarea {
+            width: 100%;
+            padding: 0.7rem 1rem;
+            border: 1.5px solid #c4a882;
+            border-radius: 12px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            background: var(--fond-tableau);
+            transition: 0.2s;
+            color: #2C1810;
+        }
+        .form-group input:focus,
+        .form-group select:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #7CB69F;
+            box-shadow: 0 0 0 3px rgba(124,182,159,0.2);
+        }
+        .form-group input.error,
+        .form-group select.error,
+        .form-group textarea.error {
+            border-color: #c62828;
+            box-shadow: 0 0 0 3px rgba(198,40,40,0.15);
+        }
+
+        /* ===== BLOC SPECTACLE + NOMBRE D'ARTISTES ===== */
+        .spectacle-selector {
+            background: var(--fond-tableau);
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 2px solid #c4a882;
+        }
+        .spectacle-selector label {
+            font-weight: 700;
+            color: #2C1810;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .spectacle-selector select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #c4a882;
+            border-radius: 12px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2C1810;
+        }
+        .spectacle-selector select:focus {
+            outline: none;
+            border-color: #1e0e49;
+            box-shadow: 0 0 0 3px rgba(30,14,73,0.15);
+        }
+        .spectacle-selector select.error {
+            border-color: #c62828;
+            box-shadow: 0 0 0 3px rgba(198,40,40,0.15);
+        }
+
+        /* ===== LIEN YOUTUBE ===== */
+        .youtube-link-container {
+            display: none;
+            margin-top: 0.6rem;
+            padding: 0.6rem 1rem;
+            background: var(--fond-tableau);
+            border-radius: 12px;
+            border-left: 4px solid #FF0000;
+            animation: fadeIn 0.3s ease;
+        }
+        .youtube-link-container.active {
+            display: block;
+        }
+        .youtube-link-container a {
+            color: #FF0000;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.2s;
+        }
+        .youtube-link-container a:hover {
+            color: #cc0000;
+            text-decoration: underline;
+        }
+        .youtube-link-container a i {
+            font-size: 1.4rem;
+        }
+
+        /* ===== IMAGE DU SPECTACLE ===== */
+        .spectacle-image-container {
+            display: none;
+            margin-top: 0.6rem;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #c4a882;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+            animation: fadeIn 0.4s ease;
+            background: white;
+        }
+        .spectacle-image-container.active {
+            display: block;
+        }
+        .spectacle-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ===== PETIT SÉLECTEUR NOMBRE D'ARTISTES ===== */
+        .artistes-selector {
+            margin-top: 0.8rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            flex-wrap: wrap;
+            background: var(--fond-tableau);
+            padding: 0.6rem 1rem;
+            border-radius: 12px;
+            border: 1px solid #d4b48c;
+        }
+        .artistes-selector label {
+            font-weight: 600;
+            color: #5a3e2a;
+            font-size: 0.85rem;
+            margin-bottom: 0;
+            white-space: nowrap;
+        }
+        .artistes-selector select {
+            padding: 0.4rem 0.8rem;
+            border: 1.5px solid #c4a882;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.9rem;
+            font-weight: 600;
+            background: white;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2C1810;
+            min-width: 70px;
+        }
+        .artistes-selector select:focus {
+            outline: none;
+            border-color: #7CB69F;
+            box-shadow: 0 0 0 3px rgba(124,182,159,0.2);
+        }
+        .artistes-selector .icone-artiste {
+            font-size: 1.2rem;
+            margin-right: 4px;
+        }
+
+        .checkbox-group {
+            margin: 0.2rem 0;
+        }
+        .checkbox-group label {
+            font-weight: 600;
+            color: #2C1810;
+            font-size: 0.85rem;
+            margin-bottom: 0.5rem;
+            display: block;
+        }
+        .checkbox-options {
+            display: flex;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        .checkbox-option {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            font-size: 0.9rem;
+            background: var(--fond-tableau);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            border: 1px solid #c4a882;
+            transition: 0.2s;
+        }
+        .checkbox-option:hover {
+            background: rgba(124,182,159,0.15);
+            border-color: #7CB69F;
+        }
+        .checkbox-option input {
+            width: 18px;
+            height: 18px;
+            accent-color: #7CB69F;
+        }
+
+        /* ===== CONDITIONS TECHNIQUES ===== */
+        .conditions-techniques {
+            display: none;
+            margin-top: 0.5rem;
+            padding: 1rem 1.2rem;
+            background: var(--fond-tableau);
+            border-radius: 12px;
+            border-left: 4px solid #1e0e49;
+            font-size: 0.9rem;
+            color: #2C1810;
+            line-height: 1.5;
+            transition: 0.3s;
+        }
+        .conditions-techniques.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+        .conditions-techniques i {
+            color: #1e0e49;
+            margin-right: 8px;
+        }
+        .conditions-techniques .titre-cond {
+            font-weight: 700;
+            color: #1e0e49;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* ===== CONDITIONS FINANCIÈRES ===== */
+        .conditions-financieres {
+            background: var(--fond-tableau);
+            padding: 1.2rem;
+            border-radius: 16px;
+            border: 2px solid #c4a882;
+        }
+        .conditions-financieres label {
+            font-weight: 700;
+            color: #2C1810;
+            font-size: 1rem;
+            display: block;
+            margin-bottom: 0.8rem;
+        }
+        .conditions-financieres label i {
+            color: #1e0e49;
+            margin-right: 6px;
+        }
+        .financieres-ligne {
+            display: flex;
+            align-items: center;
+            gap: 0.8rem;
+            margin-bottom: 0.8rem;
+            flex-wrap: wrap;
+        }
+        .financieres-ligne .label {
+            font-weight: 600;
+            color: #5a3e2a;
+            min-width: 150px;
+            font-size: 0.85rem;
+        }
+        .financieres-ligne input {
+            flex: 1;
+            min-width: 120px;
+            padding: 0.6rem 0.8rem;
+            border: 1.5px solid #c4a882;
+            border-radius: 10px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 0.85rem;
+            background: var(--fond-tableau);
+            transition: 0.2s;
+            color: #2C1810;
+        }
+        .financieres-ligne input:focus {
+            outline: none;
+            border-color: #7CB69F;
+            box-shadow: 0 0 0 3px rgba(124,182,159,0.2);
+        }
+        .financieres-ligne input::placeholder {
+            color: #b0a088;
+            font-style: italic;
+        }
+        .financieres-ligne input:read-only {
+            background: rgba(240,235,225,0.6);
+        }
+        .financieres-ligne .unite {
+            font-weight: 600;
+            color: #5a3e2a;
+            font-size: 0.85rem;
+        }
+
+        /* Zone extra pour DU COUP */
+        .extra-section {
+            display: none;
+            margin-top: 0.5rem;
+            margin-bottom: 0.5rem;
+            padding: 1rem;
+            background: var(--fond-tableau);
+            border-radius: 16px;
+            border: 1px solid #d4b48c;
+        }
+        .extra-section label {
+            font-weight: 600;
+            color: #2C1810;
+            font-size: 0.85rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+
+        .btn-submit {
+            width: 100%;
+            background: linear-gradient(135deg, #1e0e49, #2d1a66);
+            color: white;
+            padding: 1rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 0.5rem;
+            letter-spacing: 1px;
+        }
+        .btn-submit:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(30,14,73,0.3);
+        }
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        .btn-secondary {
+            background: rgba(124,182,159,0.3);
+            color: #1e0e49;
+            border: 2px solid #7CB69F;
+            padding: 0.6rem 1.2rem;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .btn-secondary:hover {
+            background: #7CB69F;
+            color: white;
+        }
+
+        .confirmation-message {
+            display: none;
+            text-align: center;
+            margin-top: 1rem;
+            padding: 1rem;
+            border-radius: 16px;
+            font-weight: 600;
+        }
+
+        /* Modal d'aperçu */
+        .modal-apercu {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.7);
+            z-index: 999;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            padding: 2rem;
+        }
+        .modal-apercu.active {
+            display: flex;
+        }
+        .modal-content {
+            background: #fffef7;
+            border-radius: 30px;
+            padding: 2.5rem;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+            border: 3px solid #7a5c3e;
+            box-shadow: 0 0 0 5px #5a3e2a, 0 20px 40px rgba(0,0,0,0.4);
+        }
+        .modal-content .close-modal {
+            position: absolute;
+            top: 1rem;
+            right: 1.5rem;
+            font-size: 1.8rem;
+            cursor: pointer;
+            color: #5a4a3a;
+            background: none;
+            border: none;
+            transition: 0.2s;
+        }
+        .modal-content .close-modal:hover {
+            color: #1e0e49;
+            transform: rotate(90deg);
+        }
+        .modal-content h2 {
+            font-family: 'Fredoka', cursive;
+            color: #1e0e49;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+        .modal-content .recap-item {
+            display: flex;
+            padding: 0.6rem 0;
+            border-bottom: 1px solid #eee6dc;
+            font-size: 0.9rem;
+        }
+        .modal-content .recap-item .label {
+            font-weight: 700;
+            min-width: 140px;
+            color: #5a3e2a;
+        }
+        .modal-content .recap-item .value {
+            color: #2C1810;
+        }
+        .modal-actions {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .modal-actions button {
+            padding: 0.7rem 2rem;
+            border: none;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .modal-actions .btn-confirmer {
+            background: linear-gradient(135deg, #1e0e49, #2d1a66);
+            color: white;
+        }
+        .modal-actions .btn-confirmer:hover {
+            transform: scale(1.05);
+        }
+        .modal-actions .btn-modifier {
+            background: #e8dccc;
+            color: #2C1810;
+        }
+        .modal-actions .btn-modifier:hover {
+            background: #d4c4b0;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .carte-magique { padding: 1.2rem; border-radius: 40px; }
+            .form-row { grid-template-columns: 1fr; }
+            .checkbox-options { flex-direction: column; gap: 0.5rem; }
+            .header-presentation h1 { font-size: 1.8rem; }
+            .modal-content { padding: 1.5rem; }
+            .modal-content .recap-item { flex-direction: column; gap: 0.2rem; }
+            .modal-content .recap-item .label { min-width: auto; }
+            .description-spectacles textarea { min-height: 120px; }
+            .financieres-ligne { flex-direction: column; align-items: stretch; gap: 0.3rem; }
+            .financieres-ligne .label { min-width: auto; }
+            .artistes-selector { flex-direction: column; align-items: stretch; }
+            .header-top { flex-direction: column; align-items: center; }
+            .logo-header img { max-width: 100px; }
+        }
+
+        @media (max-width: 480px) {
+            .carte-magique { padding: 1rem; border-radius: 30px; }
+            .header-presentation h1 { font-size: 1.5rem; }
+            .btn-submit { font-size: 0.9rem; padding: 0.8rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="carte-magique">
+
+        <!-- ===== LIEN RETOUR ===== -->
+        <a href="contrat.html" class="back-link"><i class="fas fa-arrow-left"></i> Retour aux contrats</a>
+
+        <!-- ===== HEADER AVEC LOGO À GAUCHE ===== -->
+        <div class="header-top">
+            <div class="logo-header">
+                <img src="images/Logo.png" alt="Récré Magic" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'font-size:2.5rem; color:#1e0e49;\'>🎪</div>';">
+            </div>
+            <div class="header-presentation">
+                <div class="badge">✦ RÉCRÉ MAGIC ✦</div>
+                <h1>🎪 Présentation</h1>
+            </div>
+        </div>
+
+        <form id="devisForm" class="devis-form">
+
+            <!-- ===== 1. DESCRIPTION DU PROJET ===== -->
+            <div class="description-spectacles">
+                <textarea id="descriptionSpectacles" placeholder="Décrivez votre projet, le nombre d'artistes, les animations envisagées..."></textarea>
+            </div>
+
+            <!-- ===== 2. CHOISISSEZ LE SPECTACLE + NOMBRE D'ARTISTES ===== -->
+            <div class="spectacle-selector">
+                <label for="spectacleSelect">🎭 Choisissez le spectacle <span class="obligatoire">*</span></label>
+                <select id="spectacleSelect" required>
+                    <option value="">-- Sélectionnez un spectacle --</option>
+                    <option value="DU COUP ON VIENT CHEZ VOUS">DU COUP ON VIENT CHEZ VOUS</option>
+                    <option value="DU COUP on revient chez vous">DU COUP on revient chez vous</option>
+                    <option value="COMME SUR DES ROULETTES">COMME SUR DES ROULETTES</option>
+                    <option value="DÉLICIEUSEMENT MABOUL">DÉLICIEUSEMENT MABOUL</option>
+                </select>
+
+                <!-- ===== LIEN YOUTUBE ===== -->
+                <div id="youtubeLink" class="youtube-link-container">
+                    <a href="#" target="_blank" id="youtubeLinkAnchor">
+                        <i class="fab fa-youtube"></i>
+                        <span id="youtubeLinkText">Voir la vidéo de présentation</span>
+                    </a>
+                </div>
+
+                <!-- ===== IMAGE DU SPECTACLE ===== -->
+                <div id="spectacleImage" class="spectacle-image-container">
+                    <img id="spectacleImageElement" src="" alt="Image du spectacle">
+                </div>
+
+                <div class="artistes-selector">
+                    <label><span class="icone-artiste">🎭</span> Nombre d'artistes :</label>
+                    <select id="nbArtistes">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3" selected>3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Coordonnées -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Nom / Prénom <span class="obligatoire">*</span></label>
+                    <input type="text" id="nom" required>
+                </div>
+                <div class="form-group">
+                    <label>Structure / Association</label>
+                    <input type="text" id="structure">
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group">
+                    <label>Email <span class="obligatoire">*</span></label>
+                    <input type="email" id="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Téléphone</label>
+                    <input type="tel" id="telephone">
+                </div>
+            </div>
+
+            <!-- Lieu -->
+            <div class="checkbox-group">
+                <label>📍 Lieu de la représentation</label>
+                <div class="checkbox-options">
+                    <label class="checkbox-option" id="lieuInterieur">
+                        <input type="checkbox" name="lieu" value="Intérieur" id="checkInterieur">
+                        <span>🏠 Intérieur</span>
+                    </label>
+                    <label class="checkbox-option" id="lieuExterieur">
+                        <input type="checkbox" name="lieu" value="Extérieur" id="checkExterieur">
+                        <span>🌳 Extérieur</span>
+                    </label>
+                </div>
+            </div>
+
+            <!-- ===== CONDITIONS TECHNIQUES ===== -->
+            <div id="conditionsInterieur" class="conditions-techniques">
+                <span class="titre-cond"><i class="fas fa-stage"></i> Conditions techniques - Intérieur</span>
+                Sur votre scène ou podium de 6 mètres de façade sur 5 mètres de profondeur minimum. Une prise de 16 A.
+            </div>
+
+            <div id="conditionsExterieur" class="conditions-techniques">
+                <span class="titre-cond"><i class="fas fa-tree"></i> Conditions techniques - Extérieur</span>
+                Emplacement plat de 15m par 20m, prise 16A.
+            </div>
+
+            <!-- Type d'événement -->
+            <div class="form-group">
+                <label>Type d'événement</label>
+                <select id="typeEvenement">
+                    <option value="">Sélectionnez...</option>
+                    <option>Fête de village / Fête de quartier</option>
+                    <option>Festival</option>
+                    <option>Médiathèque / Bibliothèque</option>
+                    <option>École / Centre de loisirs</option>
+                    <option>Centre commercial</option>
+                    <option>Anniversaire / Événement privé</option>
+                    <option>Autre</option>
+                </select>
+            </div>
+
+            <!-- ===== CONDITIONS FINANCIÈRES ===== -->
+            <div class="conditions-financieres">
+                <label><i class="fas fa-euro-sign"></i> Conditions financières</label>
+                
+                <div class="financieres-ligne">
+                    <span class="label">Montant HT :</span>
+                    <input type="text" id="montantHT" placeholder="0,00">
+                    <span class="unite">€</span>
+                </div>
+                
+                <div class="financieres-ligne">
+                    <span class="label">TVA 5,5% :</span>
+                    <input type="text" id="montantTVA" placeholder="0,00" readonly>
+                    <span class="unite">€</span>
+                </div>
+                
+                <div class="financieres-ligne">
+                    <span class="label">Total TTC :</span>
+                    <input type="text" id="montantTTC" placeholder="0,00" readonly>
+                    <span class="unite">€</span>
+                </div>
+                
+                <div class="financieres-ligne">
+                    <span class="label">Mode de règlement :</span>
+                    <input type="text" id="modeReglement" placeholder="Chèque, virement">
+                </div>
+            </div>
+
+            <!-- Date et lieu -->
+            <div class="form-row">
+                <div class="form-group">
+                    <label>📅 Date souhaitée</label>
+                    <input type="text" id="dateSpectacle" autocomplete="off" placeholder="Choisir une date">
+                </div>
+                <div class="form-group">
+                    <label>📍 Code postal / Ville</label>
+                    <input type="text" id="lieuSpectacle" placeholder="Ex: 81000 Albi">
+                </div>
+            </div>
+
+            <!-- Formulaire pour DU COUP (roulotte/scène) -->
+            <div id="extraFormuleDucoup" class="extra-section">
+                <label>🚐 Formule pour DU COUP :</label>
+                <div class="checkbox-options">
+                    <label class="checkbox-option"><input type="checkbox" name="formuleDucoup" value="Avec roulottes"><span>🏚️ Roulotte</span></label>
+                    <label class="checkbox-option"><input type="checkbox" name="formuleDucoup" value="Avec votre scène"><span>🎤 Scène</span></label>
+                </div>
+            </div>
+
+            <!-- Message -->
+            <div class="form-group">
+                <label>Message / Informations complémentaires</label>
+                <textarea id="message" rows="3" placeholder="Précisez vos besoins, horaires, contraintes spécifiques..."></textarea>
+            </div>
+
+            <div style="display:flex; gap:1rem; flex-wrap:wrap;">
+                <button type="button" class="btn-secondary" id="btnApercu"><i class="fas fa-eye"></i> Aperçu de la présentation</button>
+                <button type="submit" class="btn-submit" id="submitBtn" style="flex:1;">📩 Envoyer la présentation</button>
+            </div>
+
+            <div id="confirmationMsg" class="confirmation-message"></div>
+        </form>
+    </div>
+</div>
+
+<!-- ===== MODAL D'APERÇU ===== -->
+<div id="modalApercu" class="modal-apercu">
+    <div class="modal-content">
+        <button class="close-modal" onclick="fermerApercu()"><i class="fas fa-times"></i></button>
+        <h2>📋 Aperçu de votre présentation</h2>
+        <div id="recapContent"></div>
+        <div class="modal-actions">
+            <button class="btn-modifier" onclick="fermerApercu()"><i class="fas fa-edit"></i> Modifier</button>
+            <button class="btn-confirmer" id="btnConfirmerEnvoi"><i class="fas fa-check"></i> Confirmer l'envoi</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    var SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    var SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    var supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    // ===== LIENS YOUTUBE PAR SPECTACLE =====
+    var youtubeLinks = {
+        "DU COUP ON VIENT CHEZ VOUS": {
+            url: "https://www.youtube.com/watch?v=HNhvls_XnRg&t=3s",
+            text: "Voir la vidéo : DU COUP on vient chez vous"
+        },
+        "DU COUP on revient chez vous": {
+            url: "https://www.youtube.com/watch?v=Ocu-1LbdWts",
+            text: "Voir la vidéo : DU COUP on revient chez vous"
+        },
+        "COMME SUR DES ROULETTES": {
+            url: "https://www.youtube.com/watch?v=Xje7iAlDU_8",
+            text: "Voir la vidéo : Comme sur des roulettes"
+        },
+        "DÉLICIEUSEMENT MABOUL": {
+            url: "https://www.youtube.com/watch?v=bhx0xnXulVg",
+            text: "Voir la vidéo : Délicieusement Maboul"
+        }
+    };
+
+    // ===== IMAGES PAR SPECTACLE =====
+    var spectacleImages = {
+        "DU COUP on revient chez vous": "on-revien.png",
+        "DÉLICIEUSEMENT MABOUL": "delicieusement.png",
+        "COMME SUR DES ROULETTES": "comme.png"
+    };
+
+    // ===== AFFICHAGE DU LIEN YOUTUBE ET DE L'IMAGE =====
+    function afficherContenuSpectacle() {
+        var select = document.getElementById('spectacleSelect');
+        var selectedValue = select.value;
+
+        // --- Gestion du lien YouTube ---
+        var youtubeContainer = document.getElementById('youtubeLink');
+        var anchor = document.getElementById('youtubeLinkAnchor');
+        var textSpan = document.getElementById('youtubeLinkText');
+
+        if (selectedValue && youtubeLinks[selectedValue]) {
+            anchor.href = youtubeLinks[selectedValue].url;
+            textSpan.textContent = youtubeLinks[selectedValue].text;
+            youtubeContainer.classList.add('active');
+        } else {
+            youtubeContainer.classList.remove('active');
+        }
+
+        // --- Gestion de l'image ---
+        var imageContainer = document.getElementById('spectacleImage');
+        var imageElement = document.getElementById('spectacleImageElement');
+
+        if (selectedValue && spectacleImages[selectedValue]) {
+            imageElement.src = 'image/' + spectacleImages[selectedValue];
+            imageElement.alt = 'Image du spectacle ' + selectedValue;
+            imageContainer.classList.add('active');
+        } else {
+            imageContainer.classList.remove('active');
+        }
+    }
+
+    // Événement sur le select
+    document.getElementById('spectacleSelect').addEventListener('change', function() {
+        afficherContenuSpectacle();
+        
+        // Gestion de la formule DU COUP
+        var val = this.value;
+        var extra = document.getElementById('extraFormuleDucoup');
+        if (val === 'DU COUP ON VIENT CHEZ VOUS' || val === 'DU COUP on revient chez vous') {
+            extra.style.display = 'block';
+        } else {
+            extra.style.display = 'none';
+        }
+    });
+
+    // ===== CALCUL AUTOMATIQUE TVA / TTC =====
+    function calculerMontants() {
+        var htInput = document.getElementById('montantHT');
+        var tvaInput = document.getElementById('montantTVA');
+        var ttcInput = document.getElementById('montantTTC');
+        
+        var ht = parseFloat(htInput.value.replace(',', '.'));
+        if (isNaN(ht) || ht < 0) ht = 0;
+        
+        var tva = ht * 0.055;
+        var ttc = ht + tva;
+        
+        tvaInput.value = tva.toFixed(2);
+        ttcInput.value = ttc.toFixed(2);
+    }
+
+    document.getElementById('montantHT').addEventListener('input', calculerMontants);
+
+    // ===== GESTION DES CONDITIONS TECHNIQUES =====
+    function gererConditions() {
+        var interieur = document.getElementById('checkInterieur');
+        var exterieur = document.getElementById('checkExterieur');
+        var condInt = document.getElementById('conditionsInterieur');
+        var condExt = document.getElementById('conditionsExterieur');
+
+        if (interieur.checked) {
+            condInt.classList.add('active');
+        } else {
+            condInt.classList.remove('active');
+        }
+
+        if (exterieur.checked) {
+            condExt.classList.add('active');
+        } else {
+            condExt.classList.remove('active');
+        }
+    }
+
+    document.getElementById('checkInterieur').addEventListener('change', gererConditions);
+    document.getElementById('checkExterieur').addEventListener('change', gererConditions);
+
+    // ===== INIT FLATPICKR =====
+    async function initFlatpickr() {
+        var TABLE_NAME = 'events';
+        var response = await supabaseClient.from(TABLE_NAME).select('*');
+        var allEvents = response.data || [];
+        var bloque3 = ["DU COUP ON VIENT CHEZ VOUS", "DU COUP on revient chez vous", "COMME SUR DES ROULETTES"];
+
+        flatpickr("#dateSpectacle", {
+            locale: "fr",
+            dateFormat: "Y-m-d",
+            disable: allEvents.filter(function(ev) {
+                return ev.type === 'Spectacle' && bloque3.includes(ev.titre);
+            }).map(function(ev) {
+                return ev.event_date;
+            })
+        });
+    }
+    initFlatpickr();
+
+    // ===== RÉCUPÉRATION DES DONNÉES =====
+    function getFormData() {
+        return {
+            spectacle: document.getElementById('spectacleSelect').value,
+            nbArtistes: document.getElementById('nbArtistes').value,
+            nom: document.getElementById('nom').value.trim(),
+            structure: document.getElementById('structure').value.trim(),
+            email: document.getElementById('email').value.trim(),
+            telephone: document.getElementById('telephone').value.trim(),
+            lieu: Array.from(document.querySelectorAll('input[name="lieu"]:checked')).map(function(cb) { return cb.value; }).join(', '),
+            typeEvenement: document.getElementById('typeEvenement').value,
+            dateSpectacle: document.getElementById('dateSpectacle').value,
+            lieuSpectacle: document.getElementById('lieuSpectacle').value.trim(),
+            formuleDucoup: Array.from(document.querySelectorAll('input[name="formuleDucoup"]:checked')).map(function(cb) { return cb.value; }).join(', '),
+            descriptionSpectacles: document.getElementById('descriptionSpectacles').value.trim(),
+            message: document.getElementById('message').value.trim(),
+            montantHT: document.getElementById('montantHT').value,
+            montantTVA: document.getElementById('montantTVA').value,
+            montantTTC: document.getElementById('montantTTC').value,
+            modeReglement: document.getElementById('modeReglement').value.trim()
+        };
+    }
+
+    // ===== VALIDATION =====
+    function validerFormulaire(data) {
+        var errors = [];
+        if (!data.nom) errors.push('Nom / Prénom');
+        if (!data.email) errors.push('Email');
+        if (!data.spectacle) errors.push('Spectacle');
+        
+        document.querySelectorAll('.form-group input, .form-group select, .spectacle-selector select').forEach(function(el) {
+            el.classList.remove('error');
+        });
+        if (!data.nom) document.getElementById('nom').classList.add('error');
+        if (!data.email) document.getElementById('email').classList.add('error');
+        if (!data.spectacle) document.getElementById('spectacleSelect').classList.add('error');
+        
+        return errors;
+    }
+
+    // ===== APERÇU =====
+    function afficherApercu() {
+        var data = getFormData();
+        var errors = validerFormulaire(data);
+        
+        if (errors.length > 0) {
+            var msg = document.getElementById('confirmationMsg');
+            msg.textContent = '❌ Veuillez remplir les champs obligatoires : ' + errors.join(', ');
+            msg.style.background = '#FFCDD2';
+            msg.style.color = '#C62828';
+            msg.style.display = 'block';
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        var recap = document.getElementById('recapContent');
+        
+        var condInt = document.getElementById('conditionsInterieur');
+        var condExt = document.getElementById('conditionsExterieur');
+        var conditionsTexte = '';
+        if (condInt.classList.contains('active')) {
+            conditionsTexte = 'Intérieur : ' + condInt.textContent.trim();
+        }
+        if (condExt.classList.contains('active')) {
+            if (conditionsTexte) conditionsTexte += ' | ';
+            conditionsTexte += 'Extérieur : ' + condExt.textContent.trim();
+        }
+        if (!conditionsTexte) conditionsTexte = 'Non précisé';
+
+        var items = [
+            { label: '📝 Description du projet', value: data.descriptionSpectacles || 'Non renseignée' },
+            { label: '🎭 Spectacle', value: data.spectacle || 'Non sélectionné' },
+            { label: '🎭 Nombre d\'artistes', value: data.nbArtistes || 'Non renseigné' },
+            { label: '👤 Demandeur', value: data.nom + (data.structure ? ' (' + data.structure + ')' : '') },
+            { label: '📧 Email', value: data.email || 'Non renseigné' },
+            { label: '📱 Téléphone', value: data.telephone || 'Non renseigné' },
+            { label: '📍 Lieu', value: data.lieu || 'Non précisé' },
+            { label: '🔧 Conditions techniques', value: conditionsTexte },
+            { label: '📋 Type d\'événement', value: data.typeEvenement || 'Non précisé' },
+            { label: '💰 Montant HT', value: data.montantHT + ' €' || 'Non renseigné' },
+            { label: '🧾 TVA 5.5%', value: data.montantTVA + ' €' || 'Non renseigné' },
+            { label: '💶 Total TTC', value: data.montantTTC + ' €' || 'Non renseigné' },
+            { label: '🏦 Mode de règlement', value: data.modeReglement || 'Non renseigné' },
+            { label: '📅 Date', value: data.dateSpectacle || 'À définir' },
+            { label: '📍 Ville', value: data.lieuSpectacle || 'Non précisée' },
+            { label: '🚐 Formule', value: data.formuleDucoup || 'Non applicable' },
+            { label: '💬 Message', value: data.message || 'Aucun' }
+        ];
+
+        recap.innerHTML = items.map(function(item) {
+            return '<div class="recap-item"><span class="label">' + item.label + '</span><span class="value">' + item.value + '</span></div>';
+        }).join('');
+
+        document.getElementById('modalApercu').classList.add('active');
+        document.body.style.overflow = 'hidden';
+    }
+
+    function fermerApercu() {
+        document.getElementById('modalApercu').classList.remove('active');
+        document.body.style.overflow = '';
+    }
+
+    document.getElementById('modalApercu').addEventListener('click', function(e) {
+        if (e.target === this) fermerApercu();
+    });
+
+    // ===== ENVOI =====
+    async function envoyerDevis() {
+        var data = getFormData();
+        var errors = validerFormulaire(data);
+        
+        if (errors.length > 0) {
+            var msg = document.getElementById('confirmationMsg');
+            msg.textContent = '❌ Veuillez remplir les champs obligatoires : ' + errors.join(', ');
+            msg.style.background = '#FFCDD2';
+            msg.style.color = '#C62828';
+            msg.style.display = 'block';
+            msg.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            return;
+        }
+
+        var btn = document.getElementById('submitBtn');
+        var msg = document.getElementById('confirmationMsg');
+        btn.disabled = true;
+        btn.textContent = '⏳ Envoi...';
+        msg.style.display = 'none';
+
+        try {
+            var response = await supabaseClient.functions.invoke('send-devis-email', { body: data });
+
+            if (response.error) {
+                throw new Error(response.error.message || 'Erreur inconnue');
+            }
+
+            msg.textContent = '✅ La présentation a bien été envoyée ! Vous recevrez un retour sous 48h.';
+            msg.style.background = '#d4edda';
+            msg.style.color = '#155724';
+            msg.style.display = 'block';
+            
+            sauvegarderHistorique(data);
+            
+            document.getElementById('devisForm').reset();
+            document.getElementById('extraFormuleDucoup').style.display = 'none';
+            document.getElementById('descriptionSpectacles').value = '';
+            document.getElementById('message').value = '';
+            document.getElementById('conditionsInterieur').classList.remove('active');
+            document.getElementById('conditionsExterieur').classList.remove('active');
+            document.getElementById('montantHT').value = '';
+            document.getElementById('montantTVA').value = '';
+            document.getElementById('montantTTC').value = '';
+            document.getElementById('modeReglement').value = '';
+            document.getElementById('nbArtistes').value = '3';
+            document.getElementById('youtubeLink').classList.remove('active');
+            document.getElementById('spectacleImage').classList.remove('active');
+            document.querySelectorAll('.form-group input, .form-group select, .spectacle-selector select').forEach(function(el) {
+                el.classList.remove('error');
+            });
+            
+            fermerApercu();
+
+        } catch (error) {
+            msg.textContent = '❌ Erreur lors de l\'envoi : ' + error.message;
+            msg.style.background = '#FFCDD2';
+            msg.style.color = '#C62828';
+            msg.style.display = 'block';
+        }
+
+        btn.disabled = false;
+        btn.textContent = '📩 Envoyer la présentation';
+    }
+
+    function sauvegarderHistorique(data) {
+        var historique = JSON.parse(localStorage.getItem('historiqueDemandes') || '[]');
+        historique.push({
+            id: Date.now(),
+            date: new Date().toLocaleString('fr-FR'),
+            spectacle: data.spectacle,
+            nbArtistes: data.nbArtistes,
+            nom: data.nom,
+            email: data.email,
+            statut: 'Envoyé'
+        });
+        localStorage.setItem('historiqueDemandes', JSON.stringify(historique));
+    }
+
+    // ===== ÉVÉNEMENTS =====
+    document.getElementById('devisForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        envoyerDevis();
+    });
+
+    document.getElementById('btnApercu').addEventListener('click', afficherApercu);
+    document.getElementById('btnConfirmerEnvoi').addEventListener('click', function() {
+        envoyerDevis();
+    });
+
+    // ===== AUTO-REMPLISSAGE =====
+    document.addEventListener('DOMContentLoaded', function() {
+        var contratData = localStorage.getItem('factureData');
+        if (contratData) {
+            try {
+                var data = JSON.parse(contratData);
+                if (data.spectacle) {
+                    var select = document.getElementById('spectacleSelect');
+                    for (var i = 0; i < select.options.length; i++) {
+                        if (select.options[i].value === data.spectacle) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    afficherContenuSpectacle();
+                    var event = new Event('change');
+                    select.dispatchEvent(event);
+                }
+                if (data.date) document.getElementById('dateSpectacle').value = data.date;
+                if (data.lieu) document.getElementById('lieuSpectacle').value = data.lieu;
+                if (data.organisateur && data.organisateur.nom) {
+                    document.getElementById('nom').value = data.organisateur.nom;
+                }
+                if (data.organisateur && data.organisateur.email) {
+                    document.getElementById('email').value = data.organisateur.email;
+                }
+                if (data.organisateur && data.organisateur.telephone) {
+                    document.getElementById('telephone').value = data.organisateur.telephone;
+                }
+                if (data.montantHT) {
+                    document.getElementById('montantHT').value = data.montantHT;
+                    calculerMontants();
+                }
+                if (data.nbArtistes) {
+                    document.getElementById('nbArtistes').value = data.nbArtistes;
+                }
+            } catch(e) {}
+        }
+    });
+</script>
+</body>
+</html>
