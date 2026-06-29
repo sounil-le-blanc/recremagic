@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Devis - Récré Magic</title>
     <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -142,7 +142,7 @@
     <div class="devis-form">
         <h1>🎪 Demande de devis 🎪</h1>
         <p class="subtitle">Remplissez ce formulaire, nous vous répondrons rapidement.</p>
-        <form id="devisForm">
+        <form id="devisForm" action="reception.html" method="POST">
             <div class="form-row">
                 <div class="form-group"><label>Nom / Prénom *</label><input type="text" id="nom" required></div>
                 <div class="form-group"><label>Structure</label><input type="text" id="structure"></div>
@@ -260,14 +260,17 @@
         flatpickr("#dateExpo", { locale: "fr", dateFormat: "Y-m-d", disable: allEvents.filter(function(ev) { return ev.type === 'Exposition'; }).map(function(ev) { return ev.event_date; }) });
     }
 
-    document.getElementById('devisForm').addEventListener('submit', async function(e) {
+    // ========== NOUVEAU CODE POUR LA REDIRECTION VERS reception.html ==========
+    document.getElementById('devisForm').addEventListener('submit', function(e) {
         e.preventDefault();
+        
         var btn = document.getElementById('submitBtn');
         var msg = document.getElementById('confirmationMsg');
         btn.disabled = true;
         btn.textContent = '⏳ Envoi...';
         msg.style.display = 'none';
 
+        // Récupérer les données du formulaire
         var formData = {
             nom: document.getElementById('nom').value,
             structure: document.getElementById('structure').value,
@@ -287,22 +290,27 @@
             message: document.getElementById('message').value
         };
 
-        var response = await supabaseClient.functions.invoke('send-devis-email', { body: formData });
-
-        if (response.error) {
-            msg.textContent = '❌ Erreur : ' + (response.error.message || 'Réessayez');
-            msg.style.background = '#FFCDD2'; msg.style.color = '#C62828'; msg.style.display = 'block';
-        } else {
-            msg.textContent = '✅ Votre demande a bien été envoyée !';
-            msg.style.background = '#d4edda'; msg.style.color = '#155724'; msg.style.display = 'block';
-            document.getElementById('devisForm').reset();
-            document.getElementById('extraDateSpectacle').style.display = 'none';
-            document.getElementById('extraDateMaboul').style.display = 'none';
-            document.getElementById('extraDateLieuExpo').style.display = 'none';
-            document.getElementById('extraFormuleDucoup').style.display = 'none';
-        }
-        btn.disabled = false;
-        btn.textContent = '📩 Envoyer ma demande';
+        // Envoyer l'email via Supabase Edge Function
+        supabaseClient.functions.invoke('send-devis-email', { body: formData })
+            .then(function(response) {
+                if (response.error) {
+                    console.error('Erreur Edge Function:', response.error);
+                } else {
+                    console.log('✅ Email envoyé avec succès');
+                }
+                
+                // Sauvegarder les données dans localStorage
+                localStorage.setItem('devisData', JSON.stringify(formData));
+                
+                // Rediriger vers reception.html
+                window.location.href = 'reception.html';
+            })
+            .catch(function(err) {
+                console.error('Erreur:', err);
+                // Même en cas d'erreur, on sauvegarde et on redirige
+                localStorage.setItem('devisData', JSON.stringify(formData));
+                window.location.href = 'reception.html';
+            });
     });
 
     initFlatpickr();

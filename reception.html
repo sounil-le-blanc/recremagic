@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Récré Magic</title>
+    <title>Tableau de bord des devis - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -11,11 +11,9 @@
             --rose-spectacle: #EC407A;
             --jaune-accent: #FFB300;
             --text-dark: #2C1810;
-            --text-light: #ffffff;
             --fond-overlay: rgba(0, 0, 0, 0.55);
             --fond-carte: rgba(245, 235, 215, 0.96);
             --fond-tableau: rgba(255, 250, 235, 0.9);
-            --bordure-tableau: #7a5c3e;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -50,54 +48,248 @@
         .app-wrapper {
             position: relative;
             z-index: 10;
-            max-width: 1000px;
-            width: 90%;
+            max-width: 900px;
+            width: 95%;
             margin: 0 auto;
-            display: flex;
-            flex-direction: column;
-            gap: 2rem;
         }
 
         .carte-magique {
             background: var(--fond-carte);
             backdrop-filter: blur(6px);
             border-radius: 60px;
-            padding: 4rem 2rem;
+            padding: 2rem;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
             box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3);
-            min-height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-align: center;
         }
 
-        .message-accueil {
+        h1 {
             font-family: 'MedievalSharp', cursive;
             font-size: 2.5rem;
             color: #2C1810;
-            margin-bottom: 1rem;
+            text-align: center;
+            margin-bottom: 0.5rem;
         }
 
         .sous-message {
-            font-size: 1.2rem;
+            text-align: center;
+            font-size: 1rem;
             color: #5a3e2a;
-            font-weight: 600;
+            margin-bottom: 2rem;
+        }
+
+        /* --- Vue liste --- */
+        #vue-liste .devis-item {
+            background: var(--fond-tableau);
+            border-radius: 16px;
+            padding: 1rem 1.5rem;
+            margin-bottom: 0.8rem;
+            border: 2px solid #c4a882;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #vue-liste .devis-item:hover {
+            transform: translateX(8px);
+            border-color: var(--vert-caravane);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        #vue-liste .devis-item .nom {
+            font-weight: 700;
+            color: #2C1810;
+            font-size: 1.1rem;
+        }
+
+        #vue-liste .devis-item .lieu {
+            color: #5a3e2a;
+            font-size: 0.95rem;
+        }
+
+        #vue-liste .devis-item .date {
+            color: #888;
+            font-size: 0.8rem;
+        }
+
+        #vue-liste .devis-item .arrow {
+            color: var(--vert-caravane);
+            font-size: 1.2rem;
+            transition: transform 0.3s;
+        }
+
+        #vue-liste .devis-item:hover .arrow {
+            transform: translateX(5px);
+        }
+
+        .aucun-devis {
+            text-align: center;
+            color: #b0a088;
+            font-style: italic;
+            padding: 2rem;
+            font-size: 1.1rem;
+        }
+
+        /* --- Vue détail --- */
+        #vue-detail {
+            display: none;
+        }
+
+        .devis-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--fond-tableau);
+            border-radius: 20px;
+            overflow: hidden;
+            border: 2px solid #c4a882;
+        }
+
+        .devis-table tr {
+            border-bottom: 1px solid #c4a882;
+        }
+
+        .devis-table tr:last-child {
+            border-bottom: none;
+        }
+
+        .devis-table td {
+            padding: 0.8rem 1rem;
+            font-size: 0.95rem;
+            color: #2C1810;
+        }
+
+        .devis-table .label {
+            font-weight: 700;
+            color: #5a3e2a;
+            width: 40%;
+            background: rgba(255,255,255,0.3);
+        }
+
+        .devis-table .value {
+            width: 60%;
+        }
+
+        .btn-retour-liste {
+            display: inline-block;
+            margin-bottom: 1.5rem;
+            padding: 0.6rem 1.5rem;
+            background: #5a3e2a;
+            color: white;
+            text-decoration: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .btn-retour-liste:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-back, .btn-print, .btn-email {
+            display: inline-block;
+            margin-top: 0.5rem;
+            padding: 0.6rem 1.5rem;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            text-decoration: none;
+        }
+
+        .btn-back {
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            color: white;
+        }
+
+        .btn-print {
+            background: #1e0e49;
+            color: white;
+        }
+
+        .btn-email {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .btn-back:hover, .btn-print:hover, .btn-email:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .actions-detail {
+            text-align: center;
+            margin-top: 1.5rem;
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .btn-supprimer-tout {
+            display: inline-block;
+            margin-top: 1.5rem;
+            margin-left: 1rem;
+            padding: 0.8rem 2rem;
+            background: #D32F2F;
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+        }
+
+        .btn-supprimer-tout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .actions-liste {
+            text-align: center;
+            margin-top: 1.5rem;
+        }
+
+        .badge-nouveau {
+            background: #D32F2F;
+            color: white;
+            font-size: 0.6rem;
+            font-weight: 700;
+            padding: 0.2rem 0.6rem;
+            border-radius: 20px;
+            margin-left: 0.5rem;
         }
 
         @media (max-width: 768px) {
             body { padding: 1rem; }
-            .carte-magique { padding: 2rem 1.5rem; border-radius: 40px; min-height: 300px; }
-            .message-accueil { font-size: 1.8rem; }
-            .sous-message { font-size: 1rem; }
+            .carte-magique { padding: 1.5rem; border-radius: 40px; }
+            h1 { font-size: 1.8rem; }
+            #vue-liste .devis-item { padding: 0.8rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+            #vue-liste .devis-item .nom { font-size: 1rem; }
+            #vue-liste .devis-item .lieu { font-size: 0.85rem; }
+            .devis-table td { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+            .devis-table .label { width: 35%; }
         }
 
         @media (max-width: 480px) {
-            .carte-magique { padding: 1.5rem 1rem; border-radius: 30px; min-height: 250px; }
-            .message-accueil { font-size: 1.4rem; }
-            .sous-message { font-size: 0.9rem; }
+            .carte-magique { padding: 1rem; border-radius: 30px; }
+            h1 { font-size: 1.4rem; }
+            #vue-liste .devis-item { flex-direction: column; align-items: flex-start; }
+            .devis-table td { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
+            .devis-table .label { width: 40%; }
+            .btn-back, .btn-print, .btn-email { display: block; width: 100%; text-align: center; }
+            .btn-print, .btn-email { margin-left: 0; }
+            .actions-detail { flex-direction: column; }
+            .btn-supprimer-tout { display: block; margin: 0.5rem auto; width: 100%; text-align: center; }
         }
     </style>
 </head>
@@ -105,12 +297,245 @@
 
 <div class="app-wrapper">
     <div class="carte-magique">
-        <div>
-            <div class="message-accueil">🎪 Merci !</div>
-            <div class="sous-message">Votre devis a bien été envoyé.</div>
+
+        <!-- ========== TITRE ========== -->
+        <h1 id="titrePrincipal">📋 Tableau de bord des devis</h1>
+        <p class="sous-message" id="sousMessage">Cliquez sur un devis pour voir tous les détails</p>
+
+        <!-- ========== VUE LISTE ========== -->
+        <div id="vue-liste">
+            <div id="listeDevis"></div>
+            <div class="actions-liste">
+                <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+                <button class="btn-supprimer-tout" onclick="supprimerTousLesDevis()">🗑️ Supprimer tous les devis</button>
+            </div>
         </div>
+
+        <!-- ========== VUE DÉTAIL ========== -->
+        <div id="vue-detail">
+            <button class="btn-retour-liste" onclick="afficherListe()">← Retour à la liste</button>
+            <table class="devis-table" id="devisTable">
+                <tr><td class="label">👤 Nom</td><td class="value" id="d_nom">—</td></tr>
+                <tr><td class="label">🏢 Structure</td><td class="value" id="d_structure">—</td></tr>
+                <tr><td class="label">📧 Email</td><td class="value" id="d_email">—</td></tr>
+                <tr><td class="label">📞 Téléphone</td><td class="value" id="d_telephone">—</td></tr>
+                <tr><td class="label">📍 Lieu</td><td class="value" id="d_lieu">—</td></tr>
+                <tr><td class="label">🎉 Type d'événement</td><td class="value" id="d_typeEvenement">—</td></tr>
+                <tr><td class="label">🎭 Spectacles</td><td class="value" id="d_spectacles">—</td></tr>
+                <tr><td class="label">🚐 Formule DU COUP</td><td class="value" id="d_formuleDucoup">—</td></tr>
+                <tr><td class="label">📅 Date spectacle</td><td class="value" id="d_dateSpectacle">—</td></tr>
+                <tr><td class="label">📍 Lieu spectacle</td><td class="value" id="d_lieuSpectacle">—</td></tr>
+                <tr><td class="label">📅 Date Maboul</td><td class="value" id="d_dateMaboul">—</td></tr>
+                <tr><td class="label">📍 Lieu Maboul</td><td class="value" id="d_lieuMaboul">—</td></tr>
+                <tr><td class="label">🖼️ Expositions</td><td class="value" id="d_expositions">—</td></tr>
+                <tr><td class="label">📅 Date Expo</td><td class="value" id="d_dateExpo">—</td></tr>
+                <tr><td class="label">📍 Lieu Expo</td><td class="value" id="d_lieuExpo">—</td></tr>
+                <tr><td class="label">💬 Message</td><td class="value" id="d_message">—</td></tr>
+            </table>
+            <div class="actions-detail">
+                <button class="btn-print" onclick="imprimer()">🖨️ Imprimer</button>
+                <button class="btn-email" onclick="envoyerEmail()">📧 Envoyer par email</button>
+                <button class="btn-back" onclick="supprimerDevis()">🗑️ Supprimer ce devis</button>
+            </div>
+        </div>
+
     </div>
 </div>
 
+<script>
+    // ========== GESTION DES DEVIS ==========
+    let devisListe = [];
+    let devisIndexActuel = -1;
+    let idModification = null;
+
+    // Charger les devis depuis localStorage
+    function chargerDevis() {
+        var data = localStorage.getItem('tousLesDevis');
+        if (data) {
+            try {
+                devisListe = JSON.parse(data);
+            } catch (e) {
+                devisListe = [];
+            }
+        } else {
+            // Migration depuis l'ancien système
+            var ancienData = localStorage.getItem('devisData');
+            if (ancienData) {
+                try {
+                    var ancienDevis = JSON.parse(ancienData);
+                    if (ancienDevis && ancienDevis.nom) {
+                        ancienDevis.id = Date.now();
+                        ancienDevis.dateCreation = new Date().toLocaleString('fr-FR');
+                        devisListe = [ancienDevis];
+                        sauvegarderDevis();
+                    }
+                } catch (e) {}
+            }
+        }
+        afficherListe();
+    }
+
+    function sauvegarderDevis() {
+        localStorage.setItem('tousLesDevis', JSON.stringify(devisListe));
+    }
+
+    // Ajouter un nouveau devis (appelé depuis Devis.html)
+    function ajouterDevis(donnees) {
+        var nouveauDevis = {
+            id: Date.now(),
+            dateCreation: new Date().toLocaleString('fr-FR'),
+            nom: donnees.nom || '',
+            structure: donnees.structure || '',
+            email: donnees.email || '',
+            telephone: donnees.telephone || '',
+            lieu: donnees.lieu || '',
+            typeEvenement: donnees.typeEvenement || '',
+            spectacles: donnees.spectacles || '',
+            formuleDucoup: donnees.formuleDucoup || '',
+            dateSpectacle: donnees.dateSpectacle || '',
+            lieuSpectacle: donnees.lieuSpectacle || '',
+            dateMaboul: donnees.dateMaboul || '',
+            lieuMaboul: donnees.lieuMaboul || '',
+            expositions: donnees.expositions || '',
+            dateExpo: donnees.dateExpo || '',
+            lieuExpo: donnees.lieuExpo || '',
+            message: donnees.message || ''
+        };
+        devisListe.unshift(nouveauDevis); // Ajouter en premier
+        sauvegarderDevis();
+        afficherListe();
+        return nouveauDevis;
+    }
+
+    // Afficher la liste des devis
+    function afficherListe() {
+        document.getElementById('vue-liste').style.display = 'block';
+        document.getElementById('vue-detail').style.display = 'none';
+        document.getElementById('titrePrincipal').textContent = '📋 Tableau de bord des devis';
+        document.getElementById('sousMessage').textContent = 'Cliquez sur un devis pour voir tous les détails';
+
+        var container = document.getElementById('listeDevis');
+        if (devisListe.length === 0) {
+            container.innerHTML = '<div class="aucun-devis">Aucun devis pour le moment.</div>';
+            return;
+        }
+
+        var html = '';
+        devisListe.forEach(function(devis, index) {
+            var nom = devis.nom || 'Nom inconnu';
+            var lieu = devis.lieu || 'Lieu non précisé';
+            var date = devis.dateCreation || 'Date inconnue';
+            var isNew = (Date.now() - devis.id) < 60000; // Moins d'une minute
+
+            html += `
+                <div class="devis-item" onclick="ouvrirDevis(${index})">
+                    <div>
+                        <span class="nom">${nom}</span>
+                        ${isNew ? '<span class="badge-nouveau">Nouveau</span>' : ''}
+                    </div>
+                    <div>
+                        <span class="lieu">📍 ${lieu}</span>
+                        <span class="date">📅 ${date}</span>
+                        <span class="arrow">→</span>
+                    </div>
+                </div>
+            `;
+        });
+        container.innerHTML = html;
+    }
+
+    // Ouvrir un devis en détail
+    function ouvrirDevis(index) {
+        devisIndexActuel = index;
+        var devis = devisListe[index];
+        if (!devis) return;
+
+        document.getElementById('vue-liste').style.display = 'none';
+        document.getElementById('vue-detail').style.display = 'block';
+        document.getElementById('titrePrincipal').textContent = '📄 Détail du devis';
+        document.getElementById('sousMessage').textContent = devis.nom || 'Devis';
+
+        document.getElementById('d_nom').textContent = devis.nom || '—';
+        document.getElementById('d_structure').textContent = devis.structure || '—';
+        document.getElementById('d_email').textContent = devis.email || '—';
+        document.getElementById('d_telephone').textContent = devis.telephone || '—';
+        document.getElementById('d_lieu').textContent = devis.lieu || '—';
+        document.getElementById('d_typeEvenement').textContent = devis.typeEvenement || '—';
+        document.getElementById('d_spectacles').textContent = devis.spectacles || '—';
+        document.getElementById('d_formuleDucoup').textContent = devis.formuleDucoup || '—';
+        document.getElementById('d_dateSpectacle').textContent = devis.dateSpectacle || '—';
+        document.getElementById('d_lieuSpectacle').textContent = devis.lieuSpectacle || '—';
+        document.getElementById('d_dateMaboul').textContent = devis.dateMaboul || '—';
+        document.getElementById('d_lieuMaboul').textContent = devis.lieuMaboul || '—';
+        document.getElementById('d_expositions').textContent = devis.expositions || '—';
+        document.getElementById('d_dateExpo').textContent = devis.dateExpo || '—';
+        document.getElementById('d_lieuExpo').textContent = devis.lieuExpo || '—';
+        document.getElementById('d_message').textContent = devis.message || '—';
+    }
+
+    // Supprimer le devis actuel
+    function supprimerDevis() {
+        if (devisIndexActuel === -1) return;
+        if (!confirm('Supprimer ce devis ?')) return;
+        devisListe.splice(devisIndexActuel, 1);
+        sauvegarderDevis();
+        devisIndexActuel = -1;
+        afficherListe();
+    }
+
+    // Supprimer tous les devis
+    function supprimerTousLesDevis() {
+        if (devisListe.length === 0) return;
+        if (!confirm('Supprimer TOUS les devis ? Cette action est irréversible.')) return;
+        devisListe = [];
+        sauvegarderDevis();
+        afficherListe();
+    }
+
+    // Imprimer le devis
+    function imprimer() {
+        if (devisIndexActuel === -1) return;
+        window.print();
+    }
+
+    // Envoyer par email
+    function envoyerEmail() {
+        if (devisIndexActuel === -1) return;
+        var devis = devisListe[devisIndexActuel];
+        if (!devis) return;
+
+        var sujet = encodeURIComponent('Devis Récré Magic - ' + devis.nom);
+        var corps = encodeURIComponent(
+            'Nom : ' + devis.nom + '\n' +
+            'Structure : ' + devis.structure + '\n' +
+            'Email : ' + devis.email + '\n' +
+            'Téléphone : ' + devis.telephone + '\n' +
+            'Lieu : ' + devis.lieu + '\n' +
+            'Type événement : ' + devis.typeEvenement + '\n' +
+            'Spectacles : ' + devis.spectacles + '\n' +
+            'Date spectacle : ' + devis.dateSpectacle + '\n' +
+            'Lieu spectacle : ' + devis.lieuSpectacle + '\n' +
+            'Expositions : ' + devis.expositions + '\n' +
+            'Message : ' + devis.message
+        );
+
+        window.location.href = 'mailto:recremagic@wanadoo.fr?subject=' + sujet + '&body=' + corps;
+    }
+
+    // ========== INITIALISATION ==========
+    window.onload = function() {
+        chargerDevis();
+
+        // Vérifier si un devis vient d'être envoyé via Devis.html
+        var nouveauDevis = localStorage.getItem('nouveauDevis');
+        if (nouveauDevis) {
+            try {
+                var donnees = JSON.parse(nouveauDevis);
+                ajouterDevis(donnees);
+                localStorage.removeItem('nouveauDevis');
+            } catch (e) {}
+        }
+    };
+</script>
 </body>
 </html>

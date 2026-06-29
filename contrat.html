@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Contrats - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -117,6 +118,25 @@
         }
         .btn-presentation:hover {
             background: #1e4e1e;
+            transform: scale(1.02);
+        }
+        .btn-reception {
+            background: #1e0e49;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.2s;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-reception:hover {
+            background: #2d1a66;
             transform: scale(1.02);
         }
         .dropdown {
@@ -434,12 +454,38 @@
             font-weight: bold;
             font-size: 0.9rem;
             cursor: pointer;
-            margin-top: 20px;
-            width: 100%;
             transition: 0.2s;
         }
         .btn-save:hover {
             background: #5a3e2a;
+        }
+        .btn-download {
+            background: #1e0e49;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+        }
+        .btn-download:hover {
+            background: #2d1a66;
+        }
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .btn-group .btn-save {
+            flex: 1;
+        }
+        .btn-group .btn-download {
+            flex: 1;
         }
         .pied-page {
             text-align: center;
@@ -602,6 +648,8 @@
             .arrivee-ligne { flex-wrap: wrap; }
             .contrat-selector { flex-direction: column; align-items: center; }
             .inline-champ-simple { min-width: 100px; }
+            .btn-group { flex-direction: column; }
+            .btn-group .btn-save, .btn-group .btn-download { flex: none; width: 100%; }
         }
     </style>
 </head>
@@ -621,6 +669,7 @@
         </div>
         <a href="facture.html" class="btn-facture">📄 FACTURE</a>
         <a href="presentation.html" class="btn-presentation">🎪 PRÉSENTATION</a>
+        <a href="reception.html" class="btn-reception">📋 RÉCEPTION</a>
     </div>
 
     <div id="zoneContrat" class="carte-contrat" style="border-left-color: var(--couleur-contrat1);">
@@ -630,6 +679,11 @@
 </div>
 
 <script>
+    // ========== SUPABASE ==========
+    const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
     let currentContrat = 0;
     let signatureCanvas = {};
     let currentTitre = "";
@@ -855,6 +909,100 @@
         else drop.style.display = 'block';
     }
 
+    // ========== TÉLÉCHARGEMENT PDF ==========
+    function telechargerContrat() {
+        var contenu = document.getElementById('zoneContrat').innerHTML;
+        
+        var html = `
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <meta charset="UTF-8">
+            <title>Contrat Récré Magic</title>
+            <style>
+                body { font-family: Arial, sans-serif; padding: 40px; max-width: 1000px; margin: auto; }
+                .document-reel { background: white; padding: 30px; border: 1px solid #ccc; border-radius: 10px; }
+                .logo-coin { max-width: 150px; float: right; margin: 0 0 20px 20px; }
+                .contenu-avec-logo { clear: both; }
+                .header-contrat { text-align: center; margin-bottom: 30px; }
+                .contrat-badge { background: #1e0e49; color: white; padding: 10px 30px; border-radius: 30px; display: inline-block; }
+                .titre-spectacle { font-size: 24px; font-weight: bold; text-align: center; margin: 10px 0 20px 0; }
+                .doc-section { margin-bottom: 20px; border-left: 3px solid #1e0e49; padding-left: 15px; }
+                .doc-ligne { display: flex; margin-bottom: 8px; }
+                .doc-label { font-weight: bold; min-width: 150px; }
+                .doc-champ { border-bottom: 1px solid #999; padding: 4px 8px; min-width: 200px; }
+                .signature-container { display: flex; gap: 40px; margin-top: 30px; }
+                .signature-box { flex: 1; text-align: center; border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
+                .signature-img { max-width: 100%; max-height: 100px; }
+                .validation-block { background: #f9f0e0; padding: 20px; border-radius: 15px; margin: 20px 0; }
+                .infos-legales { font-size: 11px; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; color: #666; }
+                .checkbox-line { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
+                .inline-champ-simple { border-bottom: 1px solid #999; padding: 2px 8px; display: inline-block; min-width: 120px; }
+                .select-style { padding: 2px 8px; border: 1px solid #999; border-radius: 4px; }
+                .conditions-techniques { font-weight: bold; color: #b22222; }
+                .titre-achat { font-weight: bold; }
+                .conditions-titre { font-weight: bold; text-decoration: underline; }
+                .artiste-ligne { margin: 15px 0; }
+                .btn-save { display: none; }
+                .btn-download { display: none; }
+                .btn-group { display: none; }
+            </style>
+        </head>
+        <body>
+            <div class="document-reel">
+                ${contenu}
+            </div>
+        </body>
+        </html>
+        `;
+
+        var blob = new Blob([html], { type: 'text/html' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'contrat-recremagic.html';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(a.href);
+        afficherMessage('📥 Contrat téléchargé !');
+    }
+
+    // ========== ENVOYER L'EMAIL ==========
+    async function envoyerEmailContrat(num) {
+        try {
+            var donnees = recupererDonneesContrat(num);
+            var emailOrganisateur = document.querySelectorAll('.doc-champ')[3]?.innerText || '';
+            
+            if (!emailOrganisateur) {
+                console.warn('Aucun email trouvé');
+                return false;
+            }
+
+            const response = await supabaseClient.functions.invoke('send-contrat-email', {
+                body: {
+                    email: emailOrganisateur,
+                    organisateur: donnees.organisateur,
+                    titre: donnees.titre,
+                    lieu: donnees.lieu,
+                    date: donnees.date,
+                    montantHT: donnees.montantHT,
+                    totalTTC: donnees.totalTTC
+                }
+            });
+
+            if (response.error) {
+                console.error('Erreur envoi email:', response.error);
+                return false;
+            }
+
+            console.log('✅ Email envoyé à', emailOrganisateur);
+            return true;
+        } catch (err) {
+            console.error('Erreur:', err);
+            return false;
+        }
+    }
+
     function chargerContrat(num) {
         currentContrat = num;
         const zone = document.getElementById('zoneContrat');
@@ -946,7 +1094,7 @@
                         <strong>D'autre part.</strong>
                     </div>
                     <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
-                        <p class="titre-achat"><strong>L'ORGANISATEUR fait l'achat du spectacle « <select id="selectSpectacle1_bis" class="select-style">${optionsTitres}</select> » présenté por <select id="selectArtistes1" class="select-style">${optionsArtistes}</select> artistes aux conditions suivantes :</strong></p>
+                        <p class="titre-achat"><strong>L'ORGANISATEUR fait l'achat du spectacle « <select id="selectSpectacle1_bis" class="select-style">${optionsTitres}</select> » présenté par <select id="selectArtistes1" class="select-style">${optionsArtistes}</select> artistes aux conditions suivantes :</strong></p>
                     </div>
                     <div class="doc-section" style="border-left-color: var(--couleur-contrat1);">
                         <p><strong>Lieu de la représentation :</strong> <span class="doc-champ" contenteditable="true" placeholder="à remplir" style="display: inline-block; min-width: 250px;"></span></p>
@@ -977,7 +1125,10 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-save" id="saveBtn">💾 Valider le contrat</button>`;
+            <div class="btn-group">
+                <button class="btn-save" id="saveBtn">💾 Valider le contrat</button>
+                <button class="btn-download" id="downloadBtn">📥 Télécharger PDF</button>
+            </div>`;
             
             setTimeout(() => {
                 const select1 = document.getElementById('selectSpectacle1');
@@ -987,6 +1138,8 @@
                     select1bis.addEventListener('change', () => { if(select1bis.value) select1.value = select1bis.value; });
                 }
                 initSignatureCanvas('sig1_org');
+                const downloadBtn = document.getElementById('downloadBtn');
+                if (downloadBtn) downloadBtn.onclick = telechargerContrat;
             }, 50);
         } else {
             card.style.borderLeftColor = 'var(--couleur-contrat2)';
@@ -1052,7 +1205,10 @@
                     </div>
                 </div>
             </div>
-            <button class="btn-save" id="saveBtn">💾 Valider et sauvegarder le contrat</button>`;
+            <div class="btn-group">
+                <button class="btn-save" id="saveBtn">💾 Valider et sauvegarder le contrat</button>
+                <button class="btn-download" id="downloadBtn">📥 Télécharger PDF</button>
+            </div>`;
             
             setTimeout(() => {
                 const select1 = document.getElementById('selectSpectacle2');
@@ -1062,13 +1218,15 @@
                     select1bis.addEventListener('change', () => { if(select1bis.value) select1.value = select1bis.value; });
                 }
                 initSignatureCanvas('sig2_org');
+                const downloadBtn = document.getElementById('downloadBtn');
+                if (downloadBtn) downloadBtn.onclick = telechargerContrat;
             }, 50);
         }
         
         setTimeout(() => {
             const saveBtn = document.getElementById('saveBtn');
             if (saveBtn) {
-                saveBtn.onclick = () => {
+                saveBtn.onclick = async () => {
                     if (num === 1 && !document.getElementById('check1')?.checked) { 
                         afficherMessage('❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider', 'erreur');
                         return; 
@@ -1081,7 +1239,26 @@
                     sauvegarderToutesSignatures(num);
                     const donneesFacture = sauvegarderDonneesPourFacture(num);
                     
-                    afficherMessage(`✅ Contrat ${num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE'} validé ! Les données ont été sauvegardées pour la facture.`);
+                    // Sauvegarde dans l'historique
+                    var historique = JSON.parse(localStorage.getItem('historiqueContrats') || '[]');
+                    var contratData = {
+                        id: Date.now(),
+                        dateSauvegarde: new Date().toLocaleString('fr-FR'),
+                        type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
+                        donnees: recupererDonneesContrat(num)
+                    };
+                    historique.unshift(contratData);
+                    localStorage.setItem('historiqueContrats', JSON.stringify(historique));
+                    
+                    // Envoyer l'email
+                    var emailEnvoye = await envoyerEmailContrat(num);
+                    
+                    if (emailEnvoye) {
+                        var emailOrganisateur = document.querySelectorAll('.doc-champ')[3]?.innerText || '';
+                        afficherMessage(`✅ Contrat validé ! Un email a été envoyé à ${emailOrganisateur}`);
+                    } else {
+                        afficherMessage('✅ Contrat validé ! (Email non envoyé)');
+                    }
                 };
             }
         }, 150);
