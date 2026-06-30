@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tableau de bord des devis - Récré Magic</title>
+    <title>Tableau de bord - Récré Magic</title>
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -79,8 +79,32 @@
             margin-bottom: 2rem;
         }
 
+        /* --- Section séparée --- */
+        .section-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.8rem;
+            color: #2C1810;
+            margin-top: 2rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid var(--vert-caravane);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .section-title .badge {
+            font-size: 0.8rem;
+            background: var(--vert-caravane);
+            color: white;
+            padding: 0.2rem 0.8rem;
+            border-radius: 20px;
+            font-family: 'Quicksand', sans-serif;
+        }
+
         /* --- Vue liste --- */
-        #vue-liste .devis-item {
+        #vue-liste .devis-item,
+        #vue-liste .contrat-item {
             background: var(--fond-tableau);
             border-radius: 16px;
             padding: 1rem 1.5rem;
@@ -93,39 +117,58 @@
             align-items: center;
         }
 
-        #vue-liste .devis-item:hover {
+        #vue-liste .devis-item:hover,
+        #vue-liste .contrat-item:hover {
             transform: translateX(8px);
             border-color: var(--vert-caravane);
             box-shadow: 0 4px 15px rgba(0,0,0,0.1);
         }
 
-        #vue-liste .devis-item .nom {
+        #vue-liste .devis-item .nom,
+        #vue-liste .contrat-item .nom {
             font-weight: 700;
             color: #2C1810;
             font-size: 1.1rem;
         }
 
-        #vue-liste .devis-item .lieu {
+        #vue-liste .devis-item .lieu,
+        #vue-liste .contrat-item .lieu {
             color: #5a3e2a;
             font-size: 0.95rem;
         }
 
-        #vue-liste .devis-item .date {
+        #vue-liste .devis-item .date,
+        #vue-liste .contrat-item .date {
             color: #888;
             font-size: 0.8rem;
         }
 
-        #vue-liste .devis-item .arrow {
+        #vue-liste .devis-item .arrow,
+        #vue-liste .contrat-item .arrow {
             color: var(--vert-caravane);
             font-size: 1.2rem;
             transition: transform 0.3s;
         }
 
-        #vue-liste .devis-item:hover .arrow {
+        #vue-liste .devis-item:hover .arrow,
+        #vue-liste .contrat-item:hover .arrow {
             transform: translateX(5px);
         }
 
-        .aucun-devis {
+        .badge-type {
+            font-size: 0.6rem;
+            background: #1e0e49;
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 12px;
+            margin-left: 0.5rem;
+        }
+
+        .badge-type.roulotte {
+            background: #2c6e2c;
+        }
+
+        .aucun-item {
             text-align: center;
             color: #b0a088;
             font-style: italic;
@@ -138,7 +181,7 @@
             display: none;
         }
 
-        .devis-table {
+        .detail-table {
             width: 100%;
             border-collapse: collapse;
             background: var(--fond-tableau);
@@ -147,28 +190,28 @@
             border: 2px solid #c4a882;
         }
 
-        .devis-table tr {
+        .detail-table tr {
             border-bottom: 1px solid #c4a882;
         }
 
-        .devis-table tr:last-child {
+        .detail-table tr:last-child {
             border-bottom: none;
         }
 
-        .devis-table td {
+        .detail-table td {
             padding: 0.8rem 1rem;
             font-size: 0.95rem;
             color: #2C1810;
         }
 
-        .devis-table .label {
+        .detail-table .label {
             font-weight: 700;
             color: #5a3e2a;
             width: 40%;
             background: rgba(255,255,255,0.3);
         }
 
-        .devis-table .value {
+        .detail-table .value {
             width: 60%;
         }
 
@@ -192,7 +235,7 @@
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
 
-        .btn-back, .btn-print, .btn-email {
+        .btn-back, .btn-print, .btn-email, .btn-contrat, .btn-supprimer {
             display: inline-block;
             margin-top: 0.5rem;
             padding: 0.6rem 1.5rem;
@@ -220,7 +263,17 @@
             color: white;
         }
 
-        .btn-back:hover, .btn-print:hover, .btn-email:hover {
+        .btn-contrat {
+            background: #1e0e49;
+            color: white;
+        }
+
+        .btn-supprimer {
+            background: #D32F2F;
+            color: white;
+        }
+
+        .btn-back:hover, .btn-print:hover, .btn-email:hover, .btn-contrat:hover, .btn-supprimer:hover {
             transform: translateY(-3px);
             box-shadow: 0 8px 20px rgba(0,0,0,0.3);
         }
@@ -237,7 +290,6 @@
         .btn-supprimer-tout {
             display: inline-block;
             margin-top: 1.5rem;
-            margin-left: 1rem;
             padding: 0.8rem 2rem;
             background: #D32F2F;
             color: white;
@@ -269,27 +321,34 @@
             margin-left: 0.5rem;
         }
 
+        /* --- Contrats section --- */
+        .contrat-section {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 3px dashed var(--vert-caravane);
+        }
+
         @media (max-width: 768px) {
             body { padding: 1rem; }
             .carte-magique { padding: 1.5rem; border-radius: 40px; }
             h1 { font-size: 1.8rem; }
-            #vue-liste .devis-item { padding: 0.8rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
-            #vue-liste .devis-item .nom { font-size: 1rem; }
-            #vue-liste .devis-item .lieu { font-size: 0.85rem; }
-            .devis-table td { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
-            .devis-table .label { width: 35%; }
+            #vue-liste .devis-item, #vue-liste .contrat-item { padding: 0.8rem 1rem; flex-wrap: wrap; gap: 0.5rem; }
+            #vue-liste .devis-item .nom, #vue-liste .contrat-item .nom { font-size: 1rem; }
+            #vue-liste .devis-item .lieu, #vue-liste .contrat-item .lieu { font-size: 0.85rem; }
+            .detail-table td { padding: 0.6rem 0.8rem; font-size: 0.85rem; }
+            .detail-table .label { width: 35%; }
+            .actions-detail { flex-direction: column; }
+            .btn-back, .btn-print, .btn-email, .btn-contrat, .btn-supprimer { display: block; width: 100%; text-align: center; }
+            .section-title { font-size: 1.4rem; }
         }
 
         @media (max-width: 480px) {
             .carte-magique { padding: 1rem; border-radius: 30px; }
             h1 { font-size: 1.4rem; }
-            #vue-liste .devis-item { flex-direction: column; align-items: flex-start; }
-            .devis-table td { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
-            .devis-table .label { width: 40%; }
-            .btn-back, .btn-print, .btn-email { display: block; width: 100%; text-align: center; }
-            .btn-print, .btn-email { margin-left: 0; }
-            .actions-detail { flex-direction: column; }
-            .btn-supprimer-tout { display: block; margin: 0.5rem auto; width: 100%; text-align: center; }
+            #vue-liste .devis-item, #vue-liste .contrat-item { flex-direction: column; align-items: flex-start; }
+            .detail-table td { padding: 0.5rem 0.6rem; font-size: 0.75rem; }
+            .detail-table .label { width: 40%; }
+            .section-title { font-size: 1.2rem; }
         }
     </style>
 </head>
@@ -299,43 +358,51 @@
     <div class="carte-magique">
 
         <!-- ========== TITRE ========== -->
-        <h1 id="titrePrincipal">📋 Tableau de bord des devis</h1>
-        <p class="sous-message" id="sousMessage">Cliquez sur un devis pour voir tous les détails</p>
+        <h1 id="titrePrincipal">📋 Tableau de bord</h1>
+        <p class="sous-message" id="sousMessage">Cliquez sur un élément pour voir tous les détails</p>
 
         <!-- ========== VUE LISTE ========== -->
         <div id="vue-liste">
+            <!-- SECTION DEVIS -->
+            <div class="section-title">
+                📋 DEVIS
+                <span class="badge" id="devisCount">0</span>
+            </div>
             <div id="listeDevis"></div>
+
+            <!-- SECTION CONTRATS -->
+            <div class="section-title contrat-section">
+                📄 CONTRATS
+                <span class="badge" id="contratCount">0</span>
+            </div>
+            <div id="listeContrats"></div>
+
             <div class="actions-liste">
                 <a href="index.html" class="btn-back">← Retour à l'accueil</a>
-                <button class="btn-supprimer-tout" onclick="supprimerTousLesDevis()">🗑️ Supprimer tous les devis</button>
+                <button class="btn-supprimer-tout" onclick="supprimerTout()">🗑️ Supprimer tout</button>
             </div>
         </div>
 
         <!-- ========== VUE DÉTAIL ========== -->
         <div id="vue-detail">
             <button class="btn-retour-liste" onclick="afficherListe()">← Retour à la liste</button>
-            <table class="devis-table" id="devisTable">
+            <h2 id="detailTitre" style="font-family:'MedievalSharp',cursive; font-size:1.8rem; color:#2C1810; margin-bottom:1rem;">📄 Détail</h2>
+            <table class="detail-table" id="detailTable">
                 <tr><td class="label">👤 Nom</td><td class="value" id="d_nom">—</td></tr>
-                <tr><td class="label">🏢 Structure</td><td class="value" id="d_structure">—</td></tr>
                 <tr><td class="label">📧 Email</td><td class="value" id="d_email">—</td></tr>
                 <tr><td class="label">📞 Téléphone</td><td class="value" id="d_telephone">—</td></tr>
                 <tr><td class="label">📍 Lieu</td><td class="value" id="d_lieu">—</td></tr>
-                <tr><td class="label">🎉 Type d'événement</td><td class="value" id="d_typeEvenement">—</td></tr>
-                <tr><td class="label">🎭 Spectacles</td><td class="value" id="d_spectacles">—</td></tr>
-                <tr><td class="label">🚐 Formule DU COUP</td><td class="value" id="d_formuleDucoup">—</td></tr>
-                <tr><td class="label">📅 Date spectacle</td><td class="value" id="d_dateSpectacle">—</td></tr>
-                <tr><td class="label">📍 Lieu spectacle</td><td class="value" id="d_lieuSpectacle">—</td></tr>
-                <tr><td class="label">📅 Date Maboul</td><td class="value" id="d_dateMaboul">—</td></tr>
-                <tr><td class="label">📍 Lieu Maboul</td><td class="value" id="d_lieuMaboul">—</td></tr>
-                <tr><td class="label">🖼️ Expositions</td><td class="value" id="d_expositions">—</td></tr>
-                <tr><td class="label">📅 Date Expo</td><td class="value" id="d_dateExpo">—</td></tr>
-                <tr><td class="label">📍 Lieu Expo</td><td class="value" id="d_lieuExpo">—</td></tr>
+                <tr><td class="label">🎭 Spectacle</td><td class="value" id="d_spectacle">—</td></tr>
+                <tr><td class="label">📅 Date</td><td class="value" id="d_date">—</td></tr>
+                <tr><td class="label">🎉 Événement</td><td class="value" id="d_evenement">—</td></tr>
+                <tr><td class="label">📋 Type contrat</td><td class="value" id="d_typeContrat">—</td></tr>
+                <tr><td class="label">💰 Montant HT</td><td class="value" id="d_montantHT">—</td></tr>
+                <tr><td class="label">💶 Total TTC</td><td class="value" id="d_totalTTC">—</td></tr>
                 <tr><td class="label">💬 Message</td><td class="value" id="d_message">—</td></tr>
             </table>
             <div class="actions-detail">
-                <button class="btn-print" onclick="imprimer()">🖨️ Imprimer</button>
-                <button class="btn-email" onclick="envoyerEmail()">📧 Envoyer par email</button>
-                <button class="btn-back" onclick="supprimerDevis()">🗑️ Supprimer ce devis</button>
+                <button class="btn-print" onclick="imprimerDetail()">🖨️ Télécharger PDF</button>
+                <button class="btn-back" onclick="supprimerDetail()">🗑️ Supprimer</button>
             </div>
         </div>
 
@@ -343,22 +410,18 @@
 </div>
 
 <script>
-    // ========== GESTION DES DEVIS ==========
+    // ========== GESTION DES DEVIS ET CONTRATS ==========
     let devisListe = [];
-    let devisIndexActuel = -1;
-    let idModification = null;
+    let contratsListe = [];
+    let itemIndexActuel = -1;
+    let itemTypeActuel = ''; // 'devis' ou 'contrat'
 
-    // Charger les devis depuis localStorage
-    function chargerDevis() {
-        var data = localStorage.getItem('tousLesDevis');
-        if (data) {
-            try {
-                devisListe = JSON.parse(data);
-            } catch (e) {
-                devisListe = [];
-            }
+    function chargerTout() {
+        // Charger les devis
+        var dataDevis = localStorage.getItem('tousLesDevis');
+        if (dataDevis) {
+            try { devisListe = JSON.parse(dataDevis); } catch(e) { devisListe = []; }
         } else {
-            // Migration depuis l'ancien système
             var ancienData = localStorage.getItem('devisData');
             if (ancienData) {
                 try {
@@ -369,9 +432,16 @@
                         devisListe = [ancienDevis];
                         sauvegarderDevis();
                     }
-                } catch (e) {}
+                } catch(e) {}
             }
         }
+
+        // Charger les contrats
+        var dataContrats = localStorage.getItem('tousLesContrats');
+        if (dataContrats) {
+            try { contratsListe = JSON.parse(dataContrats); } catch(e) { contratsListe = []; }
+        }
+
         afficherListe();
     }
 
@@ -379,7 +449,10 @@
         localStorage.setItem('tousLesDevis', JSON.stringify(devisListe));
     }
 
-    // Ajouter un nouveau devis (appelé depuis Devis.html)
+    function sauvegarderContrats() {
+        localStorage.setItem('tousLesContrats', JSON.stringify(contratsListe));
+    }
+
     function ajouterDevis(donnees) {
         var nouveauDevis = {
             id: Date.now(),
@@ -401,139 +474,167 @@
             lieuExpo: donnees.lieuExpo || '',
             message: donnees.message || ''
         };
-        devisListe.unshift(nouveauDevis); // Ajouter en premier
+        devisListe.unshift(nouveauDevis);
         sauvegarderDevis();
         afficherListe();
         return nouveauDevis;
     }
 
-    // Afficher la liste des devis
+    function ajouterContrat(donnees) {
+        var nouveauContrat = {
+            id: Date.now(),
+            dateCreation: new Date().toLocaleString('fr-FR'),
+            nom: donnees.nom || 'Nom inconnu',
+            type: donnees.type || 'SANS ROULOTTE',
+            donnees: donnees
+        };
+        contratsListe.unshift(nouveauContrat);
+        sauvegarderContrats();
+        afficherListe();
+        return nouveauContrat;
+    }
+
     function afficherListe() {
         document.getElementById('vue-liste').style.display = 'block';
         document.getElementById('vue-detail').style.display = 'none';
-        document.getElementById('titrePrincipal').textContent = '📋 Tableau de bord des devis';
-        document.getElementById('sousMessage').textContent = 'Cliquez sur un devis pour voir tous les détails';
+        document.getElementById('titrePrincipal').textContent = '📋 Tableau de bord';
+        document.getElementById('sousMessage').textContent = 'Cliquez sur un élément pour voir tous les détails';
 
-        var container = document.getElementById('listeDevis');
+        // Mettre à jour les compteurs
+        document.getElementById('devisCount').textContent = devisListe.length;
+        document.getElementById('contratCount').textContent = contratsListe.length;
+
+        // Afficher les devis
+        var containerDevis = document.getElementById('listeDevis');
         if (devisListe.length === 0) {
-            container.innerHTML = '<div class="aucun-devis">Aucun devis pour le moment.</div>';
-            return;
+            containerDevis.innerHTML = '<div class="aucun-item">Aucun devis pour le moment.</div>';
+        } else {
+            var html = '';
+            devisListe.forEach(function(item, index) {
+                var nom = item.nom || 'Nom inconnu';
+                var lieu = item.lieu || 'Lieu non précisé';
+                var date = item.dateCreation || 'Date inconnue';
+                var isNew = (Date.now() - item.id) < 60000;
+
+                html += `
+                    <div class="devis-item" onclick="ouvrirDetail('devis', ${index})">
+                        <div>
+                            <span class="nom">${nom}</span>
+                            ${isNew ? '<span class="badge-nouveau">Nouveau</span>' : ''}
+                        </div>
+                        <div>
+                            <span class="lieu">📍 ${lieu}</span>
+                            <span class="date">📅 ${date}</span>
+                            <span class="arrow">→</span>
+                        </div>
+                    </div>
+                `;
+            });
+            containerDevis.innerHTML = html;
         }
 
-        var html = '';
-        devisListe.forEach(function(devis, index) {
-            var nom = devis.nom || 'Nom inconnu';
-            var lieu = devis.lieu || 'Lieu non précisé';
-            var date = devis.dateCreation || 'Date inconnue';
-            var isNew = (Date.now() - devis.id) < 60000; // Moins d'une minute
+        // Afficher les contrats
+        var containerContrats = document.getElementById('listeContrats');
+        if (contratsListe.length === 0) {
+            containerContrats.innerHTML = '<div class="aucun-item">Aucun contrat pour le moment.</div>';
+        } else {
+            var html = '';
+            contratsListe.forEach(function(item, index) {
+                var nom = item.nom || 'Nom inconnu';
+                var type = item.type || 'SANS ROULOTTE';
+                var date = item.dateCreation || 'Date inconnue';
+                var isNew = (Date.now() - item.id) < 60000;
+                var typeClass = type.includes('ROULOTTE') ? 'roulotte' : '';
 
-            html += `
-                <div class="devis-item" onclick="ouvrirDevis(${index})">
-                    <div>
-                        <span class="nom">${nom}</span>
-                        ${isNew ? '<span class="badge-nouveau">Nouveau</span>' : ''}
+                html += `
+                    <div class="contrat-item" onclick="ouvrirDetail('contrat', ${index})">
+                        <div>
+                            <span class="nom">${nom}</span>
+                            <span class="badge-type ${typeClass}">${type}</span>
+                            ${isNew ? '<span class="badge-nouveau">Nouveau</span>' : ''}
+                        </div>
+                        <div>
+                            <span class="date">📅 ${date}</span>
+                            <span class="arrow">→</span>
+                        </div>
                     </div>
-                    <div>
-                        <span class="lieu">📍 ${lieu}</span>
-                        <span class="date">📅 ${date}</span>
-                        <span class="arrow">→</span>
-                    </div>
-                </div>
-            `;
-        });
-        container.innerHTML = html;
+                `;
+            });
+            containerContrats.innerHTML = html;
+        }
     }
 
-    // Ouvrir un devis en détail
-    function ouvrirDevis(index) {
-        devisIndexActuel = index;
-        var devis = devisListe[index];
-        if (!devis) return;
+    function ouvrirDetail(type, index) {
+        itemTypeActuel = type;
+        itemIndexActuel = index;
+        var item = type === 'devis' ? devisListe[index] : contratsListe[index];
+        if (!item) return;
 
         document.getElementById('vue-liste').style.display = 'none';
         document.getElementById('vue-detail').style.display = 'block';
-        document.getElementById('titrePrincipal').textContent = '📄 Détail du devis';
-        document.getElementById('sousMessage').textContent = devis.nom || 'Devis';
+        document.getElementById('titrePrincipal').textContent = '📄 Détail';
+        document.getElementById('sousMessage').textContent = type === 'devis' ? 'Devis' : 'Contrat';
+        document.getElementById('detailTitre').textContent = type === 'devis' ? '📋 Détail du devis' : '📄 Détail du contrat';
 
-        document.getElementById('d_nom').textContent = devis.nom || '—';
-        document.getElementById('d_structure').textContent = devis.structure || '—';
-        document.getElementById('d_email').textContent = devis.email || '—';
-        document.getElementById('d_telephone').textContent = devis.telephone || '—';
-        document.getElementById('d_lieu').textContent = devis.lieu || '—';
-        document.getElementById('d_typeEvenement').textContent = devis.typeEvenement || '—';
-        document.getElementById('d_spectacles').textContent = devis.spectacles || '—';
-        document.getElementById('d_formuleDucoup').textContent = devis.formuleDucoup || '—';
-        document.getElementById('d_dateSpectacle').textContent = devis.dateSpectacle || '—';
-        document.getElementById('d_lieuSpectacle').textContent = devis.lieuSpectacle || '—';
-        document.getElementById('d_dateMaboul').textContent = devis.dateMaboul || '—';
-        document.getElementById('d_lieuMaboul').textContent = devis.lieuMaboul || '—';
-        document.getElementById('d_expositions').textContent = devis.expositions || '—';
-        document.getElementById('d_dateExpo').textContent = devis.dateExpo || '—';
-        document.getElementById('d_lieuExpo').textContent = devis.lieuExpo || '—';
-        document.getElementById('d_message').textContent = devis.message || '—';
+        var d = item.donnees || item;
+        document.getElementById('d_nom').textContent = d.nom || d.organisateur?.nom || '—';
+        document.getElementById('d_email').textContent = d.email || d.organisateur?.email || '—';
+        document.getElementById('d_telephone').textContent = d.telephone || d.organisateur?.telephone || '—';
+        document.getElementById('d_lieu').textContent = d.lieu || d.organisateur?.adresse || '—';
+        document.getElementById('d_spectacle').textContent = d.spectacles || d.spectacle || d.titre || '—';
+        document.getElementById('d_date').textContent = d.dateSpectacle || d.date || '—';
+        document.getElementById('d_evenement').textContent = d.typeEvenement || d.organisateur?.qualite || '—';
+        document.getElementById('d_typeContrat').textContent = type === 'contrat' ? (item.type || '—') : '—';
+        document.getElementById('d_montantHT').textContent = d.montantHT ? d.montantHT + ' €' : '—';
+        document.getElementById('d_totalTTC').textContent = d.totalTTC ? d.totalTTC + ' €' : '—';
+        document.getElementById('d_message').textContent = d.message || '—';
     }
 
-    // Supprimer le devis actuel
-    function supprimerDevis() {
-        if (devisIndexActuel === -1) return;
-        if (!confirm('Supprimer ce devis ?')) return;
-        devisListe.splice(devisIndexActuel, 1);
-        sauvegarderDevis();
-        devisIndexActuel = -1;
+    function supprimerDetail() {
+        if (itemIndexActuel === -1) return;
+        if (!confirm('Supprimer cet élément ?')) return;
+        
+        if (itemTypeActuel === 'devis') {
+            devisListe.splice(itemIndexActuel, 1);
+            sauvegarderDevis();
+        } else {
+            contratsListe.splice(itemIndexActuel, 1);
+            sauvegarderContrats();
+        }
+        
+        itemIndexActuel = -1;
         afficherListe();
     }
 
-    // Supprimer tous les devis
-    function supprimerTousLesDevis() {
-        if (devisListe.length === 0) return;
-        if (!confirm('Supprimer TOUS les devis ? Cette action est irréversible.')) return;
+    function supprimerTout() {
+        if (devisListe.length === 0 && contratsListe.length === 0) return;
+        if (!confirm('Supprimer TOUS les devis et contrats ? Cette action est irréversible.')) return;
         devisListe = [];
+        contratsListe = [];
         sauvegarderDevis();
+        sauvegarderContrats();
         afficherListe();
     }
 
-    // Imprimer le devis
-    function imprimer() {
-        if (devisIndexActuel === -1) return;
+    function imprimerDetail() {
         window.print();
     }
 
-    // Envoyer par email
-    function envoyerEmail() {
-        if (devisIndexActuel === -1) return;
-        var devis = devisListe[devisIndexActuel];
-        if (!devis) return;
-
-        var sujet = encodeURIComponent('Devis Récré Magic - ' + devis.nom);
-        var corps = encodeURIComponent(
-            'Nom : ' + devis.nom + '\n' +
-            'Structure : ' + devis.structure + '\n' +
-            'Email : ' + devis.email + '\n' +
-            'Téléphone : ' + devis.telephone + '\n' +
-            'Lieu : ' + devis.lieu + '\n' +
-            'Type événement : ' + devis.typeEvenement + '\n' +
-            'Spectacles : ' + devis.spectacles + '\n' +
-            'Date spectacle : ' + devis.dateSpectacle + '\n' +
-            'Lieu spectacle : ' + devis.lieuSpectacle + '\n' +
-            'Expositions : ' + devis.expositions + '\n' +
-            'Message : ' + devis.message
-        );
-
-        window.location.href = 'mailto:recremagic@wanadoo.fr?subject=' + sujet + '&body=' + corps;
-    }
+    // ========== EXPOSER POUR LES AUTRES PAGES ==========
+    window.ajouterContrat = ajouterContrat;
 
     // ========== INITIALISATION ==========
     window.onload = function() {
-        chargerDevis();
+        chargerTout();
 
-        // Vérifier si un devis vient d'être envoyé via Devis.html
+        // Vérifier si un devis vient d'être envoyé
         var nouveauDevis = localStorage.getItem('nouveauDevis');
         if (nouveauDevis) {
             try {
                 var donnees = JSON.parse(nouveauDevis);
                 ajouterDevis(donnees);
                 localStorage.removeItem('nouveauDevis');
-            } catch (e) {}
+            } catch(e) {}
         }
     };
 </script>

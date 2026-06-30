@@ -475,6 +475,22 @@
         .btn-download:hover {
             background: #2d1a66;
         }
+        .btn-sauvegarde {
+            background: #2c6e2c;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+        }
+        .btn-sauvegarde:hover {
+            background: #1e4e1e;
+        }
         .btn-group {
             display: flex;
             gap: 1rem;
@@ -485,6 +501,9 @@
             flex: 1;
         }
         .btn-group .btn-download {
+            flex: 1;
+        }
+        .btn-group .btn-sauvegarde {
             flex: 1;
         }
         .pied-page {
@@ -629,6 +648,22 @@
             font-weight: bold;
             color: #b22222;
         }
+        .sauvegarde-msg {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #2c6e2c;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.5s;
+        }
+        .sauvegarde-msg.visible {
+            opacity: 1;
+        }
         @media (max-width: 800px) {
             body { padding: 1rem; }
             .titre-principal { font-size: 1.5rem; }
@@ -649,7 +684,7 @@
             .contrat-selector { flex-direction: column; align-items: center; }
             .inline-champ-simple { min-width: 100px; }
             .btn-group { flex-direction: column; }
-            .btn-group .btn-save, .btn-group .btn-download { flex: none; width: 100%; }
+            .btn-group .btn-save, .btn-group .btn-download, .btn-group .btn-sauvegarde { flex: none; width: 100%; }
         }
     </style>
 </head>
@@ -699,6 +734,179 @@
 
     const nbArtistesPossibles = ["1", "2", "3", "4", "5"];
 
+    // ========== SAUVEGARDE AUTOMATIQUE ==========
+    function sauvegarderContratAutomatique(num) {
+        if (num === 0) return;
+        try {
+            var donnees = recupererDonneesContrat(num);
+            
+            var contratSauvegarde = {
+                id: Date.now(),
+                dateSauvegarde: new Date().toLocaleString('fr-FR'),
+                type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
+                donnees: donnees,
+                signatures: signaturesSauvegardees
+            };
+            
+            localStorage.setItem('contratEnCours', JSON.stringify(contratSauvegarde));
+            
+            var msg = document.getElementById('sauvegardeMsg');
+            if (!msg) {
+                msg = document.createElement('div');
+                msg.id = 'sauvegardeMsg';
+                msg.className = 'sauvegarde-msg';
+                document.body.appendChild(msg);
+            }
+            msg.textContent = '💾 Contrat sauvegardé à ' + new Date().toLocaleTimeString();
+            msg.classList.add('visible');
+            
+            clearTimeout(msg._timeout);
+            msg._timeout = setTimeout(function() {
+                msg.classList.remove('visible');
+            }, 2000);
+            
+            console.log('✅ Contrat sauvegardé automatiquement');
+        } catch (e) {
+            console.error('Erreur sauvegarde automatique:', e);
+        }
+    }
+
+    function chargerContratSauvegarde() {
+        var data = localStorage.getItem('contratEnCours');
+        if (!data) return null;
+        
+        try {
+            var sauvegarde = JSON.parse(data);
+            if (!sauvegarde.donnees) return null;
+            
+            var age = Date.now() - sauvegarde.id;
+            if (age > 24 * 60 * 60 * 1000) {
+                localStorage.removeItem('contratEnCours');
+                return null;
+            }
+            return sauvegarde;
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function restaurerContratSauvegarde() {
+        var sauvegarde = chargerContratSauvegarde();
+        if (!sauvegarde) return false;
+        
+        var num = sauvegarde.type === 'SANS ROULOTTE' ? 1 : 2;
+        
+        chargerContrat(num);
+        
+        setTimeout(function() {
+            var d = sauvegarde.donnees;
+            
+            var champs = document.querySelectorAll('.doc-champ');
+            if (champs.length >= 5) {
+                champs[0].innerText = d.organisateur?.nom || '';
+                champs[1].innerText = d.organisateur?.adresse || '';
+                champs[2].innerText = d.organisateur?.telephone || '';
+                champs[3].innerText = d.organisateur?.email || '';
+                champs[4].innerText = d.organisateur?.qualite || '';
+            }
+            
+            var lieuChamp = document.querySelector('.doc-champ[placeholder="à remplir"]');
+            if (lieuChamp) lieuChamp.innerText = d.lieu || '';
+            
+            var dateChamp = document.querySelector('.inline-champ-simple[placeholder="JJ/MM/AAAA"]');
+            if (dateChamp) dateChamp.innerText = d.date || '';
+            
+            var selectSpectacle = document.getElementById('selectSpectacle' + num);
+            if (selectSpectacle && d.spectacle) {
+                var options = selectSpectacle.options;
+                for (var i = 0; i < options.length; i++) {
+                    if (options[i].value === d.spectacle || options[i].text === d.spectacle) {
+                        selectSpectacle.selectedIndex = i;
+                        break;
+                    }
+                }
+                var evt = new Event('change');
+                selectSpectacle.dispatchEvent(evt);
+            }
+            
+            var montants = document.querySelectorAll('.doc-champ[placeholder="0,00"]');
+            if (montants.length >= 3) {
+                montants[0].innerText = d.montantHT || '0';
+                montants[1].innerText = d.tva || '0';
+                montants[2].innerText = d.totalTTC || '0';
+            }
+            
+            var reglement = document.querySelector('.doc-champ[placeholder="Chèque, virement"]');
+            if (reglement) reglement.innerText = d.modeReglement || 'Chèque';
+            
+            if (sauvegarde.signatures) {
+                signaturesSauvegardees = sauvegarde.signatures;
+                var canvasId = num === 1 ? 'sig1_org' : 'sig2_org';
+                var canvas = document.getElementById(canvasId);
+                if (canvas && signaturesSauvegardees[canvasId]) {
+                    var img = new Image();
+                    img.onload = function() {
+                        var ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                    };
+                    img.src = signaturesSauvegardees[canvasId];
+                }
+            }
+            
+            afficherMessage('🔄 Contrat restauré depuis la sauvegarde automatique !');
+            return true;
+        }, 600);
+        
+        return true;
+    }
+
+    function sauvegarderContratManuel() {
+        var num = currentContrat;
+        if (num === 0) {
+            afficherMessage('❌ Aucun contrat chargé.', 'erreur');
+            return;
+        }
+        sauvegarderContratAutomatique(num);
+        afficherMessage('✅ Contrat sauvegardé manuellement !');
+    }
+
+    function ajouterBoutonSauvegarde() {
+        var existingBtn = document.getElementById('sauvegardeManuelleBtn');
+        if (existingBtn) return;
+        
+        var btnGroup = document.querySelector('.btn-group');
+        if (!btnGroup) return;
+        
+        var btn = document.createElement('button');
+        btn.id = 'sauvegardeManuelleBtn';
+        btn.className = 'btn-sauvegarde';
+        btn.innerHTML = '💾 Sauvegarder';
+        btn.onclick = sauvegarderContratManuel;
+        
+        btnGroup.appendChild(btn);
+    }
+
+    function ecouterModifications() {
+        document.addEventListener('input', function(e) {
+            if (e.target.classList.contains('doc-champ') || 
+                e.target.classList.contains('inline-champ-simple')) {
+                if (currentContrat !== 0) {
+                    sauvegarderContratAutomatique(currentContrat);
+                }
+            }
+        });
+        
+        document.addEventListener('change', function(e) {
+            if (e.target.classList.contains('select-style')) {
+                if (currentContrat !== 0) {
+                    sauvegarderContratAutomatique(currentContrat);
+                }
+            }
+        });
+    }
+
+    // ========== FONCTIONS EXISTANTES ==========
     function toggleDropdown() {
         document.getElementById("contratDropdown").classList.toggle("show");
     }
@@ -909,7 +1117,6 @@
         else drop.style.display = 'block';
     }
 
-    // ========== TÉLÉCHARGEMENT PDF ==========
     function telechargerContrat() {
         var contenu = document.getElementById('zoneContrat').innerHTML;
         
@@ -945,6 +1152,7 @@
                 .artiste-ligne { margin: 15px 0; }
                 .btn-save { display: none; }
                 .btn-download { display: none; }
+                .btn-sauvegarde { display: none; }
                 .btn-group { display: none; }
             </style>
         </head>
@@ -967,7 +1175,6 @@
         afficherMessage('📥 Contrat téléchargé !');
     }
 
-    // ========== ENVOYER L'EMAIL ==========
     async function envoyerEmailContrat(num) {
         try {
             var donnees = recupererDonneesContrat(num);
@@ -1000,6 +1207,67 @@
         } catch (err) {
             console.error('Erreur:', err);
             return false;
+        }
+    }
+
+    function preRemplirDepuisDevis() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var type = urlParams.get('type');
+        var from = urlParams.get('from');
+        
+        if (from === 'devis' && type) {
+            var data = localStorage.getItem('devisPourContrat');
+            if (!data) return;
+            
+            try {
+                var devis = JSON.parse(data);
+                chargerContrat(parseInt(type));
+                
+                setTimeout(function() {
+                    var champs = document.querySelectorAll('.doc-champ');
+                    if (champs.length >= 5) {
+                        champs[0].innerText = devis.nom || '';
+                        champs[1].innerText = devis.lieu || '';
+                        champs[2].innerText = devis.telephone || '';
+                        champs[3].innerText = devis.email || '';
+                        champs[4].innerText = devis.typeEvenement || '';
+                    }
+                    
+                    var lieuChamp = document.querySelector('.doc-champ[placeholder="à remplir"]');
+                    if (lieuChamp) lieuChamp.innerText = devis.lieuSpectacle || devis.lieu || '';
+                    
+                    var dateChamp = document.querySelector('.inline-champ-simple[placeholder="JJ/MM/AAAA"]');
+                    if (dateChamp) dateChamp.innerText = devis.dateSpectacle || devis.date || '';
+                    
+                    var selectSpectacle = document.getElementById('selectSpectacle' + type);
+                    if (selectSpectacle) {
+                        var options = selectSpectacle.options;
+                        var spectacles = devis.spectacles || '';
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].value === spectacles || options[i].text.includes(spectacles)) {
+                                selectSpectacle.selectedIndex = i;
+                                break;
+                            }
+                        }
+                        var evt = new Event('change');
+                        selectSpectacle.dispatchEvent(evt);
+                    }
+                    
+                    if (devis.formuleDucoup) {
+                        var checkboxes = document.querySelectorAll('input[name="formuleDucoup"]');
+                        checkboxes.forEach(function(cb) {
+                            if (devis.formuleDucoup.includes(cb.value)) {
+                                cb.checked = true;
+                            }
+                        });
+                    }
+                    
+                    afficherMessage('✅ Contrat pré-rempli avec les données du devis !');
+                    localStorage.removeItem('devisPourContrat');
+                }, 600);
+            } catch (e) {
+                console.error('Erreur pré-remplissage:', e);
+            }
         }
     }
 
@@ -1140,6 +1408,7 @@
                 initSignatureCanvas('sig1_org');
                 const downloadBtn = document.getElementById('downloadBtn');
                 if (downloadBtn) downloadBtn.onclick = telechargerContrat;
+                ajouterBoutonSauvegarde();
             }, 50);
         } else {
             card.style.borderLeftColor = 'var(--couleur-contrat2)';
@@ -1220,8 +1489,19 @@
                 initSignatureCanvas('sig2_org');
                 const downloadBtn = document.getElementById('downloadBtn');
                 if (downloadBtn) downloadBtn.onclick = telechargerContrat;
+                ajouterBoutonSauvegarde();
             }, 50);
         }
+        
+        // Démarrer la sauvegarde automatique (toutes les 30 secondes)
+        if (window._intervalSauvegarde) {
+            clearInterval(window._intervalSauvegarde);
+        }
+        window._intervalSauvegarde = setInterval(function() {
+            if (currentContrat !== 0) {
+                sauvegarderContratAutomatique(currentContrat);
+            }
+        }, 30000);
         
         setTimeout(() => {
             const saveBtn = document.getElementById('saveBtn');
@@ -1239,7 +1519,7 @@
                     sauvegarderToutesSignatures(num);
                     const donneesFacture = sauvegarderDonneesPourFacture(num);
                     
-                    // Sauvegarde dans l'historique
+                    // ===== SAUVEGARDE DANS L'HISTORIQUE =====
                     var historique = JSON.parse(localStorage.getItem('historiqueContrats') || '[]');
                     var contratData = {
                         id: Date.now(),
@@ -1249,6 +1529,18 @@
                     };
                     historique.unshift(contratData);
                     localStorage.setItem('historiqueContrats', JSON.stringify(historique));
+                    
+                    // ===== SAUVEGARDE DANS LA LISTE DES CONTRATS (comme les devis) =====
+                    var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
+                    var contratListe = {
+                        id: Date.now(),
+                        dateCreation: new Date().toLocaleString('fr-FR'),
+                        nom: document.querySelectorAll('.doc-champ')[0]?.innerText || 'Nom inconnu',
+                        type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
+                        donnees: recupererDonneesContrat(num)
+                    };
+                    tousLesContrats.unshift(contratListe);
+                    localStorage.setItem('tousLesContrats', JSON.stringify(tousLesContrats));
                     
                     // Envoyer l'email
                     var emailEnvoye = await envoyerEmailContrat(num);
@@ -1265,6 +1557,28 @@
         
         document.getElementById("contratDropdown").classList.remove('show');
     }
+
+    // ========== INITIALISATION ==========
+    ecouterModifications();
+
+    // Essayer de restaurer un contrat sauvegardé
+    var restaure = restaurerContratSauvegarde();
+    if (!restaure) {
+        var data = localStorage.getItem('contratEnCours');
+        if (data) {
+            try {
+                var sauvegarde = JSON.parse(data);
+                var age = Date.now() - sauvegarde.id;
+                if (age > 24 * 60 * 60 * 1000) {
+                    afficherMessage('⏰ Une sauvegarde ancienne a été supprimée (plus de 24h)');
+                    localStorage.removeItem('contratEnCours');
+                }
+            } catch(e) {}
+        }
+    }
+
+    // Pré-remplir si on vient d'un devis
+    preRemplirDepuisDevis();
 </script>
 </body>
 </html>
