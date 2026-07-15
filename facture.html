@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Facture - Récré Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            background: #eef2f5;
+            font-family: 'Inter', sans-serif;
+            padding: 2rem;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .facture-container {
+            max-width: 1100px;
+            width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 35px -12px rgba(0, 0, 0, 0.12);
+            overflow: hidden;
+        }
+
+        .facture-header {
+            background: #fef9f0;
+            padding: 2rem 2rem 1rem 2rem;
+            border-bottom: 2px solid #e2d9cc;
+        }
+
+        .entete-sup {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .logo-section h1 {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #1e0e49;
+            letter-spacing: -0.3px;
+        }
+        .logo-section h2 {
+            font-size: 1rem;
+            font-weight: 500;
+            color: #5a3e2a;
+            margin-top: 4px;
+        }
+        .logo-section p {
+            font-size: 0.75rem;
+            color: #7a674f;
+            margin-top: 6px;
+            line-height: 1.3;
+        }
+
+        .facture-badge {
+            background: white;
+            border: 1px solid #d4b48c;
+            border-radius: 16px;
+            padding: 0.6rem 1.2rem;
+            min-width: 200px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.03);
+        }
+        .facture-badge .facture-numero {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #2c1810;
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .facture-badge .facture-date {
+            font-size: 0.7rem;
+            color: #8b6946;
+            margin-top: 6px;
+        }
+
+        .coord-row {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 1rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2d9cc;
+        }
+        .coord-box {
+            flex: 1;
+            font-size: 0.8rem;
+            line-height: 1.5;
+            background: #ffffff;
+            border: 1px solid #e8e0d4;
+            border-radius: 16px;
+            padding: 0.8rem 1rem;
+        }
+        .coord-box strong {
+            font-weight: 700;
+            display: block;
+            margin-bottom: 6px;
+            color: #1e0e49;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .champ-libre {
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed #c0a080;
+            padding: 4px 0;
+            font-family: 'Inter', monospace;
+            font-size: 0.85rem;
+            width: 100%;
+            outline: none;
+        }
+        .champ-libre:focus {
+            border-bottom-color: #1e0e49;
+        }
+
+        .facture-body {
+            padding: 2rem;
+        }
+
+        .doit-ligne {
+            margin: 1rem 0 0.5rem 0;
+            text-align: right;
+            font-weight: 600;
+            font-size: 1rem;
+            color: #1e0e49;
+        }
+
+        .spectacle-info {
+            margin: 1.5rem 0 2rem 0;
+            border-left: 4px solid #1e0e49;
+            padding-left: 1rem;
+        }
+        .spectacle-info .spectacle-ligne {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .spectacle-info .spectacle-ligne strong {
+            font-weight: 700;
+            color: #1e0e49;
+        }
+        .select-spectacle {
+            background: #fdfaf5;
+            border: 1px solid #c0a080;
+            border-radius: 40px;
+            padding: 6px 12px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 500;
+            font-size: 0.85rem;
+            color: #2c1810;
+            cursor: pointer;
+            outline: none;
+        }
+        .info-ligne {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-top: 8px;
+        }
+        .info-champ {
+            display: flex;
+            align-items: baseline;
+            gap: 8px;
+            background: #fdfaf5;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.8rem;
+        }
+        .info-champ strong {
+            font-weight: 600;
+            color: #5a3e2a;
+        }
+
+        .montants-table {
+            width: 100%;
+            margin: 1.8rem 0;
+            border-collapse: collapse;
+            background: #fefcf8;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+        .montants-table th {
+            background: #f3ede3;
+            padding: 12px 16px;
+            text-align: right;
+            font-weight: 600;
+            font-size: 0.8rem;
+            color: #2c1810;
+            border-bottom: 1px solid #e2d4c4;
+        }
+        .montants-table th:first-child {
+            text-align: left;
+        }
+        .montants-table td {
+            padding: 14px 16px;
+            text-align: right;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #eee6dc;
+        }
+        .montants-table td:first-child {
+            text-align: left;
+            font-weight: 500;
+        }
+        .montant-input {
+            background: transparent;
+            border: none;
+            border-bottom: 1px dashed #c0a080;
+            text-align: right;
+            font-family: monospace;
+            font-size: 0.9rem;
+            width: 110px;
+            padding: 4px 0;
+            outline: none;
+        }
+        .montant-input:focus {
+            border-bottom-color: #1e0e49;
+        }
+
+        .rib-container {
+            margin: 1rem 0 1.5rem 0;
+            text-align: center;
+            background: #fefcf8;
+            padding: 1rem;
+            border-radius: 16px;
+            border: 1px solid #e2d4c4;
+        }
+        .rib-image {
+            max-width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .rib-titre {
+            font-weight: 600;
+            font-size: 0.7rem;
+            color: #5a3e2a;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .code-civil-box {
+            margin: 1.5rem 0 1rem 0;
+            padding: 1rem 1.2rem;
+            background: #f8f6f2;
+            border-left: 4px solid #b22222;
+            border-radius: 12px;
+            font-size: 0.7rem;
+            line-height: 1.5;
+            color: #3a2a1a;
+            text-align: justify;
+        }
+        .code-civil-box strong {
+            color: #1e0e49;
+            font-weight: 700;
+        }
+        .code-civil-icon {
+            font-size: 0.9rem;
+            margin-right: 6px;
+        }
+
+        .signature-ligne {
+            margin-top: 2rem;
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            align-items: baseline;
+            gap: 1rem;
+            font-size: 0.8rem;
+            padding-top: 1rem;
+            border-top: 1px solid #e2d9cc;
+        }
+
+        .legal-footer {
+            margin-top: 1.5rem;
+            padding: 1rem 2rem;
+            background: #f9f5ef;
+            font-size: 0.6rem;
+            text-align: center;
+            color: #7a674f;
+            line-height: 1.4;
+            border-top: 1px solid #e2d4c4;
+        }
+
+        .btn-bar {
+            padding: 1rem 2rem;
+            background: white;
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            border-top: 1px solid #ece3d8;
+        }
+        .btn {
+            padding: 0.5rem 1.2rem;
+            border-radius: 40px;
+            font-weight: 600;
+            font-size: 0.75rem;
+            cursor: pointer;
+            transition: 0.2s;
+            border: none;
+            background: #f1f0ec;
+        }
+        .btn-primary {
+            background: #1e0e49;
+            color: white;
+        }
+        .btn-primary:hover {
+            background: #2d1a66;
+            transform: translateY(-1px);
+        }
+        .btn:hover {
+            opacity: 0.85;
+            transform: translateY(-1px);
+        }
+
+        .alert-info {
+            background: #e8f4f8;
+            border-left: 4px solid #1e0e49;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            color: #2c3e50;
+        }
+
+        @media (max-width: 700px) {
+            body { padding: 1rem; }
+            .facture-body { padding: 1.2rem; }
+            .facture-header { padding: 1.2rem; }
+            .info-ligne { flex-direction: column; }
+            .montants-table th, .montants-table td { padding: 8px 10px; }
+        }
+
+        @media print {
+            body { background: white; padding: 0; }
+            .facture-container { box-shadow: none; border-radius: 0; }
+            .btn-bar { display: none; }
+            .btn { display: none; }
+            .alert-info { display: none; }
+            .champ-libre, .montant-input { border-bottom: 1px solid #000; }
+        }
+    </style>
+</head>
+<body>
+<div class="facture-container">
+    <div class="facture-header">
+        <div class="entete-sup">
+            <div class="logo-section">
+                <h1>CAPIS</h1>
+                <h2>COMPAGNIE RÉCRÉ MAGIC</h2>
+                <p>SPECTACLES ET EXPOSITIONS ARTISTIQUES<br>
+                140, chemin du Dévez - 81400 LABASTIDE GABAUSSE<br>
+                📱 06.71.52.50.89</p>
+            </div>
+            <div class="facture-badge">
+                <div class="facture-numero">
+                    FACTURE N° <span id="factureNumero" contenteditable="true" class="champ-libre" style="width:140px; border-bottom:none; font-weight:700;">2025-001</span>
+                </div>
+                <div class="facture-date" id="factureDate">01/06/2025</div>
+            </div>
+        </div>
+        <div class="coord-row">
+            <div class="coord-box">
+                <strong>🪪 NOM / ADRESSE DU PARTENAIRE</strong>
+                <div id="clientNom" contenteditable="true" class="champ-libre" style="margin-top:6px;">Nom de l'organisateur</div>
+                <div id="clientAdresse" contenteditable="true" class="champ-libre">Adresse complète</div>
+                <div id="clientComplement" contenteditable="true" class="champ-libre">Code postal - Ville</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="facture-body">
+        <div id="alerteDonnees" class="alert-info" style="display: none;">
+            📋 Les données du dernier contrat ont été automatiquement chargées.
+        </div>
+
+        <div class="doit-ligne">📄 DOIT</div>
+
+        <div class="spectacle-info">
+            <div class="spectacle-ligne">
+                <strong>🎪 Spectacle :</strong>
+                <select id="spectacleSelect" class="select-spectacle">
+                    <option value="" selected disabled>-- Choisissez un spectacle --</option>
+                    <option value="DU COUP…ON REVIENT CHEZ VOUS du CIRCUS THEATRE RÉCRÉ MAGIC">DU COUP…ON REVIENT CHEZ VOUS du CIRCUS THEATRE RÉCRÉ MAGIC</option>
+                    <option value="DU COUP on vient chez vous">DU COUP on vient chez vous</option>
+                    <option value="COMME SUR DES ROULETTES">COMME SUR DES ROULETTES</option>
+                    <option value="DÉLICIEUSEMENT MABOUL">DÉLICIEUSEMENT MABOUL</option>
+                </select>
+            </div>
+            <div class="info-ligne">
+                <div class="info-champ"><strong>📅 Date :</strong> <span id="dateSpectacle" contenteditable="true" class="champ-libre" style="min-width:130px;">à définir</span></div>
+                <div class="info-champ"><strong>📍 Lieu :</strong> <span id="lieuSpectacle" contenteditable="true" class="champ-libre" style="min-width:200px;">à définir</span></div>
+            </div>
+        </div>
+
+        <table class="montants-table">
+            <thead>
+                <tr><th>Désignation</th><th>Montant HT (€)</th><th>TVA 5.5% (€)</th><th>Total TTC (€)</th></tr>
+            </thead>
+            <tbody id="factureLignes">
+                <tr id="lignePrincipale">
+                    <td contenteditable="true">Prestation artistique - contrat du <span id="contratDate" contenteditable="true" style="display:inline-block; min-width:80px;">JJ/MM/AAAA</span></td>
+                    <td><input type="text" id="montantHT" class="montant-input" value="0.00" placeholder="0.00"></td>
+                    <td id="tvaCell">0.00</td>
+                    <td id="ttcCell">0.00</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="rib-container">
+            <div class="rib-titre">🏦 Coordonnées bancaires (RIB) - Récré Magic</div>
+            <img src="image/rib.png" alt="RIB Récré Magic" class="rib-image" onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'color:#999; padding:20px;\'>⚠️ Image RIB introuvable (image/rib.png)</div>';">
+        </div>
+
+        <div style="text-align:right; font-size:0.7rem; margin-top:-10px;">* TVA applicable sur les prestations artistiques (5.5%)</div>
+
+        <!-- 📜 NOUVELLE PHRASE DU CODE CIVIL -->
+        <div class="code-civil-box">
+            <span class="code-civil-icon">⚖️</span> <strong>Références juridiques (Code civil)</strong><br>
+            Conformément aux <strong>articles 1103 et 1104 du Code civil</strong>, les conventions légalement formées tiennent lieu de loi à ceux qui les ont faites. Elles doivent être négociées, formées et exécutées de bonne foi.<br>
+            À défaut de paiement à l’échéance convenue, le créancier peut, conformément à l’<strong>article 1217 du Code civil</strong>, obtenir l’exécution forcée en nature, une réduction du prix, la résolution du contrat ou des dommages et intérêts. Conformément à l’<strong>article L. 441-6 du Code de commerce</strong>, tout retard de paiement donne lieu au versement d’un intérêt de retard au taux de trois fois le taux d’intérêt légal, ainsi qu’à une indemnité forfaitaire de 40 € pour frais de recouvrement.
+        </div>
+
+        <div class="signature-ligne">
+            <div><strong>Fait à, Labastide Gabausse le</strong> <span id="dateSignature" contenteditable="true" class="champ-libre" style="min-width:100px;">date</span></div>
+            <div><em>Signature précédée de la mention "Lu et approuvé"</em></div>
+        </div>
+    </div>
+
+    <div class="legal-footer">
+        Productions Récré Magic de l'Association CAPIS enregistrée sous le N° 4464 le 27/05/1987 - Préfecture d'ALBI – 81 - <br>
+        140, chemin du Dévez - 81400 - LABASTIDE GABAUSSE - Licence de spectacle n° L-R-25-1318 - Siret 382 713 766 00014 - APE 9001 Z - <br>
+        N° URSSAF 810 12457 U/I 111 01 - Centre de Recouvrement 80000 10855 TP 02 - AUDIENS 355 320 0200 - Congès Spectacle 674 94 001 U - <br>
+        TVA intracommunautaire FR 34 382 713 766 - Site : www.recremagic.com – Courriel : recremagic@wanadoo.fr
+    </div>
+
+    <div class="btn-bar">
+        <button class="btn" id="resetBtn">⟳ Réinitialiser montant</button>
+        <button class="btn btn-primary" id="validerFactureBtn">💾 Valider la facture</button>
+        <button class="btn" id="imprimerBtn">🖨️ Imprimer / PDF</button>
+    </div>
+</div>
+
+<script>
+    const montantHTInput = document.getElementById('montantHT');
+    const tvaCell = document.getElementById('tvaCell');
+    const ttcCell = document.getElementById('ttcCell');
+
+    function calculerMontants() {
+        let ht = parseFloat(montantHTInput.value.replace(',', '.'));
+        if (isNaN(ht)) ht = 0;
+        const tva = ht * 0.055;
+        const ttc = ht + tva;
+        tvaCell.innerText = tva.toFixed(2);
+        ttcCell.innerText = ttc.toFixed(2);
+    }
+
+    montantHTInput.addEventListener('input', calculerMontants);
+    
+    function setDefaultDate() {
+        const today = new Date();
+        const dateStr = today.toLocaleDateString('fr-FR');
+        const dateSpan = document.getElementById('dateSignature');
+        if (dateSpan && dateSpan.innerText.trim() === 'date') {
+            dateSpan.innerText = dateStr;
+        }
+        const factureDateSpan = document.getElementById('factureDate');
+        if (factureDateSpan && factureDateSpan.innerText === '01/06/2025') {
+            factureDateSpan.innerText = dateStr;
+        }
+    }
+
+    function chargerDonneesContrat() {
+        const donnees = localStorage.getItem('factureData');
+        if (donnees) {
+            try {
+                const contrat = JSON.parse(donnees);
+                console.log('📥 Chargement des données du contrat :', contrat);
+                
+                if (contrat.organisateur) {
+                    document.getElementById('clientNom').innerText = contrat.organisateur.nom || 'Nom de l\'organisateur';
+                    document.getElementById('clientAdresse').innerText = contrat.organisateur.adresse || 'Adresse complète';
+                    if (contrat.organisateur.codePostal) {
+                        document.getElementById('clientComplement').innerText = contrat.organisateur.codePostal;
+                    } else if (contrat.organisateur.email) {
+                        document.getElementById('clientComplement').innerText = contrat.organisateur.email;
+                    }
+                }
+                
+                if (contrat.spectacle) {
+                    const select = document.getElementById('spectacleSelect');
+                    for (let i = 0; i < select.options.length; i++) {
+                        if (select.options[i].value === contrat.spectacle) {
+                            select.selectedIndex = i;
+                            break;
+                        }
+                    }
+                }
+                
+                if (contrat.date) document.getElementById('dateSpectacle').innerText = contrat.date;
+                if (contrat.lieu) document.getElementById('lieuSpectacle').innerText = contrat.lieu;
+                
+                if (contrat.date) {
+                    const contratDateSpan = document.getElementById('contratDate');
+                    if (contratDateSpan) contratDateSpan.innerText = contrat.date;
+                }
+                
+                if (contrat.montantHT && contrat.montantHT !== '0') {
+                    montantHTInput.value = contrat.montantHT.replace('€', '').trim();
+                } else if (contrat.totalTTC) {
+                    let ttc = parseFloat(contrat.totalTTC.replace('€', '').trim());
+                    if (!isNaN(ttc)) {
+                        let ht = ttc / 1.055;
+                        montantHTInput.value = ht.toFixed(2);
+                    }
+                }
+                
+                if (contrat.dateFait) {
+                    document.getElementById('dateSignature').innerText = contrat.dateFait;
+                }
+                
+                const today = new Date();
+                const annee = today.getFullYear();
+                const mois = (today.getMonth() + 1).toString().padStart(2, '0');
+                const numero = `FACT-${annee}-${mois}-${Math.floor(Math.random() * 900 + 100)}`;
+                document.getElementById('factureNumero').innerText = numero;
+                
+                calculerMontants();
+                
+                const alertDiv = document.getElementById('alerteDonnees');
+                alertDiv.style.display = 'block';
+                setTimeout(() => {
+                    alertDiv.style.opacity = '0';
+                    setTimeout(() => {
+                        alertDiv.style.display = 'none';
+                        alertDiv.style.opacity = '1';
+                    }, 2000);
+                }, 4000);
+                
+            } catch (e) {
+                console.error('Erreur lors du chargement des données :', e);
+            }
+        } else {
+            console.log('Aucune donnée de contrat trouvée dans localStorage');
+        }
+    }
+
+    function sauvegarderFacture() {
+        const selectSpectacle = document.getElementById('spectacleSelect');
+        const factureData = {
+            numero: document.getElementById('factureNumero')?.innerText || '',
+            clientNom: document.getElementById('clientNom')?.innerText || '',
+            clientAdresse: document.getElementById('clientAdresse')?.innerText || '',
+            clientComplement: document.getElementById('clientComplement')?.innerText || '',
+            spectacle: selectSpectacle?.options[selectSpectacle.selectedIndex]?.text || '',
+            dateSpectacle: document.getElementById('dateSpectacle')?.innerText || '',
+            lieuSpectacle: document.getElementById('lieuSpectacle')?.innerText || '',
+            montantHT: montantHTInput.value,
+            tva: tvaCell.innerText,
+            ttc: ttcCell.innerText,
+            dateSignature: document.getElementById('dateSignature')?.innerText || '',
+            dateFacture: document.getElementById('factureDate')?.innerText || ''
+        };
+        localStorage.setItem('factureRecreMagic', JSON.stringify(factureData));
+        alert('✅ Facture sauvegardée localement !');
+        console.log('Facture :', factureData);
+    }
+
+    function imprimerFacture() {
+        window.print();
+    }
+
+    function resetMontant() {
+        montantHTInput.value = '0.00';
+        calculerMontants();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        setDefaultDate();
+        calculerMontants();
+        chargerDonneesContrat();
+        
+        document.getElementById('validerFactureBtn').addEventListener('click', sauvegarderFacture);
+        document.getElementById('imprimerBtn').addEventListener('click', imprimerFacture);
+        document.getElementById('resetBtn').addEventListener('click', resetMontant);
+    });
+</script>
+</body>
+</html>

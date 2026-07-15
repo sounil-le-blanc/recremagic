@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Création de contrat - Récré Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --fond-overlay: rgba(0, 0, 0, 0.55);
+            --fond-carte: rgba(245, 235, 215, 0.96);
+            --fond-tableau: rgba(255, 250, 235, 0.9);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.webp');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: var(--fond-overlay);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .carte-magique {
+            background: var(--fond-carte);
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            color: #2C1810;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .sous-message {
+            text-align: center;
+            font-size: 1rem;
+            color: #5a3e2a;
+            margin-bottom: 2rem;
+        }
+
+        .info-devis {
+            background: var(--fond-tableau);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid #c4a882;
+        }
+
+        .info-devis h3 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.5rem;
+            color: #2C1810;
+            margin-bottom: 1rem;
+            text-align: center;
+        }
+
+        .info-devis-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.5rem 1.5rem;
+        }
+
+        .info-devis-grid .item {
+            display: flex;
+            padding: 0.3rem 0;
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .info-devis-grid .label {
+            font-weight: 700;
+            color: #5a3e2a;
+            min-width: 120px;
+        }
+
+        .info-devis-grid .value {
+            color: #2C1810;
+        }
+
+        .form-group {
+            margin-bottom: 1.2rem;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 700;
+            color: #2C1810;
+            font-size: 1rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 2px solid #c4a882;
+            border-radius: 16px;
+            font-family: 'Quicksand', sans-serif;
+            font-size: 1rem;
+            background: var(--fond-tableau);
+            cursor: pointer;
+            transition: 0.2s;
+            color: #2C1810;
+        }
+
+        .form-group select:focus {
+            outline: none;
+            border-color: var(--vert-caravane);
+            box-shadow: 0 0 0 3px rgba(124,182,159,0.2);
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+            margin-top: 1.5rem;
+        }
+
+        .btn {
+            padding: 0.8rem 2rem;
+            border-radius: 40px;
+            font-weight: bold;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+            font-family: 'Quicksand', sans-serif;
+            text-decoration: none;
+            display: inline-block;
+            flex: 1;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-secondary {
+            background: #5a3e2a;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .carte-magique { padding: 1.5rem; border-radius: 40px; }
+            h1 { font-size: 1.8rem; }
+            .info-devis-grid { grid-template-columns: 1fr; }
+            .info-devis-grid .item { flex-wrap: wrap; }
+            .info-devis-grid .label { min-width: 100px; }
+            .btn-group { flex-direction: column; }
+            .btn { flex: none; width: 100%; }
+        }
+
+        @media (max-width: 480px) {
+            .carte-magique { padding: 1rem; border-radius: 30px; }
+            h1 { font-size: 1.4rem; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="carte-magique">
+        <h1>📄 Création d'un contrat</h1>
+        <p class="sous-message">Choisissez le type de contrat et générez-le avec les données du devis</p>
+
+        <!-- ===== INFORMATIONS DU DEVIS ===== -->
+        <div class="info-devis">
+            <h3>📋 Informations du devis</h3>
+            <div class="info-devis-grid" id="devisInfo">
+                <div class="item"><span class="label">👤 Nom :</span><span class="value" id="d_nom">—</span></div>
+                <div class="item"><span class="label">📧 Email :</span><span class="value" id="d_email">—</span></div>
+                <div class="item"><span class="label">📞 Téléphone :</span><span class="value" id="d_telephone">—</span></div>
+                <div class="item"><span class="label">📍 Lieu :</span><span class="value" id="d_lieu">—</span></div>
+                <div class="item"><span class="label">🎭 Spectacle :</span><span class="value" id="d_spectacle">—</span></div>
+                <div class="item"><span class="label">📅 Date :</span><span class="value" id="d_date">—</span></div>
+                <div class="item"><span class="label">🎉 Événement :</span><span class="value" id="d_evenement">—</span></div>
+                <div class="item"><span class="label">💬 Message :</span><span class="value" id="d_message">—</span></div>
+            </div>
+        </div>
+
+        <!-- ===== CHOIX DU CONTRAT ===== -->
+        <div class="form-group">
+            <label for="typeContrat">📑 Choisissez le type de contrat :</label>
+            <select id="typeContrat">
+                <option value="1">CONTRAT SANS ROULOTTE</option>
+                <option value="2">CONTRAT AVEC ROULOTTE</option>
+            </select>
+        </div>
+
+        <!-- ===== BOUTONS ===== -->
+        <div class="btn-group">
+            <button class="btn btn-primary" onclick="genererContrat()">🎪 Générer le contrat</button>
+            <a href="reception.html" class="btn btn-secondary">← Retour à la liste</a>
+        </div>
+
+        <div id="message" style="margin-top:1rem; text-align:center; font-weight:600; color:#2c6e2c;"></div>
+    </div>
+</div>
+
+<script>
+    // ========== RÉCUPÉRER LES DONNÉES DU DEVIS ==========
+    function chargerDevis() {
+        var data = localStorage.getItem('devisPourContrat');
+        if (!data) {
+            document.getElementById('devisInfo').innerHTML = '<div style="text-align:center;padding:1rem;color:#b0a088;">Aucun devis trouvé. Retournez à la liste des devis.</div>';
+            return;
+        }
+
+        try {
+            var devis = JSON.parse(data);
+
+            document.getElementById('d_nom').textContent = devis.nom || '—';
+            document.getElementById('d_email').textContent = devis.email || '—';
+            document.getElementById('d_telephone').textContent = devis.telephone || '—';
+            document.getElementById('d_lieu').textContent = devis.lieu || '—';
+            document.getElementById('d_spectacle').textContent = devis.spectacles || devis.spectacle || '—';
+            document.getElementById('d_date').textContent = devis.dateSpectacle || devis.date || '—';
+            document.getElementById('d_evenement').textContent = devis.typeEvenement || '—';
+            document.getElementById('d_message').textContent = devis.message || '—';
+        } catch (e) {
+            console.error('Erreur:', e);
+        }
+    }
+
+    // ========== GÉNÉRER LE CONTRAT ==========
+    function genererContrat() {
+        var type = document.getElementById('typeContrat').value;
+        var data = localStorage.getItem('devisPourContrat');
+        var msg = document.getElementById('message');
+
+        if (!data) {
+            msg.textContent = '❌ Aucun devis trouvé.';
+            msg.style.color = '#D32F2F';
+            return;
+        }
+
+        try {
+            var devis = JSON.parse(data);
+
+            // Construire les données pour le contrat
+            var contratData = {
+                organisateur: {
+                    nom: devis.nom || '',
+                    email: devis.email || '',
+                    telephone: devis.telephone || '',
+                    adresse: devis.lieu || '',
+                    qualite: devis.typeEvenement || ''
+                },
+                titre: devis.spectacles || devis.spectacle || 'Spectacle',
+                lieu: devis.lieuSpectacle || devis.lieu || '',
+                date: devis.dateSpectacle || devis.date || '',
+                message: devis.message || '',
+                montantHT: '0',
+                tva: '0',
+                totalTTC: '0',
+                modeReglement: 'Chèque',
+                artiste: '3',
+                heureDebut: '15H00',
+                heureArrivee: '14H00'
+            };
+
+            // Sauvegarder pour la facture
+            localStorage.setItem('factureData', JSON.stringify(contratData));
+
+            // Rediriger vers contrat.html avec le type
+            window.location.href = 'contrat.html?type=' + type + '&from=devis';
+        } catch (e) {
+            msg.textContent = '❌ Erreur : ' + e.message;
+            msg.style.color = '#D32F2F';
+        }
+    }
+
+    // ========== INITIALISATION ==========
+    window.onload = function() {
+        chargerDevis();
+    };
+</script>
+</body>
+</html>

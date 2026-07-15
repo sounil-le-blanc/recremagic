@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Admin calendrier - Récré Magic</title>
     <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
+    <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg">
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <meta name="apple-mobile-web-app-title" content="Récré Magic">
+    <link rel="manifest" href="/site.webmanifest">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -28,14 +28,14 @@
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
-@media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
-}
+        @media (min-width: 1024px) {
+            body {
+                zoom: 150%;
+            }
+            body::before {
+                zoom: 0.6667;
+            }
+        }
 
         ::-webkit-scrollbar { width: 10px; }
         ::-webkit-scrollbar-track { background: rgba(0,0,0,0.2); border-radius: 10px; }
@@ -121,6 +121,24 @@
             0% { transform: rotate(-15deg) scale(1.3); }
             50% { transform: rotate(15deg) scale(1.3); }
             100% { transform: rotate(-15deg) scale(1.3); }
+        }
+
+        .btn-contrats {
+            background: #1e0e49;
+            color: white;
+            padding: 0.45rem 1.2rem;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 0.85rem;
+            transition: background 0.2s, transform 0.2s;
+            border: none;
+            cursor: pointer;
+            display: inline-block;
+        }
+        .btn-contrats:hover {
+            background: #2d1a66;
+            transform: scale(1.05);
         }
 
         .logout-btn {
@@ -474,19 +492,35 @@
             .weekday-header { font-size: 0.65rem; }
             .popup-content { padding: 1rem; }
             .cal-day .hover-bubble { min-width: 180px; max-width: 250px; }
+            .admin-header h1 { font-size: 1.5rem; }
+            .header-actions { gap: 8px; flex-wrap: wrap; justify-content: center; }
+            .btn-contrats { font-size: 0.75rem; padding: 0.35rem 0.8rem; }
         }
     </style>
 </head>
 <body>
 
+<!-- ============================================================ -->
+<!--  VÉRIFICATION DE SESSION ADMIN - REDIRECTION AUTOMATIQUE      -->
+<!-- ============================================================ -->
 <script>
 (function() {
-    var session = JSON.parse(localStorage.getItem('admin_session') || '{}');
-    if (!session.id || !session.expires || session.expires < Date.now()) {
+    try {
+        var session = JSON.parse(localStorage.getItem('admin_session') || '{}');
+        // Si pas d'ID ou session expirée → rediriger vers login
+        if (!session.id || !session.expires || session.expires < Date.now()) {
+            localStorage.removeItem('admin_session');
+            window.location.href = 'admin-login.html';
+        } else {
+            // Session valide
+            window.adminRole = session.role || 'admin';
+            console.log('✅ Session admin active - Rôle:', window.adminRole);
+        }
+    } catch (e) {
+        console.error('Erreur de session:', e);
         localStorage.removeItem('admin_session');
         window.location.href = 'admin-login.html';
     }
-    window.adminRole = session.role;
 })();
 </script>
 
@@ -495,6 +529,7 @@
         <h1>🎪 Admin Calendrier</h1>
         <div class="header-actions">
             <a href="compte.html" class="admin-finger-link" title="📈 Voir le compteur">📈</a>
+            <a href="contrat.html" class="btn-contrats">📄 Contrats</a>
             <button class="logout-btn" onclick="logout()">🚪 Déconnexion</button>
         </div>
     </div>

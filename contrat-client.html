@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votre contrat - Récré Magic</title>
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --vert-caravane: #7CB69F;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --fond-overlay: rgba(0,0,0,0.45);
+            --fond-carte: rgba(245,235,215,0.96);
+            --fond-tableau: rgba(255,250,235,0.9);
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background-image: url('images/fond-image.webp');
+            background-size: cover;
+            background-attachment: fixed;
+            background-position: center;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 2rem;
+        }
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--fond-overlay);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .app-wrapper {
+            position: relative;
+            z-index: 10;
+            max-width: 900px;
+            width: 95%;
+            margin: 0 auto;
+        }
+
+        .carte-magique {
+            background: var(--fond-carte);
+            backdrop-filter: blur(6px);
+            border-radius: 60px;
+            padding: 2rem;
+            border: 5px solid #7a5c3e;
+            outline: 4px solid #5a3e2a;
+            outline-offset: 4px;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0,0,0,0.3);
+        }
+
+        .contrat-badge {
+            background: #1e0e49;
+            color: white;
+            padding: 0.3rem 1.5rem;
+            border-radius: 40px;
+            display: inline-block;
+            font-size: 0.9rem;
+            letter-spacing: 2px;
+            margin-bottom: 1rem;
+        }
+
+        h1 {
+            font-family: 'MedievalSharp', cursive;
+            font-size: 2.5rem;
+            color: #2C1810;
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .sous-titre {
+            text-align: center;
+            color: #5a3e2a;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .document-reel {
+            background: #fffef7;
+            border-radius: 30px;
+            padding: 1.5rem;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            border: 1px solid #d4b48c;
+            font-size: 0.9rem;
+            line-height: 1.45;
+            color: #2C1810;
+            position: relative;
+            min-height: 300px;
+            text-align: justify;
+        }
+
+        .logo-coin {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            height: 120px;
+            width: auto;
+            border-radius: 12px;
+            border: 2px solid #c0a080;
+            background: white;
+            padding: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+        }
+
+        .contenu-avec-logo {
+            padding-top: 70px;
+        }
+
+        .doc-section {
+            margin-bottom: 1.2rem;
+            border-left: 3px solid #1e0e49;
+            padding-left: 0.8rem;
+        }
+
+        .doc-ligne {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: baseline;
+            margin-bottom: 0.5rem;
+        }
+
+        .doc-label {
+            font-weight: 700;
+            min-width: 150px;
+            color: #5a3e2a;
+        }
+
+        .doc-champ-fixe {
+            flex: 1;
+            padding: 4px 8px;
+            background: rgba(200,200,200,0.15);
+            border-radius: 4px;
+            color: #2C1810;
+            font-weight: 500;
+        }
+
+        .doc-champ-editable {
+            flex: 1;
+            padding: 4px 8px;
+            border: none;
+            border-bottom: 2px solid #c0a080;
+            background: transparent;
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: #2C1810;
+            transition: 0.2s;
+        }
+
+        .doc-champ-editable:focus {
+            outline: none;
+            border-bottom-color: #1e0e49;
+        }
+
+        .doc-champ-editable:empty:before {
+            content: attr(placeholder);
+            color: #b0a088;
+            font-style: italic;
+        }
+
+        .texte-fixe {
+            margin: 0.5rem 0;
+            padding: 8px 0;
+        }
+
+        .signature-container {
+            display: flex;
+            gap: 1.5rem;
+            margin: 1rem 0;
+            flex-wrap: wrap;
+        }
+
+        .signature-box {
+            flex: 1;
+            background: white;
+            border: 1px solid #c0a080;
+            border-radius: 20px;
+            padding: 0.8rem;
+            text-align: center;
+        }
+
+        .signature-img {
+            max-width: 100%;
+            max-height: 100px;
+            object-fit: contain;
+        }
+
+        .validation-block {
+            background: #f9f0e0;
+            border-radius: 25px;
+            padding: 1.2rem;
+            margin: 1.5rem 0;
+            border: 1px solid #d4b48c;
+        }
+
+        .checkbox-line {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 15px;
+            cursor: default;
+        }
+
+        .checkbox-line input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            cursor: pointer;
+            accent-color: #1e0e49;
+            flex-shrink: 0;
+        }
+
+        .checkbox-line label {
+            font-weight: 700;
+            color: #2C1810;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        .infos-legales {
+            font-size: 0.65rem;
+            text-align: center;
+            margin-top: 1rem;
+            color: #4a3520;
+            border-top: 1px solid #d4b48c;
+            padding-top: 0.8rem;
+        }
+
+        .btn-envoyer {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: linear-gradient(135deg, #7CB69F, #5a8f78);
+            color: white;
+            border: none;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 1.1rem;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-top: 1.5rem;
+        }
+
+        .btn-envoyer:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn-envoyer:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .btn-retour {
+            display: inline-block;
+            padding: 0.6rem 1.5rem;
+            background: #5a3e2a;
+            color: white;
+            border-radius: 40px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 1rem;
+        }
+
+        .btn-retour:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+        }
+
+        .actions {
+            text-align: center;
+            margin-top: 1rem;
+        }
+
+        .inline-champ-simple {
+            border-bottom: 1px solid #c0a080;
+            padding: 2px 8px;
+            display: inline-block;
+            min-width: 120px;
+            background: rgba(200,200,200,0.1);
+            border-radius: 4px;
+        }
+
+        .non-editable {
+            background: rgba(200,200,200,0.15);
+            border-bottom: 1px solid #ccc;
+            color: #555;
+        }
+
+        @media (max-width: 768px) {
+            body { padding: 1rem; }
+            .carte-magique { padding: 1.5rem; border-radius: 40px; }
+            h1 { font-size: 1.8rem; }
+            .doc-ligne { flex-direction: column; align-items: flex-start; gap: 0.2rem; }
+            .doc-label { min-width: auto; }
+            .logo-coin { height: 80px; top: 10px; left: 10px; }
+            .contenu-avec-logo { padding-top: 60px; }
+            .signature-container { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="app-wrapper">
+    <div class="carte-magique">
+        <div style="text-align:center;">
+            <div class="contrat-badge">✦ CONTRAT ✦</div>
+            <h1>📄 Votre contrat</h1>
+            <p class="sous-titre">Veuillez vérifier les informations et compléter vos coordonnées</p>
+        </div>
+
+        <div id="loading" style="text-align:center; padding:3rem; color:#888;">
+            ⏳ Chargement du contrat...
+        </div>
+
+        <div id="contratContainer" style="display:none;">
+            <div class="document-reel" id="documentReel">
+                <img src="images/Logo.png" alt="Logo" class="logo-coin">
+                <div class="contenu-avec-logo" id="contenuContrat">
+                    <!-- Le contenu du contrat sera injecté ici -->
+                </div>
+            </div>
+
+            <button class="btn-envoyer" id="btnValider">✅ Valider mes coordonnées</button>
+
+            <div class="actions">
+                <a href="index.html" class="btn-retour">← Retour à l'accueil</a>
+            </div>
+
+            <div id="message" style="text-align:center; margin-top:1rem; font-weight:bold; color:#2c6e2c;"></div>
+        </div>
+
+        <div id="erreur" style="display:none; text-align:center; padding:2rem; color:#D32F2F;">
+            ❌ Contrat introuvable. Le lien est peut-être expiré ou invalide.
+            <br><br>
+            <a href="index.html" class="btn-retour">← Retour à l'accueil</a>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    // ========== RÉCUPÉRER L'ID DANS L'URL ==========
+    const urlParams = new URLSearchParams(window.location.search);
+    const contratId = urlParams.get('id');
+
+    // ========== CHARGER LE CONTRAT ==========
+    function chargerContratClient() {
+        if (!contratId) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('erreur').style.display = 'block';
+            return;
+        }
+
+        var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
+        var contratTrouve = null;
+
+        for (var i = 0; i < tousLesContrats.length; i++) {
+            if (tousLesContrats[i].id == contratId) {
+                contratTrouve = tousLesContrats[i];
+                break;
+            }
+        }
+
+        if (!contratTrouve) {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('erreur').style.display = 'block';
+            return;
+        }
+
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById('contratContainer').style.display = 'block';
+
+        afficherContratClient(contratTrouve);
+    }
+
+    // ========== AFFICHER LE CONTRAT EN VERSION CLIENT ==========
+    function afficherContratClient(contrat) {
+        var d = contrat.donnees;
+        if (!d) {
+            document.getElementById('erreur').style.display = 'block';
+            return;
+        }
+
+        var html = '';
+
+        // En-tête
+        html += `
+            <div class="header-contrat" style="text-align:center; margin-bottom:25px;">
+                <div class="contrat-badge" style="display:inline-block;">✦ CONTRAT ✦</div>
+                <div style="font-size:1.8rem; font-weight:800; margin-top:10px; letter-spacing:2px;">${d.titre || 'Spectacle'}</div>
+            </div>
+        `;
+
+        // SECTION 1 - ENTRE LES SOUSSIGNÉS (MODIFIABLE)
+        html += `
+            <div class="doc-section">
+                <p><strong>ENTRE LES SOUSSIGNÉS</strong></p>
+                <div class="doc-ligne">
+                    <span class="doc-label">Organisateur :</span>
+                    <span class="doc-champ-editable" contenteditable="true" id="client_nom" placeholder="Nom, prénom">${d.organisateur?.nom || ''}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Adresse :</span>
+                    <span class="doc-champ-editable" contenteditable="true" id="client_adresse" placeholder="Numéro, rue, code postal">${d.organisateur?.adresse || ''}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Téléphone :</span>
+                    <span class="doc-champ-editable" contenteditable="true" id="client_telephone" placeholder="06 XX XX XX XX">${d.organisateur?.telephone || ''}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Email :</span>
+                    <span class="doc-champ-editable" contenteditable="true" id="client_email" placeholder="exemple@email.com">${d.organisateur?.email || ''}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Qualité :</span>
+                    <span class="doc-champ-editable" contenteditable="true" id="client_qualite" placeholder="Président, trésorier...">${d.organisateur?.qualite || ''}</span>
+                </div>
+            </div>
+        `;
+
+        // Artiste (fixe)
+        html += `
+            <div style="margin:15px 0 10px 0;">
+                <strong>Artiste :</strong> <span style="font-weight:500;">${d.artiste || 'À définir'}</span>
+            </div>
+        `;
+
+        // Texte fixe
+        html += `
+            <div class="texte-fixe">
+                Thomas FABRE, responsable du spectacle « <span class="inline-champ-simple non-editable">${d.spectacle || d.titre || ''}</span> » produit par l'Association CAPIS qui règlera les charges sociales et fiscales des artistes.
+            </div>
+            <div class="texte-fixe">
+                <strong>D'autre part.</strong>
+            </div>
+        `;
+
+        // Achat du spectacle (fixe)
+        html += `
+            <div class="doc-section">
+                <p class="titre-achat" style="font-weight:700; text-decoration:underline; text-decoration-color:#b22222; text-underline-offset:4px;">
+                    <strong>L'ORGANISATEUR fait l'achat du spectacle « <span class="inline-champ-simple non-editable">${d.spectacle || d.titre || ''}</span> » présenté par <span class="inline-champ-simple non-editable">${d.artiste || '3'}</span> artistes aux conditions suivantes :</strong>
+                </p>
+            </div>
+        `;
+
+        // Lieu de représentation (fixe)
+        html += `
+            <div class="doc-section">
+                <p><strong>Lieu de la représentation :</strong> <span class="inline-champ-simple non-editable">${d.lieu || ''}</span></p>
+            </div>
+        `;
+
+        // Date et lieu (fixe)
+        html += `
+            <div class="doc-section">
+                <p><strong>DATE ET LIEU</strong></p>
+                <div class="doc-ligne">
+                    <span class="doc-label">Date :</span>
+                    <span class="inline-champ-simple non-editable">${d.date || ''}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Heure de passage :</span>
+                    <span class="inline-champ-simple non-editable">${d.heureDebut || '15H30'}</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Arrivée des artistes :</span>
+                    <span class="inline-champ-simple non-editable">${d.heureArrivee || '14H00'}</span>
+                </div>
+            </div>
+        `;
+
+        // Conditions financières (fixe)
+        html += `
+            <div class="doc-section">
+                <p><strong>CONDITIONS FINANCIÈRES</strong></p>
+                <div class="doc-ligne">
+                    <span class="doc-label">Montant HT :</span>
+                    <span class="inline-champ-simple non-editable">${d.montantHT || '0'} €</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">TVA 5,5% :</span>
+                    <span class="inline-champ-simple non-editable">${d.tva || '0'} €</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Total TTC :</span>
+                    <span class="inline-champ-simple non-editable">${d.totalTTC || '0'} €</span>
+                </div>
+                <div class="doc-ligne">
+                    <span class="doc-label">Mode de règlement :</span>
+                    <span class="inline-champ-simple non-editable">${d.modeReglement || 'Chèque'}</span>
+                </div>
+            </div>
+        `;
+
+        // Conditions techniques (fixe)
+        var conditionsTech = d.contrat === 1 ? 
+            'Sur votre scène ou podium de 6 mètres de façade sur 5 mètres de profondeur minimum. Une prise de 16 A.' : 
+            'Emplacement plat de 15m par 20m, prise 16A.';
+
+        html += `
+            <div class="doc-section">
+                <p><strong>CONDITIONS TECHNIQUES</strong></p>
+                <div class="texte-fixe" style="font-weight:bold; color:#b22222;">${conditionsTech}</div>
+            </div>
+        `;
+
+        // Conditions particulières (fixe)
+        html += `
+            <div class="doc-section">
+                <p><strong>CONDITIONS PARTICULIERES</strong></p>
+                <div class="texte-fixe">
+                    Toute annulation par l’Organisateur moins de 30 jours avant la date de la représentation entraînera le paiement intégral du montant prévu aux <strong style="text-decoration:underline; text-decoration-color:#b22222;">conditions financières</strong>, sauf cas de force majeure dûment reconnu par la législation française.<br>
+                    En cas d’annulation par l’Artiste (ou la compagnie), celui-ci s’engage à proposer une date de report dans un délai raisonnable. À défaut d’accord, le contrat sera résilié sans indemnité.<br>
+                    Tout litige relatif à l’exécution ou à l’interprétation du présent contrat sera soumis aux tribunaux compétents du Tarn, même en cas de pluralité de défendeurs ou d’appel en garantie.
+                </div>
+            </div>
+        `;
+
+        // Fait à / le (fixe)
+        html += `
+            <div class="doc-ligne">
+                <span class="doc-label">Fait à :</span>
+                <span class="inline-champ-simple non-editable">${d.lieuFait || ''}</span>
+                <span class="doc-label">le :</span>
+                <span class="inline-champ-simple non-editable">${d.dateFait || ''}</span>
+            </div>
+        `;
+
+        // Signatures (fixe)
+        html += `
+            <div class="signature-container">
+                <div class="signature-box">
+                    <h4 style="color:#5a3e2a; margin-bottom:0.5rem;">Signature Organisateur</h4>
+                    <div style="border:1px solid #d4b48c; border-radius:12px; background:white; padding:0.5rem; min-height:80px; display:flex; align-items:center; justify-content:center; color:#999; font-style:italic;">
+                        ${d.signatures && d.signatures['sig1_org'] ? '<img src="' + d.signatures['sig1_org'] + '" style="max-width:100%; max-height:80px;">' : 'Signature à apposer'}
+                    </div>
+                </div>
+                <div class="signature-box">
+                    <h4 style="color:#5a3e2a; margin-bottom:0.5rem;">Signature Récré Magic</h4>
+                    <img src="image/signature.png" alt="Signature" class="signature-img" style="max-height:80px;">
+                </div>
+            </div>
+        `;
+
+        // CASE LU ET APPROUVÉ
+        html += `
+            <div class="validation-block">
+                <div class="checkbox-line">
+                    <input type="checkbox" id="checkClient" onchange="toggleCheckboxClient()">
+                    <label for="checkClient">LU ET APPROUVÉ – J'accepte les conditions.</label>
+                </div>
+                <div style="font-size:0.75rem; color:#5a3e2a; background:#fff9ef; padding:10px; border-radius:16px; margin-top:8px; border-left:3px solid #1e0e49;">
+                    Signature + case cochée valent acceptation électronique (art. 1366 Code civil).
+                </div>
+            </div>
+        `;
+
+        // Infos légales (fixe)
+        html += `
+            <div class="infos-legales">
+                Productions Récré Magic de l'Association CAPIS enregistré sous le n° 4464 le 27/05/1987 Préfecture d'Albi<br>
+                140, chemin du Dévez - 81400 - LABASTIDE GABAUSSE - Licence de spectacle - L-R-25-1318<br>
+                Siret 382 713 766 00014 - APE 9001 Z - N° URSSAF 810 12457 1 - Centre de Recouvrement 80000 10855 TP 02<br>
+                AUDIENS 355 320 0200 - Congés Spectacle 674 94 001 U - TVA intracommunautaire FR 34 713 766 – www.recremagic.com
+            </div>
+        `;
+
+        document.getElementById('contenuContrat').innerHTML = html;
+
+        // ========== GESTION DE LA VALIDATION ==========
+        document.getElementById('btnValider').addEventListener('click', function() {
+            // Vérifier que la case est cochée
+            var checkClient = document.getElementById('checkClient');
+            if (!checkClient || !checkClient.checked) {
+                var msg = document.getElementById('message');
+                msg.textContent = '❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider.';
+                msg.style.color = '#D32F2F';
+                return;
+            }
+
+            var nom = document.getElementById('client_nom')?.innerText || '';
+            var adresse = document.getElementById('client_adresse')?.innerText || '';
+            var telephone = document.getElementById('client_telephone')?.innerText || '';
+            var email = document.getElementById('client_email')?.innerText || '';
+            var qualite = document.getElementById('client_qualite')?.innerText || '';
+
+            var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
+            for (var i = 0; i < tousLesContrats.length; i++) {
+                if (tousLesContrats[i].id == contratId) {
+                    tousLesContrats[i].donnees.organisateur.nom = nom;
+                    tousLesContrats[i].donnees.organisateur.adresse = adresse;
+                    tousLesContrats[i].donnees.organisateur.telephone = telephone;
+                    tousLesContrats[i].donnees.organisateur.email = email;
+                    tousLesContrats[i].donnees.organisateur.qualite = qualite;
+                    tousLesContrats[i].statut = 'Validé par le client';
+                    break;
+                }
+            }
+            localStorage.setItem('tousLesContrats', JSON.stringify(tousLesContrats));
+
+            var msg = document.getElementById('message');
+            msg.textContent = '✅ Merci ! Vos coordonnées ont été enregistrées et le contrat est accepté.';
+            msg.style.color = '#2c6e2c';
+            document.getElementById('btnValider').disabled = true;
+            document.getElementById('btnValider').textContent = '✅ Déjà validé';
+            document.getElementById('btnValider').style.opacity = '0.6';
+        });
+    }
+
+    // ========== FONCTION POUR LA CASE ==========
+    function toggleCheckboxClient() {
+        const cb = document.getElementById('checkClient');
+        if (cb) {
+            // La case change automatiquement, on ne fait rien de plus
+            console.log('Case cochée :', cb.checked);
+        }
+    }
+
+    window.onload = chargerContratClient;
+</script>
+</body>
+</html>
