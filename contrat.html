@@ -368,7 +368,7 @@
             margin-bottom: 0.5rem;
             font-size: 0.9rem;
         }
-        canvas {
+        .signature-box canvas {
             border: 1px solid #d4b48c;
             border-radius: 12px;
             background: white;
@@ -379,13 +379,11 @@
             touch-action: none;
         }
         .signature-img {
-            border: 1px solid #d4b48c;
-            border-radius: 12px;
-            background: white;
-            width: 100%;
-            height: auto;
-            max-height: 150px;
+            max-width: 100%;
+            max-height: 100px;
             object-fit: contain;
+            display: block;
+            margin: 0 auto;
         }
         .sign-actions {
             margin-top: 0.5rem;
@@ -415,12 +413,14 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 15px;
-            cursor: pointer;
+            cursor: default;
         }
-        .checkbox-line input {
+        .checkbox-line input[type="checkbox"] {
             width: 20px;
             height: 20px;
             cursor: pointer;
+            accent-color: #1e0e49;
+            flex-shrink: 0;
         }
         .checkbox-line label {
             font-weight: 700;
@@ -491,6 +491,22 @@
         .btn-sauvegarde:hover {
             background: #1e4e1e;
         }
+        .btn-lien {
+            background: #1e0e49;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 40px;
+            font-family: 'Quicksand', sans-serif;
+            font-weight: bold;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: 0.2s;
+            flex: 1;
+        }
+        .btn-lien:hover {
+            background: #2d1a66;
+        }
         .btn-group {
             display: flex;
             gap: 1rem;
@@ -504,6 +520,9 @@
             flex: 1;
         }
         .btn-group .btn-sauvegarde {
+            flex: 1;
+        }
+        .btn-group .btn-lien {
             flex: 1;
         }
         .pied-page {
@@ -664,6 +683,23 @@
         .sauvegarde-msg.visible {
             opacity: 1;
         }
+        .brouillon-msg {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            background: #FFB300;
+            color: #2C1810;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.7rem;
+            z-index: 999;
+            opacity: 0;
+            transition: opacity 0.5s;
+            font-weight: bold;
+        }
+        .brouillon-msg.visible {
+            opacity: 1;
+        }
         @media (max-width: 800px) {
             body { padding: 1rem; }
             .titre-principal { font-size: 1.5rem; }
@@ -684,7 +720,7 @@
             .contrat-selector { flex-direction: column; align-items: center; }
             .inline-champ-simple { min-width: 100px; }
             .btn-group { flex-direction: column; }
-            .btn-group .btn-save, .btn-group .btn-download, .btn-group .btn-sauvegarde { flex: none; width: 100%; }
+            .btn-group .btn-save, .btn-group .btn-download, .btn-group .btn-sauvegarde, .btn-group .btn-lien { flex: none; width: 100%; }
         }
     </style>
 </head>
@@ -710,7 +746,7 @@
     <div id="zoneContrat" class="carte-contrat" style="border-left-color: var(--couleur-contrat1);">
         <div style="text-align:center; padding:2rem;">Choisissez un contrat dans le menu ci-dessus.</div>
     </div>
-    <div class="pied-page">Choisissez un contrat, remplissez les champs, signez, cochez la case, validez.</div>
+    <div class="pied-page">Choisissez un contrat, remplissez les champs, signez, validez.</div>
 </div>
 
 <script>
@@ -722,6 +758,7 @@
     let currentContrat = 0;
     let signatureCanvas = {};
     let currentTitre = "";
+    let currentContratId = null;
 
     let signaturesSauvegardees = {};
 
@@ -733,6 +770,62 @@
     ];
 
     const nbArtistesPossibles = ["1", "2", "3", "4", "5"];
+
+    // ========== SAUVEGARDE AUTOMATIQUE DU BROUILLON ==========
+    function sauvegarderBrouillon(num) {
+        if (num === 0) return;
+        try {
+            var donnees = recupererDonneesContrat(num);
+            var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
+            var existe = false;
+            var nom = document.querySelectorAll('.doc-champ')[0]?.innerText || 'Nom inconnu';
+            
+            for (var i = 0; i < tousLesContrats.length; i++) {
+                if (tousLesContrats[i].id === currentContratId) {
+                    tousLesContrats[i].donnees = donnees;
+                    tousLesContrats[i].dateModification = new Date().toLocaleString('fr-FR');
+                    tousLesContrats[i].statut = 'Brouillon';
+                    tousLesContrats[i].nom = nom;
+                    existe = true;
+                    break;
+                }
+            }
+            
+            if (!existe) {
+                var contratListe = {
+                    id: currentContratId || Date.now(),
+                    dateCreation: new Date().toLocaleString('fr-FR'),
+                    dateModification: new Date().toLocaleString('fr-FR'),
+                    nom: nom,
+                    type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
+                    statut: 'Brouillon',
+                    donnees: donnees
+                };
+                tousLesContrats.unshift(contratListe);
+                currentContratId = contratListe.id;
+            }
+            localStorage.setItem('tousLesContrats', JSON.stringify(tousLesContrats));
+            
+            var msg = document.getElementById('brouillonMsg');
+            if (!msg) {
+                msg = document.createElement('div');
+                msg.id = 'brouillonMsg';
+                msg.className = 'brouillon-msg';
+                document.body.appendChild(msg);
+            }
+            msg.textContent = '📝 Brouillon sauvegardé à ' + new Date().toLocaleTimeString();
+            msg.classList.add('visible');
+            
+            clearTimeout(msg._timeout);
+            msg._timeout = setTimeout(function() {
+                msg.classList.remove('visible');
+            }, 2000);
+            
+            console.log('📝 Brouillon sauvegardé automatiquement');
+        } catch (e) {
+            console.error('Erreur sauvegarde brouillon:', e);
+        }
+    }
 
     // ========== SAUVEGARDE AUTOMATIQUE ==========
     function sauvegarderContratAutomatique(num) {
@@ -868,6 +961,7 @@
             return;
         }
         sauvegarderContratAutomatique(num);
+        sauvegarderBrouillon(num);
         afficherMessage('✅ Contrat sauvegardé manuellement !');
     }
 
@@ -887,12 +981,143 @@
         btnGroup.appendChild(btn);
     }
 
+    // ========== GÉNÉRER UN LIEN UNIQUE POUR LE CONTRAT ==========
+    function genererLienContrat() {
+        if (!currentContratId) {
+            afficherMessage('❌ Aucun contrat ouvert.', 'erreur');
+            return;
+        }
+        
+        var url = window.location.origin + window.location.pathname + '?mode=edition&id=' + currentContratId;
+        
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url).then(function() {
+                afficherMessage('✅ Lien copié dans le presse-papiers !');
+            }).catch(function() {
+                prompt('Copiez ce lien :', url);
+            });
+        } else {
+            prompt('Copiez ce lien :', url);
+        }
+    }
+
+    // ========== AJOUTER LE BOUTON LIEN ==========
+    function ajouterBoutonLien() {
+        var existingBtn = document.getElementById('genererLienBtn');
+        if (existingBtn) return;
+        
+        var btnGroup = document.querySelector('.btn-group');
+        if (!btnGroup) return;
+        
+        var btn = document.createElement('button');
+        btn.id = 'genererLienBtn';
+        btn.className = 'btn-lien';
+        btn.innerHTML = '🔗 Lien vers ce contrat';
+        btn.onclick = genererLienContrat;
+        
+        btnGroup.appendChild(btn);
+    }
+
+    // ========== CHARGER UN CONTRAT PAR LIEN UNIQUE ==========
+    function chargerContratParLien() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var mode = urlParams.get('mode');
+        var id = urlParams.get('id');
+        
+        if (mode === 'edition' && id) {
+            var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
+            var contratTrouve = null;
+            
+            for (var i = 0; i < tousLesContrats.length; i++) {
+                if (tousLesContrats[i].id == id) {
+                    contratTrouve = tousLesContrats[i];
+                    break;
+                }
+            }
+            
+            if (!contratTrouve) {
+                afficherMessage('❌ Contrat introuvable.', 'erreur');
+                return false;
+            }
+            
+            currentContratId = parseInt(id);
+            var type = contratTrouve.type === 'SANS ROULOTTE' ? 1 : 2;
+            
+            chargerContrat(type);
+            
+            setTimeout(function() {
+                var d = contratTrouve.donnees;
+                if (!d) return;
+                
+                var champs = document.querySelectorAll('.doc-champ');
+                if (champs.length >= 5) {
+                    champs[0].innerText = d.organisateur?.nom || '';
+                    champs[1].innerText = d.organisateur?.adresse || '';
+                    champs[2].innerText = d.organisateur?.telephone || '';
+                    champs[3].innerText = d.organisateur?.email || '';
+                    champs[4].innerText = d.organisateur?.qualite || '';
+                }
+                
+                var lieuChamp = document.querySelector('.doc-champ[placeholder="à remplir"]');
+                if (lieuChamp) lieuChamp.innerText = d.lieu || '';
+                
+                var dateChamp = document.querySelector('.inline-champ-simple[placeholder="JJ/MM/AAAA"]');
+                if (dateChamp) dateChamp.innerText = d.date || '';
+                
+                var selectSpectacle = document.getElementById('selectSpectacle' + type);
+                if (selectSpectacle && d.spectacle) {
+                    var options = selectSpectacle.options;
+                    for (var i = 0; i < options.length; i++) {
+                        if (options[i].value === d.spectacle || options[i].text === d.spectacle) {
+                            selectSpectacle.selectedIndex = i;
+                            break;
+                        }
+                    }
+                    var evt = new Event('change');
+                    selectSpectacle.dispatchEvent(evt);
+                }
+                
+                var montants = document.querySelectorAll('.doc-champ[placeholder="0,00"]');
+                if (montants.length >= 3) {
+                    montants[0].innerText = d.montantHT || '0';
+                    montants[1].innerText = d.tva || '0';
+                    montants[2].innerText = d.totalTTC || '0';
+                }
+                
+                var reglement = document.querySelector('.doc-champ[placeholder="Chèque, virement"]');
+                if (reglement) reglement.innerText = d.modeReglement || 'Chèque';
+                
+                if (contratTrouve.signatures) {
+                    signaturesSauvegardees = contratTrouve.signatures;
+                    var canvasId = type === 1 ? 'sig1_org' : 'sig2_org';
+                    var canvas = document.getElementById(canvasId);
+                    if (canvas && signaturesSauvegardees[canvasId]) {
+                        var img = new Image();
+                        img.onload = function() {
+                            var ctx = canvas.getContext('2d');
+                            ctx.clearRect(0, 0, canvas.width, canvas.height);
+                            ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                        };
+                        img.src = signaturesSauvegardees[canvasId];
+                    }
+                }
+                
+                sauvegarderBrouillon(type);
+                afficherMessage('📄 Contrat chargé par lien !');
+            }, 600);
+            
+            return true;
+        }
+        return false;
+    }
+
     function ecouterModifications() {
         document.addEventListener('input', function(e) {
             if (e.target.classList.contains('doc-champ') || 
                 e.target.classList.contains('inline-champ-simple')) {
                 if (currentContrat !== 0) {
                     sauvegarderContratAutomatique(currentContrat);
+                    sauvegarderBrouillon(currentContrat);
                 }
             }
         });
@@ -901,6 +1126,7 @@
             if (e.target.classList.contains('select-style')) {
                 if (currentContrat !== 0) {
                     sauvegarderContratAutomatique(currentContrat);
+                    sauvegarderBrouillon(currentContrat);
                 }
             }
         });
@@ -1117,6 +1343,94 @@
         else drop.style.display = 'block';
     }
 
+    // ========== CHARGER UN CONTRAT DEPUIS RECEPTION ==========
+    function chargerContratDepuisReception() {
+        var urlParams = new URLSearchParams(window.location.search);
+        var from = urlParams.get('from');
+        var id = urlParams.get('id');
+        var type = urlParams.get('type');
+        
+        if (from === 'reception' && id && type) {
+            var data = localStorage.getItem('contratARemplir');
+            if (!data) return false;
+            
+            try {
+                var contrat = JSON.parse(data);
+                currentContratId = parseInt(id);
+                
+                chargerContrat(parseInt(type));
+                
+                setTimeout(function() {
+                    var d = contrat.donnees;
+                    if (!d) return;
+                    
+                    var champs = document.querySelectorAll('.doc-champ');
+                    if (champs.length >= 5) {
+                        champs[0].innerText = d.organisateur?.nom || '';
+                        champs[1].innerText = d.organisateur?.adresse || '';
+                        champs[2].innerText = d.organisateur?.telephone || '';
+                        champs[3].innerText = d.organisateur?.email || '';
+                        champs[4].innerText = d.organisateur?.qualite || '';
+                    }
+                    
+                    var lieuChamp = document.querySelector('.doc-champ[placeholder="à remplir"]');
+                    if (lieuChamp) lieuChamp.innerText = d.lieu || '';
+                    
+                    var dateChamp = document.querySelector('.inline-champ-simple[placeholder="JJ/MM/AAAA"]');
+                    if (dateChamp) dateChamp.innerText = d.date || '';
+                    
+                    var selectSpectacle = document.getElementById('selectSpectacle' + type);
+                    if (selectSpectacle && d.spectacle) {
+                        var options = selectSpectacle.options;
+                        for (var i = 0; i < options.length; i++) {
+                            if (options[i].value === d.spectacle || options[i].text === d.spectacle) {
+                                selectSpectacle.selectedIndex = i;
+                                break;
+                            }
+                        }
+                        var evt = new Event('change');
+                        selectSpectacle.dispatchEvent(evt);
+                    }
+                    
+                    var montants = document.querySelectorAll('.doc-champ[placeholder="0,00"]');
+                    if (montants.length >= 3) {
+                        montants[0].innerText = d.montantHT || '0';
+                        montants[1].innerText = d.tva || '0';
+                        montants[2].innerText = d.totalTTC || '0';
+                    }
+                    
+                    var reglement = document.querySelector('.doc-champ[placeholder="Chèque, virement"]');
+                    if (reglement) reglement.innerText = d.modeReglement || 'Chèque';
+                    
+                    if (contrat.signatures) {
+                        signaturesSauvegardees = contrat.signatures;
+                        var canvasId = type === 1 ? 'sig1_org' : 'sig2_org';
+                        var canvas = document.getElementById(canvasId);
+                        if (canvas && signaturesSauvegardees[canvasId]) {
+                            var img = new Image();
+                            img.onload = function() {
+                                var ctx = canvas.getContext('2d');
+                                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                                ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+                            };
+                            img.src = signaturesSauvegardees[canvasId];
+                        }
+                    }
+                    
+                    sauvegarderBrouillon(parseInt(type));
+                    afficherMessage('🔄 Contrat chargé depuis la liste !');
+                    localStorage.removeItem('contratARemplir');
+                }, 600);
+                
+                return true;
+            } catch (e) {
+                console.error('Erreur chargement contrat:', e);
+                return false;
+            }
+        }
+        return false;
+    }
+
     function telechargerContrat() {
         var contenu = document.getElementById('zoneContrat').innerHTML;
         
@@ -1140,7 +1454,7 @@
                 .doc-champ { border-bottom: 1px solid #999; padding: 4px 8px; min-width: 200px; }
                 .signature-container { display: flex; gap: 40px; margin-top: 30px; }
                 .signature-box { flex: 1; text-align: center; border: 1px solid #ccc; padding: 20px; border-radius: 10px; }
-                .signature-img { max-width: 100%; max-height: 100px; }
+                .signature-img { max-width: 100%; max-height: 100px; object-fit: contain; display: block; margin: 0 auto; }
                 .validation-block { background: #f9f0e0; padding: 20px; border-radius: 15px; margin: 20px 0; }
                 .infos-legales { font-size: 11px; text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #ccc; color: #666; }
                 .checkbox-line { display: flex; align-items: center; gap: 10px; margin: 10px 0; }
@@ -1153,6 +1467,7 @@
                 .btn-save { display: none; }
                 .btn-download { display: none; }
                 .btn-sauvegarde { display: none; }
+                .btn-lien { display: none; }
                 .btn-group { display: none; }
             </style>
         </head>
@@ -1175,6 +1490,7 @@
         afficherMessage('📥 Contrat téléchargé !');
     }
 
+    // ========== ENVOYER L'EMAIL VERS LA NOUVELLE EDGE FUNCTION ==========
     async function envoyerEmailContrat(num) {
         try {
             var donnees = recupererDonneesContrat(num);
@@ -1185,7 +1501,11 @@
                 return false;
             }
 
-            const response = await supabaseClient.functions.invoke('send-contrat-email', {
+            // Générer le lien vers la version client
+            var lienClient = window.location.origin + '/contrat-client.html?id=' + currentContratId;
+
+            // ===== APPEL VERS LA NOUVELLE EDGE FUNCTION =====
+            const response = await supabaseClient.functions.invoke('send-contrat-client-email', {
                 body: {
                     email: emailOrganisateur,
                     organisateur: donnees.organisateur,
@@ -1193,7 +1513,9 @@
                     lieu: donnees.lieu,
                     date: donnees.date,
                     montantHT: donnees.montantHT,
-                    totalTTC: donnees.totalTTC
+                    totalTTC: donnees.totalTTC,
+                    contratId: currentContratId,
+                    lienClient: lienClient
                 }
             });
 
@@ -1221,6 +1543,7 @@
             
             try {
                 var devis = JSON.parse(data);
+                currentContratId = Date.now();
                 chargerContrat(parseInt(type));
                 
                 setTimeout(function() {
@@ -1262,6 +1585,7 @@
                         });
                     }
                     
+                    sauvegarderBrouillon(parseInt(type));
                     afficherMessage('✅ Contrat pré-rempli avec les données du devis !');
                     localStorage.removeItem('devisPourContrat');
                 }, 600);
@@ -1377,10 +1701,13 @@
                     <div class="doc-ligne"><span class="doc-label">Fait à :</span> <div class="doc-champ" contenteditable="true" placeholder="Ville"></div> <span class="doc-label">le :</span> <div class="doc-champ" contenteditable="true" placeholder="Date"></div></div>
                     <div class="signature-container">
                         <div class="signature-box"><h4>Signature Organisateur</h4><canvas id="sig1_org" width="400" height="150"></canvas><div class="sign-actions"><button class="sign-btn" onclick="clearSignature('sig1_org')">Effacer</button></div></div>
-                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="image/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
+                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="images/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
                     </div>
                     <div class="validation-block">
-                        <div class="checkbox-line" onclick="toggleCheckbox(1)"><input type="checkbox" id="check1"><label>LU ET APPROUVÉ – J'accepte les conditions.</label></div>
+                        <div class="checkbox-line">
+                            <input type="checkbox" id="check1" onchange="toggleCheckbox(1)" style="width:20px;height:20px;cursor:pointer;accent-color:#1e0e49;flex-shrink:0;">
+                            <label for="check1" style="font-weight:700;color:#2C1810;cursor:pointer;font-size:1rem;">LU ET APPROUVÉ – J'accepte les conditions (facultatif).</label>
+                        </div>
                         <div class="legal-mention" style="border-left-color: var(--couleur-contrat1);">Signature + case cochée valent acceptation électronique (art. 1366 Code civil).</div>
                         <div class="timestamp" id="ts1">Horodatage : --/--/---- --:--</div>
                     </div>
@@ -1394,7 +1721,7 @@
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-save" id="saveBtn">💾 Valider le contrat</button>
+                <button class="btn-save" id="saveBtn">📧 Envoyer le contrat</button>
                 <button class="btn-download" id="downloadBtn">📥 Télécharger PDF</button>
             </div>`;
             
@@ -1409,6 +1736,7 @@
                 const downloadBtn = document.getElementById('downloadBtn');
                 if (downloadBtn) downloadBtn.onclick = telechargerContrat;
                 ajouterBoutonSauvegarde();
+                ajouterBoutonLien();
             }, 50);
         } else {
             card.style.borderLeftColor = 'var(--couleur-contrat2)';
@@ -1458,10 +1786,13 @@
                     <div class="doc-ligne"><span class="doc-label">Fait à :</span> <div class="doc-champ" contenteditable="true" placeholder="Ville"></div> <span class="doc-label">le :</span> <div class="doc-champ" contenteditable="true" placeholder="Date"></div></div>
                     <div class="signature-container">
                         <div class="signature-box"><h4>Signature Organisateur</h4><canvas id="sig2_org" width="400" height="150"></canvas><div class="sign-actions"><button class="sign-btn" onclick="clearSignature('sig2_org')">Effacer</button></div></div>
-                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="image/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
+                        <div class="signature-box"><h4>Signature Récré Magic</h4><img src="images/signature.png" alt="Signature Récré Magic" class="signature-img"></div>
                     </div>
                     <div class="validation-block">
-                        <div class="checkbox-line" onclick="toggleCheckbox(2)"><input type="checkbox" id="check2"><label>LU ET APPROUVÉ – J'accepte les conditions.</label></div>
+                        <div class="checkbox-line">
+                            <input type="checkbox" id="check2" onchange="toggleCheckbox(2)" style="width:20px;height:20px;cursor:pointer;accent-color:#2c6e2c;flex-shrink:0;">
+                            <label for="check2" style="font-weight:700;color:#2C1810;cursor:pointer;font-size:1rem;">LU ET APPROUVÉ – J'accepte les conditions (facultatif).</label>
+                        </div>
                         <div class="legal-mention" style="border-left-color: var(--couleur-contrat2);">Signature + case cochée valent acceptation électronique (art. 1366 Code civil).</div>
                         <div class="timestamp" id="ts2">Horodatage : --/--/---- --:--</div>
                     </div>
@@ -1475,7 +1806,7 @@
                 </div>
             </div>
             <div class="btn-group">
-                <button class="btn-save" id="saveBtn">💾 Valider et sauvegarder le contrat</button>
+                <button class="btn-save" id="saveBtn">📧 Envoyer le contrat</button>
                 <button class="btn-download" id="downloadBtn">📥 Télécharger PDF</button>
             </div>`;
             
@@ -1490,6 +1821,7 @@
                 const downloadBtn = document.getElementById('downloadBtn');
                 if (downloadBtn) downloadBtn.onclick = telechargerContrat;
                 ajouterBoutonSauvegarde();
+                ajouterBoutonLien();
             }, 50);
         }
         
@@ -1500,21 +1832,39 @@
         window._intervalSauvegarde = setInterval(function() {
             if (currentContrat !== 0) {
                 sauvegarderContratAutomatique(currentContrat);
+                sauvegarderBrouillon(currentContrat);
             }
         }, 30000);
+        
+        // Sauvegarder le brouillon immédiatement
+        if (!currentContratId) {
+            currentContratId = Date.now();
+        }
+        sauvegarderBrouillon(num);
         
         setTimeout(() => {
             const saveBtn = document.getElementById('saveBtn');
             if (saveBtn) {
                 saveBtn.onclick = async () => {
-                    if (num === 1 && !document.getElementById('check1')?.checked) { 
-                        afficherMessage('❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider', 'erreur');
-                        return; 
+                    // ===== VÉRIFICATION DES CHAMPS OBLIGATOIRES =====
+                    var nom = document.querySelectorAll('.doc-champ')[0]?.innerText || '';
+                    var email = document.querySelectorAll('.doc-champ')[3]?.innerText || '';
+                    var spectacle = document.getElementById('selectSpectacle' + num)?.value || '';
+                    
+                    if (!nom.trim()) {
+                        afficherMessage('❌ Veuillez remplir le champ "Organisateur"', 'erreur');
+                        return;
                     }
-                    if (num === 2 && !document.getElementById('check2')?.checked) { 
-                        afficherMessage('❌ Vous devez cocher "LU ET APPROUVÉ" avant de valider', 'erreur');
-                        return; 
+                    if (!email.trim()) {
+                        afficherMessage('❌ Veuillez remplir le champ "Email"', 'erreur');
+                        return;
                     }
+                    if (!spectacle) {
+                        afficherMessage('❌ Veuillez choisir un spectacle', 'erreur');
+                        return;
+                    }
+                    
+                    // ===== LA CASE "LU ET APPROUVÉ" EST FACULTATIVE =====
                     
                     sauvegarderToutesSignatures(num);
                     const donneesFacture = sauvegarderDonneesPourFacture(num);
@@ -1530,27 +1880,50 @@
                     historique.unshift(contratData);
                     localStorage.setItem('historiqueContrats', JSON.stringify(historique));
                     
-                    // ===== SAUVEGARDE DANS LA LISTE DES CONTRATS (comme les devis) =====
+                    // ===== SAUVEGARDE DANS LA LISTE DES CONTRATS =====
                     var tousLesContrats = JSON.parse(localStorage.getItem('tousLesContrats') || '[]');
-                    var contratListe = {
-                        id: Date.now(),
-                        dateCreation: new Date().toLocaleString('fr-FR'),
-                        nom: document.querySelectorAll('.doc-champ')[0]?.innerText || 'Nom inconnu',
-                        type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
-                        donnees: recupererDonneesContrat(num)
-                    };
-                    tousLesContrats.unshift(contratListe);
+                    var nomContrat = document.querySelectorAll('.doc-champ')[0]?.innerText || 'Nom inconnu';
+                    
+                    var existe = false;
+                    for (var i = 0; i < tousLesContrats.length; i++) {
+                        if (tousLesContrats[i].id === currentContratId) {
+                            tousLesContrats[i].donnees = recupererDonneesContrat(num);
+                            tousLesContrats[i].dateModification = new Date().toLocaleString('fr-FR');
+                            tousLesContrats[i].statut = 'Validé';
+                            tousLesContrats[i].nom = nomContrat;
+                            existe = true;
+                            break;
+                        }
+                    }
+                    
+                    if (!existe) {
+                        var contratListe = {
+                            id: currentContratId || Date.now(),
+                            dateCreation: new Date().toLocaleString('fr-FR'),
+                            dateModification: new Date().toLocaleString('fr-FR'),
+                            nom: nomContrat,
+                            type: num === 1 ? 'SANS ROULOTTE' : 'ROULOTTE',
+                            statut: 'Validé',
+                            donnees: recupererDonneesContrat(num)
+                        };
+                        tousLesContrats.unshift(contratListe);
+                    }
                     localStorage.setItem('tousLesContrats', JSON.stringify(tousLesContrats));
                     
-                    // Envoyer l'email
+                    // ===== ENVOYER L'EMAIL VERS LA NOUVELLE EDGE FUNCTION =====
                     var emailEnvoye = await envoyerEmailContrat(num);
                     
                     if (emailEnvoye) {
                         var emailOrganisateur = document.querySelectorAll('.doc-champ')[3]?.innerText || '';
-                        afficherMessage(`✅ Contrat validé ! Un email a été envoyé à ${emailOrganisateur}`);
+                        afficherMessage(`✅ Contrat envoyé ! Un email a été envoyé à ${emailOrganisateur}`);
                     } else {
-                        afficherMessage('✅ Contrat validé ! (Email non envoyé)');
+                        afficherMessage('⚠️ Contrat enregistré mais email non envoyé. Vérifiez l\'adresse email saisie.');
                     }
+                    
+                    // Redirection automatique vers la page de réception
+                    setTimeout(function() {
+                        window.location.href = 'reception.html';
+                    }, 2000);
                 };
             }
         }, 150);
@@ -1561,24 +1934,32 @@
     // ========== INITIALISATION ==========
     ecouterModifications();
 
-    // Essayer de restaurer un contrat sauvegardé
-    var restaure = restaurerContratSauvegarde();
-    if (!restaure) {
-        var data = localStorage.getItem('contratEnCours');
-        if (data) {
-            try {
-                var sauvegarde = JSON.parse(data);
-                var age = Date.now() - sauvegarde.id;
-                if (age > 24 * 60 * 60 * 1000) {
-                    afficherMessage('⏰ Une sauvegarde ancienne a été supprimée (plus de 24h)');
-                    localStorage.removeItem('contratEnCours');
-                }
-            } catch(e) {}
+    // Charger un contrat par lien unique
+    var chargeParLien = chargerContratParLien();
+    if (!chargeParLien) {
+        // Essayer de restaurer un contrat sauvegardé
+        var restaure = restaurerContratSauvegarde();
+        if (!restaure) {
+            var data = localStorage.getItem('contratEnCours');
+            if (data) {
+                try {
+                    var sauvegarde = JSON.parse(data);
+                    var age = Date.now() - sauvegarde.id;
+                    if (age > 24 * 60 * 60 * 1000) {
+                        afficherMessage('⏰ Une sauvegarde ancienne a été supprimée (plus de 24h)');
+                        localStorage.removeItem('contratEnCours');
+                    }
+                } catch(e) {}
+            }
+        }
+
+        // Charger un contrat depuis la liste (reception.html)
+        var chargeDepuisReception = chargerContratDepuisReception();
+        if (!chargeDepuisReception) {
+            // Sinon, pré-remplir si on vient d'un devis
+            preRemplirDepuisDevis();
         }
     }
-
-    // Pré-remplir si on vient d'un devis
-    preRemplirDepuisDevis();
 </script>
 </body>
 </html>
