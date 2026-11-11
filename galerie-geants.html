@@ -210,11 +210,6 @@
     z-index: 10;
 }
 
-@media (min-width: 1024px) {
-    .carousel-wrapper {
-        margin-top: -480px;
-    }
-}
 
         .carousel-container {
             position: relative;
@@ -541,11 +536,49 @@
             }
 
             .carousel-info {
-                bottom: 10px;
+                bottom: 24px;
                 gap: 8px;
             }
         }
-    </style>
+    
+/* ==== CORRECTION CARROUSEL GÉANTS — placé en dernier pour primer sur les media queries responsive ==== */
+@media (min-width: 0px) {
+    /* Le body est en zoom:150% et en flex centré verticalement.
+       L'ancien margin-top:-480px sortait le carrousel du centre : décalage
+       constant vers le haut (mesuré : -225px d'écart haut/bas à largeur 1000px),
+       et carte coupée dès que la fenêtre descendait sous ~780px de haut.
+       On le réduit pour recentrer, et on dimensionne la carte sur la hauteur
+       utile réelle (viewport / 1.5) en gardant le ratio 2:3 des photos. */
+    .carousel-wrapper {
+        margin-top: 0;
+        position: fixed;
+        /* 55px = navbar réelle (83px écran / zoom 1.5) */
+        top: 55px;
+        left: 0;
+        right: 0;
+        /* marge basse égale à la marge haute visible -> centrage optique */
+        bottom: 15px;
+        height: auto;
+    }
+
+    /* Mobile : la navbar est plus basse (48px) mais le logo déborde
+       davantage -> on remonte le conteneur pour recentrer la carte. */
+    @media (max-width: 480px) {
+        .carousel-wrapper {
+            top: 20px;
+            bottom: 4px;
+        }
+    }
+
+    .carousel-container .card {
+        height: calc((100vh - 143px) / 1.5 * 0.93);
+        max-height: calc((100vh - 143px) / 1.5 * 0.93);
+        width: calc((100vh - 143px) / 1.5 * 0.93 * 0.667);
+        max-width: none;
+    }
+}
+
+</style>
 </head>
 <body>
 
@@ -586,7 +619,6 @@
 
     <!-- Info en bas -->
     <div class="carousel-info">
-        <div class="counter" id="photoCounter">1 / 12</div>
         <div class="dots-ring" id="dotsContainer"></div>
     </div>
 
@@ -705,7 +737,7 @@
         function updateUI(index) {
             currentIndex = index;
             
-            photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+            if (photoCounter) photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
 
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, i) => {
@@ -878,7 +910,7 @@
             
             positionCards(false);
 
-            photoCounter.textContent = `1 / ${photos.length}`;
+            if (photoCounter) photoCounter.textContent = `1 / ${photos.length}`;
             
             preloadImages();
         }
