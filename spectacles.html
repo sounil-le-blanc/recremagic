@@ -232,9 +232,19 @@ body::before {
 @media (min-width: 1760px) {
     body { zoom: 150%; }
     body::before { zoom: 0.6667; }
-    .spectacle-card-inner { grid-template-columns: 500px 1fr; }
-    .spectacle-img { min-height: 350px; max-height: none; }
-    .spectacles-list { max-width: 1200px; }
+    /* On conserve la mise en page d'en dessous de 1760px (une colonne,
+       affiche en haut, texte en dessous) mais un peu plus grande.
+       Reference a 1759px : liste 960 / carte 896. Le zoom 1.5 du body
+       multiplie tout : on divise par 1.5 pour obtenir ~1350px reels.
+
+       PAS d'aspect-ratio carre impose : les affiches n'ont pas toutes le
+       meme format (Du coup 1 et Roulettes sont carrees 1:1, Du coup 2 est
+       en 0.67 et Maboul en 0.57). Un cadre carre les rognait et laissait
+       apparaitre le fond bois sur les cotes. Le cadre suit donc le format
+       naturel de chaque affiche. */
+    .spectacles-list { max-width: 900px; }
+    .spectacle-card-inner { grid-template-columns: 1fr; }
+    .spectacle-img { min-height: 0; max-height: none; aspect-ratio: auto; height: auto; }
 }
 </style>
 </head>
