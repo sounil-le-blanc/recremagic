@@ -213,8 +213,33 @@
 }
 
 @media (min-width: 1024px) {
+    /* Meme correction que la galerie des geants.
+       Le body est en zoom:150% et en flex centre : l'ancien margin-top:-480px
+       sortait le carrousel du centre et faisait couper la carte des que la
+       fenetre etait peu haute. On positionne le conteneur entre la navbar et
+       le bas d'ecran, et on dimensionne la carte sur la hauteur reelle
+       disponible. Les photos sont en paysage 1536x1024 (ratio 1.5) : on garde
+       ce ratio pour ne rien rogner. */
     .carousel-wrapper {
-        margin-top: -480px;
+        margin-top: 0;
+        position: fixed;
+        top: 55px;
+        left: 0;
+        right: 0;
+        bottom: 50px;
+        height: auto;
+    }
+
+    /* PALIER 1 — 1024px a 1599px de large.
+       La carte est plafonnee a 480px CSS (720px reels) : taille intermediaire
+       entre la carte mobile (600x380 a 1023px) et la taille pleine des grands
+       ecrans. Evite que la carte soit trop grosse des qu'on depasse 1024px. */
+    .carousel-container .card {
+        --zone: calc((100vh - 140px) / 1.5);
+        height: min(var(--zone), 480px);
+        max-height: min(var(--zone), 480px);
+        width: calc(min(var(--zone), 480px) * 1.5);
+        max-width: none;
     }
 }
 
@@ -426,7 +451,7 @@
         }
 
         /* ===== RESPONSIVE ===== */
-        @media (max-width: 1024px) {
+        @media (max-width: 1023px) {
             .card {
                 width: min(85vw, 600px);
                 height: min(50vw, 380px);
@@ -536,7 +561,21 @@
                 gap: 8px;
             }
         }
-    </style>
+    
+
+/* PALIER 2 — a partir de 1600px de large, la carte reprend sa pleine taille
+   (celle validee a 2140px : 1590x1060 reels), et continue de grandir avec la
+   hauteur d'ecran jusqu'au plafond de 900px CSS. */
+@media (min-width: 1600px) {
+    .carousel-container .card {
+        --zone: calc((100vh - 140px) / 1.5);
+        height: min(var(--zone), 900px);
+        max-height: min(var(--zone), 900px);
+        width: calc(min(var(--zone), 900px) * 1.5);
+        max-width: none;
+    }
+}
+</style>
 </head>
 <body>
 
@@ -577,7 +616,6 @@
 
     <!-- Info en bas -->
     <div class="carousel-info">
-        <div class="counter" id="photoCounter">1 / 12</div>
         <div class="dots-ring" id="dotsContainer"></div>
     </div>
 
@@ -696,7 +734,7 @@
         function updateUI(index) {
             currentIndex = index;
             
-            photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
+            if (photoCounter) photoCounter.textContent = `${currentIndex + 1} / ${photos.length}`;
 
             const dots = document.querySelectorAll('.dot');
             dots.forEach((dot, i) => {
@@ -869,7 +907,7 @@
             
             positionCards(false);
 
-            photoCounter.textContent = `1 / ${photos.length}`;
+            if (photoCounter) photoCounter.textContent = `1 / ${photos.length}`;
             
             preloadImages();
         }
