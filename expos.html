@@ -76,15 +76,24 @@
             flex-wrap: nowrap;
         }
         .nav-left-group {
-            display: flex; align-items: center; gap: 0.6rem;
+            display: flex; align-items: flex-start; gap: 0.6rem;
             flex-shrink: 0; z-index: 2;
+            /* align-items:center faisait deborder le logo (120px) hors du haut
+               de la navbar (55px). On l'aligne en haut. */
+            height: 100%;
         }
         .logo-wrapper {
             text-decoration: none; transition: all 0.25s ease; line-height: 0;
+            /* Le logo (120px) depassait de 33px AU-DESSUS de l'ecran : les deux
+               flex parents (.navbar-container et .nav-left-group) sont en
+               align-items:center, donc un element plus haut que la navbar (55px)
+               deborde autant en haut qu'en bas. On l'ancre en haut. */
+            align-self: flex-start !important;
         }
         .logo-wrapper img {
             height: 120px; transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 0;
         }
         .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
         .back-arrow {
@@ -237,7 +246,13 @@
             text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
         }
 
-        .expos-list { max-width: 1200px; margin: 4rem auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem; }
+        .expos-list { max-width: 800px; margin: 4rem auto; padding: 0 2rem; display: flex; flex-direction: column; gap: 3rem; }
+        /* Le body est en zoom:150% des 1024px : un max-width CSS y est multiplie
+           par 1.5 a l'affichage. On divise donc la valeur pour que la carte
+           garde la meme taille reelle que sur un ecran non zoome. */
+        @media (min-width: 1024px) {
+            .expos-list { max-width: 533px; }
+        }
 
         .expo-item {
             background: rgba(235, 215, 185, 0.96); border-radius: 32px; overflow: hidden;
@@ -414,6 +429,19 @@
             .nav-icons { gap: 0.6rem; }
             .navbar-container { padding: 0 0.5rem; }
         }
+    
+        /* La liste est plafonnee a 800px : deux colonnes n'y tiennent pas
+           (l'image reprenait 400px fixes et ecrasait le texte a 393px).
+           On conserve donc la mise en page sur une colonne, comme en dessous
+           de 968px, pour toutes les largeurs. */
+        @media (min-width: 969px) {
+            .expo-item { grid-template-columns: 1fr !important; }
+            /* Pas de hauteur forcee sur .expo-img : en une colonne le cadre doit
+               prendre le ratio naturel de la photo (les geants sont en portrait
+               0.56, les marionnettes en paysage 1.5). Forcer une hauteur mettait
+               cover en mode rognage et amputait le geant de moitie. */
+            .expo-img { height: auto; max-height: none; min-height: 0; }
+        }
     </style>
 </head>
 <body>
@@ -482,13 +510,13 @@
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.webp" alt="" class="btn-icon"> Demander un devis</a>
-                <a href="expos-image.html" class="btn-primary" target="_blank"><img src="images/icone-photos.webp" alt="" class="btn-icon"> VOIR LES PHOTOS</a>
+                <a href="expos-image.html" class="btn-primary" target="_blank"><img src="images/icone-expos.webp" alt="" class="btn-icon"> VOIR LES PHOTOS</a>
             </div>
         </div>
     </div>
 
     <div class="expo-item">
-        <div class="expo-img"><img src="images/expo-geants.jpeg" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
+        <div class="expo-img"><img src="images/expo-geants.webp" alt="Géants" onerror="this.parentElement.style.background='linear-gradient(135deg, #EC407A, #c2185b)'; this.style.display='none'"></div>
         <div class="expo-content">
             <span class="expo-badge">SPECTACULAIRE</span>
             <h2 class="expo-title">LES GÉANTS DU CARNAVAL</h2>
@@ -503,7 +531,7 @@
             </div>
             <div class="button-group">
                 <a href="Devis.html" class="btn-primary" target="_blank"><img src="images/icone-devis.webp" alt="" class="btn-icon"> Demander un devis</a>
-                <a href="galerie-geants.html" class="btn-primary"><img src="images/icone-voir.webp" alt="" class="btn-icon"> VOIR LES GÉANTS</a>
+                <a href="galerie-geants.html" class="btn-primary"><img src="images/icone-video.webp" alt="" class="btn-icon"> VOIR LES GÉANTS</a>
             </div>
         </div>
     </div>
