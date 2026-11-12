@@ -1244,10 +1244,18 @@
         const container = document.getElementById('eventsListContainer');
         if (!container) return;
         
+        /* Ne garder que les dates a venir (aujourd'hui inclus) dans la liste
+           des evenements. Le calendrier avec les numeros de jours n'est pas
+           touche : il lit eventsData directement, pas allEntries. */
+        const today = new Date();
+        today.setHours(0, 0, 0, 0);
+
         const allEntries = [];
         for (let dateKey in eventsData) {
             const eventList = eventsData[dateKey];
             if (!Array.isArray(eventList)) continue;
+            const [dy, dm, dd] = dateKey.split('-').map(Number);
+            if (new Date(dy, dm - 1, dd) < today) continue;   // date passee : on saute
             eventList.forEach(ev => {
                 allEntries.push({ dateKey, ...ev });
             });
