@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stages et résidences d'arts du spectacle - Récrémagic, Tarn</title>
-    <meta name="description" content="Stage de création circus théâtre Récrémagic, pour amateurs : membres de la troupe le temps du séjour, vous créez votre spectacle et vous le jouez. Résidences d'artistes dans le Tarn.">
+    <title>Séjours artistiques - Récrémagic, Tarn</title>
+    <meta name="description" content="Séjours artistiques Récrémagic dans le Tarn : venir apprendre avec la troupe, venir créer son projet en résidence, séjours enfants. Roulottes et circus théâtre.">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
-    <meta property="og:title" content="Stages et résidences - Récrémagic">
-    <meta property="og:description" content="Stages d'arts du spectacle et résidences d'artistes, dans le Tarn. Donnez vie à votre magie.">
+    <meta property="og:title" content="Séjours artistiques - Récrémagic">
+    <meta property="og:description" content="Venir apprendre, venir créer, séjours enfants : les séjours artistiques Récrémagic, dans le Tarn. Donnez vie à votre magie.">
     <meta property="og:image" content="https://www.recremagic.com/images/2-ecrin-roulotte-allee.webp">
     <meta property="og:type" content="website">
     <meta property="og:site_name" content="Récré Magic">
@@ -247,6 +247,8 @@
         .photo-hero { max-width: 980px; }
         .photo-hero img { max-height: 460px; }
         .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.6rem; }
+        .photo-grid.trois { grid-template-columns: repeat(3, 1fr); }
+        .photo-grid.seule { grid-template-columns: 1fr; }
         .photo-grid .photo-frame { display: block; margin: 0; }
         .photo-grid.portrait img { aspect-ratio: 3 / 4; }
         .photo-grid.paysage img { aspect-ratio: 3 / 2; }
@@ -317,7 +319,7 @@
             .nav-icons { gap: 1.5rem; }
             .sejour-cols { grid-template-columns: 1fr; }
             .tarn-grid { grid-template-columns: 1fr; }
-            .photo-grid { grid-template-columns: 1fr; }
+            .photo-grid, .photo-grid.trois { grid-template-columns: 1fr; }
         }
         @media (max-width: 600px) {
             body { padding-top: 100px; }
@@ -362,7 +364,30 @@
         .lien-carte { display: inline-block; margin-top: 1rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #4a2e1a; text-decoration: none; padding: 0.4rem 1.1rem; border-radius: 30px; border: 2px solid #7a5c3e; background: rgba(235, 215, 185, 1); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
         .lien-carte:hover { background: var(--cuivre-ecrin); color: #fff; }
         .centre { text-align: center; }
-        @media (max-width: 900px) { .etapes, .infos-grid, .colonnes { grid-template-columns: 1fr; } }
+
+        /* ========== TROIS PORTES ========== */
+        .ecrin-card[id] { scroll-margin-top: 140px; }
+        .portes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.4rem; margin-top: 1.6rem; }
+        .porte {
+            background: rgba(255, 251, 240, 0.85); border: 2px solid #b89a6a; border-radius: 16px;
+            overflow: hidden; display: flex; flex-direction: column;
+            text-decoration: none; color: inherit;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+        .porte:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.35); }
+        .porte img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+        .porte-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
+        .porte strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.15rem; color: #4a2e1a; text-align: center; }
+        .porte p { font-size: 0.92rem; font-weight: 600; color: #2C1810; margin-top: 0.4rem; }
+        .porte .porte-cta {
+            margin-top: auto; padding-top: 0.8rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            color: #7a5c3e; text-align: center;
+        }
+        .porte:hover .porte-cta { color: var(--cuivre-ecrin); }
+        .colonne .col-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; margin-bottom: 0.7rem; border: 2px solid #b89a6a; }
+
+        @media (max-width: 900px) { .etapes, .infos-grid, .colonnes, .portes { grid-template-columns: 1fr; } }
     </style>
     <link rel="stylesheet" href="saison-noel.css?v=noel3">
 </head>
@@ -412,14 +437,14 @@
             <div class="inner-parchment"></div>
             <span class="magic-sparks">❄️</span>
             <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"></div>
-            <h1 class="welcome-title">Stages &amp; résidences</h1>
-            <p class="welcome-subtitle">Stage de création · circus théâtre</p>
+            <h1 class="welcome-title">Séjours artistiques</h1>
+            <p class="welcome-subtitle">Apprendre · créer · vivre le circus théâtre</p>
             <span class="mot-saison">Noël sous le chapiteau</span>
         </div>
     </div>
 
     <div class="ecrin-card">
-        <p class="card-intro">On vous invite au voyage : membres de la troupe le temps du séjour, vous créez votre spectacle, et vous le jouez. Les roulottes sont le décor&nbsp;; les marionnettes et les personnages n'attendent que vos mains, dans le circus théâtre Récrémagic.</p>
+        <p class="card-intro">On vous invite au voyage : le temps d'un séjour, vous ne visitez pas l'univers Récrémagic, vous en faites partie. Les roulottes sont le décor&nbsp;; les marionnettes et les personnages n'attendent que vos mains. Trois portes d'entrée, un même univers à habiter.</p>
         <p class="devise">Donnez vie à votre magie... c'est tout.</p>
     </div>
 
@@ -427,11 +452,45 @@
         <img src="images/12-ecrin-decor-peint.webp" alt="Grand panneau de bois peint à la main : Circus Théâtre Récré Magic" width="1400" height="788">
     </figure>
 
-    <section class="ecrin-card" id="stage">
+    <section class="ecrin-card" id="portes">
         <div class="card-head">
-            <span class="section-badge badge-creer">Le stage</span>
+            <span class="section-badge badge-univers">Les séjours</span>
+            <h2 class="card-title">Trois portes d'entrée</h2>
+            <p class="card-intro">Apprendre avec nous, créer votre propre projet, ou faire vivre l'aventure aux enfants&nbsp;: choisissez votre porte.</p>
+        </div>
+        <div class="portes">
+            <a class="porte" href="#apprendre">
+                <img src="images/Super-photo4.webp" alt="Une artiste clown et une marionnette sur la scène de la roulotte théâtre" width="1429" height="804" loading="lazy">
+                <div class="porte-body">
+                    <strong>Venir apprendre</strong>
+                    <p>On propose le contenu, on vous guide pas à pas&nbsp;: des stages ouverts aux novices, pour apprendre en créant.</p>
+                    <span class="porte-cta">Découvrir le stage</span>
+                </div>
+            </a>
+            <a class="porte" href="#creer">
+                <img src="images/2-roulottes-nuit-vergnet.webp" alt="Les roulottes éclairées dans la nuit, prêtes à accueillir une création" width="1200" height="675" loading="lazy">
+                <div class="porte-body">
+                    <strong>Venir créer</strong>
+                    <p>Vous arrivez avec votre projet&nbsp;: un regard artistique, un accompagnement ponctuel, ou simplement le lieu et le quotidien pris en charge.</p>
+                    <span class="porte-cta">Voir les résidences</span>
+                </div>
+            </a>
+            <a class="porte" href="#enfants">
+                <img src="images/Super-photo5.webp" alt="Des enfants au premier rang d'un spectacle de la roulotte théâtre, en montagne" width="1429" height="804" loading="lazy">
+                <div class="porte-body">
+                    <strong>Séjours enfants</strong>
+                    <p>Pour les jeunes troupes&nbsp;: apprendre au fil du séjour et monter un spectacle à jouer à la fin.</p>
+                    <span class="porte-cta">Pour les familles</span>
+                </div>
+            </a>
+        </div>
+    </section>
+
+    <section class="ecrin-card" id="apprendre">
+        <div class="card-head">
+            <span class="section-badge badge-creer">Venir apprendre</span>
             <h2 class="card-title">Créer-jouer</h2>
-            <p class="card-intro">Pas un programme d'ateliers : une aventure de troupe, ouverte aux amateurs. On y apprend ce qu'est une histoire, et comment la technique la sert.</p>
+            <p class="card-intro">Notre première proposition de stage&nbsp;: pas un programme d'ateliers, une aventure de troupe, ouverte aux amateurs. On y apprend ce qu'est une histoire, et comment la technique la sert.</p>
         </div>
         <div class="etapes">
             <div class="etape"><strong>On imagine une histoire</strong><p>Personnages, désir, obstacles : la troupe construit le fil de son spectacle.</p></div>
@@ -481,9 +540,9 @@
             <p class="card-intro">Un monde de forains, de féerie et de cabaret, déjà là autour de vous. Le temps du séjour, vous ne visitez pas cet univers : vous en faites partie.</p>
         </div>
         <div class="colonnes">
-            <div class="colonne"><strong>Le forain</strong><p>Les roulottes, la vie de camp et l'esprit forain : la fête, la curiosité et l'art d'accueillir le public.</p></div>
-            <div class="colonne"><strong>Le féerique</strong><p>Marionnettes et personnages prennent vie entre vos mains : le merveilleux se fabrique à la main.</p></div>
-            <div class="colonne"><strong>Le cabaret</strong><p>Des numéros solo ou collectifs s'enchaînent au plus près du public : la féerie grandit à chaque entrée en scène.</p></div>
+            <div class="colonne"><img class="col-img" src="images/Super-photo3.webp" alt="La roulotte et sa remorque sur la route, au pied des montagnes" width="1558" height="737" loading="lazy"><strong>Le forain</strong><p>Les roulottes, la vie de camp et l'esprit forain : la fête, la curiosité et l'art d'accueillir le public.</p></div>
+            <div class="colonne"><img class="col-img" src="images/expo-marionnettes.webp" alt="Marionnettes colorées sur leur petite scène illuminée" width="1313" height="875" loading="lazy"><strong>Le féerique</strong><p>Marionnettes et personnages prennent vie entre vos mains : le merveilleux se fabrique à la main.</p></div>
+            <div class="colonne"><img class="col-img" src="images/Super-photo9.webp" alt="La roulotte théâtre face au public, au bord de la mer" width="1545" height="611" loading="lazy"><strong>Le cabaret</strong><p>Des numéros solo ou collectifs s'enchaînent au plus près du public : la féerie grandit à chaque entrée en scène.</p></div>
         </div>
         <p class="devise">Un univers à habiter, pas un décor à regarder.</p>
     </section>
@@ -494,10 +553,14 @@
             <h2 class="card-title">La vie sur place</h2>
             <p class="card-intro">Les roulottes, décor du circus théâtre, deviennent votre maison pour la semaine. Les repas se prennent ensemble, à la bonne franquette, comme au camp. Les journées suivent le rythme de la création ; les soirées, celui des veillées.</p>
         </div>
-        <div class="photo-grid portrait">
+        <div class="photo-grid portrait trois">
             <figure>
                 <span class="photo-frame"><img src="images/3-ecrin-roulotte.webp" alt="Roulotte de caractère en bois, décors peints" width="744" height="975" loading="lazy"></span>
                 <figcaption>Roulotte de caractère</figcaption>
+            </figure>
+            <figure>
+                <span class="photo-frame"><img src="images/10-ecrin-cuisine.webp" alt="L'intérieur tout en bois d'une roulotte : cuisine, table et lit" width="1400" height="788" loading="lazy"></span>
+                <figcaption>À l'intérieur, tout le confort</figcaption>
             </figure>
             <figure>
                 <span class="photo-frame"><img src="images/2-ecrin-roulotte-allee.webp" alt="Une roulotte de bois peinte en vert, porte ouverte, au coucher du soleil" width="744" height="975" loading="lazy"></span>
@@ -514,23 +577,53 @@
             <h2 class="card-title">Et au bout, votre spectacle</h2>
             <p class="card-intro">Le dernier jour, vous jouez votre spectacle, ensemble, pour de vrai. Vos numéros, solo ou collectifs, font grandir la féerie : vous repartez avec l'expérience de l'avoir fait exister.</p>
         </div>
+        <figure class="photo-wide">
+            <span class="photo-frame"><img src="images/Super-photo2.webp" alt="Le public rassemblé devant la roulotte théâtre, au coucher du soleil" width="1429" height="804" loading="lazy"></span>
+            <figcaption>Le public, au coucher du soleil.</figcaption>
+        </figure>
         <p class="devise">Envie d'en être ? Racontez-nous votre envie, on imagine la suite ensemble.</p>
     </section>
 
-    <section class="ecrin-card" id="residences">
+    <section class="ecrin-card" id="creer">
         <div class="card-head">
-            <span class="section-badge badge-alentours">Les résidences</span>
+            <span class="section-badge badge-alentours">Venir créer</span>
             <h2 class="card-title">Résidences d'artistes</h2>
-            <p class="card-intro">L'Écrin accueille aussi des artistes en résidence, pour écrire, répéter ou fabriquer. Ici, le décor fait déjà partie du matériau : bois, roulottes peintes, souvenirs de cirque et grand air.</p>
+            <p class="card-intro">Vous arrivez avec votre propre projet&nbsp;: écrire, répéter, fabriquer. Selon vos besoins, nous pouvons apporter un regard artistique, un accompagnement ponctuel, ou simplement gérer le lieu et la vie quotidienne pendant que vous créez.</p>
         </div>
-        <p class="texte-carte">Vous avez un projet de création ? Parlez-nous-en : les conditions d'accueil se définissent ensemble, selon vos besoins.</p>
+        <div class="photo-grid paysage seule">
+            <figure>
+                <span class="photo-frame"><img src="images/4-ecrin-cirque.webp" alt="Affiches anciennes de cirque et colombes, dans le décor du lieu" width="744" height="975" loading="lazy"></span>
+                <figcaption>Ici, le décor fait partie du matériau</figcaption>
+            </figure>
+        </div>
+        <p class="texte-carte">Bois, roulottes peintes, souvenirs de cirque et grand air&nbsp;: parlez-nous de votre projet, les conditions d'accueil se définissent ensemble, selon vos besoins.</p>
+        <p class="centre"><a class="lien-carte" href="ecrin.html">Découvrir L'Écrin et ses roulottes</a></p>
+    </section>
+
+    <section class="ecrin-card" id="enfants">
+        <div class="card-head">
+            <span class="section-badge badge-sejour">Pour les familles</span>
+            <h2 class="card-title">Séjours enfants</h2>
+            <p class="card-intro">La même aventure, pensée pour les jeunes troupes&nbsp;: un apprentissage au fil du séjour, puis un spectacle monté ensemble et joué à la fin.</p>
+        </div>
+        <div class="photo-grid paysage">
+            <figure>
+                <span class="photo-frame"><img src="images/Super-photo5.webp" alt="Des enfants captivés devant la scène de la roulotte théâtre" width="1429" height="804" loading="lazy"></span>
+                <figcaption>Les jeunes spectateurs d'aujourd'hui...</figcaption>
+            </figure>
+            <figure>
+                <span class="photo-frame"><img src="images/Super-photo8.webp" alt="Des familles rassemblées autour de la roulotte théâtre en station" width="1031" height="765" loading="lazy"></span>
+                <figcaption>... sont les troupes de demain</figcaption>
+            </figure>
+        </div>
+        <p class="texte-carte">Cette formule se prépare&nbsp;: racontez-nous votre envie pour être prévenu et imaginer la suite avec nous.</p>
     </section>
 
     <section class="ecrin-card" id="infos">
         <div class="card-head">
             <span class="section-badge badge-univers">Infos pratiques</span>
             <h2 class="card-title">Dates et inscription</h2>
-            <p class="card-intro">Le premier stage se prépare ; les détails se précisent directement avec nous.</p>
+            <p class="card-intro">Le premier stage se prépare, les autres formules aussi&nbsp;; les détails se précisent directement avec nous.</p>
         </div>
         <div class="infos-grid">
             <div class="info"><strong>Format imaginé</strong><span>7 jours · pension complète · couchage en roulotte</span></div>
