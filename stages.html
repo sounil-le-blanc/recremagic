@@ -3,14 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stages - Récré Magic</title>
-    <!-- Favicons -->
+    <title>Stages et résidences d'arts du spectacle - Récrémagic, Tarn</title>
+    <meta name="description" content="Stages d'arts du spectacle pour amateurs et résidences d'artistes à L'Écrin Récrémagic, dans le Tarn : former une troupe, inventer une histoire, jouer un spectacle, dormir en roulotte.">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.ico">
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
     <meta name="apple-mobile-web-app-title" content="Récré Magic">
     <link rel="manifest" href="/site.webmanifest">
+    <meta property="og:title" content="Stages et résidences - Récrémagic">
+    <meta property="og:description" content="Stages d'arts du spectacle et résidences d'artistes en roulotte, dans le Tarn. Donnez vie à votre magie.">
+    <meta property="og:image" content="https://www.recremagic.com/images/2-ecrin-roulotte-allee.webp">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Récré Magic">
     <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <style>
@@ -18,10 +23,12 @@
             --vert-caravane: #7CB69F;
             --rose-spectacle: #EC407A;
             --jaune-accent: #FFB300;
+            --cuivre-ecrin: #B87333;
             --text-dark: #2C1810;
             --text-light: #ffffff;
         }
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
 
         @media (min-width: 1024px) {
             body { zoom: 150%; }
@@ -40,26 +47,27 @@
             background-position: center;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
             position: relative;
-            overflow-x: hidden;
+            min-height: 100vh;
             padding-top: 120px;
+            overflow-x: hidden;
+            color: var(--text-dark);
+            line-height: 1.6;
         }
 
         body::before {
             content: '';
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
+            background: rgba(0, 0, 0, 0.5);
             z-index: 0;
             pointer-events: none;
         }
 
-        /* ========== NAVBAR ========== */
+        img { display: block; max-width: 100%; }
+        a { color: inherit; }
+
+        /* ========== NAVBAR (identique aux autres pages) ========== */
         .navbar {
             position: fixed;
             top: 0; left: 0; width: 100%;
@@ -70,220 +78,247 @@
             height: 55px;
         }
         .navbar-container {
-            width: 100%;
-            height: 100%;
+            width: 100%; height: 100%;
             padding: 0 1.2rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
             flex-wrap: nowrap;
         }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-        .logo-wrapper {
-            text-decoration: none;
-            transition: all 0.25s ease;
-            line-height: 0;
-        }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
-        }
+        .nav-left-group { display: flex; align-items: center; gap: 0.6rem; flex-shrink: 0; z-index: 2; }
+        .logo-wrapper { text-decoration: none; transition: all 0.25s ease; line-height: 0; }
+        .logo-wrapper img { height: 120px; transition: transform 0.25s; filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8)); margin-top: 60px; }
+        .logo-wrapper:hover img { transform: scale(1.08); filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9)); }
         .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            width: 36px; height: 36px; border-radius: 50%;
             background: rgba(255,255,255,0.1);
             border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
+            color: white; font-size: 1.1rem; text-decoration: none; cursor: pointer;
+            transition: all 0.25s ease; flex-shrink: 0;
         }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
+        .back-arrow:hover { background: rgba(255,255,255,0.2); border-color: #FFB300; color: #FFB300; box-shadow: 0 0 12px rgba(255,179,0,0.3); }
 
-        /* ========== AVATAR & MENU UTILISATEUR ========== */
         .user-avatar {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 40px;
-            height: 40px;
+            display: flex; align-items: center; justify-content: center;
+            width: 40px; height: 40px;
             background: linear-gradient(135deg, #7CB69F, #5a8f78);
-            border-radius: 50%;
-            font-weight: bold;
-            font-size: 1rem;
-            color: white;
-            transition: all 0.2s;
-            border: 2px solid rgba(255,255,255,0.5);
-            cursor: pointer;
+            border-radius: 50%; font-weight: bold; font-size: 1rem; color: white;
+            transition: all 0.2s; border: 2px solid rgba(255,255,255,0.5); cursor: pointer;
         }
-        .user-avatar.premium {
-            background: linear-gradient(135deg, #FFB300, #e6a200);
-            border: 2px solid #FFD700;
-            box-shadow: 0 0 10px rgba(255,215,0,0.5);
-        }
-        .user-avatar:hover {
-            transform: scale(1.05);
-        }
-        .user-menu {
-            position: relative;
-            display: inline-block;
-        }
+        .user-avatar.premium { background: linear-gradient(135deg, #FFB300, #e6a200); border: 2px solid #FFD700; box-shadow: 0 0 10px rgba(255,215,0,0.5); }
+        .user-avatar:hover { transform: scale(1.05); }
+        .user-menu { position: relative; display: inline-block; }
         .user-dropdown {
-            display: none;
-            position: absolute;
-            right: 0;
-            top: 45px;
-            background: rgba(0,0,0,0.9);
-            backdrop-filter: blur(10px);
-            border-radius: 16px;
-            padding: 0.5rem 0;
-            min-width: 180px;
-            z-index: 1001;
+            display: none; position: absolute; right: 0; top: 45px;
+            background: rgba(0,0,0,0.9); backdrop-filter: blur(10px);
+            border-radius: 16px; padding: 0.5rem 0; min-width: 180px; z-index: 1001;
             border: 1px solid rgba(255,255,255,0.2);
         }
         .user-dropdown a, .user-dropdown button {
-            display: block;
-            width: 100%;
-            padding: 0.6rem 1rem;
-            color: white !important;
-            text-decoration: none !important;
-            text-align: left;
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 0.85rem;
+            display: block; width: 100%; padding: 0.6rem 1rem;
+            color: white !important; text-decoration: none !important; text-align: left;
+            background: none; border: none; cursor: pointer; font-size: 0.85rem;
             font-family: 'Quicksand', sans-serif;
         }
-        .user-dropdown a:hover, .user-dropdown button:hover {
-            background: rgba(255,255,255,0.1);
-            color: white !important;
-            text-decoration: none !important;
-        }
-        .user-menu:hover .user-dropdown {
-            display: block;
-        }
+        .user-dropdown a:hover, .user-dropdown button:hover { background: rgba(255,255,255,0.1); }
+        .user-menu:hover .user-dropdown { display: block; }
 
-        .nav-icons {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-            z-index: 2;
-        }
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-icon-img {
-            height: 32px;
-            width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-            transition: transform 0.2s;
-        }
-        .icon-wrapper:hover .nav-icon-img {
-            transform: scale(1.15);
-        }
+        .nav-icons { display: flex; gap: 1.2rem; align-items: center; flex-shrink: 0; flex-wrap: nowrap; z-index: 2; }
+        .icon-wrapper { display: flex; flex-direction: column; align-items: center; gap: 0.1rem; text-decoration: none; transition: all 0.2s ease; }
+        .nav-icon-img { height: 32px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6)); transition: transform 0.2s; }
+        .icon-wrapper:hover .nav-icon-img { transform: scale(1.15); }
         .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
+            font-size: 0.6rem; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1px; color: rgba(255,255,255,0.7); transition: color 0.2s; white-space: nowrap;
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* CONTENU PRINCIPAL */
-        .main-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            width: 100%;
+        /* ========== CONTAINER & PARCHEMIN (comme pros.html) ========== */
+        .container {
+            max-width: 1100px; width: 100%;
+            margin: 0 auto; padding: 2rem;
+            position: relative; z-index: 10;
         }
+        .welcome-text { text-align: center; margin-bottom: 3rem; }
+        .parchment-wrapper {
+            display: inline-block; position: relative;
+            background: linear-gradient(135deg, #e6d5b8 0%, #cfb991 50%, #b89a6a 100%);
+            padding: 3rem 4rem; margin: 0 auto 2rem auto;
+            border-radius: 10px 15px 5px 12px / 8px 12px 10px 6px;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6), 0 0 0 3px #bfa055, 0 0 0 6px #8b6914, inset 0 0 20px rgba(0,0,0,0.4);
+            background-image:
+                repeating-linear-gradient(45deg, rgba(0,0,0,0.03) 0px, rgba(0,0,0,0.03) 2px, transparent 2px, transparent 6px),
+                radial-gradient(circle at 20% 30%, rgba(0,0,0,0.1) 0%, transparent 40%),
+                radial-gradient(circle at 80% 70%, rgba(255,255,255,0.2) 0%, transparent 40%),
+                radial-gradient(circle at 50% 50%, rgba(139,90,43,0.15) 0%, transparent 70%);
+            transform: perspective(700px) rotateX(2deg);
+            animation: floatParchment 6s ease-in-out infinite;
+        }
+        @keyframes floatParchment {
+            0%, 100% { transform: perspective(700px) rotateX(2deg) translateY(0); }
+            50% { transform: perspective(700px) rotateX(2deg) translateY(-12px); }
+        }
+        .parchment-wrapper::before {
+            content: ''; position: absolute; top: -12px; left: -12px;
+            width: 36px; height: 36px;
+            border-top: 6px solid #d4af37; border-left: 6px solid #d4af37;
+            border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2;
+        }
+        .parchment-wrapper::after {
+            content: ''; position: absolute; bottom: -12px; right: -12px;
+            width: 36px; height: 36px;
+            border-bottom: 6px solid #d4af37; border-right: 6px solid #d4af37;
+            border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2;
+        }
+        .inner-parchment {
+            position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px;
+            border: 2px solid rgba(212, 175, 55, 0.5);
+            border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px;
+            pointer-events: none;
+        }
+        .magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: chute-flocon 6s linear infinite; pointer-events: none; }
+        @keyframes chute-flocon { 0% { opacity: 0; transform: translate(0,0) rotate(0deg); } 15% { opacity: 0.9; } 80% { opacity: 0.9; } 100% { opacity: 0; transform: translate(-6px,22px) rotate(40deg); } }
+        .welcome-title {
+            font-family: 'MedievalSharp', cursive;
+            font-size: clamp(2.5rem, 6vw, 4rem);
+            color: #f5d06b; text-transform: uppercase; letter-spacing: 4px;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7;
+            position: relative;
+        }
+        .welcome-subtitle {
+            font-size: 1.4rem; color: #f5d06b; font-weight: 600; margin: 0;
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.6), 0 0 10px rgba(255,215,0,0.2);
+        }
+        .hero-enseigne { width: 280px; height: auto; max-width: 100%; border-radius: 10px; border: 3px solid #8b6914; box-shadow: 0 6px 18px rgba(0,0,0,0.5); }
+        body.saison-noel .cadre-saison { margin: 0 auto 1rem; text-align: center; }
+        body.saison-noel .medaillon-saison { top: -6px; }
 
-        .message-box {
+        /* ========== CARTES PARCHEMIN CADRE BOIS (comme spectacles/pros) ========== */
+        .ecrin-card {
             background: rgba(235, 215, 185, 0.96);
-            backdrop-filter: blur(8px);
-            border-radius: 60px;
-            padding: 3rem 2rem;
+            border-radius: 32px;
+            position: relative;
             border: 5px solid #7a5c3e;
             outline: 4px solid #5a3e2a;
             outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-            animation: fadeInUp 1s ease-out;
+            box-shadow: 0 0 0 8px #3e2a1a, 0 8px 20px rgba(0,0,0,0.5);
+            padding: 2.5rem;
+            margin: 3rem auto;
+            max-width: 980px;
         }
-
-        @keyframes fadeInUp {
-            from { opacity: 0; transform: translateY(50px); }
-            to { opacity: 1; transform: translateY(0); }
+        .ecrin-card::before {
+            content: ''; position: absolute; top: 8px; left: 8px; right: 8px; bottom: 8px;
+            border-radius: 24px; border: 1px solid rgba(0,0,0,0.1); pointer-events: none; z-index: 1;
         }
+        .ecrin-card > * { position: relative; z-index: 2; }
 
-        .soon-title {
+        .section-badge {
+            display: inline-block; padding: 0.5rem 1rem; border-radius: 20px;
+            font-size: 0.85rem; font-weight: 700; color: white;
+            margin-bottom: 1rem; text-transform: uppercase; letter-spacing: 1px;
+        }
+        .badge-univers { background: var(--vert-caravane); }
+        .badge-sejour { background: var(--rose-spectacle); }
+        .badge-creer { background: var(--jaune-accent); color: #4a2e1a; }
+        .badge-alentours { background: var(--cuivre-ecrin); }
+
+        .card-head { text-align: center; margin-bottom: 1.5rem; }
+        .card-title {
             font-family: 'MedievalSharp', cursive;
-            font-size: 3.5rem;
-            font-weight: 800;
-            color: #2C1810;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
+            font-size: clamp(1.7rem, 4vw, 2.2rem);
+            color: #000; text-transform: uppercase; letter-spacing: 2px;
             text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
+            margin: 0.4rem 0 0.8rem;
         }
+        .card-intro { max-width: 700px; margin: 0 auto; text-align: center; font-weight: 600; color: #1a0f08; }
+        .devise { text-align: center; font-style: italic; color: #7a5c3e; font-weight: 600; margin-top: 1rem; }
 
-        .soon-subtitle {
-            font-size: 1.3rem;
-            color: #2C1810;
-            margin-bottom: 2rem;
+        /* ========== PHOTOS ========== */
+        .photo-frame { display: block;
+            margin: 1.6rem auto 0;
+            border-radius: 16px; overflow: hidden;
+            border: 4px solid #7a5c3e; outline: 3px solid #5a3e2a; outline-offset: 3px;
+            box-shadow: 0 6px 18px rgba(0,0,0,0.45);
         }
+        .photo-frame img { width: 100%; height: 100%; object-fit: cover; }
+        .photo-hero { max-width: 980px; }
+        .photo-hero img { max-height: 460px; }
+        .photo-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.4rem; margin-top: 1.6rem; }
+        .photo-grid .photo-frame { display: block; margin: 0; }
+        .photo-grid.portrait img { aspect-ratio: 3 / 4; }
+        .photo-grid.paysage img { aspect-ratio: 3 / 2; }
+        .photo-wide img { max-height: 380px; }
+        figcaption { text-align: center; font-size: 0.9rem; font-style: italic; color: #5a3e2a; font-weight: 600; padding: 0.6rem 0.4rem 0; }
 
-        .btn-back {
-            display: inline-block;
-            background: linear-gradient(135deg, #D32F2F, #EC407A);
-            color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 1rem;
+        /* ========== INFOS SEJOUR ========== */
+        .sejour-cols { display: grid; grid-template-columns: 1.2fr 1fr; gap: 2rem; align-items: center; margin-top: 1.6rem; }
+        .infos { display: flex; flex-direction: column; gap: 0.8rem; }
+        .info {
+            background: rgba(255, 251, 240, 0.85);
+            border: 2px solid #b89a6a; border-radius: 14px;
+            padding: 0.9rem 1.1rem;
         }
-        .btn-back:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        .info strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; color: #4a2e1a; }
+        .info span { font-size: 0.95rem; color: #2C1810; font-weight: 600; }
+        .info--cle {
+            background: var(--jaune-accent);
+            border-color: #8b6914;
+            box-shadow: 0 0 0 3px rgba(255,179,0,0.35), 0 6px 16px rgba(0,0,0,0.35);
         }
+        .info--cle strong { color: #3e2a1a; }
 
-        /* ========== CORRECTIONS MOBILE ========== */
+        /* ========== TARN ========== */
+        .tarn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.6rem; }
+        .tarn-item {
+            background: rgba(255, 251, 240, 0.85);
+            border: 2px solid #b89a6a; border-radius: 16px;
+            padding: 1.1rem 1.2rem;
+        }
+        .tarn-item strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.05rem; color: #4a2e1a; }
+        .tarn-item p { font-size: 0.92rem; font-weight: 600; color: #2C1810; margin-top: 0.3rem; }
+        .tarn-item a {
+            display: inline-block; margin-top: 0.6rem;
+            font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+            color: #4a2e1a; text-decoration: none;
+            padding: 0.35rem 1rem; border-radius: 30px;
+            border: 2px solid #7a5c3e; background: rgba(235, 215, 185, 1);
+            box-shadow: 0 3px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+        }
+        .tarn-item a:hover { background: var(--cuivre-ecrin); color: #fff; border-color: #8a5a26; }
+
+        /* ========== CONTACT & PIED (comme pros.html) ========== */
+        .contact-note {
+            text-align: center; margin-top: 3.5rem;
+            color: white; font-size: 1.1rem; font-weight: 600;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .contact-note .titre-contact { font-family: 'Fredoka', sans-serif; font-size: 1.6rem; color: #f5d06b; text-shadow: 2px 2px 0px rgba(0,0,0,0.6); margin-bottom: 0.4rem; }
+        .contact-note a { color: var(--jaune-accent); text-decoration: none; font-weight: bold; }
+        .contact-note a:hover { text-decoration: underline; }
+
+        .social-links { display: flex; align-items: center; justify-content: center; gap: 1.5rem; margin-top: 1.5rem; flex-wrap: wrap; }
+        .social-links a { display: inline-block; transition: transform 0.3s ease, filter 0.3s ease; }
+        .social-links a:hover { transform: scale(1.2); filter: drop-shadow(0 0 10px rgba(255,255,255,0.6)); }
+        .social-links img { height: 40px; width: auto; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.5)); }
+
+        .footer-note {
+            display: flex; align-items: center; justify-content: center; gap: 1rem; flex-wrap: wrap;
+            margin-top: 2rem; color: white; text-shadow: 1px 1px 2px black; font-size: 0.9rem;
+        }
+        .footer-note a { color: #ffffff; text-decoration: none; font-weight: 500; opacity: 0.7; transition: opacity 0.2s; }
+        .footer-note a:hover { opacity: 1; }
+
+        /* ========== MOBILE (comme pros.html) ========== */
+        @media (max-width: 900px) {
+            .nav-icons { gap: 1.5rem; }
+            .sejour-cols { grid-template-columns: 1fr; }
+            .tarn-grid { grid-template-columns: 1fr; }
+            .photo-grid { grid-template-columns: 1fr; }
+        }
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
@@ -291,38 +326,40 @@
             .nav-left-group { gap: 0.4rem; }
             .logo-wrapper img { height: 70px !important; margin-top: 35px; }
             .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            
             .nav-icon-img { height: 28px !important; }
             .icon-label { font-size: 0.55rem !important; letter-spacing: 0.3px; }
             .nav-icons { gap: 0.8rem; }
-            
             .user-avatar { width: 36px; height: 36px; font-size: 0.9rem; }
             .user-dropdown { top: 40px; min-width: 160px; }
             .user-dropdown a, .user-dropdown button { padding: 0.5rem 0.8rem; font-size: 0.8rem; }
-            
-            .soon-title { font-size: 2.2rem; }
-            .soon-subtitle { font-size: 1rem; }
-            .message-box { padding: 2rem 1.5rem; margin: 0 1rem; }
+            .container { padding: 1rem; }
+            .parchment-wrapper { padding: 2rem 2.5rem; margin: 0 auto 1rem auto; }
+            .welcome-title { font-size: 2rem; }
+            .ecrin-card { padding: 1.5rem; margin: 2.2rem auto; }
+            .social-links img { height: 32px; }
+            .social-links { gap: 1rem; }
         }
-
         @media (max-width: 450px) {
             .icon-label { font-size: 0.5rem !important; }
             .nav-icon-img { height: 26px !important; }
             .nav-icons { gap: 0.6rem; }
             .navbar-container { padding: 0 0.5rem; }
         }
-    
-        /* Pour les ecrins <= 400px : la barre tient en largeur */
-        @media (max-width: 400px) {
-            .navbar-container { padding: 0 0.3rem; }
-            .nav-left-group { gap: 0.3rem; }
-            .nav-icons { gap: 0.45rem; }
-            .nav-icon-img { height: 22px !important; }
-            .icon-label { font-size: 0.45rem !important; letter-spacing: 0.2px; }
-            .logo-wrapper img { height: 58px !important; margin-top: 28px; }
-            .back-arrow { width: 28px; height: 28px; font-size: 0.9rem; }
-        }
-</style>
+
+        .etapes { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; margin-top: 1.6rem; counter-reset: etape; }
+        .etape { background: rgba(255, 251, 240, 0.85); border: 2px solid #b89a6a; border-radius: 16px; padding: 1.1rem 1.2rem 1.1rem 3.6rem; position: relative; }
+        .etape::before { counter-increment: etape; content: counter(etape); position: absolute; left: 1rem; top: 1rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--jaune-accent); color: #3e2a1a; font-family: 'Fredoka', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #8b6914; }
+        .etape strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; color: #4a2e1a; }
+        .etape p { font-size: 0.95rem; font-weight: 600; color: #2C1810; margin-top: 0.3rem; }
+        .missions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; }
+        .missions span { background: rgba(255, 251, 240, 0.85); border: 2px solid #b89a6a; border-radius: 30px; padding: 0.35rem 1rem; font-weight: 700; color: #4a2e1a; font-size: 0.9rem; }
+        .infos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.6rem; }
+        .texte-carte { max-width: 760px; margin: 1.2rem auto 0; font-weight: 600; color: #1a0f08; text-align: center; }
+        .lien-carte { display: inline-block; margin-top: 1rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #4a2e1a; text-decoration: none; padding: 0.4rem 1.1rem; border-radius: 30px; border: 2px solid #7a5c3e; background: rgba(235, 215, 185, 1); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
+        .lien-carte:hover { background: var(--cuivre-ecrin); color: #fff; }
+        .centre { text-align: center; }
+        @media (max-width: 900px) { .etapes, .infos-grid { grid-template-columns: 1fr; } }
+    </style>
     <link rel="stylesheet" href="saison-noel.css?v=noel3">
 </head>
 <body class="saison-noel">
@@ -345,17 +382,14 @@
                 <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
                 <span class="icon-label">Boutique</span>
             </a>
-            <!-- Lien Abonnement -->
             <a href="Abonnement.html" class="icon-wrapper" id="abonnement-link">
                 <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
                 <span class="icon-label">Abonnement</span>
             </a>
-            <!-- Bouton Connexion (visible quand non connecté) -->
             <a href="connexion.html" class="icon-wrapper" id="connexion-btn">
                 <img src="images/icone-connexion.webp" alt="Connexion" class="nav-icon-img">
                 <span class="icon-label">Connexion</span>
             </a>
-            <!-- Avatar utilisateur (caché par défaut) -->
             <div class="user-menu" id="user-menu" style="display: none;">
                 <div class="user-avatar" id="user-avatar">?</div>
                 <div class="user-dropdown">
@@ -367,12 +401,123 @@
     </div>
 </nav>
 
-<div class="main-content">
-    <div class="message-box">
-        <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1 class="soon-title">Bientôt disponible</h1>
-        <p class="soon-subtitle">Les stages arrivent très bientôt !</p><span class="mot-saison sur-clair">Noël sous le chapiteau</span></div>
-        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+<div class="container">
+
+    <div class="welcome-text">
+        <div class="parchment-wrapper">
+            <div class="inner-parchment"></div>
+            <span class="magic-sparks">❄️</span>
+            <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"></div>
+            <h1 class="welcome-title">Stages &amp; résidences</h1>
+            <p class="welcome-subtitle">Arts du spectacle à L'Écrin</p>
+            <span class="mot-saison">Noël sous le chapiteau</span>
+        </div>
     </div>
+
+    <div class="ecrin-card">
+        <p class="card-intro">Venez apprendre, créer et jouer dans l'univers de Récrémagic : forain, féerique, cabaret. Un stage pour devenir troupe le temps d'un séjour, et un lieu d'accueil pour les artistes qui ont besoin de temps et de calme pour travailler.</p>
+        <p class="devise">Donnez vie à votre magie... c'est tout.</p>
+    </div>
+
+    <figure class="photo-frame photo-hero">
+        <img src="images/12-ecrin-decor-peint.webp" alt="Grand panneau de bois peint à la main : Circus Théâtre Récré Magic" width="1400" height="788">
+    </figure>
+
+    <section class="ecrin-card" id="stage">
+        <div class="card-head">
+            <span class="section-badge badge-creer">Le stage</span>
+            <h2 class="card-title">Créer-jouer</h2>
+            <p class="card-intro">Un stage d'arts du spectacle ouvert aux amateurs : nul besoin d'être professionnel. Le groupe devient une troupe, construit une histoire ensemble, puis la joue sur scène.</p>
+        </div>
+        <div class="etapes">
+            <div class="etape"><strong>On forme la troupe</strong><p>Le groupe entre dans l'univers de Récrémagic et devient, le temps du séjour, une vraie troupe.</p></div>
+            <div class="etape"><strong>On invente l'histoire</strong><p>Ensemble, on découvre ce qu'est une histoire et comment la technique est là pour la servir.</p></div>
+            <div class="etape"><strong>Chacun trouve sa mission</strong><p>Selon son niveau et ses envies, de la technique à la scène.</p></div>
+            <div class="etape"><strong>On joue</strong><p>Le stage se termine par un petit spectacle, en solo ou en collectif.</p></div>
+        </div>
+        <div class="missions">
+            <span>Décor</span><span>Son</span><span>Lumière</span><span>Jonglerie</span><span>Cascade</span><span>Jeu et personnages</span>
+        </div>
+        <figure class="photo-wide">
+            <span class="photo-frame"><img src="images/5-ecrin-nuit.webp" alt="La roulotte de nuit, éclairée par ses lanternes" width="1545" height="582" loading="lazy"></span>
+            <figcaption>Le stage se vit sur place, dans le décor.</figcaption>
+        </figure>
+    </section>
+
+    <section class="ecrin-card" id="roulottes">
+        <div class="card-head">
+            <span class="section-badge badge-sejour">Le séjour</span>
+            <h2 class="card-title">Dormir en roulotte</h2>
+            <p class="card-intro">Le stage se déroule à L'Écrin, où l'on peut dormir dans une roulotte de bois peinte. Les roulottes, avec les marionnettes et les personnages de la troupe, font partie du décor et du jeu.</p>
+        </div>
+        <div class="photo-grid portrait">
+            <figure>
+                <span class="photo-frame"><img src="images/3-ecrin-roulotte.webp" alt="Roulotte de caractère en bois, décors peints" width="744" height="975" loading="lazy"></span>
+                <figcaption>Roulotte de caractère</figcaption>
+            </figure>
+            <figure>
+                <span class="photo-frame"><img src="images/2-ecrin-roulotte-allee.webp" alt="Une roulotte de bois peinte en vert, porte ouverte, au coucher du soleil" width="744" height="975" loading="lazy"></span>
+                <figcaption>Au coucher du soleil</figcaption>
+            </figure>
+        </div>
+        <p class="centre"><a class="lien-carte" href="ecrin.html">Découvrir L'Écrin</a></p>
+    </section>
+
+    <section class="ecrin-card" id="residences">
+        <div class="card-head">
+            <span class="section-badge badge-alentours">Les résidences</span>
+            <h2 class="card-title">Résidences d'artistes</h2>
+            <p class="card-intro">L'Écrin accueille aussi des artistes en résidence, pour écrire, répéter ou fabriquer. Ici, le décor fait déjà partie du matériau : bois, roulottes peintes, souvenirs de cirque et grand air.</p>
+        </div>
+        <p class="texte-carte">Vous avez un projet de création ? Parlez-nous-en : les conditions d'accueil se définissent ensemble, selon vos besoins.</p>
+    </section>
+
+    <section class="ecrin-card" id="infos">
+        <div class="card-head">
+            <span class="section-badge badge-univers">Infos pratiques</span>
+            <h2 class="card-title">Dates et inscription</h2>
+            <p class="card-intro">Les détails du premier stage sont en cours de préparation.</p>
+        </div>
+        <div class="infos-grid">
+            <div class="info"><strong>Dates</strong><span>À préciser</span></div>
+            <div class="info"><strong>Durée</strong><span>À préciser</span></div>
+            <div class="info"><strong>Tarif</strong><span>À préciser</span></div>
+            <div class="info"><strong>Inscription</strong><span>À préciser, contactez-nous pour être prévenu</span></div>
+        </div>
+    </section>
+
+    <p class="contact-note" id="contact">
+        <span class="titre-contact">Parlons de votre projet</span><br>
+        Dates, tarifs et modalités d'inscription se précisent directement avec nous.<br>
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="vertical-align:-0.15em" aria-hidden="true"><path d="M6.6 10.8c1.4 2.8 3.8 5.1 6.6 6.6l2.2-2.2c.3-.3.7-.4 1-.2 1.1.4 2.3.6 3.6.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1C10.6 21 3 13.4 3 4c0-.6.4-1 1-1h3.5c.6 0 1 .4 1 1 0 1.2.2 2.4.6 3.6.1.3 0 .7-.2 1l-2.3 2.2z"/></svg> <a href="tel:+33671525089">06 71 52 50 89</a> •
+        <svg viewBox="0 0 24 24" width="1em" height="1em" fill="currentColor" style="vertical-align:-0.15em" aria-hidden="true"><path d="M20 4H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/></svg> <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
+    </p>
+
+    <figure class="photo-frame photo-hero" style="margin-top: 2.5rem;">
+        <img src="images/7-ecrin-coucher-soleil.webp" alt="Ciel rose au coucher du soleil, au-dessus du lieu" width="1545" height="426" loading="lazy" style="max-height: 260px;">
+    </figure>
+
+    <div class="social-links">
+        <a href="https://www.instagram.com/recremagic/" target="_blank" title="Instagram">
+            <img src="images/instagram.webp" alt="Instagram">
+        </a>
+        <a href="https://www.tiktok.com/@recremagic" target="_blank" title="TikTok">
+            <img src="images/tiktok.webp" alt="TikTok">
+        </a>
+        <a href="https://www.youtube.com/@recremagic" target="_blank" title="YouTube">
+            <img src="images/youtubevrai.webp" alt="YouTube">
+        </a>
+        <a href="https://www.facebook.com/recremagic" target="_blank" title="Facebook">
+            <img src="images/facebook.webp" alt="Facebook">
+        </a>
+    </div>
+
+    <div class="footer-note">
+        <span>Récré Magic • Circus Théâtre Ambulant • Depuis 1985</span>
+        <span style="opacity: 0.5;">•</span>
+        <a href="mentions-legales.html">Mentions légales</a>
+    </div>
+
 </div>
 
 <script>
@@ -380,30 +525,26 @@
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-    // ========== AVATAR & MENU UTILISATEUR ==========
-    let dropdownTimeout;
-
     async function updateNavbarAvatar() {
         const { data: { user } } = await supabaseClient.auth.getUser();
         const userMenu = document.getElementById('user-menu');
         const connexionBtn = document.getElementById('connexion-btn');
         const abonnementLink = document.getElementById('abonnement-link');
         const userAvatar = document.getElementById('user-avatar');
-        const dropdown = document.querySelector('.user-dropdown');
-        
+
         if (user) {
             if (connexionBtn) connexionBtn.style.display = 'none';
             if (userMenu) userMenu.style.display = 'block';
-            
+
             const { data: profile } = await supabaseClient
                 .from('profiles')
                 .select('subscription_status')
                 .eq('id', user.id)
                 .single();
-            
+
             const isPremium = profile?.subscription_status === 'active';
             const avatarLetter = user.email?.charAt(0).toUpperCase() || '?';
-            
+
             if (userAvatar) {
                 userAvatar.textContent = avatarLetter;
                 if (isPremium) {
@@ -414,7 +555,7 @@
                     if (abonnementLink) abonnementLink.style.display = 'flex';
                 }
             }
-            
+
             const logoutBtn = document.getElementById('logout-btn-nav');
             if (logoutBtn) {
                 const newLogoutBtn = logoutBtn.cloneNode(true);
@@ -434,7 +575,7 @@
     window.addEventListener('load', async function() {
         await updateNavbarAvatar();
     });
-    
+
     supabaseClient.auth.onAuthStateChange(() => {
         updateNavbarAvatar();
     });
