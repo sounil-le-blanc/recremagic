@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Stages et résidences d'arts du spectacle - Récrémagic, Tarn</title>
-    <meta name="description" content="Stages d'arts du spectacle pour amateurs et résidences d'artistes Récrémagic, dans le Tarn : former une troupe, inventer une histoire, jouer un spectacle.">
+    <meta name="description" content="Stage de création circus théâtre Récrémagic, pour amateurs : membres de la troupe le temps du séjour, vous créez votre spectacle et vous le jouez. Résidences d'artistes dans le Tarn.">
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
     <link rel="shortcut icon" href="/favicon.ico">
@@ -351,6 +351,10 @@
         .etape::before { counter-increment: etape; content: counter(etape); position: absolute; left: 1rem; top: 1rem; width: 1.9rem; height: 1.9rem; border-radius: 50%; background: var(--jaune-accent); color: #3e2a1a; font-family: 'Fredoka', sans-serif; font-weight: 700; display: flex; align-items: center; justify-content: center; border: 2px solid #8b6914; }
         .etape strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; color: #4a2e1a; }
         .etape p { font-size: 0.95rem; font-weight: 600; color: #2C1810; margin-top: 0.3rem; }
+        .colonnes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin-top: 1.6rem; }
+        .colonne { background: rgba(255, 251, 240, 0.85); border: 2px solid #b89a6a; border-radius: 16px; padding: 1.1rem 1.2rem; }
+        .colonne strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.1rem; color: #4a2e1a; text-align: center; }
+        .colonne p { font-size: 0.95rem; font-weight: 600; color: #2C1810; margin-top: 0.3rem; }
         .missions { display: flex; flex-wrap: wrap; gap: 0.6rem; justify-content: center; margin-top: 1.4rem; }
         .missions span { background: rgba(255, 251, 240, 0.85); border: 2px solid #b89a6a; border-radius: 30px; padding: 0.35rem 1rem; font-weight: 700; color: #4a2e1a; font-size: 0.9rem; }
         .infos-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.8rem; margin-top: 1.6rem; }
@@ -358,7 +362,7 @@
         .lien-carte { display: inline-block; margin-top: 1rem; font-size: 0.9rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: #4a2e1a; text-decoration: none; padding: 0.4rem 1.1rem; border-radius: 30px; border: 2px solid #7a5c3e; background: rgba(235, 215, 185, 1); box-shadow: 0 3px 8px rgba(0,0,0,0.2); }
         .lien-carte:hover { background: var(--cuivre-ecrin); color: #fff; }
         .centre { text-align: center; }
-        @media (max-width: 900px) { .etapes, .infos-grid { grid-template-columns: 1fr; } }
+        @media (max-width: 900px) { .etapes, .infos-grid, .colonnes { grid-template-columns: 1fr; } }
     </style>
     <link rel="stylesheet" href="saison-noel.css?v=noel3">
 </head>
@@ -409,13 +413,13 @@
             <span class="magic-sparks">❄️</span>
             <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"></div>
             <h1 class="welcome-title">Stages &amp; résidences</h1>
-            <p class="welcome-subtitle">Arts du spectacle</p>
+            <p class="welcome-subtitle">Stage de création · circus théâtre</p>
             <span class="mot-saison">Noël sous le chapiteau</span>
         </div>
     </div>
 
     <div class="ecrin-card">
-        <p class="card-intro">Venez apprendre, créer et jouer dans l'univers de Récrémagic : forain, féerique, cabaret. Un stage pour devenir troupe le temps d'un séjour, et un lieu d'accueil pour les artistes qui ont besoin de temps et de calme pour travailler.</p>
+        <p class="card-intro">On vous invite au voyage : membres de la troupe le temps du séjour, vous créez votre spectacle, et vous le jouez. Les roulottes sont le décor&nbsp;; les marionnettes et les personnages n'attendent que vos mains, dans le circus théâtre Récrémagic.</p>
         <p class="devise">Donnez vie à votre magie... c'est tout.</p>
     </div>
 
@@ -427,28 +431,68 @@
         <div class="card-head">
             <span class="section-badge badge-creer">Le stage</span>
             <h2 class="card-title">Créer-jouer</h2>
-            <p class="card-intro">Un stage d'arts du spectacle ouvert aux amateurs : nul besoin d'être professionnel. Le groupe devient une troupe, construit une histoire ensemble, puis la joue sur scène.</p>
+            <p class="card-intro">Pas un programme d'ateliers : une aventure de troupe, ouverte aux amateurs. On y apprend ce qu'est une histoire, et comment la technique la sert.</p>
         </div>
         <div class="etapes">
-            <div class="etape"><strong>On forme la troupe</strong><p>Le groupe entre dans l'univers de Récrémagic et devient, le temps du séjour, une vraie troupe.</p></div>
-            <div class="etape"><strong>On invente l'histoire</strong><p>Ensemble, on découvre ce qu'est une histoire et comment la technique est là pour la servir.</p></div>
-            <div class="etape"><strong>Chacun trouve sa mission</strong><p>Selon son niveau et ses envies, de la technique à la scène.</p></div>
-            <div class="etape"><strong>On joue</strong><p>Le stage se termine par un petit spectacle, en solo ou en collectif.</p></div>
+            <div class="etape"><strong>On imagine une histoire</strong><p>Personnages, désir, obstacles : la troupe construit le fil de son spectacle.</p></div>
+            <div class="etape"><strong>Chacun trouve sa place</strong><p>Marionnettes, personnages, technique ou scène : des missions à votre niveau, au service de l'histoire.</p></div>
+            <div class="etape"><strong>On la joue, à la fin</strong><p>Le spectacle prend vie, pour de vrai.</p></div>
         </div>
-        <div class="missions">
-            <span>Décor</span><span>Son</span><span>Lumière</span><span>Jonglerie</span><span>Cascade</span><span>Jeu et personnages</span>
-        </div>
+        <p class="texte-carte">Un spectacle naît du mariage de tous les postes. Trois artistes accompagnent la troupe du début à la fin.</p>
         <figure class="photo-wide">
             <span class="photo-frame"><img src="images/5-ecrin-nuit.webp" alt="La roulotte de nuit, éclairée par ses lanternes" width="1545" height="582" loading="lazy"></span>
             <figcaption>Les roulottes, à la nuit tombée.</figcaption>
         </figure>
     </section>
 
-    <section class="ecrin-card" id="roulottes">
+    <section class="ecrin-card" id="semaine">
         <div class="card-head">
-            <span class="section-badge badge-sejour">Hébergement</span>
-            <h2 class="card-title">Dormir en roulotte ?</h2>
-            <p class="card-intro">Le lieu et les conditions d'accueil restent à définir. Une possibilité : dormir dans une roulotte de bois peinte, comme à L'Écrin. Les roulottes, avec les marionnettes et les personnages de la troupe, feraient partie du décor et du jeu.</p>
+            <span class="section-badge badge-sejour">Le séjour</span>
+            <h2 class="card-title">La semaine, jour par jour</h2>
+            <p class="card-intro">Une proposition de rythme, à ajuster ensemble : le rythme reste souple, il suit l'énergie de la troupe.</p>
+        </div>
+        <div class="etapes">
+            <div class="etape"><strong>Arrivée</strong><p>On vous invite au voyage : le groupe devient troupe autour du feu.</p></div>
+            <div class="etape"><strong>Théorie de l'histoire</strong><p>On apprend les ressorts d'une histoire, puis on imagine la nôtre.</p></div>
+            <div class="etape"><strong>Une technique, une place</strong><p>Chacun se saisit d'une technique, d'une marionnette ou d'un personnage.</p></div>
+            <div class="etape"><strong>On construit</strong><p>Décors, numéros solo ou collectifs, sons, lumières : chacun fabrique sa partie.</p></div>
+            <div class="etape"><strong>On assemble</strong><p>Les morceaux se relient : l'histoire devient un spectacle.</p></div>
+            <div class="etape"><strong>Filage</strong><p>On joue tout à la suite, du début à la fin, comme le grand jour.</p></div>
+            <div class="etape"><strong>Le grand jour</strong><p>On joue pour de vrai, et la féerie grandit. Puis on fête ça.</p></div>
+        </div>
+    </section>
+
+    <section class="ecrin-card" id="postes">
+        <div class="card-head">
+            <span class="section-badge badge-creer">Les missions</span>
+            <h2 class="card-title">Tous les postes d'un spectacle</h2>
+            <p class="card-intro">Décorateur, technicien son, lumière, cascadeur, jongleur, et plus encore&nbsp;:</p>
+        </div>
+        <div class="missions">
+            <span>Magie</span><span>Marionnette</span><span>Théâtre d'ombre</span><span>Clown</span><span>Son, lumière et musique</span><span>Vidéo et montage</span><span>Jonglage et arts du feu</span><span>Cascade et combat scénique</span><span>Jeu de rôle et écriture</span><span>Décors et fabrication</span>
+        </div>
+        <p class="texte-carte">Les missions se dessinent selon vos envies, votre niveau et ce dont l'histoire a besoin.</p>
+    </section>
+
+    <section class="ecrin-card" id="univers">
+        <div class="card-head">
+            <span class="section-badge badge-univers">L'univers</span>
+            <h2 class="card-title">L'univers Récrémagic</h2>
+            <p class="card-intro">Un monde de forains, de féerie et de cabaret, déjà là autour de vous. Le temps du séjour, vous ne visitez pas cet univers : vous en faites partie.</p>
+        </div>
+        <div class="colonnes">
+            <div class="colonne"><strong>Le forain</strong><p>Les roulottes, la vie de camp et l'esprit forain : la fête, la curiosité et l'art d'accueillir le public.</p></div>
+            <div class="colonne"><strong>Le féerique</strong><p>Marionnettes et personnages prennent vie entre vos mains : le merveilleux se fabrique à la main.</p></div>
+            <div class="colonne"><strong>Le cabaret</strong><p>Des numéros solo ou collectifs s'enchaînent au plus près du public : la féerie grandit à chaque entrée en scène.</p></div>
+        </div>
+        <p class="devise">Un univers à habiter, pas un décor à regarder.</p>
+    </section>
+
+    <section class="ecrin-card" id="vie">
+        <div class="card-head">
+            <span class="section-badge badge-sejour">Sur place</span>
+            <h2 class="card-title">La vie sur place</h2>
+            <p class="card-intro">Les roulottes, décor du circus théâtre, deviennent votre maison pour la semaine. Les repas se prennent ensemble, à la bonne franquette, comme au camp. Les journées suivent le rythme de la création ; les soirées, celui des veillées.</p>
         </div>
         <div class="photo-grid portrait">
             <figure>
@@ -460,7 +504,17 @@
                 <figcaption>Au coucher du soleil</figcaption>
             </figure>
         </div>
-        <p class="centre"><a class="lien-carte" href="ecrin.html">Découvrir L'Écrin</a></p>
+        <p class="texte-carte">Pension complète, esprit camp : on y crée et on y vit, ensemble.</p>
+        <p class="centre"><a class="lien-carte" href="ecrin.html">Découvrir L'Écrin et ses roulottes</a></p>
+    </section>
+
+    <section class="ecrin-card" id="spectacle">
+        <div class="card-head">
+            <span class="section-badge badge-creer">La restitution</span>
+            <h2 class="card-title">Et au bout, votre spectacle</h2>
+            <p class="card-intro">Le dernier jour, vous jouez votre spectacle, ensemble, pour de vrai. Vos numéros, solo ou collectifs, font grandir la féerie : vous repartez avec l'expérience de l'avoir fait exister.</p>
+        </div>
+        <p class="devise">Envie d'en être ? Racontez-nous votre envie, on imagine la suite ensemble.</p>
     </section>
 
     <section class="ecrin-card" id="residences">
@@ -476,14 +530,14 @@
         <div class="card-head">
             <span class="section-badge badge-univers">Infos pratiques</span>
             <h2 class="card-title">Dates et inscription</h2>
-            <p class="card-intro">Les détails du premier stage sont en cours de préparation.</p>
+            <p class="card-intro">Le premier stage se prépare ; les détails se précisent directement avec nous.</p>
         </div>
         <div class="infos-grid">
+            <div class="info"><strong>Format imaginé</strong><span>7 jours · pension complète · couchage en roulotte</span></div>
             <div class="info"><strong>Lieu</strong><span>À préciser</span></div>
             <div class="info"><strong>Dates</strong><span>À préciser</span></div>
-            <div class="info"><strong>Durée</strong><span>À préciser</span></div>
-            <div class="info"><strong>Tarif</strong><span>À préciser</span></div>
-            <div class="info"><strong>Inscription</strong><span>À préciser, contactez-nous pour être prévenu</span></div>
+            <div class="info"><strong>Tarif</strong><span>En cours de définition</span></div>
+            <div class="info"><strong>Inscription</strong><span>Racontez-nous votre envie pour être prévenu</span></div>
         </div>
     </section>
 
