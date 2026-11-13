@@ -188,8 +188,9 @@
             .admin-nav-btn { font-size: 0.7rem; padding: 0.3rem 0.7rem; }
         }
     </style>
+    <link rel="stylesheet" href="saison-noel.css">
 </head>
-<body>
+<body class="saison-noel">
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -287,7 +288,7 @@
         if (authError || !user) {
             card.innerHTML = `
                 <div style="text-align: center; padding: 2rem;">
-                    <h1 class="profile-title">Mon Profil</h1>
+                    <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1 class="profile-title">Mon Profil</h1><span class="mot-saison sur-clair">Noël sous le chapiteau</span></div>
                     <p style="margin-bottom: 1.5rem;">🔒 Vous devez être connecté</p>
                     <a href="connexion.html" class="btn btn-primary">🎪 Se connecter</a>
                     <a href="inscription.html" class="btn btn-warning">✨ S'inscrire</a>
@@ -313,7 +314,7 @@
         card.innerHTML = `
             <div class="profile-header">
                 <div class="avatar">${avatarLetter}</div>
-                <h1 class="profile-title">Mon Compte</h1>
+                <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1 class="profile-title">Mon Compte</h1><span class="mot-saison sur-clair">Noël sous le chapiteau</span></div>
                 <p class="welcome-message">${isPremium ? '🌟 Merci de faire partie de la troupe !' : '✨ Découvrez nos vidéos exclusives'}</p>
             </div>
 

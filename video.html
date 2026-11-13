@@ -229,9 +229,21 @@
             .nav-icons { gap: 0.6rem; }
             .navbar-container { padding: 0 0.5rem; }
         }
-    </style>
+    
+        /* Pour les ecrins <= 400px : la barre tient en largeur */
+        @media (max-width: 400px) {
+            .navbar-container { padding: 0 0.3rem; }
+            .nav-left-group { gap: 0.3rem; }
+            .nav-icons { gap: 0.45rem; }
+            .nav-icon-img { height: 22px !important; }
+            .icon-label { font-size: 0.45rem !important; letter-spacing: 0.2px; }
+            .logo-wrapper img { height: 58px !important; margin-top: 28px; }
+            .back-arrow { width: 28px; height: 28px; font-size: 0.9rem; }
+        }
+</style>
+    <link rel="stylesheet" href="saison-noel.css">
 </head>
-<body>
+<body class="saison-noel">
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -431,7 +443,7 @@
 
         container.innerHTML = `
             <div class="video-box">
-                <h1 class="video-title">🎬 Chargement...</h1>
+                <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1 class="video-title">🎬 Chargement...</h1><span class="mot-saison sur-clair">Noël sous le chapiteau</span></div>
                 <div class="video-wrapper">
                     <iframe id="video-iframe" src="about:blank" allowfullscreen></iframe>
                 </div>

@@ -354,9 +354,21 @@
             .nav-icons { gap: 0.6rem; }
             .navbar-container { padding: 0 0.5rem; }
         }
-    </style>
+    
+        /* Pour les ecrins <= 400px : la barre tient en largeur */
+        @media (max-width: 400px) {
+            .navbar-container { padding: 0 0.3rem; }
+            .nav-left-group { gap: 0.3rem; }
+            .nav-icons { gap: 0.45rem; }
+            .nav-icon-img { height: 22px !important; }
+            .icon-label { font-size: 0.45rem !important; letter-spacing: 0.2px; }
+            .logo-wrapper img { height: 58px !important; margin-top: 28px; }
+            .back-arrow { width: 28px; height: 28px; font-size: 0.9rem; }
+        }
+</style>
+    <link rel="stylesheet" href="saison-noel.css">
 </head>
-<body>
+<body class="saison-noel">
 
 <nav class="navbar">
     <div class="navbar-container">
@@ -400,7 +412,7 @@
 
 <div class="main-content">
     <div class="message-box">
-        <h1>Mentions Légales</h1>
+        <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1>Mentions Légales</h1><span class="mot-saison sur-clair">Noël sous le chapiteau</span></div>
         <p class="intro">Conformément aux dispositions de la loi n° 2004-575 du 21 juin 2004 pour la confiance dans l'économie numérique, il est précisé aux utilisateurs du site Récré Magic l'identité des différents intervenants dans le cadre de sa réalisation et de son suivi.</p>
 
         <h2>Identification de l'éditeur du site</h2>
