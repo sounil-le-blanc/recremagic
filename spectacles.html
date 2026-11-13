@@ -125,7 +125,7 @@ body::before {
 .spectacle-description { line-height: 1.8; margin-bottom: 1.5rem; color: #2C1810; text-align: justify; font-weight: 700; }
 
 .youtube-viewer { width: 100%; border-radius: 0 0 27px 27px; overflow: hidden; box-shadow: inset 0 5px 15px rgba(0,0,0,0.3); border-top: 4px solid #7a5c3e; background: #000; position: relative; z-index: 0; }
-.youtube-viewer iframe { display: block; width: 100%; height: 400px; border: none; }
+.youtube-viewer iframe { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; border: none; }
 
 .spectacle-badge-new { display: inline-block; padding: 0.7rem 1.6rem; border-radius: 30px; font-size: 0.95rem; font-weight: 800; color: white; margin-bottom: 1.2rem; text-transform: uppercase; letter-spacing: 2px; background: linear-gradient(135deg, #D32F2F, #EC407A); border: 2px solid rgba(255,255,255,0.6); box-shadow: 0 0 22px rgba(236,64,122,0.7), 0 4px 12px rgba(0,0,0,0.3); animation: pulse 2s infinite; text-shadow: 1px 1px 2px rgba(0,0,0,0.3); }
 @keyframes pulse { 0%,100%{transform:scale(1);box-shadow:0 0 18px rgba(236,64,122,0.7),0 4px 12px rgba(0,0,0,0.3)} 50%{transform:scale(1.06);box-shadow:0 0 30px rgba(255,80,130,1),0 6px 16px rgba(0,0,0,0.4)} }
@@ -173,7 +173,7 @@ body::before {
 @media (max-width: 968px) { 
     .spectacle-card-inner { grid-template-columns: 1fr; } 
     .spectacle-img { min-height: 250px; } 
-    .youtube-viewer iframe { height: 300px; } 
+    .youtube-viewer iframe { aspect-ratio: 16 / 9; height: auto; } 
 }
 
 @media (min-width: 968px) and (max-width: 1759px) {
@@ -217,7 +217,7 @@ body::before {
     .page-header h1 { font-size: 1.8rem; } 
     .page-header p { font-size: 1rem; } 
     .parchment-wrapper { padding: 1.5rem 1.8rem; margin: 1rem auto 2rem auto; } 
-    .youtube-viewer iframe { height: 220px; } 
+    .youtube-viewer iframe { aspect-ratio: 16 / 9; height: auto; } 
     .gallery-grid { grid-template-columns: 1fr; } 
     .nav-arrow { width: 40px; height: 40px; font-size: 30px; } 
     .btn-devis { display: block; text-align: center; } 
@@ -259,7 +259,7 @@ body::before {
     .btn-devis { font-size: 10.67px; padding: 8.53px 21.33px; border-radius: 33.33px; margin-top: 5.33px; }
     .formule-texte { font-size: 10.13px; padding: 4.27px 8.53px; border-radius: 13.33px; }
     /* L'iframe YouTube fait 400px en CSS -> 600px avec le zoom. On la ramene a 400px reels. */
-    .youtube-viewer iframe { height: 266.67px; }
+    .youtube-viewer iframe { aspect-ratio: 16 / 9; height: auto; }
 }
 
         /* Pour les ecrins <= 400px : la barre tient en largeur */
