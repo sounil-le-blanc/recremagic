@@ -375,7 +375,7 @@
             transition: transform 0.25s ease, box-shadow 0.25s ease;
         }
         .porte:hover { transform: translateY(-4px); box-shadow: 0 8px 18px rgba(0,0,0,0.35); }
-        .porte img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
+        .porte img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; display: block; }
         .porte-body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; flex: 1; }
         .porte strong { display: block; font-family: 'Fredoka', sans-serif; font-weight: 700; font-size: 1.15rem; color: #4a2e1a; text-align: center; }
         .porte p { font-size: 0.92rem; font-weight: 600; color: #2C1810; margin-top: 0.4rem; }
@@ -385,7 +385,7 @@
             color: #7a5c3e; text-align: center;
         }
         .porte:hover .porte-cta { color: var(--cuivre-ecrin); }
-        .colonne .col-img { width: 100%; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; margin-bottom: 0.7rem; border: 2px solid #b89a6a; }
+        .colonne .col-img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 10px; margin-bottom: 0.7rem; border: 2px solid #b89a6a; }
 
         @media (max-width: 900px) { .etapes, .infos-grid, .colonnes, .portes { grid-template-columns: 1fr; } }
     </style>
@@ -623,15 +623,9 @@
         <div class="card-head">
             <span class="section-badge badge-univers">Infos pratiques</span>
             <h2 class="card-title">Dates et inscription</h2>
-            <p class="card-intro">Le premier stage se prépare, les autres formules aussi&nbsp;; les détails se précisent directement avec nous.</p>
+            <p class="card-intro">À venir&nbsp;: les dates des prochains séjours seront annoncées ici.</p>
         </div>
-        <div class="infos-grid">
-            <div class="info"><strong>Format imaginé</strong><span>7 jours · pension complète · couchage en roulotte</span></div>
-            <div class="info"><strong>Lieu</strong><span>À préciser</span></div>
-            <div class="info"><strong>Dates</strong><span>À préciser</span></div>
-            <div class="info"><strong>Tarif</strong><span>En cours de définition</span></div>
-            <div class="info"><strong>Inscription</strong><span>Par mail ou par téléphone, coordonnées ci-dessous</span></div>
-        </div>
+        <p class="texte-carte centre">Inscriptions par mail ou par téléphone&nbsp;: coordonnées juste ci-dessous.</p>
     </section>
 
     <p class="contact-note" id="contact">
