@@ -1,0 +1,38 @@
+/* ===== Habillage de saison : NOËL =====
+   Couche additive : aucune modification du layout ni du contenu.
+   Activation : une classe "saison-noel" sur <body> + ce fichier.
+   Desactivation : retirer la classe (ou le fichier). */
+
+/* 1. Le decor change : variante hivernale du fond existant */
+body.saison-noel {
+    background-image: url('images/fond-image-hiver.webp');
+}
+
+/* 2. Le cachet de saison : medaillon grave pose sur le parchemin */
+.saison-noel .medaillon-saison {
+    position: absolute;
+    top: -30px;
+    right: -30px;
+    width: 96px;
+    height: auto;
+    transform: rotate(8deg);
+    filter: drop-shadow(0 4px 10px rgba(0,0,0,0.55));
+    z-index: 3;
+    pointer-events: none;
+}
+
+/* 3. Le mot de saison : une ligne, meme typographie, rien d'autre */
+.saison-noel .mot-saison {
+    display: block;
+    margin-top: 0.5rem;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 600;
+    letter-spacing: 1px;
+    color: #e6d5b8;
+    text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
+}
+
+@media (max-width: 768px) {
+    .saison-noel .medaillon-saison { width: 64px; top: -20px; right: -18px; }
+}
