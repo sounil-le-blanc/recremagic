@@ -50,6 +50,9 @@ body.saison-noel.fond-preserve {
     text-shadow: 1px 1px 0 rgba(0,0,0,0.6);
 }
 
+/* Mot de saison masque a la demande de Thomas (13 nov 2026) : le medaillon et le reste du decor sont conserves */
+.saison-noel .mot-saison { display: none; }
+
 /* Variante du mot de saison sur fond clair (page L'Ecrin) */
 .saison-noel .mot-saison.sur-clair {
     color: #8a6a55;
