@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Expositions - Récré Magic</title>
+    <meta name="description" content="Les expositions itinérantes de Récrémagic : la Féerie des Marionnettes (12 vitrines animées, 56 personnages) et les Géants du Carnaval (12 géants de 2 à 3 m). Dimensions, espace requis, devis.">
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -227,11 +228,13 @@
         }
         .magic-sparks {
             position: absolute; top: -5px; right: -10px; font-size: 2rem;
-            opacity: 0.8; animation: sparkle 2s infinite; pointer-events: none;
+            opacity: 0.8; animation: chute-flocon 6s linear infinite; pointer-events: none;
         }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+        @keyframes chute-flocon {
+            0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+            15% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% { opacity: 0; transform: translate(-6px, 22px) rotate(40deg); }
         }
 
         .page-header { text-align: center; margin-top: 2rem; margin-bottom: 3rem; }
@@ -498,7 +501,7 @@
 <div class="page-header">
     <div class="parchment-wrapper">
         <div class="inner-parchment"></div>
-        <span class="magic-sparks">✨</span>
+        <span class="magic-sparks">❄️</span>
         <img src="images/medaillon-noel.png" alt="" class="medaillon-saison">
         <h1>Nos Expositions</h1>
         <p>Installations interactives pour vos événements</p>

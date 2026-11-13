@@ -287,12 +287,14 @@
             top: -5px; right: -10px;
             font-size: 2rem;
             opacity: 0.8;
-            animation: sparkle 2s infinite;
+            animation: chute-flocon 6s linear infinite;
             pointer-events: none;
         }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+        @keyframes chute-flocon {
+            0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+            15% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% { opacity: 0; transform: translate(-6px, 22px) rotate(40deg); }
         }
 
         .welcome-title {
@@ -586,7 +588,7 @@
     <div class="welcome-text">
         <div class="parchment-wrapper">
             <div class="inner-parchment"></div>
-            <span class="magic-sparks">✨</span>
+            <span class="magic-sparks">❄️</span>
             <img src="images/medaillon-noel.png" alt="" class="medaillon-saison">
             <h1 class="welcome-title">Bienvenue chez Récré Magic</h1>
             <p class="welcome-subtitle">Artisans du spectacle</p>
@@ -764,14 +766,15 @@
     // ============================================================
     function createConfetti() {
         var ctn = document.getElementById('confetti');
-        var colors = ['#FFB300', '#EC407A', '#7CB69F', '#D32F2F'];
+        var blancs = ['#ffffff', '#f4f8ff', '#e9f1fc'];
         for (var i = 0; i < 50; i++) {
             var d = document.createElement('div');
-            d.style.cssText = 'position:absolute; width:'+(Math.random()*12+5)+'px; height:'+(Math.random()*12+5)+'px; background:'+colors[Math.floor(Math.random()*4)]+'; left:'+(Math.random()*100)+'%; top:-20px; opacity:'+(Math.random()*0.7+0.3)+'; border-radius:'+(Math.random()>0.5?'50%':'0')+'; transform:rotate('+(Math.random()*360)+'deg); animation:fall '+(Math.random()*4+5)+'s linear '+(Math.random()*3)+'s infinite;';
+            var taille = Math.random()*7+3;
+            d.style.cssText = 'position:absolute; width:'+taille+'px; height:'+taille+'px; background:'+blancs[Math.floor(Math.random()*3)]+'; left:'+(Math.random()*100)+'%; top:-20px; opacity:'+(Math.random()*0.5+0.35)+'; border-radius:50%; animation:fall '+(Math.random()*5+7)+'s linear '+(Math.random()*4)+'s infinite;';
             ctn.appendChild(d);
         }
         var style = document.createElement('style');
-        style.textContent = '@keyframes fall{to{transform:translateY(100vh) rotate(720deg); opacity:0;}}';
+        style.textContent = '@keyframes fall{0%{transform:translate(0,-20px);}25%{transform:translate(8px,25vh);}50%{transform:translate(-6px,50vh);}75%{transform:translate(8px,75vh);}100%{transform:translate(-4px,105vh);opacity:0;}}';
         document.head.appendChild(style);
     }
 

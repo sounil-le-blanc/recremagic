@@ -177,8 +177,8 @@
             border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px;
             pointer-events: none;
         }
-        .magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: sparkle 2s infinite; pointer-events: none; }
-        @keyframes sparkle { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+        .magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: chute-flocon 6s linear infinite; pointer-events: none; }
+        @keyframes chute-flocon { 0% { opacity: 0; transform: translate(0,0) rotate(0deg); } 15% { opacity: 0.9; } 80% { opacity: 0.9; } 100% { opacity: 0; transform: translate(-6px,22px) rotate(40deg); } }
         .welcome-title {
             font-family: 'MedievalSharp', cursive;
             font-size: clamp(2.5rem, 6vw, 4rem);
@@ -392,7 +392,7 @@
     <div class="welcome-text">
         <div class="parchment-wrapper">
             <div class="inner-parchment"></div>
-            <span class="magic-sparks">✨</span>
+            <span class="magic-sparks">❄️</span>
             <div class="cadre-saison"><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><img class="hero-enseigne" src="images/1-ecrin-enseigne.webp" alt="Enseigne peinte L'Écrin Récré Magic" width="700" height="583"></div>
             <h1 class="welcome-title">L'Écrin</h1>
             <p class="welcome-subtitle">Hébergement insolite &amp; résidences d'artistes</p>

@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nos Spectacles - Récré Magic</title>
+    <meta name="description" content="Les spectacles itinérants de Récrémagic : la série Du coup, Comme sur des roulettes et Délicieusement Maboul. Durées, publics, formules intérieur ou extérieur et demande de devis.">
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -99,8 +100,8 @@ body::before {
 .parchment-wrapper::before { content: ''; position: absolute; top: -12px; left: -12px; width: 36px; height: 36px; border-top: 6px solid #d4af37; border-left: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
 .parchment-wrapper::after { content: ''; position: absolute; bottom: -12px; right: -12px; width: 36px; height: 36px; border-bottom: 6px solid #d4af37; border-right: 6px solid #d4af37; border-radius: 4px; filter: drop-shadow(0 0 8px gold); z-index: 2; }
 .inner-parchment { position: absolute; top: 10px; left: 10px; right: 10px; bottom: 10px; border: 2px solid rgba(212,175,55,0.5); border-radius: 5px 10px 3px 8px / 5px 8px 5px 4px; pointer-events: none; }
-.magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: sparkle 2s infinite; pointer-events: none; }
-@keyframes sparkle { 0%, 100% { opacity: 0.4; transform: scale(1); } 50% { opacity: 1; transform: scale(1.2); } }
+.magic-sparks { position: absolute; top: -5px; right: -10px; font-size: 2rem; opacity: 0.8; animation: chute-flocon 6s linear infinite; pointer-events: none; }
+@keyframes chute-flocon { 0% { opacity: 0; transform: translate(0,0) rotate(0deg); } 15% { opacity: 0.9; } 80% { opacity: 0.9; } 100% { opacity: 0; transform: translate(-6px,22px) rotate(40deg); } }
 
 .page-header { text-align: center; margin-top: 2rem; margin-bottom: 3rem; }
 .page-header h1 { font-family: 'MedievalSharp', cursive; font-size: clamp(2.5rem, 5vw, 3.5rem); color: #f5d06b; text-transform: uppercase; letter-spacing: 4px; margin-bottom: 0.5rem; text-shadow: 2px 2px 0 #3e6b3a, -1px -1px 0 #3e6b3a, 0 0 8px #66bb6a, 0 0 15px #a5d6a7; }
@@ -299,7 +300,7 @@ body::before {
 </nav>
 
 <div class="page-header">
-    <div class="parchment-wrapper"><div class="inner-parchment"></div><span class="magic-sparks">✨</span><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1>Nos Spectacles</h1><p>5 créations itinérantes pour tous publics</p><span class="mot-saison">Noël sous le chapiteau</span></div>
+    <div class="parchment-wrapper"><div class="inner-parchment"></div><span class="magic-sparks">❄️</span><img src="images/medaillon-noel.png" alt="" class="medaillon-saison"><h1>Nos Spectacles</h1><p>5 créations itinérantes pour tous publics</p><span class="mot-saison">Noël sous le chapiteau</span></div>
 </div>
 
 <div class="spectacles-list">
@@ -319,6 +320,7 @@ body::before {
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                     <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
                     <span class="formule-texte">Formule : en extérieur avec nos roulottes ou sur votre scène en intérieur</span>
+                    <span class="formule-texte">⏱️ Durée : 1h00</span>
                 </div>
             </div>
         </div>
@@ -340,6 +342,7 @@ body::before {
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                     <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
                     <span class="formule-texte">Formule : en extérieur avec nos roulottes ou avec votre scène en intérieur</span>
+                    <span class="formule-texte">⏱️ Durée : 1h00 · Tout public dès 3 ans</span>
                 </div>
             </div>
         </div>
@@ -381,6 +384,7 @@ body::before {
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                     <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
                     <span class="formule-texte">Formule : avec votre scène intérieur/extérieur</span>
+                    <span class="formule-texte">⏱️ Durée : 55 min · Tout public</span>
                 </div>
             </div>
         </div>
@@ -401,6 +405,7 @@ body::before {
                 <div style="display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;">
                     <a href="Devis.html" class="btn-devis" target="_blank">📩 Demander un devis</a>
                     <span class="formule-texte">Formule : avec votre scène intérieur/extérieur</span>
+                    <span class="formule-texte">⏱️ Durée : 1h00 · Tout public dès 4 ans</span>
                 </div>
             </div>
         </div>
@@ -435,6 +440,7 @@ body::before {
     <div class="contact-cta" id="contact">
         <h2>🎪 Intéressé par nos spectacles ?</h2>
         <p>Contactez-nous pour un devis gratuit et personnalisé</p>
+        <p>📍 Troupe itinérante basée à Labastide Gabausse, dans le Tarn</p>
         <p>📞 <a href="tel:+33671525089">06 71 52 50 89</a> &nbsp;&nbsp;|&nbsp;&nbsp; 📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a></p>
         <a href="Devis.html" style="margin-top:1rem;display:inline-block;background:linear-gradient(135deg,var(--rouge-spectacle),var(--rose-spectacle));padding:0.8rem 2rem;border-radius:50px;text-decoration:none;font-weight:700;color:white;" target="_blank">📩 Demander un devis</a>
         

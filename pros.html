@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Récré Magic - Prestations</title>
+    <meta name="description" content="Nous engager : spectacles, expositions itinérantes, stages et hébergement insolite à L'Écrin. Récrémagic, troupe itinérante basée dans le Tarn.">
     <!-- Favicons -->
     <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
     <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -295,12 +296,14 @@
             top: -5px; right: -10px;
             font-size: 2rem;
             opacity: 0.8;
-            animation: sparkle 2s infinite;
+            animation: chute-flocon 6s linear infinite;
             pointer-events: none;
         }
-        @keyframes sparkle {
-            0%, 100% { opacity: 0.4; transform: scale(1); }
-            50% { opacity: 1; transform: scale(1.2); }
+        @keyframes chute-flocon {
+            0% { opacity: 0; transform: translate(0, 0) rotate(0deg); }
+            15% { opacity: 0.9; }
+            80% { opacity: 0.9; }
+            100% { opacity: 0; transform: translate(-6px, 22px) rotate(40deg); }
         }
 
         .welcome-title {
@@ -592,7 +595,7 @@
     <div class="welcome-text">
         <div class="parchment-wrapper">
             <div class="inner-parchment"></div>
-            <span class="magic-sparks">✨</span>
+            <span class="magic-sparks">❄️</span>
             <img src="images/medaillon-noel.png" alt="" class="medaillon-saison">
             <h1 class="welcome-title">PRESTATIONS</h1>
             <p class="welcome-subtitle">Nous engager</p>
@@ -647,7 +650,8 @@
     <p class="contact-note">
         Une question ? Contactez-nous :<br>
         📞 <a href="tel:+33671525089">06 71 52 50 89</a> • 
-        📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a>
+        📧 <a href="mailto:recremagic@wanadoo.fr">recremagic@wanadoo.fr</a><br>
+        📍 Troupe itinérante basée à Labastide Gabausse, dans le Tarn
     </p>
 
     <div class="social-links">
