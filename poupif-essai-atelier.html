@@ -65,11 +65,11 @@ const TXT={carte:'Tout est sur la carte. Entrons dans la roulotte, à droite.',c
 const LAB={carte:'01 / La carte',caravane:"02 / L'atelier",scene:'03 / La petite scène'};
 const scBtn=document.getElementById('scene');
 let scene='carte',pActu=0,animId=0,fin=0,debut=0;
-function finAnim(){entrer.disabled=scene!=='carte';scBtn.disabled=scene!=='caravane';retour.disabled=scene==='carte';porte.tabIndex=scene==='carte'?0:-1;etat.textContent=TXT[scene];}
+function finAnim(){requestAnimationFrame(()=>{monde.style.willChange='auto';});entrer.disabled=scene!=='carte';scBtn.disabled=scene!=='caravane';retour.disabled=scene==='carte';porte.tabIndex=scene==='carte'?0:-1;etat.textContent=TXT[scene];}
 function aller(nom){
  if(nom===scene)return;
  const depart=pActu,arrivee=NIV[nom];
- scene=nom;document.body.dataset.scene=nom==='carte'?'carte':'caravane';
+ scene=nom;monde.style.willChange='transform';document.body.dataset.scene=nom==='carte'?'carte':'caravane';
  entrer.disabled=true;scBtn.disabled=true;retour.disabled=true;porte.tabIndex=-1;
  repere.textContent=LAB[nom];
  if(reduced){pActu=arrivee;rendre(pActu);finAnim();fin=performance.now();return;}
