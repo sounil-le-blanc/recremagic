@@ -38,29 +38,11 @@
 
         body {
             font-family: 'Quicksand', sans-serif;
-            background-image: url('images/fond-image.webp');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            background-attachment: fixed;
+            background: #2F3B52;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: flex-start;
+            min-height: 100dvh;
             position: relative;
-            overflow-x: hidden;
-            padding-top: 90px;
-            padding-bottom: 360px; /* zone dégagée pour le widget de conversation */
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.45);
-            z-index: 0;
-            pointer-events: none;
+            overflow: hidden;
         }
 
         /* ========== NAVBAR ========== */
@@ -162,108 +144,13 @@
         }
         .icon-wrapper:hover .icon-label { color: #FFB300; }
 
-        /* CONTENU PRINCIPAL */
-        .main-content {
-            position: relative;
-            z-index: 10;
-            text-align: center;
-            padding: 2rem;
-            max-width: 800px;
-            width: 100%;
-        }
-
-        .message-box {
-            background: #F2E4C4;
-            border-radius: 60px;
-            padding: 2.5rem 2rem;
-            border: 5px solid #7a5c3e;
-            outline: 4px solid #5a3e2a;
-            outline-offset: 4px;
-            box-shadow: 0 0 0 8px #3e2a1a, 0 25px 50px -12px rgba(0, 0, 0, 0.3);
-        }
-
-        .poupif-title {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 3rem;
-            font-weight: 800;
-            color: #2C1810;
-            margin-bottom: 1rem;
-            letter-spacing: 2px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.2);
-        }
-
-        .poupif-subtitle {
-            font-size: 1.2rem;
-            color: #2C1810;
-            margin-bottom: 1.2rem;
-            line-height: 1.6;
-        }
-
-        .poupif-indice {
-            font-size: 1rem;
-            color: #5a3e2a;
-            font-weight: 600;
-        }
-
-        .poupif-precision {
-            font-size: 0.95rem;
-            color: #5a3e2a;
-            font-style: italic;
-            margin-top: 1rem;
-        }
-
-        .btn-back {
-            display: inline-block;
-            background: linear-gradient(135deg, #D32F2F, #EC407A);
-            color: white;
-            padding: 0.9rem 2rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1.1rem;
-            transition: transform 0.2s, box-shadow 0.2s;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-            margin-top: 1.5rem;
-        }
-        .btn-back:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-
-        /* ========== VISITE GUIDEE ========== */
-        .visite-section {
-            position: relative;
-            z-index: 10;
-            width: 100%;
-            max-width: 1500px;
-            padding: 0 1rem;
-            margin-top: 2rem;
-        }
-        .visite-box { padding: 2rem; }
-        .visite-title {
-            font-family: 'MedievalSharp', cursive;
-            font-size: 2.2rem;
-            font-weight: 800;
-            color: #2C1810;
-            margin-bottom: 0.6rem;
-            letter-spacing: 1px;
-        }
-        .visite-subtitle {
-            font-size: 1rem;
-            color: #5a3e2a;
-            margin-bottom: 1.2rem;
-            line-height: 1.5;
-        }
+        /* ========== LE DESSIN EST LA PAGE ========== */
         .visite-viewport {
-            position: relative;
-            width: 100%;
-            height: 340px;
-            transition: height 0.5s ease;
+            position: fixed;
+            inset: 0;
+            z-index: 1;
             overflow: hidden;
-            border-radius: 24px;
-            border: 4px solid #5a3e2a;
-            background: #F7EAD3;
+            background: #2F3B52; /* même bleu nuit que le papier du dessin */
         }
         .visite-stage {
             position: absolute;
@@ -271,22 +158,107 @@
             width: 4328px;
             height: 1772px;
             transform-origin: 0 0;
-            transition: transform 1.4s cubic-bezier(0.45, 0.05, 0.35, 1);
+            transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.35, 1);
         }
-        .visite-stage img { width: 4328px; height: 1772px; display: block; }
+        .visite-stage img {
+            width: 4328px;
+            height: 1772px;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        /* Projecteur : assombrit le reste du plan pendant une étape */
+        .visite-spot {
+            position: absolute;
+            border-radius: 40px;
+            box-shadow: 0 0 0 9999px rgba(16, 22, 34, 0.66);
+            opacity: 0;
+            pointer-events: none;
+            transition: left 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        top 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        width 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        height 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        opacity 0.9s ease;
+        }
+
+        /* Textes flottant sur le dessin */
+        .poupif-entete {
+            position: fixed;
+            top: 66px; /* sous la navbar et son logo */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            background: rgba(242, 228, 196, 0.94);
+            border: 2px solid #7a5c3e;
+            border-radius: 18px;
+            padding: 0.4rem 0.95rem;
+            width: 620px;
+            max-width: calc(100vw - 24px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+        .poupif-title {
+            display: inline;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #2C1810;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+        }
+        .poupif-indice {
+            display: inline;
+            font-size: 0.78rem;
+            color: #5a3e2a;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+        .poupif-precision {
+            font-size: 0.62rem;
+            color: #5a3e2a;
+            font-style: italic;
+            line-height: 1.35;
+            margin-top: 0.15rem;
+        }
+        .lien-accueil {
+            color: #5a3e2a;
+            font-weight: 700;
+            font-style: normal;
+            text-decoration: none;
+            border-bottom: 2px solid #7a5c3e;
+            padding-bottom: 1px;
+            white-space: nowrap;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .lien-accueil:hover { color: #D32F2F; border-color: #D32F2F; }
+
+        /* Lien vers la vraie page de l'étape, flottant sur le dessin */
+        .visite-lien {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: inline-block;
+            background: linear-gradient(135deg, #D32F2F, #EC407A);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            white-space: nowrap;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .visite-lien:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
         .visite-lien.cache { display: none; }
-        .visite-box .btn-back.visite-lien { display: inline-block; margin-top: 1.2rem; }
-        .visite-box .btn-back.visite-lien.cache { display: none; }
 
         @media (max-width: 600px) {
-            .visite-box { padding: 1.4rem 1rem; }
-            .visite-title { font-size: 1.6rem; }
-            .visite-subtitle { font-size: 0.9rem; }
-            .visite-viewport { border-radius: 16px; }
-        }
-
-        @media (max-width: 600px) {
-            body { padding-top: 80px; padding-bottom: 320px; }
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
             .nav-left-group { gap: 0.4rem; }
@@ -295,11 +267,19 @@
             .nav-icon-img { height: 26px; }
             .icon-wrapper .icon-label { font-size: 0.5rem; }
             .nav-icons { gap: 0.7rem; }
-            .poupif-title { font-size: 2rem; }
-            .poupif-subtitle { font-size: 1rem; }
-            .message-box { padding: 1.8rem 1.4rem; margin: 0 1rem; }
-            .visite-section { padding: 0 0.25rem; }
-            .message-box.visite-box { margin: 0 0.25rem; padding: 1rem 0.5rem; }
+            .poupif-entete {
+                top: 118px; /* sous l'emprise réelle du logo, qui déborde de la navbar */
+                padding: 0.45rem 0.8rem;
+                border-radius: 20px;
+            }
+            .poupif-title { font-size: 1.1rem; }
+            .poupif-indice { font-size: 0.74rem; }
+            .poupif-precision { font-size: 0.62rem; margin-top: 0.2rem; }
+            .visite-lien {
+                font-size: 0.85rem;
+                padding: 0.55rem 1.1rem;
+                bottom: 135px; /* au-dessus de la carte du widget de conversation */
+            }
         }
     </style>
 </head>
@@ -331,35 +311,22 @@
     </div>
 </nav>
 
-<div class="main-content">
-    <div class="message-box">
+<div class="visite-viewport" id="visiteViewport">
+    <div class="visite-stage" id="visiteStage">
+        <img src="images/poupif-visite/visite-poupif.svg" alt="Plan dessiné de la visite : les spectacles, le calendrier et la caravane du site Récré Magic">
+        <div class="visite-spot" id="visiteSpot" aria-hidden="true"></div>
+    </div>
+</div>
+
+<header class="poupif-entete">
+    <div class="ligne-intro">
         <h1 class="poupif-title">Monsieur Poupif</h1>
-        <p class="poupif-subtitle">
-            Le directeur de la troupe du Circus Théâtre Récré Magic vous reçoit dans son bureau.<br>
-            Venez le rencontrer et discuter avec lui.
-        </p>
-        <p class="poupif-indice">La conversation s'ouvre en bas à droite de l'écran.</p>
-        <p class="poupif-precision">Cette conversation est générée par une IA qui incarne Monsieur Poupif.<br>
-        Voix et texte sont traités par ElevenLabs, le service qui lui donne sa voix ; le micro ne s'active que si vous lancez la conversation.</p>
-        <a href="index.html" class="btn-back">← Retour à l'accueil</a>
+        <p class="poupif-indice">- Le directeur de la troupe vous reçoit : parlez-lui en bas à droite, il déplace le dessin pour vous montrer spectacles, calendrier et caravane.</p>
     </div>
-</div>
+    <p class="poupif-precision">Conversation générée par une IA qui incarne Monsieur Poupif ; voix et texte traités par ElevenLabs, le micro ne s'active que si vous lancez la conversation. <a href="index.html" class="lien-accueil">← Retour à l'accueil</a></p>
+</header>
 
-
-<div class="visite-section">
-    <div class="message-box visite-box">
-        <h2 class="visite-title">La visite guidée</h2>
-        <p class="visite-subtitle">
-            Explorez les spectacles, le calendrier et la caravane.
-        </p>
-        <div class="visite-viewport" id="visiteViewport">
-            <div class="visite-stage" id="visiteStage">
-                <img src="images/poupif-visite/visite-poupif.svg" alt="Plan dessiné de la visite : les spectacles, le calendrier et la caravane du site Récré Magic">
-            </div>
-        </div>
-        <a id="visiteLien" class="btn-back visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
-    </div>
-</div>
+<a id="visiteLien" class="visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
 
 <elevenlabs-convai agent-id="agent_6601m7bt4995eh0anx8pek1nj0f4"></elevenlabs-convai>
 <script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
@@ -367,9 +334,8 @@
 
 <script>
 (function () {
-    var SVG_W = 4328, SVG_H = 1772;
     var ETAPES = {
-        accueil:    { cx: 2164, cy: 886,  w: 4500, h: 1900 },
+        accueil:    { cx: 2164, cy: 886,  w: 4360, h: 1810 },
         spectacles: { cx: 664,  cy: 781,  w: 1280, h: 960, lien: 'spectacles.html',  libelle: 'Voir les spectacles' },
         calendrier: { cx: 2164, cy: 1281, w: 1280, h: 960, lien: 'calendrier.html',  libelle: 'Voir le calendrier' },
         caravane:   { cx: 3664, cy: 781,  w: 1280, h: 960, lien: 'familles.html',    libelle: 'Découvrir la caravane' }
@@ -377,6 +343,8 @@
     var viewport = document.getElementById('visiteViewport');
     var stage = document.getElementById('visiteStage');
     var lien = document.getElementById('visiteLien');
+    var spot = document.getElementById('visiteSpot');
+    var entete = document.querySelector('.poupif-entete');
     var etapeCourante = 'accueil';
 
     function goToStep(nom) {
@@ -384,38 +352,49 @@
         if (!e) return;
         etapeCourante = nom;
         var vw = viewport.clientWidth;
-        var z = Math.min(vw / e.w, (window.innerHeight * 0.8) / e.h);
-        var vh = Math.round(e.h * z);
-        viewport.style.height = vh + 'px';
+        var vh = viewport.clientHeight;
+        var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
+        var reserveBas = e.lien ? 70 : 0; /* place pour le lien flottant vers la vraie page */
+        var spanH = Math.max(120, vh - reserveHaut - reserveBas);
+        var z = Math.min(vw / e.w, spanH / e.h);
         var tx = vw / 2 - z * e.cx;
-        var ty = vh / 2 - z * e.cy;
+        var ty = reserveHaut + spanH / 2 - z * e.cy;
+        var tyMin = reserveHaut - z * (e.cy - e.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
+        var tyMax = vh - reserveBas - z * (e.cy + e.h / 2); /* bas du cadre au-dessus du lien */
+        if (ty < tyMin) ty = tyMin;
+        if (ty > tyMax) ty = tyMax;
         stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
         if (e.lien) {
             lien.href = e.lien;
             lien.textContent = e.libelle + ' →';
             lien.classList.remove('cache');
+            spot.style.left = (e.cx - e.w / 2) + 'px';
+            spot.style.top = (e.cy - e.h / 2) + 'px';
+            spot.style.width = e.w + 'px';
+            spot.style.height = e.h + 'px';
+            spot.style.opacity = '1';
         } else {
             lien.classList.add('cache');
+            spot.style.opacity = '0';
         }
     }
     window.poupifMontrerEtape = goToStep;
 
     function repositionnerSansTransition() {
         var t1 = stage.style.transition;
-        var t2 = viewport.style.transition;
         stage.style.transition = 'none';
-        viewport.style.transition = 'none';
         goToStep(etapeCourante);
         stage.style.transition = t1;
-        viewport.style.transition = t2;
     }
     window.addEventListener('resize', repositionnerSansTransition);
     window.addEventListener('load', repositionnerSansTransition);
     if ('ResizeObserver' in window) {
         var derniereLargeur = viewport.clientWidth;
+        var derniereHauteur = viewport.clientHeight;
         new ResizeObserver(function () {
-            if (viewport.clientWidth !== derniereLargeur) {
+            if (viewport.clientWidth !== derniereLargeur || viewport.clientHeight !== derniereHauteur) {
                 derniereLargeur = viewport.clientWidth;
+                derniereHauteur = viewport.clientHeight;
                 repositionnerSansTransition();
             }
         }).observe(viewport);
@@ -423,9 +402,8 @@
 
     var demandee = new URLSearchParams(window.location.search).get('etape');
     stage.style.transition = 'none';
-    viewport.style.transition = 'none';
     goToStep(ETAPES[demandee] ? demandee : 'accueil');
-    requestAnimationFrame(function () { stage.style.transition = ''; viewport.style.transition = ''; });
+    requestAnimationFrame(function () { stage.style.transition = ''; });
 
     window.addEventListener('elevenlabs-convai:call', function (event) {
         event.detail.config.clientTools = {
