@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex,nofollow"><meta name="color-scheme" content="only light">
+<title>Le petit voyage de Poupif | Essai Récrémagic</title>
+<meta name="description" content="Un premier essai : de la carte au décor, puis retour. Sans micro ni conversation vocale.">
+<style>
+:root{color-scheme:only light;--papier:#f2e4c4;--nuit:#2f3b52;--or:#e9be6e}*{box-sizing:border-box}body{margin:0;background:var(--nuit);color:var(--papier);font-family:system-ui,sans-serif;height:100svh;min-height:480px;display:flex;flex-direction:column;overflow:hidden}header{padding:20px 24px 12px;position:relative;z-index:4;flex:none}header p{margin:0 0 5px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d8c9ae}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(23px,3vw,34px);margin:0}#etat{margin:8px 0 0;font-size:14px;line-height:1.5;max-width:640px;text-transform:none;letter-spacing:normal;color:var(--papier)}.theatre{position:relative;flex:1;min-height:200px;overflow:hidden;isolation:isolate;background:#2f3b52}.monde{position:absolute;width:4328px;height:1772px;transform-origin:0 0;will-change:transform}.plan{width:4328px;height:1772px;display:block;pointer-events:none;user-select:none}.porte{position:absolute;left:3064px;top:354px;width:1200px;height:750px;border:10px solid var(--or);background:transparent;color:transparent;border-radius:15px;cursor:pointer;box-shadow:0 0 65px #e9be6e90;transition:opacity .4s}.porte:focus-visible{outline:20px solid white;outline-offset:12px}body[data-scene="caravane"] .porte{opacity:0;pointer-events:none}.personnage{position:absolute;bottom:0;left:9%;height:clamp(125px,29vh,300px);width:auto;pointer-events:none;filter:drop-shadow(3px 6px 5px #12192766);z-index:3;transition:left 2.8s cubic-bezier(.45,0,.25,1)}body[data-scene="caravane"] .personnage{left:19%}.rebord{position:absolute;bottom:0;height:8px;background:linear-gradient(#9d7447,#4f3525);width:100%;z-index:2;opacity:0;transition:opacity 1s}body[data-scene="caravane"] .rebord{opacity:1}.repere{position:absolute;top:12px;right:16px;border:1px solid #f2e4c450;border-radius:20px;padding:6px 11px;font-size:11px;letter-spacing:.03em;background:#263047dd;pointer-events:none}footer{position:relative;z-index:4;padding:14px 24px max(16px,env(safe-area-inset-bottom));background:#263047;flex:none}.commandes{display:flex;gap:10px;flex-wrap:wrap}button{font:inherit}footer button{min-height:46px;border-radius:25px;padding:10px 20px;font-size:14px;font-weight:650;cursor:pointer;border:1px solid #f2e4c47a;background:transparent;color:var(--papier)}footer button.principal{background:var(--papier);color:#36271e;border-color:var(--papier)}footer button:disabled{opacity:.45;cursor:default}footer button:focus-visible{outline:3px solid var(--or);outline-offset:3px}.note{font-size:11px;color:#c8c6c4;margin:10px 0 0;line-height:1.5}.note a{color:inherit;text-underline-offset:3px}#erreur{position:absolute;inset:20%;background:var(--nuit);z-index:5;padding:20px;line-height:1.6}#erreur[hidden]{display:none}@media(max-width:600px){header{padding:16px 18px 8px}header p{font-size:10px}#etat{font-size:13px;min-height:39px;margin-top:7px}footer{padding:12px 16px max(16px,env(safe-area-inset-bottom))}.commandes{display:grid;grid-template-columns:1fr 1fr;gap:8px}footer button{padding:9px 10px;font-size:12px}.personnage{height:clamp(130px,25vh,220px)}.repere{font-size:10px;right:12px;top:8px}.note{font-size:10px}}@media(prefers-reduced-motion:reduce){.personnage{transition:none}}
+</style>
+</head>
+<body data-scene="carte">
+<header><p>Récrémagic · Petit essai de machinerie</p><h1>Le petit voyage de Poupif</h1><p id="etat" aria-live="polite">Tout est sur la carte. Entrons dans la caravane, à droite.</p></header>
+<main class="theatre" id="theatre" aria-label="La carte et son décor">
+<div class="monde" id="monde"><img class="plan" id="plan" src="images/poupif-visite/essai-carte.svg" width="4328" height="1772" alt="Une carte dessinée : les spectacles à gauche, le calendrier au centre, la caravane à droite."><button class="porte" id="porte" aria-label="Entrer dans l'image de la caravane">Entrer dans la caravane</button></div>
+<div class="repere" id="repere">01 / La carte</div>
+<div class="rebord"></div><canvas class="personnage" id="poupif" width="240" height="431" aria-label="Monsieur Poupif au premier plan" role="img"></canvas>
+<p id="erreur" hidden>Le dessin n'a pas pu se charger. Rechargez la page pour réessayer.</p>
+</main>
+<footer><div class="commandes"><button class="principal" id="entrer">Entrer dans la caravane →</button><button id="retour" disabled>← Revenir à la carte</button></div><p class="note">Essai sans son, sans micro, sans appel vocal. <a href="poupif">La page Poupif actuelle</a> reste inchangée.</p></footer>
+<script>
+/* Scène source : essai-carte.excalidraw, copie du plan existant avec la vraie image de la caravane.
+   Le SVG garde les coordonnées de son export (décalage -160, -70). HTML ne fait que déplacer la caméra.
+   Aucun SDK de conversation, appel réseau vocal, micro ou génération. */
+(function(){
+'use strict';
+const theatre=document.getElementById('theatre'),monde=document.getElementById('monde');
+const entrer=document.getElementById('entrer'),retour=document.getElementById('retour'),porte=document.getElementById('porte');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+let scene='carte',fin=0;
+function cadre(nom){
+ const w=theatre.clientWidth,h=theatre.clientHeight;
+ if(nom==='carte') {const z=Math.min((w-28)/4328,(h-30)/1772);return {z,x:(w-4328*z)/2,y:(h-1772*z)/2};}
+ // Le même rectangle image devient tout le fond, sans changement de décor en cours de route.
+ const z=Math.max(w/1200,h/750);return {z,x:w/2-3664*z,y:h/2-729*z};
+}
+function position(animer){const c=cadre(scene);monde.style.transition=animer&&!reduced?'transform 2.8s cubic-bezier(.45,0,.25,1)':'none';monde.style.transform=`translate(${c.x}px,${c.y}px) scale(${c.z})`;}
+function aller(nom){
+ if(nom===scene)return;
+ scene=nom;document.body.dataset.scene=nom;position(true);fin=performance.now()+(reduced?0:2800);
+ entrer.disabled=nom==='caravane';retour.disabled=nom==='carte';porte.tabIndex=nom==='carte'?0:-1;
+ document.getElementById('repere').textContent=nom==='carte'?'01 / La carte':'02 / Dans le décor';
+ document.getElementById('etat').textContent=nom==='carte'?'On recule : les lieux se retrouvent sur la même carte.':'La même image est devenue notre décor. Poupif reste devant.';
+}
+entrer.addEventListener('click',()=>aller('caravane'));porte.addEventListener('click',()=>aller('caravane'));retour.addEventListener('click',()=>aller('carte'));
+addEventListener('keydown',e=>{if(e.key==='Escape'&&scene!=='carte'){aller('carte');entrer.focus();}});
+new ResizeObserver(()=>position(false)).observe(theatre);position(false);
+document.getElementById('plan').addEventListener('error',()=>document.getElementById('erreur').hidden=false);
+const canvas=document.getElementById('poupif'),ctx=canvas.getContext('2d'),marche=new Image(),salut=new Image();
+marche.src='images/poupif-visite/poupif-marche.webp';salut.src='images/poupif-visite/poupif-salut-face.webp';
+let debut=performance.now(),dernier=-1,dernierePlanche='';
+function dessin(t){
+ const bouge=t<fin&&!reduced;const img=bouge?marche:salut;
+ let n=bouge?Math.floor((t-debut)/1000*24)%24:(reduced?0:Math.min(95,Math.floor(Math.max(0,t-fin)/1000*12)));
+ const cols=bouge?6:10,ident=bouge?'marche':'salut';
+ if(img.complete&&img.naturalWidth&&(n!==dernier||ident!==dernierePlanche)){
+  ctx.clearRect(0,0,240,431);ctx.save();if(bouge){ctx.translate(240,0);ctx.scale(-1,1);}ctx.drawImage(img,(n%cols)*240,Math.floor(n/cols)*431,240,431,0,0,240,431);ctx.restore();dernier=n;dernierePlanche=ident;
+ }
+ requestAnimationFrame(dessin);
+}
+fin=performance.now();requestAnimationFrame(dessin);
+})();
+</script>
+</body></html>
