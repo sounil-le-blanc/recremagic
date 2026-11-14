@@ -317,6 +317,61 @@
                 bottom: 135px; /* au-dessus de la carte du widget de conversation */
             }
         }
+
+        /* ========== BOUTON « PARLER A POUPIF » (propre au site) ========== */
+        .poupif-parler {
+            position: fixed; right: 18px; bottom: 18px; z-index: 60;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .poupif-parler-btn {
+            font-family: 'Fredoka', sans-serif; font-size: 1.05rem; font-weight: 600;
+            padding: 12px 24px; border: 2px solid #7a5c3e; border-radius: 999px; cursor: pointer;
+            background: rgba(242, 228, 196, 0.96); color: #2C1810;
+            box-shadow: 0 6px 18px rgba(0,0,0,.35); transition: transform .2s, box-shadow .2s;
+        }
+        .poupif-parler-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.4); }
+        .poupif-parler-btn:disabled { opacity: .65; cursor: default; transform: none; }
+        .poupif-parler-btn.en-appel {
+            background: linear-gradient(135deg, #D32F2F, #EC407A); color: #fff; border-color: transparent;
+        }
+        .poupif-parler-etat {
+            font-family: 'Quicksand', sans-serif; font-size: .85rem; font-weight: 600;
+            background: rgba(242, 228, 196, 0.94); color: #2C1810;
+            padding: 6px 12px; border-radius: 999px; border: 1px solid #7a5c3e;
+        }
+        .cache { display: none !important; }
+
+        /* ========== NOTICE PRE-APPEL (seul endroit nommant ElevenLabs) ========== */
+        .poupif-notice {
+            position: fixed; inset: 0; z-index: 70;
+            background: rgba(15,20,32,.55); display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .poupif-notice-carte {
+            max-width: 420px; background: #F7EAD3; color: #2C1810;
+            border: 2px solid #7a5c3e; border-radius: 18px; padding: 22px 24px;
+            font-family: 'Quicksand', sans-serif; line-height: 1.5; box-shadow: 0 16px 48px rgba(0,0,0,.5);
+        }
+        .poupif-notice-carte h2 { font-family: 'Fredoka', sans-serif; margin: 0 0 10px; font-size: 1.25rem; }
+        .poupif-notice-carte p { margin: 0 0 8px; }
+        .poupif-notice-mention { font-size: .8rem; opacity: .75; margin-top: 12px; } /* petit mais lisible */
+        .poupif-notice-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .poupif-notice-annuler {
+            background: none; border: 1px solid #2C1810; border-radius: 999px;
+            padding: 10px 18px; font-family: 'Quicksand', sans-serif; cursor: pointer; color: #2C1810;
+        }
+
+        /* ========== PERSONNAGE QUI SE PROMENE ========== */
+        .poupif-perso {
+            position: fixed; bottom: 6px; left: 0; z-index: 5;
+            pointer-events: none; /* ne bloque jamais les liens ni le dessin */
+        }
+        .poupif-perso.cache { display: none !important; }
+
+        @media (max-width: 600px) {
+            .poupif-parler { right: 12px; bottom: 12px; gap: 8px; }
+            .poupif-parler-btn { font-size: 0.95rem; padding: 10px 18px; }
+            .poupif-parler-etat { font-size: .75rem; padding: 5px 10px; }
+        }
     </style>
 </head>
 <body>
@@ -359,7 +414,7 @@
         <h1 class="poupif-title">Monsieur Poupif</h1>
         <p class="poupif-indice">- Le directeur de la troupe vous reçoit : parlez-lui en bas à droite, il déplace le dessin pour vous montrer spectacles, calendrier et caravane.</p>
     </div>
-    <p class="poupif-precision">Conversation générée par une IA qui incarne Monsieur Poupif ; voix et texte traités par ElevenLabs, le micro ne s'active que si vous lancez la conversation. <a href="index.html" class="lien-accueil">← Retour à l'accueil</a></p>
+    <p class="poupif-precision">Conversation générée par une IA qui incarne Monsieur Poupif ; le micro ne s'active que si vous lancez la conversation. <a href="index.html" class="lien-accueil">← Retour à l'accueil</a></p>
 </header>
 
 <a id="visiteLien" class="visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
@@ -371,32 +426,57 @@
     <p>En attendant, <a href="Devis.html">demandez un devis</a> ou <a href="index.html">revenez à l'accueil</a>.</p>
 </div>
 
-<elevenlabs-convai agent-id="agent_6601m7bt4995eh0anx8pek1nj0f4"></elevenlabs-convai>
-<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"
-        onerror="window.poupifWidgetEchec=true"></script>
+<!-- Personnage anime qui se promene sur la page (decoratif, non interactif) -->
+<canvas id="poupifPerso" class="poupif-perso cache" aria-hidden="true"></canvas>
+
+<!-- Bouton de conversation propre au site (aucun habillage ElevenLabs) -->
+<div id="poupifParler" class="poupif-parler">
+    <span id="poupifParlerEtat" class="poupif-parler-etat cache" role="status" aria-live="polite"></span>
+    <button type="button" id="poupifParlerBtn" class="poupif-parler-btn">Parler à Poupif</button>
+</div>
+
+<!-- Notice pre-appel : seul endroit ou ElevenLabs est nomme (petit mais lisible) -->
+<div id="poupifNotice" class="poupif-notice cache" role="dialog" aria-modal="true" aria-labelledby="poupifNoticeTitre">
+    <div class="poupif-notice-carte">
+        <h2 id="poupifNoticeTitre">Avant de parler à Poupif</h2>
+        <p>
+            Poupif est un personnage incarné par une IA, pas un humain.
+            Le micro n'est actif que pendant l'appel.
+            La conversation est enregistrée (voix et texte).
+        </p>
+        <p class="poupif-notice-mention">
+            Voix et texte de la conversation traités par ElevenLabs et ses prestataires.
+        </p>
+        <div class="poupif-notice-actions">
+            <button type="button" id="poupifNoticeGo" class="poupif-parler-btn">Commencer la conversation</button>
+            <button type="button" id="poupifNoticeStop" class="poupif-notice-annuler">Annuler</button>
+        </div>
+    </div>
+</div>
 
 <script>
-/* Surveillance du widget de conversation.
+/* Surveillance du service de conversation (SDK charge en module).
    Trois cas ou l'on affiche le panneau "indisponible" plutot qu'une page muette :
-   - le script ElevenLabs ne charge pas (bloqueur, panne, reseau) ;
-   - il charge mais le composant n'est jamais defini (delai depasse) ;
+   - le module SDK ElevenLabs ne charge pas (bloqueur, panne, reseau) ;
+   - il charge mais n'a pas signale sa disponibilite sous 12 s ;
    - le navigateur a le micro refuse, donc la visite vocale est impossible. */
 (function () {
     var panneau = document.getElementById('poupifIndispo');
-    var widget = document.querySelector('elevenlabs-convai');
+    var bouton = document.getElementById('poupifParler');
     var affiche = false;
 
     function montrerIndisponible() {
         if (affiche || !panneau) return;
         affiche = true;
         panneau.hidden = false;
-        if (widget) widget.style.display = 'none';
+        if (bouton) bouton.classList.add('cache');
     }
+    window.poupifMontrerIndispo = montrerIndisponible;
 
     var debut = Date.now();
     (function surveiller() {
-        if (window.poupifWidgetEchec) { montrerIndisponible(); return; }
-        if (window.customElements && customElements.get('elevenlabs-convai')) return; /* charge : on s'arrete la */
+        if (window.poupifSDKEchec) { montrerIndisponible(); return; }
+        if (window.poupifSDKPret) return; /* charge : on s'arrete la */
         if (Date.now() - debut > 12000) { montrerIndisponible(); return; }
         setTimeout(surveiller, 500);
     })();
@@ -489,16 +569,243 @@
     goToStep(ETAPES[demandee] ? demandee : 'accueil');
     requestAnimationFrame(function () { stage.style.transition = ''; });
 
-    window.addEventListener('elevenlabs-convai:call', function (event) {
-        event.detail.config.clientTools = {
-            montrerEtape: function (params) {
-                var nom = String((params && params.etape) || '').toLowerCase();
-                if (!ETAPES[nom]) return 'Etape inconnue : ' + nom;
-                goToStep(nom);
-                return 'La scene de la visite montre maintenant l etape : ' + nom;
-            }
-        };
+    /* Outil vocal partage : le SDK conversation l'appelle via clientTools. */
+    window.poupifOutilMontrerEtape = function (params) {
+        var nom = String((params && params.etape) || '').toLowerCase();
+        if (!ETAPES[nom]) return 'Etape inconnue : ' + nom;
+        goToStep(nom);
+        return 'La scene de la visite montre maintenant l etape : ' + nom;
+    };
+})();
+</script>
+
+
+<script type="module">
+/* Bouton « Parler a Poupif » : conversation via le SDK officiel (aucune cle cote client,
+   l'agent est public). La notice s'affiche AVANT toute connexion ; son ouverture est
+   geree par un script classique (pas d'attente du chargement de ce module). */
+try {
+    const { Conversation } = await import('https://esm.sh/@elevenlabs/client@1.36.1');
+
+    const AGENT_ID = 'agent_6601m7bt4995eh0anx8pek1nj0f4';
+    const btn    = document.getElementById('poupifParlerBtn');
+    const etat   = document.getElementById('poupifParlerEtat');
+    const go     = document.getElementById('poupifNoticeGo');
+
+    const setEtat = (txt) => {
+        etat.textContent = txt || '';
+        etat.classList.toggle('cache', !txt);
+    };
+    const repos = () => {
+        btn.disabled = false; btn.textContent = 'Parler à Poupif';
+        btn.classList.remove('en-appel'); setEtat('');
+    };
+
+    window.poupifDemarrerAppel = async () => {
+        btn.disabled = true; btn.textContent = 'Connexion…';
+        try {
+            window.poupifConversation = await Conversation.startSession({
+                agentId: AGENT_ID,
+                clientTools: { montrerEtape: (p) => window.poupifOutilMontrerEtape(p) },
+                onStatusChange: ({ status }) => {
+                    if (status === 'connected') {
+                        btn.disabled = false; btn.textContent = 'Arrêter';
+                        btn.classList.add('en-appel'); setEtat('Poupif écoute');
+                    }
+                    if (status === 'disconnected') { window.poupifConversation = null; repos(); }
+                },
+                onModeChange: ({ mode }) => {
+                    if (!window.poupifConversation) return;
+                    setEtat(mode === 'speaking' ? 'Poupif parle' : 'Poupif écoute');
+                },
+                onDisconnect: () => { window.poupifConversation = null; repos(); },
+                onError: () => { setEtat('Problème de connexion'); }
+            });
+        } catch (e) {
+            window.poupifConversation = null; repos();
+            setEtat('La connexion n’a pas abouti, réessayez');
+        }
+    };
+    go.disabled = false;
+    go.textContent = 'Commencer la conversation';
+
+    window.poupifSDKPret = true; /* signale au surveillant que le service est la */
+} catch (e) {
+    window.poupifSDKEchec = true; /* module bloque ou panne : le surveillant affiche le panneau */
+}
+</script>
+
+<script>
+/* Notice pre-appel : ouverture immediate, sans attendre le SDK. Le bouton
+   « Commencer la conversation » reste grise tant que le service n'est pas charge. */
+(function () {
+    var btn    = document.getElementById('poupifParlerBtn');
+    var notice = document.getElementById('poupifNotice');
+    var go     = document.getElementById('poupifNoticeGo');
+    var stop   = document.getElementById('poupifNoticeStop');
+    if (!btn || !notice || !go || !stop) return;
+
+    go.disabled = true;
+    go.textContent = 'Chargement…';
+
+    btn.addEventListener('click', function () {
+        if (window.poupifConversation) {          // etat actif -> Arreter
+            btn.disabled = true;
+            window.poupifConversation.endSession().catch(function () {});
+            return;                               // onDisconnect remet l'UI au repos
+        }
+        notice.classList.remove('cache');         // 1er clic : notice AVANT toute connexion
     });
+    stop.addEventListener('click', function () { notice.classList.add('cache'); });
+    go.addEventListener('click', function () {
+        if (go.disabled || !window.poupifDemarrerAppel) return;
+        notice.classList.add('cache');
+        window.poupifDemarrerAppel();
+    });
+})();
+</script>
+
+<script>
+/* Le personnage qui se promene : planches d'images alpha dessinees sur canvas
+   (compatible partout, aucun codec video requis). Choregraphie : il traverse, salue en profil a une extremite,
+   salue de face a l'autre ; les saluts sont rejoues a l'envers avant de repartir
+   pour un raccord doux (le salut profil finit chapeau leve). Si une image manque,
+   le personnage reste cache et la page fonctionne sans lui. */
+(function () {
+    var CONF = {
+        marche:  { src: 'images/poupif-visite/poupif-marche.webp',
+                   frames: 24, cols: 6, fw: 240, fh: 431, fps: 24 },
+        salutp:  { src: 'images/poupif-visite/poupif-salut-profil.webp',
+                   frames: 67, cols: 9, fw: 240, fh: 431, fps: 12 },
+        salutf:  { src: 'images/poupif-visite/poupif-salut-face.webp',
+                   frames: 96, cols: 10, fw: 240, fh: 431, fps: 12 },
+        hauteurVh: { bureau: 30, mobile: 17 },
+        basPx: 6,
+        vitessePxS: 230,
+        margeDroite: 250,   // ne passe pas sous le bouton Parler a Poupif
+        margeGauche: 20,
+        pauseSalutMs: 700   // temps de tenue avant de rejouer le salut a l'envers
+    };
+    var el = document.getElementById('poupifPerso');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    var dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var pret = { marche: false, salutp: false, salutf: false };
+    var img = {};
+    function charge(nom, differer) {
+        var c = CONF[nom];
+        var faire = function () {
+            var i = new Image();
+            i.onload = function () { img[nom] = i; pret[nom] = true; if (pret.marche) demarrer(); };
+            i.onerror = function () { /* image absente : ce mouvement reste inutilise */ };
+            i.src = c.src;
+        };
+        if (differer && 'requestIdleCallback' in window) requestIdleCallback(faire, { timeout: 4000 });
+        else if (differer) setTimeout(faire, 2500);
+        else faire();
+    }
+
+    var x = -9999, dir = 1;                 // dir 1 = va a droite (miroir), -1 = va a gauche
+    var phase = 'attente';                  // attente|marche|salut|retour|statique
+    var frame = 0, sens = 1, dernierT = 0, acc = 0, salutEnCours = null, pauseFin = 0;
+    var elW = 0, elH = 0, salutAlterne = 'salutp';
+    var cadreCourant = { nom: 'marche', n: 0, miroir: false };
+
+    function mesurer() {
+        var mobile = window.innerWidth <= 600;
+        elH = Math.round(window.innerHeight * (mobile ? CONF.hauteurVh.mobile : CONF.hauteurVh.bureau) / 100);
+        elW = Math.round(CONF.marche.fw * (elH / CONF.marche.fh));
+        el.width = Math.round(elW * dpr);
+        el.height = Math.round(elH * dpr);
+        el.style.width = elW + 'px';
+        el.style.height = elH + 'px';
+        el.style.bottom = CONF.basPx + 'px';
+    }
+
+    function cadre(nom, n, miroir) {
+        var c = CONF[nom];
+        if (!pret[nom]) return;
+        n = Math.max(0, Math.min(c.frames - 1, n));
+        cadreCourant = { nom: nom, n: n, miroir: !!miroir };
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, elW, elH);
+        if (miroir) { ctx.translate(elW, 0); ctx.scale(-1, 1); }
+        ctx.drawImage(img[nom], (n % c.cols) * c.fw, Math.floor(n / c.cols) * c.fh, c.fw, c.fh, 0, 0, elW, elH);
+    }
+
+    function placer() {
+        el.style.transform = 'translateX(' + Math.round(x) + 'px)';
+    }
+
+    function demarrer() {
+        if (phase !== 'attente') return;
+        mesurer();
+        el.classList.remove('cache');
+        if (reduit) {   // mouvement reduit : il reste debout pres du bouton, sans animation
+            x = window.innerWidth - elW - CONF.margeDroite;
+            cadre('marche', 0, true); placer(); phase = 'statique'; return;
+        }
+        x = -elW; dir = 1; phase = 'marche'; frame = 0;
+        requestAnimationFrame(boucle);
+    }
+
+    function debutSalut() {
+        // il se tourne vers le centre de la page pour saluer ; alterne profil et face
+        var nom = salutAlterne;
+        if (!pret[nom]) nom = (nom === 'salutp') ? 'salutf' : 'salutp';
+        if (!pret[nom]) { finSalutImmediate(); return; }
+        salutEnCours = nom; salutAlterne = (nom === 'salutp') ? 'salutf' : 'salutp';
+        phase = 'salut'; frame = 0; sens = 1;
+    }
+    function finSalutImmediate() { dir = -dir; phase = 'marche'; frame = 0; }
+
+    function boucle(t) {
+        if (phase === 'statique') return;
+        var dt = Math.min(64, t - dernierT || 16); dernierT = t;
+        var nom = (phase === 'salut' || phase === 'retour') ? salutEnCours : 'marche';
+        var c = CONF[nom];
+
+        if (phase === 'marche') {
+            acc += dt * c.fps / 1000;
+            while (acc >= 1) { acc -= 1; frame = (frame + 1) % c.frames; }
+            x += dir * CONF.vitessePxS * dt / 1000;
+            var buteD = window.innerWidth - elW - CONF.margeDroite;
+            var buteG = CONF.margeGauche;
+            if (dir === 1 && x >= buteD) { x = buteD; debutSalut(); }
+            else if (dir === -1 && x <= buteG) { x = buteG; debutSalut(); }
+            cadre('marche', frame, dir === 1);   // miroir quand il va a droite (la source regarde a gauche)
+            placer();
+        } else if (phase === 'salut') {
+            acc += dt * c.fps / 1000;
+            while (acc >= 1) { acc -= 1; frame += sens; }
+            if (frame >= c.frames - 1) { frame = c.frames - 1; phase = 'retour'; pauseFin = t + CONF.pauseSalutMs; }
+            cadre(nom, frame, dir === -1);       // il salue vers le centre : a droite il regarde a gauche (pas de miroir)
+            placer();
+        } else if (phase === 'retour') {
+            if (t >= pauseFin) {
+                acc += dt * c.fps / 1000;
+                while (acc >= 1) { acc -= 1; frame -= 1; }
+                cadre(nom, Math.max(0, frame), dir === -1);
+                placer();
+                if (frame <= 0) finSalutImmediate();
+            }
+        }
+        requestAnimationFrame(boucle);
+    }
+
+    window.addEventListener('resize', function () {
+        if (phase === 'attente') return;
+        mesurer();
+        var max = window.innerWidth - elW - CONF.margeDroite;
+        if (x > max) x = max;
+        cadre(cadreCourant.nom, cadreCourant.n, cadreCourant.miroir);
+        placer();
+    });
+
+    charge('marche', false);                // la marche tout de suite
+    charge('salutp', true); charge('salutf', true);   // les saluts apres la page
 })();
 </script>
 
