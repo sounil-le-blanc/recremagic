@@ -1,6 +1,6 @@
 // Crée la conversation Mac et une session signée sans saisie de code.
 // Essai sans code autorisé, borné par FIN_ESSAI et les contrôles du moteur.
-import { signerJeton, transmettre, refus, essaiOuvert, FIN_ESSAI } from '../../lib/poupif-bridge.js';
+import { signerJeton, transmettre, refus, essaiOuvert, DUREE_MIN } from '../../lib/poupif-bridge.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'POST') return refus(req, res, 405, 'Méthode non autorisée');
@@ -14,5 +14,5 @@ export default async function handler(req, res) {
   if (!r.donnees || typeof r.donnees.session !== 'string')
     return refus(req, res, 502, 'Démarrage incomplet du moteur');
   if (!essaiOuvert()) return refus(req, res, 410, 'Cet essai temporaire est terminé.');
-  return res.status(200).json({ ...r.donnees, jeton: signerJeton(secret), expireLe: new Date(FIN_ESSAI).toISOString() });
+  return res.status(200).json({ ...r.donnees, jeton: signerJeton(secret), expireLe: new Date(Date.now() + DUREE_MIN * 60000).toISOString() });
 }
