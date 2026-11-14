@@ -78,7 +78,7 @@ retour.addEventListener('click',()=>aller('carte'));
 addEventListener('keydown',e=>{if(e.key==='Escape'&&scene!=='carte'){aller('carte');entrer.focus();}});
 new ResizeObserver(()=>rendre(pActu)).observe(theatre);rendre(0);
 document.getElementById('plan').addEventListener('error',()=>document.getElementById('erreur').hidden=false);
-const etat=document.getElementById('etat'),canvas=document.getElementById('poupif'),ctx=canvas.getContext('2d'),marche=new Image(),salut=new Image();
+const canvas=document.getElementById('poupif'),ctx=canvas.getContext('2d'),marche=new Image(),salut=new Image();
 marche.src='images/poupif-visite/poupif-marche.webp';salut.src='images/poupif-visite/poupif-salut-face.webp';
 debut=performance.now();fin=performance.now();let dernier=-1,dernierePlanche='';
 function dessin(t){
