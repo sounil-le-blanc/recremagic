@@ -6,6 +6,19 @@
     <meta name="color-scheme" content="only light">
     <meta name="darkreader-lock">
     <title>Monsieur Poupif - Récré Magic</title>
+    <meta name="description" content="Parlez à Monsieur Poupif, le directeur de la troupe Récré Magic. Il vous répond de sa voix et déplace le décor pour vous montrer les spectacles, le calendrier et la caravane.">
+    <link rel="canonical" href="https://www.recremagic.com/poupif">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Récré Magic">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://www.recremagic.com/poupif">
+    <meta property="og:title" content="Monsieur Poupif — le directeur de la troupe">
+    <meta property="og:description" content="Le directeur de la troupe Récré Magic vous reçoit. Parlez-lui : il répond de sa voix et vous fait visiter les spectacles, le calendrier et la caravane.">
+    <meta property="og:image" content="https://www.recremagic.com/images/og-poupif.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Monsieur Poupif, le directeur marionnette de la troupe Récré Magic">
+    <meta name="twitter:card" content="summary_large_image">
     <!-- Favicons -->
 <link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
 <link rel="icon" type="image/svg+xml" href="/favicon.svg">
@@ -261,6 +274,26 @@
         }
         .visite-lien.cache { display: none; }
 
+        /* Panneau affiche quand le service de conversation est injoignable
+           (script bloque, panne ElevenLabs, reseau coupe). Il remplace le widget
+           a sa place, en bas a droite, pour ne jamais laisser une page morte. */
+        .poupif-indispo {
+            position: fixed; right: 32px; bottom: 32px; z-index: 1000;
+            width: min(340px, calc(100vw - 40px));
+            background: #FDF6E3; color: var(--text-dark);
+            border: 3px solid var(--jaune-accent); border-radius: 20px;
+            padding: 1rem 1.15rem; box-shadow: 0 10px 32px rgba(0,0,0,.35);
+            font-family: 'Quicksand', sans-serif; font-size: .92rem; line-height: 1.45;
+        }
+        .poupif-indispo[hidden] { display: none; }
+        .poupif-indispo strong { display: block; margin-bottom: .5rem; font-family: 'Fredoka', sans-serif; font-size: 1.02rem; }
+        .poupif-indispo p { margin: 0 0 .55rem; }
+        .poupif-indispo p:last-child { margin-bottom: 0; }
+        .poupif-indispo a { color: #8A4B12; font-weight: 700; }
+        @media (max-width: 600px) {
+            .poupif-indispo { right: 12px; bottom: 12px; left: 12px; width: auto; }
+        }
+
         @media (max-width: 600px) {
             .navbar { height: 48px; }
             .navbar-container { padding: 0 0.8rem; }
@@ -331,8 +364,51 @@
 
 <a id="visiteLien" class="visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
 
+<!-- Filet de securite : affiche seulement si le widget de conversation ne charge pas. -->
+<div class="poupif-indispo" id="poupifIndispo" hidden role="alert">
+    <strong>Le directeur est momentanément indisponible</strong>
+    <p>Monsieur Poupif ne peut pas recevoir de visite pour l'instant — le service de conversation est injoignable. Ce n'est pas vous.</p>
+    <p>En attendant, <a href="Devis.html">demandez un devis</a> ou <a href="index.html">revenez à l'accueil</a>.</p>
+</div>
+
 <elevenlabs-convai agent-id="agent_6601m7bt4995eh0anx8pek1nj0f4"></elevenlabs-convai>
-<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"></script>
+<script src="https://elevenlabs.io/convai-widget/index.js" async type="text/javascript"
+        onerror="window.poupifWidgetEchec=true"></script>
+
+<script>
+/* Surveillance du widget de conversation.
+   Trois cas ou l'on affiche le panneau "indisponible" plutot qu'une page muette :
+   - le script ElevenLabs ne charge pas (bloqueur, panne, reseau) ;
+   - il charge mais le composant n'est jamais defini (delai depasse) ;
+   - le navigateur a le micro refuse, donc la visite vocale est impossible. */
+(function () {
+    var panneau = document.getElementById('poupifIndispo');
+    var widget = document.querySelector('elevenlabs-convai');
+    var affiche = false;
+
+    function montrerIndisponible() {
+        if (affiche || !panneau) return;
+        affiche = true;
+        panneau.hidden = false;
+        if (widget) widget.style.display = 'none';
+    }
+
+    var debut = Date.now();
+    (function surveiller() {
+        if (window.poupifWidgetEchec) { montrerIndisponible(); return; }
+        if (window.customElements && customElements.get('elevenlabs-convai')) return; /* charge : on s'arrete la */
+        if (Date.now() - debut > 12000) { montrerIndisponible(); return; }
+        setTimeout(surveiller, 500);
+    })();
+
+    if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: 'microphone' }).then(function (etat) {
+            if (etat.state === 'denied') montrerIndisponible();
+            etat.onchange = function () { if (etat.state === 'denied') montrerIndisponible(); };
+        }).catch(function () { /* API indisponible : on ne bloque rien */ });
+    }
+})();
+</script>
 
 
 <script>
