@@ -578,6 +578,22 @@ function creerSession(){
     }
   }
 
+  async function accueillir(){
+    if(!S.vivante||S.envoi||!S.id)return;
+    const generation=S.generation;S.envoi=true;
+    S.debutTour=performance.now();S.premierSon=0;S.prochainSon=0;S.finsAudio=[];
+    etat.textContent='Poupif entre en scène…';
+    try{
+      const d=await posterFlux('/accueil-flux',{
+        session:S.id,visite:window.poupifEtatVisite(),presentation:window.poupifEtatPresentation(true),
+        contexte:['Ouverture consentie par le visiteur. Début du trajet peint vers la roulotte.',...fileContexte.slice()]
+      });
+      if(!S.vivante||generation!==S.generation)return;
+      await traiterReponse(d,generation);
+    }catch(e){if(S.vivante&&generation===S.generation)etat.textContent="L'accueil vocal n'a pas pu démarrer ("+e.message+'). Vous pouvez parler à Poupif.';}
+    finally{S.envoi=false;}
+  }
+
   function veille(){
     if(!S.vivante||!S.analyse||S.envoi||S.muet||S.audio)return;
     const n=niveau();
@@ -641,6 +657,7 @@ function creerSession(){
   session.fermer=fermer;
   return {
     demarrer:demarrer,
+    accueillir:accueillir,
     endSession:async()=>{fermer();},
     setMicMuted:m=>{S.muet=!!m;if(S.flux)S.flux.getAudioTracks().forEach(t=>t.enabled=!S.muet);},
     sendContextualUpdate:t=>{noterContexte(t);}
@@ -662,7 +679,7 @@ go.addEventListener('click',async()=>{
     window.poupifConversation=session;
     btn.disabled=false;terminer.hidden=false;actualiser();
     /* Le trajet ne se joue qu'à la première visite, jamais sur une reconnexion. */
-    if(!reprise){attente=true;demarrage=false;window.poupifJouer&&window.poupifJouer();}
+    if(!reprise){attente=true;demarrage=false;session.accueillir();window.poupifJouer&&window.poupifJouer();}
     else{etat.textContent='Poupif écoute';window.poupifNotifierPresentation(true);}
   }catch(e){
     window.poupifConversation=null;repos();
