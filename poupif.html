@@ -353,29 +353,21 @@
         etapeCourante = nom;
         var vw = viewport.clientWidth;
         var vh = viewport.clientHeight;
-        var z, tx, ty;
-        if (nom === 'accueil' && vw <= 600 && vw < vh) {
-            /* Téléphone portrait : zoom dans le plan pour que le dessin remplisse
-               tout l'écran au lieu de tenir en vignette au milieu d'un vide.
-               Le titre dessiné (haut du plan, y ≈ 48) se place juste sous la navbar. */
-            z = Math.max(vw / e.w, vh / e.h);
-            tx = vw / 2 - z * e.cx;
-            if (tx > 0) tx = 0;
-            if (tx < vw - z * e.w) tx = vw - z * e.w;
-            ty = 50 - z * 48;
-            if (ty < vh - z * e.h) ty = vh - z * e.h;
-        } else {
-            var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
-            var reserveBas = e.lien ? 70 : 0; /* place pour le lien flottant vers la vraie page */
-            var spanH = Math.max(120, vh - reserveHaut - reserveBas);
-            z = Math.min(vw / e.w, spanH / e.h);
-            tx = vw / 2 - z * e.cx;
-            ty = reserveHaut + spanH / 2 - z * e.cy;
-            var tyMin = reserveHaut - z * (e.cy - e.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
-            var tyMax = vh - reserveBas - z * (e.cy + e.h / 2); /* bas du cadre au-dessus du lien */
-            if (ty < tyMin) ty = tyMin;
-            if (ty > tyMax) ty = tyMax;
-        }
+        /* Téléphone portrait : à l'accueil on cadre la colonne centrale du plan
+           (titre dessiné + scène du calendrier) pour que le dessin remplisse
+           l'écran en largeur, au lieu d'une vignette perdue dans le vide. */
+        var accueilMobile = (nom === 'accueil' && vw <= 600 && vw < vh);
+        var cadre = accueilMobile ? { cx: 2164, cy: 886, w: 1400, h: 1810 } : e;
+        var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
+        var reserveBas = e.lien ? 70 : (accueilMobile ? 120 : 0); /* place pour le lien flottant, ou le widget de conversation à l'accueil mobile */
+        var spanH = Math.max(120, vh - reserveHaut - reserveBas);
+        var z = Math.min(vw / cadre.w, spanH / cadre.h);
+        var tx = vw / 2 - z * cadre.cx;
+        var ty = reserveHaut + spanH / 2 - z * cadre.cy;
+        var tyMin = reserveHaut - z * (cadre.cy - cadre.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
+        var tyMax = vh - reserveBas - z * (cadre.cy + cadre.h / 2); /* bas du cadre au-dessus du lien ou du widget */
+        if (ty < tyMin) ty = tyMin;
+        if (ty > tyMax) ty = tyMax;
         stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
         if (e.lien) {
             lien.href = e.lien;
@@ -433,4 +425,5 @@
 
 </body>
 </html>
+
 
