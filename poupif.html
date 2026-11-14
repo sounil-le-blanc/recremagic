@@ -113,7 +113,7 @@ header{padding-top:9px;padding-bottom:9px}header p{display:none}header h1{font-s
 <p id="erreur" hidden>Le dessin n'a pas pu se charger. Rechargez la page pour réessayer.</p>
 </main>
 <footer><div class="commandes"><button class="principal" id="parler">Suivre Poupif avec sa voix</button><button id="muet">Voir sans le son</button><button id="rejouer" hidden>↻ Revoir l'ouverture</button></div><button class="fin-session" id="terminer" hidden>Terminer la conversation</button><div class="options-visite"><label><input type="checkbox" id="sousTitres"> Sous-titres</label></div><p class="session-note" id="sessionNote" hidden>Micro en pause : Poupif peut continuer à parler. La session reste ouverte. « Terminer » ferme la connexion.</p><p class="appel-etat" id="appelEtat" role="status" aria-live="polite"></p><section id="ecranNav" hidden aria-label="Commandes de présentation"><div class="menu-entete" id="menuEntete" hidden><button type="button" id="retourThemes">← Thèmes</button><span id="menuTheme"></span></div><div class="ecran-nav" id="themesNav" aria-label="Les écrans de scène"><button data-ecran="spectacles">Spectacles</button><button data-ecran="expositions">Expositions</button><button data-ecran="sejours">Séjours artistiques</button><button data-ecran="ecrin">L’Écrin</button><button data-ecran="calendrier">Calendrier</button><button data-ecran="caravane">Caravane</button><button data-ecran="accueil">Le château</button></div><div id="commandesCalendrier" hidden><div class="cal-commandes"><button id="calAvant" type="button" aria-label="Mois précédent">‹</button><label>Mois <input id="calMois" type="month"></label><button id="calApres" type="button" aria-label="Mois suivant">›</button><button id="calVue" type="button">Toutes les dates</button><button id="calLire" type="button">Actualiser</button></div><label class="cal-date">Montrer une date <input id="calDate" type="date"></label></div><div class="choix-diapos" id="choixDiapos" hidden aria-label="Choisir une diapositive"></div><div id="presentationInfos" hidden><div class="diapo-texte"><h2 id="diapoTitre"></h2><p id="diapoAccroche"></p></div><figcaption><span id="ecranTitre"></span><span class="separateur"> · </span><a id="ecranLien" target="_blank" rel="noopener">Ouvrir la page actuelle ↗</a><br><small id="ecranMention">Visuels du site · aucune disponibilité en temps réel</small></figcaption></div></section><p class="note">Poupif est incarné par une IA. Micro uniquement après votre accord, pendant la conversation. <a href="poupif-dessinee">La visite dessinée</a></p></footer>
-<div class="modal" id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitre"><div class="modal-carte"><h2 id="noticeTitre">Avant de suivre Poupif</h2><p>Sa voix vous accompagne pendant le trajet, puis vous pouvez lui parler et lui demander de projeter les spectacles, les expositions, les séjours artistiques, L'Écrin, le calendrier ou la caravane.</p><p>Poupif est une IA, pas un humain. Le micro reste actif pendant la conversation. Le son de votre voix est transcrit et la réponse est générée par un service d'intelligence artificielle ; aucune conversation n'est conservée après l'échange.</p><p>Aucune conversation ne démarre sans votre accord.</p><button id="commencer" disabled>Chargement de la voix…</button><button id="annuler">Annuler</button></div></div>
+<div class="modal" id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitre"><div class="modal-carte"><h2 id="noticeTitre">Avant de suivre Poupif</h2><p>Sa voix vous accompagne pendant le trajet, puis vous pouvez lui parler et lui demander de projeter les spectacles, les expositions, les séjours artistiques, L'Écrin, le calendrier ou la caravane.</p><p>Poupif est une IA, pas un humain. Le micro ne s'ouvre qu'après votre accord et reste actif pendant la conversation. Votre voix est transcrite par DeepSeek, la réponse est écrite par DeepSeek et prononcée sur cet appareil par un moteur vocal local. Nous ne conservons aucune trace de l'échange ; consultez la politique de DeepSeek pour le traitement de la transcription et du texte.</p><p>Aucune conversation ne démarre sans votre accord.</p><button id="commencer" disabled>Chargement de la voix…</button><button id="annuler">Annuler</button></div></div>
 <script>
 /* Ouverture mise en scène. Fond peint généré (poupif-paysage.webp) sous la carte Excalidraw (essai-carte.excalidraw, export SVG inline sans son fond bleu) ; mêmes deux décors générés
    que l'essai précédent ; ici la caméra est dirigée par une petite partition (pauses, saluts, surprise).
@@ -376,105 +376,205 @@ document.getElementById('sousTitres').addEventListener('change',e=>{document.bod
 document.getElementById('annuler').addEventListener('click',fermerNotice);
 notice.addEventListener('keydown',e=>{if(e.key==='Escape')fermerNotice();if(e.key==='Tab'){const first=go.disabled?document.getElementById('annuler'):go,last=document.getElementById('annuler');if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
 function lancer(){if(!attente||demarrage)return;demarrage=true;attente=false;if(!reprise)window.poupifJouer();}
-// Boucle vocale locale : mic -> DeepSeek ASR -> DeepSeek LLM -> voix Poupif.
-// Remplace le widget ElevenLabs dans poupif.html. La clé DeepSeek reste côté serveur.
+try{
+/* ---- Boucle vocale locale : micro -> moteur (ASR + LLM DeepSeek, voix Poupif) ----
+   La clé reste côté moteur. Cette page ne fait que transporter du son et des états. */
 const API = window.POUPIF_API || 'http://localhost:8099';
-let flux=null,ctx=null,analyse=null,rec=null,silence=0,debut=0,envoiEnCours=false;
-let audioEnCours=null;
-const LIMITE_MS=15000, SILENCE_TICKS=11;
+let fileContexte = [];
+const noterContexte = t => { fileContexte.push(String(t)); if(fileContexte.length>12) fileContexte.shift(); };
 
-async function demarrerMicro(){
-  flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
-  ctx=new (window.AudioContext||window.webkitAudioContext)();
-  const src=ctx.createMediaStreamSource(flux);
-  analyse=ctx.createAnalyser();analyse.fftSize=1024;src.connect(analyse);
-  setInterval(veille,80);
-  etat.textContent='Poupif écoute';
+const ETAPES_VALIDES = ['accueil','spectacles','expositions','sejours','ecrin','calendrier','caravane'];
+const ETAT_AFFICHE = {type:'object',properties:{
+  etape:{type:'string',enum:ETAPES_VALIDES},
+  diapo:{type:'string',description:'identifiant de diapositive, optionnel'}}};
+const ETAT_PRESENTATION = {type:'object',properties:{
+  action:{type:'string',enum:['afficher','suivant','precedent','etat']},
+  theme:{type:'string',enum:ETAPES_VALIDES},
+  diapo:{type:'string'},
+  mois:{type:'string',description:'AAAA-MM pour le calendrier'},
+  date:{type:'string',description:'AAAA-MM-JJ pour le calendrier'},
+  vue:{type:'string',enum:['mois','liste']}}};
+
+function b64(buf){
+  const octets=new Uint8Array(buf);let s='';
+  for(let i=0;i<octets.length;i+=0x8000)s+=String.fromCharCode.apply(null,octets.subarray(i,i+0x8000));
+  return btoa(s);
+}
+async function poster(chemin,charge){
+  const r=await fetch(API+chemin,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(charge)});
+  const texte=await r.text();
+  let d;try{d=JSON.parse(texte);}catch(e){throw new Error('réponse illisible du moteur');}
+  if(!r.ok||d.erreur)throw new Error(d.erreur||('HTTP '+r.status));
+  return d;
 }
 
-function niveau(){
-  const d=new Float32Array(analyse.fftSize);analyse.getFloatTimeDomainData(d);
-  let s=0;for(let i=0;i<d.length;i++)s+=d[i]*d[i];
-  return Math.sqrt(s/d.length);
-}
-
-function veille(){
-  if(!analyse||envoiEnCours||pauseMicro||audioEnCours)return;
-  const n=niveau();
-  if(!rec){
-    if(n>0.02){
-      const mime=MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')?'audio/ogg;codecs=opus':'';
-      rec=new MediaRecorder(flux,mime?{mimeType:mime}:undefined);
-      const parts=[];
-      rec.ondataavailable=e=>{if(e.data.size)parts.push(e.data);};
-      rec.onstop=async()=>{
-        const blob=new Blob(parts,{type:mime||'audio/webm'});
-        rec=null;silence=0;
-        if(blob.size<1200){etat.textContent='Poupif écoute';return;}
-        await envoyerTour(blob);
-      };
-      rec.start();debut=Date.now();silence=0;
-      etat.textContent='Poupif écoute…';
-    }
-  }else{
-    if(n<0.014)silence++;else silence=0;
-    if(silence>SILENCE_TICKS||Date.now()-debut>LIMITE_MS){try{rec.stop();}catch(e){rec=null;}}
+/* Exécute une demande d'outil venue du moteur, après validation des arguments.
+   Renvoie le résultat réel de la page, pas une confirmation inventée. */
+async function executerOutil(nom,args){
+  const a=args||{};
+  if(nom==='montrerEtape'){
+    if(!ETAPES_VALIDES.includes(a.etape))return {ok:false,erreur:'Étape inconnue : '+a.etape};
+    if(typeof window.poupifOutilMontrerEtape!=='function')return {ok:false,erreur:'Projection indisponible'};
+    return await window.poupifOutilMontrerEtape({etape:a.etape,diapo:a.diapo});
   }
+  if(nom==='piloterPresentation'){
+    if(a.action&&!['afficher','suivant','precedent','etat','calendrier'].includes(a.action))
+      return {ok:false,erreur:'Action inconnue : '+a.action};
+    if(typeof window.poupifOutilPresentation!=='function')return {ok:false,erreur:'Présentation indisponible'};
+    return await window.poupifOutilPresentation(a);
+  }
+  return {ok:false,erreur:'Outil inconnu : '+nom};
 }
 
-async function envoyerTour(blob){
-  envoiEnCours=true;etat.textContent='Réflexion…';
-  try{
-    const r=await fetch(API+'/tour',{method:'POST',headers:{'Content-Type':'audio/ogg'},body:blob});
-    const d=await r.json();
-    if(d.erreur){etat.textContent='Erreur : '+d.erreur;return;}
+function creerSession(){
+  const S={vivante:true,generation:0,rec:null,flux:null,ctx:null,analyse:null,minuterie:null,
+           audio:null,envoi:false,silence:0,debut:0,muet:false,id:null};
+  const session={id:null};
+
+  function niveau(){
+    const d=new Float32Array(S.analyse.fftSize);S.analyse.getFloatTimeDomainData(d);
+    let s=0;for(let i=0;i<d.length;i++)s+=d[i]*d[i];
+    return Math.sqrt(s/d.length);
+  }
+
+  function jouerReponse(charge,mime){
+    return new Promise(res=>{
+      if(!S.vivante)return res();
+      const a=new Audio('data:'+(mime||'audio/mpeg')+';base64,'+charge);
+      S.audio=a;parle=true;actualiser();
+      const fin=()=>{S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}res();};
+      a.onended=fin;a.onerror=fin;
+      a.play().catch(fin);
+    });
+  }
+
+  async function traiterReponse(d,generation){
+    if(!S.vivante||generation!==S.generation)return;
     const leg=document.getElementById('legende');
     if(d.texte){leg.textContent=d.texte;leg.classList.add('on');}
-    if(d.outil){
-      if(d.outil.nom==='montrerEtape'&&window.poupifOutilMontrerEtape)window.poupifOutilMontrerEtape(d.outil.args);
-      if(d.outil.nom==='piloterPresentation'&&window.poupifOutilPresentation)window.poupifOutilPresentation(d.outil.args);
+    let boucle=0;
+    while(d.outil&&boucle++<3&&S.vivante&&generation===S.generation){
+      const resultat=await executerOutil(d.outil.nom,d.outil.args);
+      if(!S.vivante||generation!==S.generation)return;
+      d=await poster('/outil',{session:S.id,outil_id:d.outil.id,nom:d.outil.nom,resultat:resultat,
+                               contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
+      if(d.reponse){leg.textContent=d.reponse;leg.classList.add('on');}
     }
-    if(d.reponse){leg.textContent=d.reponse;leg.classList.add('on');}
-    if(d.audio)jouer(d.audio);else etat.textContent='Poupif écoute';
-  }catch(e){
-    etat.textContent='Connexion au moteur impossible ('+e.message+')';
-  }finally{envoiEnCours=false;}
-}
+    if(!S.vivante||generation!==S.generation)return;
+    if(d.reponse&&!d.outil){leg.textContent=d.reponse;leg.classList.add('on');}
+    if(d.audio)await jouerReponse(d.audio,d.audio_mime);
+    else if(S.vivante)etat.textContent='Poupif écoute';
+  }
 
-function jouer(b64){
-  const a=new Audio('data:audio/mpeg;base64,'+b64);
-  audioEnCours=a;parle=true;actualiser();
-  a.onended=()=>{audioEnCours=null;parle=false;actualiser();etat.textContent='Poupif écoute';};
-  a.onerror=()=>{audioEnCours=null;parle=false;actualiser();};
-  a.play().catch(()=>{audioEnCours=null;parle=false;actualiser();});
-}
+  async function envoyerTour(blob,mime){
+    if(!S.vivante||S.envoi)return;
+    const generation=S.generation;
+    S.envoi=true;etat.textContent='Réflexion…';
+    try{
+      const charge={
+        session:S.id,
+        mime:mime||'audio/webm',
+        audio:b64(await blob.arrayBuffer()),
+        contexte:fileContexte.slice(),
+        visite:window.poupifEtatVisite(),
+        presentation:window.poupifEtatPresentation(true)
+      };
+      fileContexte=[];
+      const d=await poster('/tour',charge);
+      if(!S.vivante||generation!==S.generation)return;
+      if(d.session)S.id=d.session;
+      await traiterReponse(d,generation);
+    }catch(e){
+      if(S.vivante&&generation===S.generation)etat.textContent='Connexion au moteur impossible ('+e.message+')';
+    }finally{
+      S.envoi=false;
+    }
+  }
 
-window.poupifConversation={
-  endSession:async()=>{
-    if(rec){try{rec.stop();}catch(e){}}
-    if(audioEnCours){audioEnCours.pause();audioEnCours=null;}
-    if(flux)flux.getTracks().forEach(t=>t.stop());
-    flux=null;analyse=null;parle=false;
-  },
-  setMicMuted:(m)=>{if(flux)flux.getAudioTracks().forEach(t=>t.enabled=!m);},
-  sendContextualUpdate:()=>{}
-};
+  function veille(){
+    if(!S.vivante||!S.analyse||S.envoi||S.muet||S.audio)return;
+    const n=niveau();
+    if(!S.rec){
+      if(n>0.02){
+        const mime=MediaRecorder.isTypeSupported('audio/ogg;codecs=opus')?'audio/ogg;codecs=opus'
+                  :(MediaRecorder.isTypeSupported('audio/webm;codecs=opus')?'audio/webm;codecs=opus':'');
+        S.rec=new MediaRecorder(S.flux,mime?{mimeType:mime}:undefined);
+        const parts=[];const typeReel=S.rec.mimeType||mime||'audio/webm';
+        S.rec.ondataavailable=e=>{if(e.data.size)parts.push(e.data);};
+        S.rec.onstop=()=>{
+          const rec=S.rec;S.rec=null;S.silence=0;
+          if(!S.vivante)return;
+          const blob=new Blob(parts,{type:typeReel});
+          if(blob.size<1200){etat.textContent='Poupif écoute';return;}
+          envoyerTour(blob,typeReel);
+        };
+        S.rec.start();S.debut=Date.now();S.silence=0;
+        etat.textContent='Poupif écoute…';
+      }
+    }else{
+      if(n<0.014)S.silence++;else S.silence=0;
+      if(S.silence>11||Date.now()-S.debut>15000){try{S.rec.stop();}catch(e){S.rec=null;}}
+    }
+  }
+
+  async function demarrer(){
+    S.flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
+    S.ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const src=S.ctx.createMediaStreamSource(S.flux);
+    S.analyse=S.ctx.createAnalyser();S.analyse.fftSize=1024;src.connect(S.analyse);
+    S.minuterie=setInterval(veille,80);
+    try{
+      const d=await poster('/session',{contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
+      if(d.session)S.id=d.session;
+    }catch(e){
+      etat.textContent='Moteur vocal injoignable ('+e.message+'). La visite reste disponible sans le son.';
+      throw e;
+    }
+  }
+
+  function fermer(){
+    S.vivante=false;S.generation++;
+    if(S.rec){const r=S.rec;S.rec=null;try{r.onstop=null;r.stop();}catch(e){}}
+    if(S.audio){try{S.audio.pause();}catch(e){}S.audio=null;}
+    if(S.minuterie){clearInterval(S.minuterie);S.minuterie=null;}
+    if(S.flux)S.flux.getTracks().forEach(t=>t.stop());
+    if(S.ctx&&S.ctx.close)try{S.ctx.close();}catch(e){}
+    S.flux=null;S.analyse=null;S.envoi=false;parle=false;pauseMicro=false;
+  }
+
+  session.demarrer=demarrer;
+  session.fermer=fermer;
+  return {
+    demarrer:demarrer,
+    endSession:async()=>{fermer();},
+    setMicMuted:m=>{S.muet=!!m;if(S.flux)S.flux.getAudioTracks().forEach(t=>t.enabled=!S.muet);},
+    sendContextualUpdate:t=>{noterContexte(t);}
+  };
+}
 
 go.disabled=false;go.textContent='Démarrer avec la voix et le micro';
 go.addEventListener('click',async()=>{
-  if(go.disabled)return;fermerNotice();go.disabled=true;btn.disabled=true;btn.textContent='Connexion…';etat.textContent='Connexion à Poupif…';
+  if(go.disabled)return;
+  fermerNotice();go.disabled=true;btn.disabled=true;btn.textContent='Connexion…';etat.textContent='Connexion à Poupif…';
+  const session=creerSession();
   try{
-    reprise=window.poupifEtatVisite().commencee;attente=true;demarrage=false;pauseMicro=false;parle=false;
-    document.body.dataset.vocal='oui';document.getElementById('legende').classList.remove('on');
-    await demarrerMicro();
+    reprise=window.poupifEtatVisite().commencee;
+    attente=true;demarrage=false;pauseMicro=false;parle=false;
+    document.body.dataset.vocal='oui';
+    document.getElementById('legende').classList.remove('on');
+    await session.demarrer();
+    /* La session n'existe qu'une fois le micro réellement ouvert. */
+    window.poupifConversation=session;
     btn.disabled=false;terminer.hidden=false;actualiser();
-    window.poupifNotifierPresentation(true);
-    etat.textContent='Poupif écoute';
+    /* Le trajet ne se joue qu'à la première visite, jamais sur une reconnexion. */
+    if(!reprise){attente=true;demarrage=false;window.poupifJouer&&window.poupifJouer();}
+    else{etat.textContent='Poupif écoute';window.poupifNotifierPresentation(true);}
   }catch(e){
     window.poupifConversation=null;repos();
     etat.textContent='Micro refusé ou moteur injoignable. La visite est conservée, vous pouvez réessayer.';
   }finally{go.disabled=false;}
 });
+}catch(e){go.textContent='Voix indisponible';etat.textContent='Le moteur vocal ne charge pas. L’ouverture reste disponible sans le son.';}
 window.addEventListener('pagehide',()=>{window.poupifConversation?.endSession().catch(()=>{});});
 </script>
 </body></html>
