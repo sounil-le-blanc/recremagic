@@ -1,0 +1,819 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="robots" content="noindex,nofollow">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="color-scheme" content="only light">
+    <meta name="darkreader-lock">
+    <title>La visite dessinée de Poupif - Récré Magic</title>
+    <meta name="description" content="Parlez à Monsieur Poupif, le directeur de la troupe Récré Magic. Il vous répond de sa voix et déplace le décor pour vous montrer les spectacles, le calendrier et la caravane.">
+    <link rel="canonical" href="https://www.recremagic.com/poupif-dessinee">
+    <meta property="og:type" content="website">
+    <meta property="og:site_name" content="Récré Magic">
+    <meta property="og:locale" content="fr_FR">
+    <meta property="og:url" content="https://www.recremagic.com/poupif-dessinee">
+    <meta property="og:title" content="Monsieur Poupif — le directeur de la troupe">
+    <meta property="og:description" content="Le directeur de la troupe Récré Magic vous reçoit. Parlez-lui : il répond de sa voix et vous fait visiter les spectacles, le calendrier et la caravane.">
+    <meta property="og:image" content="https://www.recremagic.com/images/og-poupif.jpg">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta property="og:image:alt" content="Monsieur Poupif, le directeur marionnette de la troupe Récré Magic">
+    <meta name="twitter:card" content="summary_large_image">
+    <!-- Favicons -->
+<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
+<link rel="icon" type="image/svg+xml" href="/favicon.svg">
+<link rel="shortcut icon" href="/favicon.ico">
+<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-title" content="Récré Magic">
+<link rel="manifest" href="/site.webmanifest">
+    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root { color-scheme: only light; } /* pas de recoloration forcee par le mode sombre du navigateur : les couleurs de la page sont deja choisies */
+        :root {
+            --vert-caravane: #7CB69F;
+            --rose-spectacle: #EC407A;
+            --jaune-accent: #FFB300;
+            --text-dark: #2C1810;
+            --text-light: #ffffff;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        @media (min-width: 1024px) {
+    body {
+        zoom: 150%;
+    }
+    body::before {
+        zoom: 0.6667; /* annule le zoom sur le fond */
+    }
+}
+
+        ::-webkit-scrollbar { width: 12px; }
+        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: #2F3B52;
+            min-height: 100vh;
+            min-height: 100dvh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* ========== NAVBAR ========== */
+        .navbar {
+            position: fixed;
+            top: 0; left: 0; width: 100%;
+            background: rgba(0, 0, 0, 0.35);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+            height: 55px;
+        }
+        .navbar-container {
+            width: 100%;
+            height: 100%;
+            padding: 0 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: nowrap;
+        }
+        .nav-left-group {
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            flex-shrink: 0;
+            z-index: 2;
+        }
+        .logo-wrapper {
+            text-decoration: none;
+            transition: all 0.25s ease;
+            line-height: 0;
+        }
+        .logo-wrapper img {
+            height: 120px;
+            transition: transform 0.25s;
+            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
+            margin-top: 60px;
+        }
+        .logo-wrapper:hover img {
+            transform: scale(1.08);
+            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
+        }
+        .back-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            font-size: 1.1rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            flex-shrink: 0;
+        }
+        .back-arrow:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: #FFB300;
+            color: #FFB300;
+            box-shadow: 0 0 12px rgba(255,179,0,0.3);
+        }
+        .nav-icons {
+            display: flex;
+            gap: 1.2rem;
+            align-items: center;
+            flex-shrink: 0;
+            flex-wrap: nowrap;
+            z-index: 2;
+        }
+        .icon-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.1rem;
+            text-decoration: none;
+            transition: all 0.2s ease;
+        }
+        .nav-icon-img {
+            height: 32px;
+            width: auto;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
+            transition: transform 0.2s;
+        }
+        .icon-wrapper:hover .nav-icon-img {
+            transform: scale(1.15);
+        }
+        .icon-wrapper .icon-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: rgba(255,255,255,0.7);
+            transition: color 0.2s;
+            white-space: nowrap;
+        }
+        .icon-wrapper:hover .icon-label { color: #FFB300; }
+
+        /* ========== LE DESSIN EST LA PAGE ========== */
+        .visite-viewport {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            overflow: hidden;
+            background: #2F3B52; /* même bleu nuit que le papier du dessin */
+        }
+        .visite-stage {
+            position: absolute;
+            top: 0; left: 0;
+            width: 4328px;
+            height: 1772px;
+            transform-origin: 0 0;
+            transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.35, 1);
+        }
+        .visite-stage img {
+            width: 4328px;
+            height: 1772px;
+            display: block;
+            pointer-events: none;
+            user-select: none;
+            -webkit-user-drag: none;
+        }
+        /* Projecteur : assombrit le reste du plan pendant une étape */
+        .visite-spot {
+            position: absolute;
+            border-radius: 40px;
+            box-shadow: 0 0 0 9999px rgba(16, 22, 34, 0.66);
+            opacity: 0;
+            pointer-events: none;
+            transition: left 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        top 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        width 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        height 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
+                        opacity 0.9s ease;
+        }
+
+        /* Textes flottant sur le dessin */
+        .poupif-entete {
+            position: fixed;
+            top: 66px; /* sous la navbar et son logo */
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 10;
+            text-align: center;
+            background: rgba(242, 228, 196, 0.94);
+            border: 2px solid #7a5c3e;
+            border-radius: 18px;
+            padding: 0.4rem 0.95rem;
+            width: 620px;
+            max-width: calc(100vw - 24px);
+            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
+        }
+        .poupif-title {
+            display: inline;
+            font-family: 'MedievalSharp', cursive;
+            font-size: 1.1rem;
+            font-weight: 800;
+            color: #2C1810;
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
+        }
+        .poupif-indice {
+            display: inline;
+            font-size: 0.78rem;
+            color: #5a3e2a;
+            font-weight: 600;
+            line-height: 1.35;
+        }
+        .poupif-precision {
+            font-size: 0.62rem;
+            color: #5a3e2a;
+            font-style: italic;
+            line-height: 1.35;
+            margin-top: 0.15rem;
+        }
+        .lien-accueil {
+            color: #5a3e2a;
+            font-weight: 700;
+            font-style: normal;
+            text-decoration: none;
+            border-bottom: 2px solid #7a5c3e;
+            padding-bottom: 1px;
+            white-space: nowrap;
+            transition: color 0.2s, border-color 0.2s;
+        }
+        .lien-accueil:hover { color: #D32F2F; border-color: #D32F2F; }
+
+        /* Lien vers la vraie page de l'étape, flottant sur le dessin */
+        .visite-lien {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%);
+            z-index: 10;
+            display: inline-block;
+            background: linear-gradient(135deg, #D32F2F, #EC407A);
+            color: white;
+            padding: 0.7rem 1.5rem;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 1rem;
+            white-space: nowrap;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .visite-lien:hover {
+            transform: translateX(-50%) translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
+        }
+        .visite-lien.cache { display: none; }
+
+        /* Panneau affiche quand le service de conversation est injoignable
+           (script bloque, panne ElevenLabs, reseau coupe). Il remplace le widget
+           a sa place, en bas a droite, pour ne jamais laisser une page morte. */
+        .poupif-indispo {
+            position: fixed; right: 32px; bottom: 32px; z-index: 1000;
+            width: min(340px, calc(100vw - 40px));
+            background: #FDF6E3; color: var(--text-dark);
+            border: 3px solid var(--jaune-accent); border-radius: 20px;
+            padding: 1rem 1.15rem; box-shadow: 0 10px 32px rgba(0,0,0,.35);
+            font-family: 'Quicksand', sans-serif; font-size: .92rem; line-height: 1.45;
+        }
+        .poupif-indispo[hidden] { display: none; }
+        .poupif-indispo strong { display: block; margin-bottom: .5rem; font-family: 'Fredoka', sans-serif; font-size: 1.02rem; }
+        .poupif-indispo p { margin: 0 0 .55rem; }
+        .poupif-indispo p:last-child { margin-bottom: 0; }
+        .poupif-indispo a { color: #8A4B12; font-weight: 700; }
+        @media (max-width: 600px) {
+            .poupif-indispo { right: 12px; bottom: 12px; left: 12px; width: auto; }
+        }
+
+        @media (max-width: 600px) {
+            .navbar { height: 48px; }
+            .navbar-container { padding: 0 0.8rem; }
+            .nav-left-group { gap: 0.4rem; }
+            .logo-wrapper img { height: 80px; margin-top: 30px; }
+            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
+            .nav-icon-img { height: 26px; }
+            .icon-wrapper .icon-label { font-size: 0.5rem; }
+            .nav-icons { gap: 0.7rem; }
+            .poupif-entete {
+                top: 118px; /* sous l'emprise réelle du logo, qui déborde de la navbar */
+                padding: 0.3rem 0.7rem;
+                border-radius: 14px;
+            }
+            .poupif-title { font-size: 0.95rem; }
+            .poupif-indice { font-size: 0.66rem; line-height: 1.25; }
+            .poupif-precision { font-size: 0.54rem; line-height: 1.25; margin-top: 0.08rem; }
+            .visite-lien {
+                font-size: 0.85rem;
+                padding: 0.55rem 1.1rem;
+                bottom: 135px; /* au-dessus de la carte du widget de conversation */
+            }
+        }
+
+        /* ========== BOUTON « PARLER A POUPIF » (propre au site) ========== */
+        .poupif-parler {
+            position: fixed; right: 18px; bottom: 18px; z-index: 60;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .poupif-parler-btn {
+            font-family: 'Fredoka', sans-serif; font-size: 1.05rem; font-weight: 600;
+            padding: 12px 24px; border: 2px solid #7a5c3e; border-radius: 999px; cursor: pointer;
+            background: rgba(242, 228, 196, 0.96); color: #2C1810;
+            box-shadow: 0 6px 18px rgba(0,0,0,.35); transition: transform .2s, box-shadow .2s;
+        }
+        .poupif-parler-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.4); }
+        .poupif-parler-btn:disabled { opacity: .65; cursor: default; transform: none; }
+        .poupif-parler-btn.en-appel {
+            background: linear-gradient(135deg, #D32F2F, #EC407A); color: #fff; border-color: transparent;
+        }
+        .poupif-parler-etat {
+            font-family: 'Quicksand', sans-serif; font-size: .85rem; font-weight: 600;
+            background: rgba(242, 228, 196, 0.94); color: #2C1810;
+            padding: 6px 12px; border-radius: 999px; border: 1px solid #7a5c3e;
+        }
+        .cache { display: none !important; }
+
+        /* ========== NOTICE PRE-APPEL (seul endroit nommant ElevenLabs) ========== */
+        .poupif-notice {
+            position: fixed; inset: 0; z-index: 70;
+            background: rgba(15,20,32,.55); display: flex; align-items: center; justify-content: center; padding: 20px;
+        }
+        .poupif-notice-carte {
+            max-width: 420px; background: #F7EAD3; color: #2C1810;
+            border: 2px solid #7a5c3e; border-radius: 18px; padding: 22px 24px;
+            font-family: 'Quicksand', sans-serif; line-height: 1.5; box-shadow: 0 16px 48px rgba(0,0,0,.5);
+        }
+        .poupif-notice-carte h2 { font-family: 'Fredoka', sans-serif; margin: 0 0 10px; font-size: 1.25rem; }
+        .poupif-notice-carte p { margin: 0 0 8px; }
+        .poupif-notice-mention { font-size: .8rem; opacity: .75; margin-top: 12px; } /* petit mais lisible */
+        .poupif-notice-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+        .poupif-notice-annuler {
+            background: none; border: 1px solid #2C1810; border-radius: 999px;
+            padding: 10px 18px; font-family: 'Quicksand', sans-serif; cursor: pointer; color: #2C1810;
+        }
+
+        /* ========== PERSONNAGE QUI SE PROMENE ========== */
+        .poupif-perso {
+            position: fixed; bottom: 6px; left: 0; z-index: 5;
+            pointer-events: none; /* ne bloque jamais les liens ni le dessin */
+        }
+        .poupif-perso.cache { display: none !important; }
+
+        @media (max-width: 600px) {
+            .poupif-parler { right: 12px; bottom: 12px; gap: 8px; }
+            .poupif-parler-btn { font-size: 0.95rem; padding: 10px 18px; }
+            .poupif-parler-etat { font-size: .75rem; padding: 5px 10px; }
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="navbar-container">
+        <div class="nav-left-group">
+            <a href="index.html" class="logo-wrapper">
+                <img src="images/logo.webp" alt="Récré Magic">
+            </a>
+            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
+        </div>
+
+        <div class="nav-icons">
+            <a href="calendrier.html" class="icon-wrapper">
+    <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
+    <span class="icon-label">Calendrier</span>
+</a>
+            <a href="boutique.html" class="icon-wrapper">
+                <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
+                <span class="icon-label">Boutique</span>
+            </a>
+            <a href="Abonnement.html" class="icon-wrapper">
+                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
+                <span class="icon-label">Abonnement</span>
+            </a>
+        </div>
+    </div>
+</nav>
+
+<div class="visite-viewport" id="visiteViewport">
+    <div class="visite-stage" id="visiteStage">
+        <img src="images/poupif-visite/visite-poupif.svg?v=388d98c" alt="Plan dessiné de la visite : les spectacles, le calendrier et la caravane du site Récré Magic">
+        <div class="visite-spot" id="visiteSpot" aria-hidden="true"></div>
+    </div>
+</div>
+
+<header class="poupif-entete">
+    <div class="ligne-intro">
+        <h1 class="poupif-title">Monsieur Poupif</h1>
+        <p class="poupif-indice">- Le directeur de la troupe vous reçoit : parlez-lui en bas à droite, il déplace le dessin pour vous montrer spectacles, calendrier et caravane.</p>
+    </div>
+    <p class="poupif-precision">Conversation générée par une IA qui incarne Monsieur Poupif ; le micro ne s'active que si vous lancez la conversation. <a href="index.html" class="lien-accueil">← Retour à l'accueil</a></p>
+</header>
+
+<a id="visiteLien" class="visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
+
+<!-- Filet de securite : affiche seulement si le widget de conversation ne charge pas. -->
+<div class="poupif-indispo" id="poupifIndispo" hidden role="alert">
+    <strong>Le directeur est momentanément indisponible</strong>
+    <p>Monsieur Poupif ne peut pas recevoir de visite pour l'instant — le service de conversation est injoignable. Ce n'est pas vous.</p>
+    <p>En attendant, <a href="Devis.html">demandez un devis</a> ou <a href="index.html">revenez à l'accueil</a>.</p>
+</div>
+
+<!-- Personnage anime qui se promene sur la page (decoratif, non interactif) -->
+<canvas id="poupifPerso" class="poupif-perso cache" aria-hidden="true"></canvas>
+
+<!-- Bouton de conversation propre au site (aucun habillage ElevenLabs) -->
+<div id="poupifParler" class="poupif-parler">
+    <span id="poupifParlerEtat" class="poupif-parler-etat cache" role="status" aria-live="polite"></span>
+    <button type="button" id="poupifParlerBtn" class="poupif-parler-btn">Parler à Poupif</button>
+</div>
+
+<!-- Notice pre-appel : seul endroit ou ElevenLabs est nomme (petit mais lisible) -->
+<div id="poupifNotice" class="poupif-notice cache" role="dialog" aria-modal="true" aria-labelledby="poupifNoticeTitre">
+    <div class="poupif-notice-carte">
+        <h2 id="poupifNoticeTitre">Avant de parler à Poupif</h2>
+        <p>
+            Poupif est un personnage incarné par une IA, pas un humain.
+            Le micro n'est actif que pendant l'appel.
+            La conversation est enregistrée (voix et texte).
+        </p>
+        <p class="poupif-notice-mention">
+            Voix et texte de la conversation traités par ElevenLabs et ses prestataires.
+        </p>
+        <div class="poupif-notice-actions">
+            <button type="button" id="poupifNoticeGo" class="poupif-parler-btn">Commencer la conversation</button>
+            <button type="button" id="poupifNoticeStop" class="poupif-notice-annuler">Annuler</button>
+        </div>
+    </div>
+</div>
+
+<script>
+/* Surveillance du service de conversation (SDK charge en module).
+   Trois cas ou l'on affiche le panneau "indisponible" plutot qu'une page muette :
+   - le module SDK ElevenLabs ne charge pas (bloqueur, panne, reseau) ;
+   - il charge mais n'a pas signale sa disponibilite sous 12 s ;
+   - le navigateur a le micro refuse, donc la visite vocale est impossible. */
+(function () {
+    var panneau = document.getElementById('poupifIndispo');
+    var bouton = document.getElementById('poupifParler');
+    var affiche = false;
+
+    function montrerIndisponible() {
+        if (affiche || !panneau) return;
+        affiche = true;
+        panneau.hidden = false;
+        if (bouton) bouton.classList.add('cache');
+    }
+    window.poupifMontrerIndispo = montrerIndisponible;
+
+    var debut = Date.now();
+    (function surveiller() {
+        if (window.poupifSDKEchec) { montrerIndisponible(); return; }
+        if (window.poupifSDKPret) return; /* charge : on s'arrete la */
+        if (Date.now() - debut > 12000) { montrerIndisponible(); return; }
+        setTimeout(surveiller, 500);
+    })();
+
+    if (navigator.permissions && navigator.permissions.query) {
+        navigator.permissions.query({ name: 'microphone' }).then(function (etat) {
+            if (etat.state === 'denied') montrerIndisponible();
+            etat.onchange = function () { if (etat.state === 'denied') montrerIndisponible(); };
+        }).catch(function () { /* API indisponible : on ne bloque rien */ });
+    }
+})();
+</script>
+
+
+<script>
+(function () {
+    var ETAPES = {
+        accueil:    { cx: 2164, cy: 886,  w: 4360, h: 1810 },
+        spectacles: { cx: 664,  cy: 781,  w: 1280, h: 960, lien: 'spectacles.html',  libelle: 'Voir les spectacles' },
+        calendrier: { cx: 2164, cy: 1281, w: 1280, h: 960, lien: 'calendrier.html',  libelle: 'Voir le calendrier' },
+        caravane:   { cx: 3664, cy: 781,  w: 1280, h: 960, lien: 'familles.html',    libelle: 'Découvrir la caravane' }
+    };
+    var viewport = document.getElementById('visiteViewport');
+    var stage = document.getElementById('visiteStage');
+    var lien = document.getElementById('visiteLien');
+    var spot = document.getElementById('visiteSpot');
+    var entete = document.querySelector('.poupif-entete');
+    var etapeCourante = 'accueil';
+
+    function goToStep(nom) {
+        var e = ETAPES[nom];
+        if (!e) return;
+        etapeCourante = nom;
+        var vw = viewport.clientWidth;
+        var vh = viewport.clientHeight;
+        /* Téléphone portrait : à l'accueil on cadre la colonne centrale du plan
+           (titre dessiné + scène du calendrier) pour que le dessin remplisse
+           l'écran en largeur, au lieu d'une vignette perdue dans le vide. */
+        var accueilMobile = (nom === 'accueil' && vw <= 600 && vw < vh);
+        var cadre = accueilMobile ? { cx: 2164, cy: 886, w: 1400, h: 1810 } : e;
+        var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
+        var reserveBas = e.lien ? 70 : (accueilMobile ? 120 : 0); /* place pour le lien flottant, ou le widget de conversation à l'accueil mobile */
+        var spanH = Math.max(120, vh - reserveHaut - reserveBas);
+        var z = Math.min(vw / cadre.w, spanH / cadre.h);
+        var tx = vw / 2 - z * cadre.cx;
+        var ty = reserveHaut + spanH / 2 - z * cadre.cy;
+        var tyMin = reserveHaut - z * (cadre.cy - cadre.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
+        var tyMax = vh - reserveBas - z * (cadre.cy + cadre.h / 2); /* bas du cadre au-dessus du lien ou du widget */
+        if (ty < tyMin) ty = tyMin;
+        if (ty > tyMax) ty = tyMax;
+        stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
+        if (e.lien) {
+            lien.href = e.lien;
+            lien.textContent = e.libelle + ' →';
+            lien.classList.remove('cache');
+            spot.style.left = (e.cx - e.w / 2) + 'px';
+            spot.style.top = (e.cy - e.h / 2) + 'px';
+            spot.style.width = e.w + 'px';
+            spot.style.height = e.h + 'px';
+            spot.style.opacity = '1';
+        } else {
+            lien.classList.add('cache');
+            spot.style.opacity = '0';
+        }
+    }
+    window.poupifMontrerEtape = goToStep;
+
+    function repositionnerSansTransition() {
+        var t1 = stage.style.transition;
+        stage.style.transition = 'none';
+        goToStep(etapeCourante);
+        stage.style.transition = t1;
+    }
+    window.addEventListener('resize', repositionnerSansTransition);
+    window.addEventListener('load', repositionnerSansTransition);
+    if ('ResizeObserver' in window) {
+        var derniereLargeur = viewport.clientWidth;
+        var derniereHauteur = viewport.clientHeight;
+        new ResizeObserver(function () {
+            if (viewport.clientWidth !== derniereLargeur || viewport.clientHeight !== derniereHauteur) {
+                derniereLargeur = viewport.clientWidth;
+                derniereHauteur = viewport.clientHeight;
+                repositionnerSansTransition();
+            }
+        }).observe(viewport);
+    }
+
+    var demandee = new URLSearchParams(window.location.search).get('etape');
+    stage.style.transition = 'none';
+    goToStep(ETAPES[demandee] ? demandee : 'accueil');
+    requestAnimationFrame(function () { stage.style.transition = ''; });
+
+    /* Outil vocal partage : le SDK conversation l'appelle via clientTools. */
+    window.poupifOutilMontrerEtape = function (params) {
+        var nom = String((params && params.etape) || '').toLowerCase();
+        if (!ETAPES[nom]) return 'Etape inconnue : ' + nom;
+        goToStep(nom);
+        return 'La scene de la visite montre maintenant l etape : ' + nom;
+    };
+})();
+</script>
+
+
+<script type="module">
+/* Bouton « Parler a Poupif » : conversation via le SDK officiel (aucune cle cote client,
+   l'agent est public). La notice s'affiche AVANT toute connexion ; son ouverture est
+   geree par un script classique (pas d'attente du chargement de ce module). */
+try {
+    const { Conversation } = await import('https://esm.sh/@elevenlabs/client@1.36.1');
+
+    const AGENT_ID = 'agent_6601m7bt4995eh0anx8pek1nj0f4';
+    const btn    = document.getElementById('poupifParlerBtn');
+    const etat   = document.getElementById('poupifParlerEtat');
+    const go     = document.getElementById('poupifNoticeGo');
+
+    const setEtat = (txt) => {
+        etat.textContent = txt || '';
+        etat.classList.toggle('cache', !txt);
+    };
+    const repos = () => {
+        btn.disabled = false; btn.textContent = 'Parler à Poupif';
+        btn.classList.remove('en-appel'); setEtat('');
+    };
+
+    window.poupifDemarrerAppel = async () => {
+        btn.disabled = true; btn.textContent = 'Connexion…';
+        try {
+            window.poupifConversation = await Conversation.startSession({
+                agentId: AGENT_ID,
+                clientTools: { montrerEtape: (p) => window.poupifOutilMontrerEtape(p) },
+                onStatusChange: ({ status }) => {
+                    if (status === 'connected') {
+                        btn.disabled = false; btn.textContent = 'Arrêter';
+                        btn.classList.add('en-appel'); setEtat('Poupif écoute');
+                    }
+                    if (status === 'disconnected') { window.poupifConversation = null; repos(); }
+                },
+                onModeChange: ({ mode }) => {
+                    if (!window.poupifConversation) return;
+                    setEtat(mode === 'speaking' ? 'Poupif parle' : 'Poupif écoute');
+                },
+                onDisconnect: () => { window.poupifConversation = null; repos(); },
+                onError: () => { setEtat('Problème de connexion'); }
+            });
+        } catch (e) {
+            window.poupifConversation = null; repos();
+            setEtat('La connexion n’a pas abouti, réessayez');
+        }
+    };
+    go.disabled = false;
+    go.textContent = 'Commencer la conversation';
+
+    window.poupifSDKPret = true; /* signale au surveillant que le service est la */
+} catch (e) {
+    window.poupifSDKEchec = true; /* module bloque ou panne : le surveillant affiche le panneau */
+}
+</script>
+
+<script>
+/* Notice pre-appel : ouverture immediate, sans attendre le SDK. Le bouton
+   « Commencer la conversation » reste grise tant que le service n'est pas charge. */
+(function () {
+    var btn    = document.getElementById('poupifParlerBtn');
+    var notice = document.getElementById('poupifNotice');
+    var go     = document.getElementById('poupifNoticeGo');
+    var stop   = document.getElementById('poupifNoticeStop');
+    if (!btn || !notice || !go || !stop) return;
+
+    go.disabled = true;
+    go.textContent = 'Chargement…';
+
+    btn.addEventListener('click', function () {
+        if (window.poupifConversation) {          // etat actif -> Arreter
+            btn.disabled = true;
+            window.poupifConversation.endSession().catch(function () {});
+            return;                               // onDisconnect remet l'UI au repos
+        }
+        notice.classList.remove('cache');         // 1er clic : notice AVANT toute connexion
+    });
+    stop.addEventListener('click', function () { notice.classList.add('cache'); });
+    go.addEventListener('click', function () {
+        if (go.disabled || !window.poupifDemarrerAppel) return;
+        notice.classList.add('cache');
+        window.poupifDemarrerAppel();
+    });
+})();
+</script>
+
+<script>
+/* Le personnage qui se promene : planches d'images alpha dessinees sur canvas
+   (compatible partout, aucun codec video requis). Choregraphie : il traverse, salue en profil a une extremite,
+   salue de face a l'autre ; les saluts sont rejoues a l'envers avant de repartir
+   pour un raccord doux (le salut profil finit chapeau leve). Si une image manque,
+   le personnage reste cache et la page fonctionne sans lui. */
+(function () {
+    var CONF = {
+        marche:  { src: 'images/poupif-visite/poupif-marche.webp',
+                   frames: 24, cols: 6, fw: 240, fh: 431, fps: 24 },
+        salutp:  { src: 'images/poupif-visite/poupif-salut-profil.webp',
+                   frames: 67, cols: 9, fw: 240, fh: 431, fps: 12 },
+        salutf:  { src: 'images/poupif-visite/poupif-salut-face.webp',
+                   frames: 96, cols: 10, fw: 240, fh: 431, fps: 12 },
+        hauteurVh: { bureau: 30, mobile: 26 },
+        basPx: 6,
+        pasParSeconde: 1.4,    // vitesse = 1.4 x sa hauteur par seconde : les pas suivent le sol
+        margeDroite: { bureau: 250, mobile: 12 },   // bureau : ne passe pas sous le bouton ; mobile : il passe dessous (bouton au-dessus)
+        margeGauche: 20,
+        pauseSalutMs: 700   // temps de tenue avant de rejouer le salut a l'envers
+    };
+    var el = document.getElementById('poupifPerso');
+    if (!el) return;
+    var ctx = el.getContext('2d');
+    var dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
+    var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var pret = { marche: false, salutp: false, salutf: false };
+    var img = {};
+    function charge(nom, differer) {
+        var c = CONF[nom];
+        var faire = function () {
+            var i = new Image();
+            i.onload = function () { img[nom] = i; pret[nom] = true; if (pret.marche) demarrer(); };
+            i.onerror = function () { /* image absente : ce mouvement reste inutilise */ };
+            i.src = c.src;
+        };
+        if (differer && 'requestIdleCallback' in window) requestIdleCallback(faire, { timeout: 4000 });
+        else if (differer) setTimeout(faire, 2500);
+        else faire();
+    }
+
+    var x = -9999, dir = 1;                 // dir 1 = va a droite (miroir), -1 = va a gauche
+    var phase = 'attente';                  // attente|marche|salut|retour|statique
+    var frame = 0, sens = 1, dernierT = 0, acc = 0, salutEnCours = null, pauseFin = 0;
+    var elW = 0, elH = 0, vitesse = 230, salutAlterne = 'salutp';
+    function estMobile() { return window.innerWidth <= 600; }
+    function margeD() { return estMobile() ? CONF.margeDroite.mobile : CONF.margeDroite.bureau; }
+    var cadreCourant = { nom: 'marche', n: 0, miroir: false };
+
+    function mesurer() {
+        var mobile = estMobile();
+        elH = Math.round(window.innerHeight * (mobile ? CONF.hauteurVh.mobile : CONF.hauteurVh.bureau) / 100);
+        elW = Math.round(CONF.marche.fw * (elH / CONF.marche.fh));
+        vitesse = elH * CONF.pasParSeconde;
+        el.width = Math.round(elW * dpr);
+        el.height = Math.round(elH * dpr);
+        el.style.width = elW + 'px';
+        el.style.height = elH + 'px';
+        el.style.bottom = CONF.basPx + 'px';
+    }
+
+    function cadre(nom, n, miroir) {
+        var c = CONF[nom];
+        if (!pret[nom]) return;
+        n = Math.max(0, Math.min(c.frames - 1, n));
+        cadreCourant = { nom: nom, n: n, miroir: !!miroir };
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        ctx.clearRect(0, 0, elW, elH);
+        if (miroir) { ctx.translate(elW, 0); ctx.scale(-1, 1); }
+        ctx.drawImage(img[nom], (n % c.cols) * c.fw, Math.floor(n / c.cols) * c.fh, c.fw, c.fh, 0, 0, elW, elH);
+    }
+
+    function placer() {
+        el.style.transform = 'translateX(' + Math.round(x) + 'px)';
+    }
+
+    function demarrer() {
+        if (phase !== 'attente') return;
+        mesurer();
+        el.classList.remove('cache');
+        if (reduit) {   // mouvement reduit : il reste debout pres du bouton, sans animation
+            x = window.innerWidth - elW - margeD();
+            cadre('marche', 0, true); placer(); phase = 'statique'; return;
+        }
+        x = -elW; dir = 1; phase = 'marche'; frame = 0;
+        requestAnimationFrame(boucle);
+    }
+
+    function debutSalut() {
+        // il se tourne vers le centre de la page pour saluer ; alterne profil et face
+        var nom = salutAlterne;
+        if (!pret[nom]) nom = (nom === 'salutp') ? 'salutf' : 'salutp';
+        if (!pret[nom]) { finSalutImmediate(); return; }
+        salutEnCours = nom; salutAlterne = (nom === 'salutp') ? 'salutf' : 'salutp';
+        phase = 'salut'; frame = 0; sens = 1;
+    }
+    function finSalutImmediate() { dir = -dir; phase = 'marche'; frame = 0; }
+
+    function boucle(t) {
+        if (phase === 'statique') return;
+        var dt = Math.min(64, t - dernierT || 16); dernierT = t;
+        var nom = (phase === 'salut' || phase === 'retour') ? salutEnCours : 'marche';
+        var c = CONF[nom];
+
+        if (phase === 'marche') {
+            acc += dt * c.fps / 1000;
+            while (acc >= 1) { acc -= 1; frame = (frame + 1) % c.frames; }
+            x += dir * vitesse * dt / 1000;
+            var buteD = window.innerWidth - elW - margeD();
+            var buteG = CONF.margeGauche;
+            if (dir === 1 && x >= buteD) { x = buteD; debutSalut(); }
+            else if (dir === -1 && x <= buteG) { x = buteG; debutSalut(); }
+            cadre('marche', frame, dir === 1);   // miroir quand il va a droite (la source regarde a gauche)
+            placer();
+        } else if (phase === 'salut') {
+            acc += dt * c.fps / 1000;
+            while (acc >= 1) { acc -= 1; frame += sens; }
+            if (frame >= c.frames - 1) { frame = c.frames - 1; phase = 'retour'; pauseFin = t + CONF.pauseSalutMs; }
+            cadre(nom, frame, dir === -1);       // il salue vers le centre : a droite il regarde a gauche (pas de miroir)
+            placer();
+        } else if (phase === 'retour') {
+            if (t >= pauseFin) {
+                acc += dt * c.fps / 1000;
+                while (acc >= 1) { acc -= 1; frame -= 1; }
+                cadre(nom, Math.max(0, frame), dir === -1);
+                placer();
+                if (frame <= 0) finSalutImmediate();
+            }
+        }
+        requestAnimationFrame(boucle);
+    }
+
+    window.addEventListener('resize', function () {
+        if (phase === 'attente') return;
+        mesurer();
+        var max = window.innerWidth - elW - margeD();
+        if (x > max) x = max;
+        cadre(cadreCourant.nom, cadreCourant.n, cadreCourant.miroir);
+        placer();
+    });
+
+    charge('marche', false);                // la marche tout de suite
+    charge('salutp', true); charge('salutf', true);   // les saluts apres la page
+})();
+</script>
+
+</body>
+</html>
+
+

@@ -1,818 +1,314 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="color-scheme" content="only light">
-    <meta name="darkreader-lock">
-    <title>Monsieur Poupif - Récré Magic</title>
-    <meta name="description" content="Parlez à Monsieur Poupif, le directeur de la troupe Récré Magic. Il vous répond de sa voix et déplace le décor pour vous montrer les spectacles, le calendrier et la caravane.">
-    <link rel="canonical" href="https://www.recremagic.com/poupif">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Récré Magic">
-    <meta property="og:locale" content="fr_FR">
-    <meta property="og:url" content="https://www.recremagic.com/poupif">
-    <meta property="og:title" content="Monsieur Poupif — le directeur de la troupe">
-    <meta property="og:description" content="Le directeur de la troupe Récré Magic vous reçoit. Parlez-lui : il répond de sa voix et vous fait visiter les spectacles, le calendrier et la caravane.">
-    <meta property="og:image" content="https://www.recremagic.com/images/og-poupif.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:image:alt" content="Monsieur Poupif, le directeur marionnette de la troupe Récré Magic">
-    <meta name="twitter:card" content="summary_large_image">
-    <!-- Favicons -->
-<link rel="icon" type="image/png" href="/favicon-96x96.png" sizes="96x96">
-<link rel="icon" type="image/svg+xml" href="/favicon.svg">
-<link rel="shortcut icon" href="/favicon.ico">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<meta name="apple-mobile-web-app-title" content="Récré Magic">
-<link rel="manifest" href="/site.webmanifest">
-    <link href="https://fonts.googleapis.com/css2?family=MedievalSharp&family=Fredoka:wght@400;600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root { color-scheme: only light; } /* pas de recoloration forcee par le mode sombre du navigateur : les couleurs de la page sont deja choisies */
-        :root {
-            --vert-caravane: #7CB69F;
-            --rose-spectacle: #EC407A;
-            --jaune-accent: #FFB300;
-            --text-dark: #2C1810;
-            --text-light: #ffffff;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-
-        @media (min-width: 1024px) {
-    body {
-        zoom: 150%;
-    }
-    body::before {
-        zoom: 0.6667; /* annule le zoom sur le fond */
-    }
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<link rel="canonical" href="https://www.recremagic.com/poupif"><meta name="color-scheme" content="only light">
+<title>Monsieur Poupif - Récré Magic</title>
+<meta name="description" content="Une petite ouverture mise en scène : Poupif nous emmène de la carte à l'atelier, puis à la petite scène. Une conversation à lancer, du chemin à la scène.">
+<style>
+:root{color-scheme:only light;--papier:#f2e4c4;--nuit:#2f3b52;--or:#e9be6e}*{box-sizing:border-box}body{margin:0;background:var(--nuit);color:var(--papier);font-family:system-ui,sans-serif;height:100svh;min-height:480px;display:flex;flex-direction:column;overflow:hidden}header{padding:20px 24px 12px;position:relative;z-index:4;flex:none}header p{margin:0 0 5px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:#d8c9ae}h1{font-family:Georgia,serif;font-weight:400;font-size:clamp(23px,3vw,34px);margin:0}#etat{margin:8px 0 0;font-size:14px;line-height:1.5;max-width:640px;text-transform:none;letter-spacing:normal;color:var(--papier)}.theatre{position:relative;flex:1;min-height:200px;overflow:hidden;isolation:isolate;background:#2f3b52}.monde{position:absolute;width:4328px;height:1772px;transform-origin:0 0;will-change:transform}.paysage{position:absolute;left:0;top:0;width:4328px;height:1772px;object-fit:cover;pointer-events:none;user-select:none;filter:brightness(.94) saturate(.95)}.plan{position:absolute;left:0;top:0;width:4328px;height:1772px;display:block;pointer-events:none;user-select:none}.atelier,.petite{position:absolute;object-fit:cover;pointer-events:none;user-select:none}.petite{opacity:0}.cache{position:absolute;left:3064px;top:354px;width:1200px;height:750px;background:#2f3b52 url('images/poupif-visite/poupif-paysage.webp') -3064px -354px/4328px 1772px no-repeat;pointer-events:none}.cache svg{display:block;width:1200px;height:750px}.porte{position:absolute;left:3064px;top:354px;width:1200px;height:750px;border:10px solid var(--or);background:transparent;color:transparent;border-radius:15px;cursor:pointer;box-shadow:0 0 65px #e9be6e90;transition:opacity .4s}.porte:focus-visible{outline:20px solid white;outline-offset:12px}body[data-scene="caravane"] .porte{opacity:0;pointer-events:none}.personnage{position:absolute;bottom:8px;left:4%;z-index:3;transition:left 3.4s cubic-bezier(.45,0,.25,1)}body[data-scene="caravane"] .personnage{left:19%}.rebord{position:absolute;bottom:0;height:8px;background:linear-gradient(#9d7447,#4f3525);width:100%;z-index:2;opacity:0;transition:opacity 1s}body[data-scene="caravane"] .rebord{opacity:1}.repere{position:absolute;top:12px;right:16px;border:1px solid #f2e4c450;border-radius:20px;padding:6px 11px;font-size:11px;letter-spacing:.03em;background:#263047dd;pointer-events:none;z-index:3}footer{position:relative;z-index:4;padding:14px 24px max(16px,env(safe-area-inset-bottom));background:#263047;flex:none}.commandes{display:flex;gap:10px;flex-wrap:wrap}button{font:inherit}footer button{min-height:46px;border-radius:25px;padding:10px 20px;font-size:14px;font-weight:650;cursor:pointer;border:1px solid #f2e4c47a;background:transparent;color:var(--papier)}footer button.principal{background:var(--papier);color:#36271e;border-color:var(--papier)}footer button:disabled{opacity:.45;cursor:default}footer button:focus-visible{outline:3px solid var(--or);outline-offset:3px}.note{font-size:11px;color:#c8c6c4;margin:10px 0 0;line-height:1.5}.note a{color:inherit;text-underline-offset:3px}#erreur{position:absolute;inset:20%;background:var(--nuit);z-index:5;padding:20px;line-height:1.6}#erreur[hidden]{display:none}@media(max-width:600px){header{padding:16px 18px 8px}header p{font-size:10px}#etat{font-size:13px;min-height:39px;margin-top:7px}footer{padding:12px 16px max(16px,env(safe-area-inset-bottom))}.commandes{display:grid;grid-template-columns:1fr 1fr;gap:8px}footer button{padding:9px 10px;font-size:12px}.personnage{height:clamp(130px,25vh,220px)}.repere{font-size:10px;right:12px;top:8px}.note{font-size:10px}}@media(prefers-reduced-motion:reduce){.personnage{transition:none}}
+#etat{display:none}.legende{position:absolute;left:50%;bottom:34px;transform:translateX(-50%);z-index:4;max-width:min(560px,86%);text-align:center;font-family:Georgia,serif;font-style:italic;font-size:clamp(16px,2.2vw,22px);line-height:1.4;padding:10px 20px;border-radius:22px;background:#263047d9;color:var(--papier);opacity:0;transition:opacity .9s;pointer-events:none}.legende.on{opacity:1}.lueur{position:absolute;pointer-events:none;opacity:0;transition:opacity 2.2s;background:radial-gradient(ellipse at 50% 55%,#fff0b8f0 0%,#ffd77a99 40%,#ffd77a00 70%);mix-blend-mode:screen}.lueur.on{opacity:1}.petite{filter:brightness(.82) saturate(.9);transition:filter 2.4s}.petite.allume{filter:brightness(1.15) saturate(1.2)}body[data-scene="entree"] .personnage{left:-40%;transition:none}footer button[hidden]{display:none}@media(max-width:600px){.legende{bottom:22px;font-size:15px;padding:8px 14px}}
+[hidden]{display:none!important}.ecran{position:absolute;z-index:2;top:7%;right:6%;width:min(68%,790px);margin:0;perspective:1100px;animation:leviter 5s ease-in-out infinite}.ecran-cadre{overflow:hidden;background:#1d2636;border:3px solid #e9be6e;border-radius:14px;box-shadow:0 0 0 5px #6c4c2e,0 14px 60px #000b,0 0 42px #f8d48355;transform:rotateY(-5deg) rotateZ(1deg)}.ecran img{display:block;width:100%;max-height:48svh;object-fit:contain;background:#172131}.ecran figcaption{padding:8px 12px;background:#263047;text-align:center;font-size:12px}.ecran a{color:var(--papier);text-underline-offset:3px}.ecran:after{content:'';position:absolute;width:70%;height:22px;background:#0c1322aa;filter:blur(14px);left:15%;bottom:-38px;border-radius:50%}.ecran-nav{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.ecran-nav button{font-size:12px;min-height:36px;padding:7px 12px}.appel-etat{font-size:12px;margin:8px 0 0;color:#e9be6e}.modal{position:fixed;inset:0;z-index:20;background:#101725c9;display:grid;place-items:center;padding:20px}.modal-carte{max-height:92svh;overflow-y:auto;max-width:440px;background:#f2e4c4;color:#302b2c;border:2px solid #bd985b;border-radius:20px;padding:24px;line-height:1.5;box-shadow:0 15px 60px #0008}.modal h2{font:25px Georgia,serif;margin-top:0}.modal button{padding:12px 18px;min-height:46px;border-radius:25px;background:#263047;color:#f2e4c4;border:0;cursor:pointer;margin:5px 5px 0 0}.modal button:disabled{opacity:.5}.modal button:focus-visible{outline:3px solid #996a20;outline-offset:3px}body[data-vocal="oui"] .legende{font-style:normal;font-size:14px;max-width:min(620px,90%)}@keyframes leviter{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}@media(max-width:600px){.ecran{width:88%;right:6%;top:9%}.ecran img{max-height:min(35svh,calc(var(--theatre-h,600px)*.4 - 30px))}.ecran figcaption{font-size:11px;padding:6px}.ecran-nav{gap:5px}.ecran-nav button{font-size:11px;padding:6px 9px;min-height:34px}.legende{max-height:72px;overflow:hidden}header p{letter-spacing:.1em}footer .note{margin-top:6px}}@media(prefers-reduced-motion:reduce){.ecran{animation:none}.ecran-cadre{transform:none}}
+body:not([data-soustitres="oui"]) .legende{display:none}.options-visite{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px;font-size:11px}.options-visite label{display:flex;gap:5px;align-items:center}.options-visite input{accent-color:#e9be6e}.session-note{font-size:11px;line-height:1.4;color:#d1c8b8;margin:7px 0}.fin-session{font-size:12px;min-height:36px;padding:7px 12px}@media(max-width:600px){.options-visite{gap:7px;font-size:10px}.options-visite label{gap:3px}}
+.invitation{position:absolute;z-index:3;top:15%;left:50%;transform:translateX(-50%);width:min(540px,87%);padding:20px 24px;text-align:center;border:1px solid #e9be6eaa;border-radius:20px;background:#263047ed;box-shadow:0 12px 50px #0007}.invitation h2{font:clamp(21px,3vw,30px) Georgia,serif;margin:0 0 10px}.invitation p{font-size:14px;line-height:1.5;margin:8px 0}.invitation .choix{display:flex;justify-content:center;gap:8px;flex-wrap:wrap}.invitation button{border:1px solid #e9be6e88;border-radius:20px;padding:9px 13px;background:#f2e4c4;color:#263047;cursor:pointer;min-height:38px}.invitation small{font-size:11px;color:#d9cdb8}@media(max-width:600px){.invitation{top:8%;padding:14px 16px}.invitation p{font-size:12px}.invitation button{font-size:11px;padding:7px 10px}.invitation h2{font-size:23px}}@media(max-height:700px){.invitation{top:5%;padding:10px 14px}.invitation p{margin:5px 0;font-size:12px}.invitation h2{font-size:21px;margin-bottom:5px}}
+.theatre[data-court="oui"] .invitation{left:66%;width:62%;top:6%;padding:8px 10px}.theatre[data-court="oui"] .invitation h2{font-size:18px}.theatre[data-court="oui"] .invitation p{font-size:11px;line-height:1.35;margin:4px 0}.theatre[data-court="oui"] .invitation small{display:none}
+/* Régie : cadre commun, contenu interne par diapositive. */
+.theatre{overflow:clip}
+.diapo-spectacle{display:grid;grid-template-columns:minmax(0,40%) minmax(0,60%);height:min(410px,calc(var(--theatre-h,700px)*.52));background:var(--papier);color:#263047;overflow:hidden}
+.ecran .diapo-spectacle img{width:100%;height:100%;max-height:100%;min-height:0;object-fit:contain;background:#172131}
+.diapo-texte{min-width:0;min-height:0;padding:clamp(10px,2vw,26px);display:flex;flex-direction:column;justify-content:center;gap:clamp(8px,2vw,22px);overflow:hidden}
+.diapo-texte h2{margin:0;font:clamp(16px,2.3vw,30px)/1.12 Georgia,serif}.diapo-texte p{margin:0;font-size:clamp(11px,1.35vw,17px);line-height:1.35}
+.diapo-commandes{display:flex;align-items:center;justify-content:space-between;gap:6px;background:#263047;padding:6px 10px;font-size:11px}.diapo-commandes button{border:1px solid #e9be6e88;border-radius:18px;padding:7px 9px;min-height:34px;background:transparent;color:var(--papier);font-size:11px;cursor:pointer}.diapo-commandes button:disabled{opacity:.35;cursor:default}.diapo-commandes button:focus-visible{outline:3px solid var(--or)}
+@media(max-width:600px){.diapo-spectacle{height:calc(var(--theatre-h,500px)*.38)}.diapo-texte{padding:10px;gap:10px}.diapo-texte h2{font-size:clamp(14px,4.4vw,20px)}.diapo-texte p{font-size:11px}.ecran figcaption{font-size:10px}.diapo-commandes{font-size:10px;padding:5px}}
+@media(max-height:700px){.diapo-texte p{display:none}.diapo-texte h2{font-size:clamp(13px,3.7vw,21px)}.diapo-spectacle{height:calc(var(--theatre-h,400px)*.28)}.ecran figcaption small,.ecran figcaption>span{display:none}.ecran figcaption{padding:3px 6px}.diapo-commandes{padding:3px 6px}.diapo-commandes button{min-height:28px;padding:4px 7px}}
+</style>
+<style>
+[data-format="paysage"] .diapo-spectacle{grid-template-columns:1fr;grid-template-rows:minmax(0,58%) minmax(0,42%)}
+[data-format="paysage"] .diapo-spectacle img{width:100%;height:100%;object-fit:contain;background:#172131}
+[data-format="paysage"] .diapo-texte{padding:8px 14px;gap:5px}[data-format="paysage"] .diapo-texte h2{font-size:clamp(15px,2vw,26px)}[data-format="paysage"] .diapo-texte p{font-size:clamp(11px,1.3vw,16px)}
+@media(max-width:600px){[data-format="paysage"] .diapo-spectacle{height:calc(var(--theatre-h,500px)*.40)}[data-format="paysage"] .diapo-texte h2{font-size:17px}[data-format="paysage"] .diapo-texte p{font-size:11px}[data-format="paysage"] .diapo-texte{padding:7px 10px}}
+@media(max-height:700px){[data-etape="expositions"][data-diapo="geants"] .diapo-texte{padding:4px 8px;gap:3px}[data-etape="expositions"][data-diapo="geants"] .diapo-texte h2{font-size:14px}[data-etape="expositions"][data-diapo="geants"] .diapo-texte p{display:block;font-size:10px;line-height:1.1}}
+</style><style>
+/* Le plateau reste une image ; la régie visiteur est regroupée en bas. */
+#ecran .diapo-spectacle,#ecran[data-format="paysage"] .diapo-spectacle{display:block;height:min(470px,calc(var(--theatre-h,700px)*.69));background:#172131}
+#ecran .diapo-spectacle img{height:100%;max-height:100%;object-fit:contain}
+#ecran[data-format="paysage"] .diapo-spectacle{height:auto;aspect-ratio:16/9;max-height:calc(var(--theatre-h,700px)*.66)}
+#ecran[data-format="paysage"] .diapo-spectacle img{height:100%;max-height:calc(var(--theatre-h,700px)*.66)}
+#presentationInfos .diapo-texte{padding:7px 0 3px;gap:3px;color:var(--papier);overflow:visible}
+#presentationInfos .diapo-texte h2{font:18px/1.15 Georgia,serif}
+#presentationInfos .diapo-texte p{display:block;font-size:11px;margin:0}
+#presentationInfos figcaption{font-size:10px;color:#c8c6c4;line-height:1.3}
+#presentationInfos figcaption a{color:var(--papier)}
+#presentationInfos figcaption>span,#presentationInfos figcaption br{display:none}
+#presentationInfos figcaption small{display:inline;font-size:9px;margin-left:8px}
+#ecranNav{margin-top:9px;max-width:980px}
+.menu-entete{display:flex;align-items:center;gap:10px;font-size:12px;color:#e9be6e}
+.menu-entete button{font-size:11px;padding:4px 10px;min-height:30px}
+.choix-diapos{display:flex;gap:6px;overflow-x:auto;scrollbar-width:thin;scrollbar-color:#e9be6e #263047;padding:7px 1px 3px}
+.choix-diapos button{flex:none;font-size:11px;min-height:32px;padding:6px 11px}
+.choix-diapos button[aria-pressed="true"]{background:var(--papier);color:#263047;border-color:var(--papier)}
+#presentationInfos .diapo-commandes{padding:3px 0;background:transparent;justify-content:flex-start;gap:12px}
+#presentationInfos .diapo-commandes button{min-height:28px;padding:4px 9px;font-size:10px}
+@media(max-width:600px){header{padding:10px 16px 7px}header h1{font-size:23px}header p{font-size:9px}footer{padding:9px 14px max(10px,env(safe-area-inset-bottom))}.commandes button{min-height:38px;padding:6px 10px}.options-visite{margin-top:5px}.ecran{width:90%;right:5%;top:8%}.ecran-cadre{border-width:2px;border-radius:10px}#ecran .diapo-spectacle{height:calc(var(--theatre-h,500px)*.67)}#ecran[data-format="paysage"] .diapo-spectacle{height:auto;max-height:calc(var(--theatre-h,500px)*.68)}#presentationInfos .diapo-texte h2{font-size:15px}#presentationInfos .diapo-texte p{font-size:10px}#presentationInfos figcaption small{display:none}#ecranNav{margin-top:6px}.ecran-nav{margin-top:0}.ecran-nav button{min-height:31px;font-size:10px;padding:5px 8px}footer .note{font-size:9px;line-height:1.3;margin-top:5px}.choix-diapos{padding-top:5px}.choix-diapos button{min-height:29px;font-size:10px;padding:5px 9px}}
+@media(max-height:700px){#presentationInfos .diapo-texte{padding-top:3px}#presentationInfos .diapo-texte p{display:none}#presentationInfos[data-theme="expositions"][data-diapo="geants"] .diapo-texte p{display:block}#presentationInfos .diapo-texte h2{font-size:14px}.menu-entete button{min-height:26px}.choix-diapos button{min-height:27px}#presentationInfos .diapo-commandes{padding:2px 0}}
+</style><style>
+.diapo-lecture{background:var(--papier);color:#263047;padding:clamp(18px,3vw,38px);height:min(480px,calc(var(--theatre-h,700px)*.70));display:flex;flex-direction:column;justify-content:flex-start;gap:18px;overflow:auto}
+.diapo-lecture h2{margin:0;font:clamp(22px,2.5vw,35px)/1.12 Georgia,serif}
+.diapo-lecture p{margin:0;font-size:clamp(16px,1.65vw,23px);line-height:1.5}
+#presentationInfos .diapo-texte{padding:3px 0}
+#presentationInfos .diapo-texte p{display:none}
+.choix-diapos{margin-bottom:3px}
+@media(max-width:600px){.diapo-lecture{height:calc(var(--theatre-h,500px)*.72);padding:16px 18px;gap:12px}.diapo-lecture h2{font-size:20px}.diapo-lecture p{font-size:13px;line-height:1.42}.choix-diapos button{font-size:10px}#presentationInfos .diapo-texte h2{font-size:13px}#presentationInfos[data-theme="expositions"][data-diapo="geants"] .diapo-texte p{display:block}}
+@media(max-height:700px){.diapo-lecture{padding:12px 14px;gap:8px;height:calc(var(--theatre-h,500px)*.76)}.diapo-lecture h2{font-size:17px}.diapo-lecture p{font-size:11px;line-height:1.35}}
+</style></head>
+<body data-scene="entree">
+<header><p>Récrémagic · Le théâtre de Poupif</p><h1>Suivez Monsieur Poupif</h1><p id="etat" aria-live="polite">Choisissez une visite avec Poupif ou une ouverture muette.</p></header>
+<main class="theatre" id="theatre" aria-label="La carte et son décor">
+<div class="monde" id="monde"><img class="paysage" id="paysage" src="images/poupif-visite/poupif-paysage.webp" width="4328" height="1772" alt="" aria-hidden="true"><svg class="plan" id="plan" role="img" aria-label="Le titre de la visite, dans le ciel du paysage." version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4328 1772" width="4328" height="1772"><!-- svg-source:excalidraw --><metadata></metadata><defs><style class="style-fonts">
+      @font-face { font-family: Virgil; src: url(data:font/woff2;base64,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); }
+[hidden]{display:none!important}.ecran{position:absolute;z-index:2;top:7%;right:6%;width:min(68%,790px);margin:0;perspective:1100px;animation:leviter 5s ease-in-out infinite}.ecran-cadre{overflow:hidden;background:#1d2636;border:3px solid #e9be6e;border-radius:14px;box-shadow:0 0 0 5px #6c4c2e,0 14px 60px #000b,0 0 42px #f8d48355;transform:rotateY(-5deg) rotateZ(1deg)}.ecran img{display:block;width:100%;max-height:48svh;object-fit:contain;background:#172131}.ecran figcaption{padding:8px 12px;background:#263047;text-align:center;font-size:12px}.ecran a{color:var(--papier);text-underline-offset:3px}.ecran:after{content:'';position:absolute;width:70%;height:22px;background:#0c1322aa;filter:blur(14px);left:15%;bottom:-38px;border-radius:50%}.ecran-nav{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}.ecran-nav button{font-size:12px;min-height:36px;padding:7px 12px}.appel-etat{font-size:12px;margin:8px 0 0;color:#e9be6e}.modal{position:fixed;inset:0;z-index:20;background:#101725c9;display:grid;place-items:center;padding:20px}.modal-carte{max-height:92svh;overflow-y:auto;max-width:440px;background:#f2e4c4;color:#302b2c;border:2px solid #bd985b;border-radius:20px;padding:24px;line-height:1.5;box-shadow:0 15px 60px #0008}.modal h2{font:25px Georgia,serif;margin-top:0}.modal button{padding:12px 18px;min-height:46px;border-radius:25px;background:#263047;color:#f2e4c4;border:0;cursor:pointer;margin:5px 5px 0 0}.modal button:disabled{opacity:.5}.modal button:focus-visible{outline:3px solid #996a20;outline-offset:3px}body[data-vocal="oui"] .legende{font-style:normal;font-size:14px;max-width:min(620px,90%)}@keyframes leviter{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}@media(max-width:600px){.ecran{width:88%;right:6%;top:9%}.ecran img{max-height:min(35svh,calc(var(--theatre-h,600px)*.4 - 30px))}.ecran figcaption{font-size:11px;padding:6px}.ecran-nav{gap:5px}.ecran-nav button{font-size:11px;padding:6px 9px;min-height:34px}.legende{max-height:72px;overflow:hidden}header p{letter-spacing:.1em}footer .note{margin-top:6px}}@media(prefers-reduced-motion:reduce){.ecran{animation:none}.ecran-cadre{transform:none}}
+</style></defs><g transform="translate(865 40) rotate(0 1300 50)"><text x="1300" y="70.47999999999999" font-family="Virgil, sans-serif, Segoe UI Emoji" font-size="80px" fill="#F2E4C4" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">La visite de Monsieur Poupif</text></g><g transform="translate(865 160) rotate(0 1300 25)"><text x="1300" y="31.716" font-family="Virgil, sans-serif, Segoe UI Emoji" font-size="36px" fill="#F2E4C4" text-anchor="middle" style="white-space: pre;" direction="ltr" dominant-baseline="alphabetic">Les coulisses du site Récré Magic, en trois étapes</text></g></svg><img class="atelier" id="atelier" src="images/poupif-visite/poupif-atelier.webp" alt="L'atelier de Poupif, bien plus grand que la roulotte : décors peints, marionnettes, petite scène." style="left:3064px;top:354px;width:1200px;height:750px;opacity:0"><img class="petite" id="petite" src="images/poupif-visite/poupif-petite-scene.webp" alt="Le décor peint de la petite scène : un château sur une colline." style="left:3717px;top:676px;width:167px;height:105px"><div class="lueur" id="lueur"></div></div>
+<div class="repere" id="repere">Ouverture</div><div class="legende" id="legende" aria-live="polite"></div>
+<section class="invitation" id="invitation" hidden aria-labelledby="invitationTitre"><h2 id="invitationTitre">Je te fais visiter ?</h2><p>Spectacles, expositions, séjours artistiques, L'Écrin,<br>calendrier ou caravane : où veux-tu aller ?</p><p><small>Dis-le à Poupif avec le micro, ou choisis un écran.</small></p></section><figure class="ecran" id="ecran" hidden aria-label="Projection sur scène"><div class="ecran-cadre"><img id="ecranImage" alt=""><article class="diapo-lecture" id="diapoLecture" hidden aria-label="Texte de présentation"><h2 id="lectureTitre"></h2><p id="lectureTexte"></p></article><section class="diapo-spectacle" id="diapoSpectacle" hidden aria-label="Prestation présentée"><img id="diapoImage" alt=""></section></div></figure><div class="rebord"></div><canvas class="personnage" id="poupif" width="240" height="431" aria-label="Monsieur Poupif au premier plan" role="img"></canvas>
+<p id="erreur" hidden>Le dessin n'a pas pu se charger. Rechargez la page pour réessayer.</p>
+</main>
+<footer><div class="commandes"><button class="principal" id="parler">Suivre Poupif avec sa voix</button><button id="muet">Voir sans le son</button><button id="rejouer" hidden>↻ Revoir l'ouverture</button></div><button class="fin-session" id="terminer" hidden>Terminer la conversation</button><div class="options-visite"><label><input type="checkbox" id="sousTitres"> Sous-titres</label></div><p class="session-note" id="sessionNote" hidden>Micro en pause : Poupif peut continuer à parler. La session reste ouverte et peut utiliser des crédits. « Terminer » ferme la connexion.</p><p class="appel-etat" id="appelEtat" role="status" aria-live="polite"></p><section id="ecranNav" hidden aria-label="Commandes de présentation"><div class="menu-entete" id="menuEntete" hidden><button type="button" id="retourThemes">← Thèmes</button><span id="menuTheme"></span></div><div class="ecran-nav" id="themesNav" aria-label="Les écrans de scène"><button data-ecran="spectacles">Spectacles</button><button data-ecran="expositions">Expositions</button><button data-ecran="sejours">Séjours artistiques</button><button data-ecran="ecrin">L’Écrin</button><button data-ecran="calendrier">Calendrier</button><button data-ecran="caravane">Caravane</button><button data-ecran="accueil">Le château</button></div><div class="choix-diapos" id="choixDiapos" hidden aria-label="Choisir une diapositive"></div><div id="presentationInfos" hidden><div class="diapo-texte"><h2 id="diapoTitre"></h2><p id="diapoAccroche"></p></div><figcaption><span id="ecranTitre"></span><span class="separateur"> · </span><a id="ecranLien" target="_blank" rel="noopener">Ouvrir la page actuelle ↗</a><br><small id="ecranMention">Visuels du site · aucune disponibilité en temps réel</small></figcaption></div></section><p class="note">Poupif est incarné par une IA. Micro uniquement après votre accord, pendant la conversation. <a href="poupif-dessinee">La visite dessinée</a></p></footer>
+<div class="modal" id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitre"><div class="modal-carte"><h2 id="noticeTitre">Avant de suivre Poupif</h2><p>Sa voix vous accompagne pendant le trajet, puis vous pouvez lui parler et lui demander de projeter les spectacles, les expositions, les séjours artistiques, L'Écrin, le calendrier ou la caravane.</p><p>Poupif est une IA, pas un humain. Le micro reste actif pendant l'appel. La conversation est enregistrée en voix et en texte, traitée par ElevenLabs et ses prestataires.</p><p>Cette conversation utilise les crédits du service vocal. Aucun appel ne démarre sans votre accord.</p><button id="commencer" disabled>Chargement de la voix…</button><button id="annuler">Annuler</button></div></div>
+<script>
+/* Ouverture mise en scène. Fond peint généré (poupif-paysage.webp) sous la carte Excalidraw (essai-carte.excalidraw, export SVG inline sans son fond bleu) ; mêmes deux décors générés
+   que l'essai précédent ; ici la caméra est dirigée par une petite partition (pauses, saluts, surprise).
+   Conversation optionnelle et projections, sans clé API côté navigateur. */
+(function(){
+'use strict';
+const theatre=document.getElementById('theatre'),monde=document.getElementById('monde'),atelier=document.getElementById('atelier');
+const repere=document.getElementById('repere'),leg=document.getElementById('legende'),lueur=document.getElementById('lueur'),rejouerBtn=document.getElementById('rejouer');
+const petite=document.getElementById('petite');
+const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
+const PLAN_W=4328,PLAN_H=1772,PH={x:3064,y:354,w:1200,h:750},PORTE={x:4011,y:900},CHEMIN=[[450,1530],[1000,1470],[1800,1500],[2500,1480],[3200,1400],[3400,1390],[3500,1365],[3580,1345],[3635,1320],[3650,1300],[3640,1275],[3600,1250],[3660,1225],[3730,1200],[3740,1170],[3800,1150],[3900,1140]];
+const IW=750*16/9,IX=PH.x-(IW-PH.w)/2,ST={x:IX+0.540*IW,y:PH.y+0.43*750,w:0.125*IW,h:0.14*750};
+lueur.style.cssText+=`left:${ST.x-ST.w*0.3}px;top:${ST.y-ST.h*0.3}px;width:${ST.w*1.6}px;height:${ST.h*1.6}px`;
+function cadres(){
+ const w=theatre.clientWidth,h=theatre.clientHeight;
+ const zc=Math.max(w/PLAN_W,h/PLAN_H);
+ const zm=Math.max(w/1500,h/900);
+ const zp=Math.max(w/300,h/400),zd=Math.max(w/PH.w,h/PH.h),zs=Math.max(w/ST.w,h/ST.h);
+ return{carte:{z:zc,cx:PLAN_W/2,cy:PLAN_H/2},depart:{z:zm,cx:CHEMIN[0][0],cy:CHEMIN[0][1]},
+  porte:{z:zp,cx:PORTE.x,cy:PORTE.y},decor:{z:zd,cx:PH.x+PH.w/2,cy:PH.y+PH.h/2},scene:{z:zs,cx:ST.x+ST.w/2,cy:ST.y+ST.h/2},zm};
 }
+/* point du chemin à la fraction u (0..1) de sa longueur */
+const LONG=[0];for(let i=1;i<CHEMIN.length;i++)LONG.push(LONG[i-1]+Math.hypot(CHEMIN[i][0]-CHEMIN[i-1][0],CHEMIN[i][1]-CHEMIN[i-1][1]));
+function surChemin(u){const d=u*LONG[LONG.length-1];let i=1;while(i<CHEMIN.length-1&&LONG[i]<d)i++;const t=(d-LONG[i-1])/(LONG[i]-LONG[i-1]);
+ return{x:CHEMIN[i-1][0]+(CHEMIN[i][0]-CHEMIN[i-1][0])*t,y:CHEMIN[i-1][1]+(CHEMIN[i][1]-CHEMIN[i-1][1])*t};}
+const ease=t=>t<.5?4*t*t*t:1-Math.pow(-2*t+2,3)/2;
+const soft=t=>t*t*(3-2*t);
+function interp(a,b,s){return{z:Math.exp(Math.log(a.z)+(Math.log(b.z)-Math.log(a.z))*s),cx:a.cx+(b.cx-a.cx)*s,cy:a.cy+(b.cy-a.cy)*s};}
+/* p : -2 carte entière, -1 à gauche, 0 devant la roulotte, 1 atelier, 2 petite scène. */
+function cadreAt(p){
+ const k=cadres();let c;const w=theatre.clientWidth,h=theatre.clientHeight;
+ const borne=c=>{const hv=w/(2*c.z),vv=h/(2*c.z);return{z:c.z,cx:Math.min(Math.max(c.cx,hv),PLAN_W-hv),cy:Math.min(Math.max(c.cy,vv),PLAN_H-vv)};};
+ const fin=CHEMIN[CHEMIN.length-1],devant=borne({z:k.zm,cx:fin[0],cy:fin[1]});
+ if(p<-1)c=interp(k.carte,borne(k.depart),soft(p+2));
+ else if(p<0){const pt=surChemin(soft(p+1));c=borne({z:k.zm*(1+0.12*Math.sin((p+1)*Math.PI)),cx:pt.x,cy:pt.y});}
+ else if(p<=1)c=p<0.55?interp(devant,k.porte,ease(p/0.55)):interp(k.porte,k.decor,ease((p-0.55)/0.45));
+ else c=interp(k.decor,k.scene,ease(p-1));
+ return{z:c.z,x:w/2-c.cx*c.z,y:h/2-c.cy*c.z};
+}
+function opAtelier(p){return p<=0.48?0:p>=0.74?1:(p-0.48)/0.26;}
+function opPetite(p){return p<=1.4?0:p>=1.8?1:(p-1.4)/0.4;}
+let pActu=-2,run=0,debut=0,fin=0;
+/* Les pieds suivent le chemin dans le même repère que le paysage, y compris
+   quand le cadrage mobile se resserre. Le premier plan de l'atelier est conservé. */
+function placerPoupif(p,c){
+ const perso=document.getElementById('poupif');
+ if(p>=0.55){perso.style.removeProperty('left');perso.style.removeProperty('bottom');perso.style.removeProperty('transition');if(theatre.clientHeight<350)perso.style.height=Math.round(theatre.clientHeight*.40)+'px';else perso.style.removeProperty('height');return;}
+ const pt=surChemin(soft(Math.max(0,Math.min(1,p+1))));
+ const w=theatre.clientWidth,h=theatre.clientHeight;
+ const u=p>0?soft(Math.min(1,p/0.55)):0;
+ const base=w<=600?Math.min(220,Math.max(130,innerHeight*0.25)):431;
+ const dehors=Math.min(base,h*0.43),ph=dehors+(base-dehors)*u,pw=ph*240/431;
+ perso.style.height=`${ph}px`;
+ let x=c.x+pt.x*c.z-pw*0.5,y=c.y+pt.y*c.z-ph*(420/431);
+ if(p>0){x+=(w*0.19-x)*u;y+=(h-8-ph-y)*u;}
+ perso.style.transition='none';perso.style.left=`${x}px`;perso.style.bottom=`${h-y-ph}px`;
+}
+function rendre(p){theatre.dataset.court=theatre.clientHeight<350?'oui':'non';theatre.style.setProperty('--theatre-h',theatre.clientHeight+'px');const c=cadreAt(p);monde.style.transform=`translate(${c.x}px,${c.y}px) scale(${c.z})`;atelier.style.opacity=opAtelier(p);petite.style.opacity=opPetite(p);placerPoupif(p,c);}
+new ResizeObserver(()=>rendre(pActu)).observe(theatre);rendre(-2);
+window.poupifEtatVisite=()=>({commencee:run>0,position:pActu,scenePrete,projection:projectionEnAttente});
+const sleep=ms=>new Promise(r=>setTimeout(r,ms));
+function marcher(){debut=performance.now();fin=Infinity;}
+function reposer(){fin=performance.now();}
+function dire(t){if(document.body.dataset.vocal==='oui')return Promise.resolve();leg.classList.remove('on');return sleep(t?450:0).then(()=>{if(t){leg.textContent=t;leg.classList.add('on');}});}
+function anim(from,to,D,id){return new Promise(res=>{
+ if(reduced){pActu=to;rendre(to);return res();}
+ monde.style.willChange='transform';const t0=performance.now();
+ (function b(t){if(id!==run)return res();const u=Math.min(1,(t-t0)/D);pActu=from+(to-from)*u;rendre(pActu);
+  if(u<1)requestAnimationFrame(b);else{requestAnimationFrame(()=>{monde.style.willChange='auto';});res();}})(t0);});}
+const images=[...document.images].concat([]);
+const pret=Promise.all(images.map(i=>i.decode?i.decode().catch(()=>{}):0));
+let scenePrete=false,projectionEnAttente='accueil';
+const THEMES={"spectacles":{"titre":"Les spectacles","lien":"spectacles","diapos":[{"id":"du-coup-1","titre":"Du coup on vient chez vous","accroche":"Flo rêve d'entrer dans la troupe. Toto va devoir suivre.","image":"images/Ducoup-on-vien-chez-vous.webp","faits":"Flo passe une audition pour intégrer la troupe sous l'œil de Poupif. Toto tente de canaliser son imagination. Musique, magie et théâtre burlesque.","source":"https://www.recremagic.com/spectacles","texteGuide":"Bienvenue dans la troupe ! Dans Du coup on vient chez vous, Flo rêve de nous rejoindre. Les auditions commencent sous mon œil de directeur... mais avec son imagination débordante, Toto a bien du mal à le canaliser ! Magie, musique, marionnettes et théâtre burlesque se rencontrent dans cette première aventure.","reperes":"1 h. En extérieur avec les roulottes ou sur votre scène en intérieur."},{"id":"du-coup-2","titre":"Du coup on revient chez vous","accroche":"Une tournée joyeuse. Une ancienne malédiction. Un royaume à défendre.","image":"images/Ducoup-on-revient-chez-vous.webp","faits":"Une ancienne malédiction perturbe la tournée de Flo et Toto. Gros Boulard enrôle les créatures du royaume magique pour conquérir le monde.","source":"https://www.recremagic.com/spectacles","texteGuide":"Ah, les revoilà sur les routes ! Dans Du coup on revient chez vous, la tournée de Flo et Toto prend un drôle de tournant : une ancienne malédiction se réveille. Gros Boulard veut conquérir le monde et enrôle les créatures du royaume magique. Nos deux amis réussiront-ils à déjouer ses plans ?","reperes":"1 h. Tout public dès 3 ans. En extérieur avec les roulottes ou sur votre scène en intérieur."},{"id":"du-coup-3","titre":"Du coup 3 - Le royaume magique en péril ?","accroche":"Les êtres du royaume disparaissent. Toto et Flo doivent comprendre pourquoi.","image":"images/Du-coup-3.webp","faits":"Les habitants du royaume disparaissent pendant les numéros de Toto et Flo. Ils doivent résoudre cette énigme. Grand final de la trilogie.","source":"https://www.recremagic.com/spectacles","texteGuide":"Quelque chose ne tourne pas rond dans le royaume ! Pendant les numéros de Toto et Flo, ses habitants disparaissent les uns après les autres. Dans Du coup 3 - Le royaume magique en péril ?, il faut résoudre cette énigme pour sauver le monde imaginaire. C'est le grand final de la trilogie, entre magie, musique, théâtre et marionnettes.","reperes":"Grand final de la série de trois spectacles. Durée et âge minimum non indiqués sur la fiche actuelle : à confirmer avant de les annoncer."},{"id":"roulettes","titre":"Comme sur des roulettes","accroche":"Toto aime l'ordre. Flo préfère y semer un peu de folie.","image":"images/Comme-sur-des-roulette.webp","faits":"Toto partage la scène avec Flo, imprévisible et farceur. Humour, illusion, quiproquos et tendresse.","source":"https://www.recremagic.com/spectacles","texteGuide":"Avec ces deux-là, rien ne roule tout à fait comme prévu ! Dans Comme sur des roulettes, Toto doit partager la scène avec Flo, aussi farceur qu'attachant. Gaffes, illusions, quiproquos et moments de tendresse bousculent son univers bien ordonné. Un duo complice qui embarque petits et grands dans sa drôle de mécanique.","reperes":"55 min. Tout public. Sur votre scène en intérieur ou en extérieur."},{"id":"maboul","titre":"Délicieusement Maboul","accroche":"Un clown haut en couleurs, des gags et de la magie.","image":"images/ybos.webp","faits":"Monsieur YBOS, clown haut en couleurs : gags, magie et surprises dans un spectacle rythmé et joyeux.","source":"https://www.recremagic.com/spectacles","texteGuide":"Je te présente maintenant Monsieur YBOS ! Dans Délicieusement Maboul, ce clown haut en couleurs arrive avec une énergie débordante et son grain de folie. Entre gags et numéros de magie, il entraîne petits et grands dans un tourbillon de rires et de surprises. De quoi découvrir qu'il est bon d'être un peu maboul !","reperes":"1 h. Tout public dès 4 ans. Sur votre scène en intérieur ou en extérieur."}]},"calendrier":{"titre":"Le calendrier","lien":"calendrier","diapos":[{"id":"apercu","titre":"Le calendrier","image":"images/poupif-visite/ecrans-calendrier.webp","faits":"Aperçu figé du calendrier. Aucune disponibilité, date ou place vérifiée en direct. Le lien ouvre le calendrier actuel.","source":"https://www.recremagic.com/calendrier"}]},"caravane":{"titre":"La caravane","lien":"familles","diapos":[{"id":"apercu","titre":"La caravane","image":"images/poupif-visite/ecrans-caravane.webp","faits":"Aperçu figé de la page caravane. Pas de diapositive de détail supplémentaire disponible dans ce thème. Le lien ouvre la page actuelle.","source":"https://www.recremagic.com/familles"}]},"expositions":{"titre":"Les expositions","lien":"expos.html","diapos":[{"id":"marionnettes","titre":"La Féerie des marionnettes","accroche":"Un bouton, et 56 personnages prennent vie.","image":"images/expo-marionnettes.webp","faits":"12 vitrines animées et sonorisées, 56 personnages. Intérieur uniquement. 40 m² minimum, prise 220 V par vitrine, installation annoncée de 2 h.","texteGuide":"Approche... ici, c'est le public qui réveille les personnages ! La Féerie des marionnettes réunit douze vitrines animées et sonorisées. On appuie sur un bouton, et cinquante-six personnages prennent vie. Une exposition à installer en intérieur pour ouvrir une fenêtre sur notre imaginaire.","source":"https://www.recremagic.com/expos.html"},{"id":"geants","titre":"Les Géants du Carnaval","accroche":"Douze géants animés. En intérieur ou extérieur couvert.","image":"images/expo-geants.webp","faits":"12 personnages géants de 2 à 3 m. Intérieur ou extérieur couvert. 40 m² minimum. Installation annoncée de 2 h. Besoins électriques selon configuration.","texteGuide":"Ceux-là, difficile de les manquer ! Les Géants du Carnaval, ce sont douze personnages de deux à trois mètres qui s'animent et suivent les visiteurs du regard. On les accueille en intérieur ou dans un extérieur couvert. Pour les conditions d'installation, on regarde le lieu avec la troupe.","source":"https://www.recremagic.com/expos.html"}]},"sejours":{"titre":"Les séjours artistiques","lien":"stages.html","diapos":[{"id":"apprendre","titre":"Venir apprendre","accroche":"Créer avec la troupe, même quand on débute.","image":"images/Super-photo4.webp","faits":"Stages guidés ouverts aux novices. Apprentissage en créant : marionnettes, décors, sons, lumières. Dates à venir. Tarifs et inscriptions à préciser directement.","texteGuide":"Et si, cette fois, tu passais de l'autre côté du décor ? Avec nos stages, on apprend en fabriquant : marionnettes, décors, sons ou lumières. Pas besoin d'être déjà artiste, la troupe guide les premiers pas. Les prochaines dates et les modalités sont à préciser directement avec nous.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir apprendre · photo"},{"id":"apprendre-texte","titre":"Venir apprendre","accroche":"Créer avec la troupe, même quand on débute.","image":"images/Super-photo4.webp","faits":"Stages guidés ouverts aux novices. Apprentissage en créant : marionnettes, décors, sons, lumières. Dates à venir. Tarifs et inscriptions à préciser directement.","texteGuide":"Et si, cette fois, tu passais de l'autre côté du décor ? Avec nos stages, on apprend en fabriquant : marionnettes, décors, sons ou lumières. Pas besoin d'être déjà artiste, la troupe guide les premiers pas. Les prochaines dates et les modalités sont à préciser directement avec nous.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir apprendre · texte","format":"texte"},{"id":"creer","titre":"Venir créer","accroche":"Votre projet au cœur du séjour.","image":"images/2-roulottes-nuit-vergnet.webp","faits":"Résidence autour du projet du visiteur : regard artistique, accompagnement ponctuel ou lieu et quotidien pris en charge. Modalités à convenir. Pas de dates ni tarifs annoncés.","texteGuide":"Tu as déjà une idée qui te trotte dans la tête ? Ici, tu peux venir avec ton propre projet. Un regard artistique, un coup de main ponctuel, ou simplement le lieu et le quotidien pris en charge : le séjour se construit autour de ta création. On en parle avec la troupe pour trouver la bonne forme.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir créer · photo"},{"id":"creer-texte","titre":"Venir créer","accroche":"Votre projet au cœur du séjour.","image":"images/2-roulottes-nuit-vergnet.webp","faits":"Résidence autour du projet du visiteur : regard artistique, accompagnement ponctuel ou lieu et quotidien pris en charge. Modalités à convenir. Pas de dates ni tarifs annoncés.","texteGuide":"Tu as déjà une idée qui te trotte dans la tête ? Ici, tu peux venir avec ton propre projet. Un regard artistique, un coup de main ponctuel, ou simplement le lieu et le quotidien pris en charge : le séjour se construit autour de ta création. On en parle avec la troupe pour trouver la bonne forme.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir créer · texte","format":"texte"},{"id":"enfants","titre":"Séjours enfants : en préparation","accroche":"Une jeune troupe, un séjour, un spectacle à inventer.","image":"images/Super-photo5.webp","faits":"Projet en préparation, pas une session ouverte ou réservable annoncée. Apprendre au fil du séjour puis monter un spectacle. Âges, dates, tarifs et encadrement non détaillés sur la page.","texteGuide":"Une autre aventure se prépare pour les jeunes troupes : apprendre ensemble au fil d'un séjour, puis monter un spectacle à jouer à la fin. Ce projet est encore en préparation. Je peux te raconter l'idée, mais je n'ai pas de date ni de place à te promettre.","source":"https://www.recremagic.com/stages.html","menuTitre":"Séjours enfants · photo"},{"id":"enfants-texte","titre":"Séjours enfants : en préparation","accroche":"Une jeune troupe, un séjour, un spectacle à inventer.","image":"images/Super-photo5.webp","faits":"Projet en préparation, pas une session ouverte ou réservable annoncée. Apprendre au fil du séjour puis monter un spectacle. Âges, dates, tarifs et encadrement non détaillés sur la page.","texteGuide":"Une autre aventure se prépare pour les jeunes troupes : apprendre ensemble au fil d'un séjour, puis monter un spectacle à jouer à la fin. Ce projet est encore en préparation. Je peux te raconter l'idée, mais je n'ai pas de date ni de place à te promettre.","source":"https://www.recremagic.com/stages.html","menuTitre":"Séjours enfants · texte","format":"texte"}]},"ecrin":{"titre":"L'Écrin Récré Magic","lien":"ecrin","diapos":[{"id":"lieu","titre":"L'Écrin Récré Magic","accroche":"Créer, séjourner, partager dans un lieu habité par le spectacle.","image":"images/2-ecrin-roulotte-allee.webp","faits":"Résidence d'artistes et séjour en roulotte. 6 personnes : 2 lits doubles et 2 lits simples. Restauration possible selon modalités avec Thomas. Conditions, tarifs et disponibilités directement avec la troupe.","texteGuide":"Bienvenue à L'Écrin ! Des roulottes de caractère, des décors nourris de cirque et le plaisir de prendre un autre rythme. On peut y séjourner ou venir créer en résidence. Pour préparer ton accueil, les tarifs et les disponibilités, c'est avec la troupe qu'on construit la suite.","source":"https://www.recremagic.com/ecrin"}]}};
+let diapoEnAttente=null;
+function contexte(texte){window.poupifConversation?.sendContextualUpdate('ouverture-scene : '+texte);}
+let changementEcran=0,ecranAnime=null,gesteDebut=-Infinity;
+function annulerEcran(){changementEcran++;ecranAnime?.cancel();ecranAnime=null;gesteDebut=-Infinity;}
+function etatPresentation(avecCatalogue=true){
+ const cadre=document.getElementById('ecran'),theme=cadre.hidden?null:cadre.dataset.etape,diapo=theme&&THEMES[theme]?.diapos.find(d=>d.id===cadre.dataset.diapo);
+ return {regie:'themes-v1',scenePrete,affiche:diapo?{theme,diapo:diapo.id,titre:diapo.titre,faits:diapo.faits,texteGuide:diapo.texteGuide,reperes:diapo.reperes,source:diapo.source,format:diapo.format||'photo'}:null,demande:{theme:projectionEnAttente,diapo:diapoEnAttente},transition:!!ecranAnime,catalogue:avecCatalogue?Object.entries(THEMES).map(([id,t])=>({theme:id,titre:t.titre,diapos:t.diapos.map(d=>({id:d.id,titre:d.titre,faits:d.faits}))})):undefined,limites:'Aperçus non temps réel. Aucun tarif, date, place ou disponibilité vérifiés. Ne pas inventer de diapos ou de détails absents.'};
+}
+function notifierPresentation(avecCatalogue=false){contexte('regie-themes-v1 '+JSON.stringify(etatPresentation(avecCatalogue))+'. État technique, pas une demande de parler automatiquement.');}
+function actualiserMenu(theme,diapo){
+ const t=THEMES[theme],detail=!!t;
+ document.getElementById('themesNav').hidden=detail;
+ document.getElementById('menuEntete').hidden=!detail;
+ document.getElementById('menuTheme').textContent=t?.titre||'';
+ document.getElementById('presentationInfos').hidden=!detail;
+ document.getElementById('presentationInfos').dataset.theme=theme;
+ document.getElementById('presentationInfos').dataset.diapo=diapo?.id||'';
+ const liste=document.getElementById('choixDiapos');liste.replaceChildren();liste.hidden=!t||t.diapos.length<2;
+ if(t)for(const [i,d]of t.diapos.entries()){
+  const b=document.createElement('button');b.type='button';b.textContent=d.menuTitre||(t.diapos.length>3?String(i+1)+' · '+d.titre:d.titre);b.setAttribute('aria-pressed',String(d.id===diapo?.id));b.addEventListener('click',()=>projeter(theme,d.id));liste.append(b);
+ }
+ requestAnimationFrame(()=>{const actif=liste.querySelector('[aria-pressed="true"]');if(actif)liste.scrollLeft=Math.max(0,actif.offsetLeft-liste.offsetLeft-8);});
+ if(t&&diapo){document.getElementById('diapoTitre').textContent=diapo.titre;document.getElementById('diapoAccroche').textContent=diapo.accroche||diapo.faits;}
+}
+async function projeter(etape,diapoId){
+ if(etape!=='accueil'&&!THEMES[etape])return {ok:false,erreur:'Thème inconnu.',etat:etatPresentation()};
+ const t=THEMES[etape],d=t?.diapos.find(d=>d.id===(diapoId||t.diapos[0].id));
+ if(t&&!d)return {ok:false,erreur:'Diapositive inconnue dans ce thème.',etat:etatPresentation()};
+ projectionEnAttente=etape;diapoEnAttente=d?.id||null;
+ if(!scenePrete)return {ok:true,statut:'en_attente',message:'Trajet en cours ; ne pas annoncer un affichage déjà visible.',etat:etatPresentation()};
+ const cadre=document.getElementById('ecran'),invitation=document.getElementById('invitation');
+ annulerEcran();const id=changementEcran;
+ if(cadre.dataset.etape===etape&&cadre.dataset.diapo===d?.id&&!cadre.hidden){actualiserMenu(etape,d);return {ok:true,statut:'deja_affiche',etat:etatPresentation()};}
+ let image;
+ if(d&&d.format!=='texte'){image=new Image();image.src=d.image;try{await image.decode();}catch{if(id===changementEcran){projectionEnAttente=cadre.hidden?'accueil':cadre.dataset.etape;diapoEnAttente=cadre.dataset.diapo||null;notifierPresentation();}return {ok:false,erreur:'Image non chargée. Affichage précédent conservé.',etat:etatPresentation()};}}
+ if(id!==changementEcran||!scenePrete)return {ok:false,statut:'remplacee',etat:etatPresentation()};
+ const memeTheme=!cadre.hidden&&cadre.dataset.etape===etape;
+ const animer=async(images,duree)=>{const animation=cadre.animate(images,{duration:duree,easing:'cubic-bezier(.4,0,.2,1)',fill:'both'});ecranAnime=animation;try{await animation.finished;}catch{}if(id===changementEcran){animation.cancel();ecranAnime=null;}};
+ if(!memeTheme&&!reduced&&(d||!cadre.hidden)){gesteDebut=performance.now();invitation.hidden=true;}
+ if(!memeTheme&&!cadre.hidden&&!reduced)await animer([{transform:'translateX(0) rotate(0)',opacity:1},{transform:'translateX(-115vw) rotate(-8deg)',opacity:0}],480);
+ if(id!==changementEcran||!scenePrete)return {ok:false,statut:'remplacee',etat:etatPresentation()};
+ if(!d){actualiserMenu('accueil');cadre.hidden=true;delete cadre.dataset.etape;delete cadre.dataset.diapo;invitation.hidden=false;notifierPresentation();return {ok:true,statut:'chateau',etat:etatPresentation()};}
+ invitation.hidden=true;
+ cadre.dataset.format=['expositions','sejours','ecrin'].includes(etape)?'paysage':'affiche';
+ const detail=!['calendrier','caravane'].includes(etape);document.getElementById('ecranImage').hidden=detail;document.getElementById('diapoSpectacle').hidden=!detail||d.format==='texte';document.getElementById('diapoLecture').hidden=d.format!=='texte';document.getElementById('lectureTitre').textContent=d.titre;document.getElementById('lectureTexte').textContent=d.texteGuide||'';cadre.dataset.contenu=d.format||'photo';
+ const img=document.getElementById(detail?'diapoImage':'ecranImage');img.src=image?.src||d.image;img.alt=detail?(etape==='spectacles'?'Affiche : ':'Visuel : ')+d.titre:'Aperçu du site : '+d.titre;
+ if(detail){document.getElementById('diapoTitre').textContent=d.titre;document.getElementById('diapoAccroche').textContent=d.accroche;}
+ document.getElementById('ecranTitre').textContent=t.titre;document.getElementById('ecranLien').href=t.lien;cadre.dataset.etape=etape;cadre.dataset.diapo=d.id;cadre.hidden=false;actualiserMenu(etape,d);
+ if(!memeTheme&&!reduced)await animer([{transform:'translateX(115vw) rotate(8deg)',opacity:0},{transform:'translateX(0) rotate(0)',opacity:1}],650);
+ if(id!==changementEcran||!scenePrete)return {ok:false,statut:'remplacee',etat:etatPresentation()};
+ notifierPresentation();return {ok:true,statut:'affiche',etat:etatPresentation()};
+}
+async function piloterPresentation(p={}){
+ p=p||{};const action=p.action||'etat';if(action==='etat')return {ok:true,etat:etatPresentation()};
+ if(action==='afficher')return projeter(p.theme,p.diapo);
+ if(action!=='suivant'&&action!=='precedent')return {ok:false,erreur:'Action inconnue.',etat:etatPresentation()};
+ const theme=p.theme||projectionEnAttente,t=THEMES[theme];
+ if(!t)return {ok:false,erreur:'Aucun thème ouvert. Choisir un thème.',etat:etatPresentation()};
+ const i=t.diapos.findIndex(d=>d.id===diapoEnAttente),n=i+(action==='suivant'?1:-1);
+ if(i<0||n<0||n>=t.diapos.length)return {ok:false,erreur:'Limite du thème atteinte. Ne pas changer de thème automatiquement.',etat:etatPresentation()};
+ return projeter(theme,t.diapos[n].id);
+}
+window.poupifOutilMontrerEtape=params=>projeter(params?.etape);
+window.poupifOutilPresentation=piloterPresentation;
+window.poupifEtatPresentation=etatPresentation;window.poupifNotifierPresentation=notifierPresentation;
+window.poupifProjection=projeter;
+document.querySelectorAll('[data-ecran]').forEach(b=>b.addEventListener('click',()=>projeter(b.dataset.ecran)));
+document.getElementById('retourThemes').addEventListener('click',()=>{document.getElementById('themesNav').hidden=false;document.getElementById('menuEntete').hidden=true;document.getElementById('choixDiapos').hidden=true;document.getElementById('presentationInfos').hidden=true;});
 
-        ::-webkit-scrollbar { width: 12px; }
-        ::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.2); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: linear-gradient(135deg, var(--rose-spectacle), var(--vert-caravane)); border-radius: 10px; }
-        ::-webkit-scrollbar-thumb:hover { background: linear-gradient(135deg, var(--vert-caravane), var(--rose-spectacle)); }
 
-        body {
-            font-family: 'Quicksand', sans-serif;
-            background: #2F3B52;
-            min-height: 100vh;
-            min-height: 100dvh;
-            position: relative;
-            overflow: hidden;
-        }
+function ouvrirScene(){scenePrete=true;repere.textContent='La petite scène';repere.hidden=true;if(document.body.dataset.vocal!=='oui')leg.classList.remove('on');document.getElementById('ecranNav').hidden=false;projeter(projectionEnAttente,diapoEnAttente);contexte('Scène prête, arrivée devant le château. Les thèmes présents dans le catalogue de la régie peuvent maintenant apparaître.');}
+async function jouer(){
+ annulerEcran();
+ scenePrete=false;projectionEnAttente='accueil';diapoEnAttente=null;document.getElementById('invitation').hidden=true;document.getElementById('ecran').hidden=true;document.getElementById('ecranNav').hidden=true;
+ document.getElementById('muet').hidden=true;contexte('Début du trajet peint vers la roulotte. Tu peux parler au visiteur pendant que tu marches.');
+ repere.hidden=false;const id=++run;const ok=()=>id===run;
+ rejouerBtn.hidden=true;lueur.classList.remove('on');petite.classList.remove('allume');leg.classList.remove('on');
+ document.body.dataset.scene='entree';pActu=-2;rendre(-2);repere.textContent='Ouverture';reposer();
+ await pret;await sleep(500);if(!ok())return;
+ if(reduced){pActu=2;rendre(2);document.body.dataset.scene='caravane';lueur.classList.add('on');petite.classList.add('allume');await dire('Le château s\'allume. Monsieur Poupif vous attend.');rejouerBtn.hidden=false;ouvrirScene();return;}
+ document.body.dataset.scene='carte';marcher();
+ dire('Voici Récrémagic, la nuit.');
+ await anim(-2,-1,2800,id);if(!ok())return;
+ dire('Poupif connaît le chemin.');
+ await anim(-1,0,6200,id);if(!ok())return;
+ reposer();await dire('Là. La petite roulotte, lumière allumée.');await sleep(2600);if(!ok())return;
+ await dire('Il frappe. Personne ne répond… il entre.');await sleep(1400);if(!ok())return;
+ document.body.dataset.scene='caravane';marcher();repere.textContent='Dans la roulotte';
+ await anim(0,1,4600,id);if(!ok())return;
+ reposer();contexte('Nous sommes dans l’atelier. La petite scène est encore au fond.');repere.textContent="L'atelier";await dire('Plus grand dedans que dehors.');await sleep(3200);if(!ok())return;
+ await dire('Au fond, une toute petite scène.');await sleep(1700);if(!ok())return;
+ marcher();await anim(1,2,4200,id);if(!ok())return;
+ reposer();repere.textContent='La petite scène';await sleep(900);if(!ok())return;
+ lueur.classList.add('on');petite.classList.add('allume');await dire('Chut… le château s\'allume.');await sleep(3600);if(!ok())return;
+ await dire('Monsieur Poupif vous attend.');await sleep(2600);if(!ok())return;
+ rejouerBtn.hidden=false;ouvrirScene();
+}
+rejouerBtn.addEventListener('click',jouer);window.poupifJouer=jouer;document.getElementById('muet').addEventListener('click',jouer);
+const canvas=document.getElementById('poupif'),ctx=canvas.getContext('2d'),marche=new Image(),salut=new Image();
+marche.src='images/poupif-visite/poupif-marche.webp';salut.src='images/poupif-visite/poupif-salut-face.webp';
+debut=performance.now();fin=performance.now();let dernier=-1,dernierePlanche='';
+function dessin(t){
+ const bouge=t<fin&&!reduced;const img=bouge?marche:salut;
+ let n=bouge?Math.floor((t-debut)/1000*24)%24:(reduced?0:Math.min(95,Math.floor(Math.max(0,t-fin)/1000*12)));
+ // Geste de présentation : retour du chapeau, main levée, puis retour à la pose.
+ const geste=(t-gesteDebut)/1000;
+ if(!bouge&&!reduced&&geste>=0&&geste<1.45){n=geste<.55?Math.round(95-71*geste/.55):geste<.85?Math.round(24+12*(geste-.55)/.30):Math.round(36+59*(geste-.85)/.60);}
+ const cols=bouge?6:10,ident=bouge?'marche':'salut';
+ if(img.complete&&img.naturalWidth&&(n!==dernier||ident!==dernierePlanche)){
+  ctx.clearRect(0,0,240,431);ctx.save();if(bouge){ctx.translate(240,0);ctx.scale(-1,1);}ctx.drawImage(img,(n%cols)*240,Math.floor(n/cols)*431,240,431,0,0,240,431);ctx.restore();dernier=n;dernierePlanche=ident;
+ }
+ requestAnimationFrame(dessin);
+}
+requestAnimationFrame(dessin);
 
-        /* ========== NAVBAR ========== */
-        .navbar {
-            position: fixed;
-            top: 0; left: 0; width: 100%;
-            background: rgba(0, 0, 0, 0.35);
-            backdrop-filter: blur(10px);
-            z-index: 1000;
-            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-            height: 55px;
-        }
-        .navbar-container {
-            width: 100%;
-            height: 100%;
-            padding: 0 1.2rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            flex-wrap: nowrap;
-        }
-        .nav-left-group {
-            display: flex;
-            align-items: center;
-            gap: 0.6rem;
-            flex-shrink: 0;
-            z-index: 2;
-        }
-        .logo-wrapper {
-            text-decoration: none;
-            transition: all 0.25s ease;
-            line-height: 0;
-        }
-        .logo-wrapper img {
-            height: 120px;
-            transition: transform 0.25s;
-            filter: drop-shadow(0 4px 12px rgba(0,0,0,0.8));
-            margin-top: 60px;
-        }
-        .logo-wrapper:hover img {
-            transform: scale(1.08);
-            filter: drop-shadow(0 6px 18px rgba(0,0,0,0.9));
-        }
-        .back-arrow {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2);
-            color: white;
-            font-size: 1.1rem;
-            text-decoration: none;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            flex-shrink: 0;
-        }
-        .back-arrow:hover {
-            background: rgba(255,255,255,0.2);
-            border-color: #FFB300;
-            color: #FFB300;
-            box-shadow: 0 0 12px rgba(255,179,0,0.3);
-        }
-        .nav-icons {
-            display: flex;
-            gap: 1.2rem;
-            align-items: center;
-            flex-shrink: 0;
-            flex-wrap: nowrap;
-            z-index: 2;
-        }
-        .icon-wrapper {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.1rem;
-            text-decoration: none;
-            transition: all 0.2s ease;
-        }
-        .nav-icon-img {
-            height: 32px;
-            width: auto;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.6));
-            transition: transform 0.2s;
-        }
-        .icon-wrapper:hover .nav-icon-img {
-            transform: scale(1.15);
-        }
-        .icon-wrapper .icon-label {
-            font-size: 0.6rem;
-            font-weight: 700;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: rgba(255,255,255,0.7);
-            transition: color 0.2s;
-            white-space: nowrap;
-        }
-        .icon-wrapper:hover .icon-label { color: #FFB300; }
-
-        /* ========== LE DESSIN EST LA PAGE ========== */
-        .visite-viewport {
-            position: fixed;
-            inset: 0;
-            z-index: 1;
-            overflow: hidden;
-            background: #2F3B52; /* même bleu nuit que le papier du dessin */
-        }
-        .visite-stage {
-            position: absolute;
-            top: 0; left: 0;
-            width: 4328px;
-            height: 1772px;
-            transform-origin: 0 0;
-            transition: transform 1.6s cubic-bezier(0.45, 0.05, 0.35, 1);
-        }
-        .visite-stage img {
-            width: 4328px;
-            height: 1772px;
-            display: block;
-            pointer-events: none;
-            user-select: none;
-            -webkit-user-drag: none;
-        }
-        /* Projecteur : assombrit le reste du plan pendant une étape */
-        .visite-spot {
-            position: absolute;
-            border-radius: 40px;
-            box-shadow: 0 0 0 9999px rgba(16, 22, 34, 0.66);
-            opacity: 0;
-            pointer-events: none;
-            transition: left 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
-                        top 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
-                        width 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
-                        height 1.6s cubic-bezier(0.45, 0.05, 0.35, 1),
-                        opacity 0.9s ease;
-        }
-
-        /* Textes flottant sur le dessin */
-        .poupif-entete {
-            position: fixed;
-            top: 66px; /* sous la navbar et son logo */
-            left: 50%;
-            transform: translateX(-50%);
-            z-index: 10;
-            text-align: center;
-            background: rgba(242, 228, 196, 0.94);
-            border: 2px solid #7a5c3e;
-            border-radius: 18px;
-            padding: 0.4rem 0.95rem;
-            width: 620px;
-            max-width: calc(100vw - 24px);
-            box-shadow: 0 6px 16px rgba(0, 0, 0, 0.25);
-        }
-        .poupif-title {
-            display: inline;
-            font-family: 'MedievalSharp', cursive;
-            font-size: 1.1rem;
-            font-weight: 800;
-            color: #2C1810;
-            letter-spacing: 1px;
-            text-shadow: 2px 2px 0px rgba(0,0,0,0.15);
-        }
-        .poupif-indice {
-            display: inline;
-            font-size: 0.78rem;
-            color: #5a3e2a;
-            font-weight: 600;
-            line-height: 1.35;
-        }
-        .poupif-precision {
-            font-size: 0.62rem;
-            color: #5a3e2a;
-            font-style: italic;
-            line-height: 1.35;
-            margin-top: 0.15rem;
-        }
-        .lien-accueil {
-            color: #5a3e2a;
-            font-weight: 700;
-            font-style: normal;
-            text-decoration: none;
-            border-bottom: 2px solid #7a5c3e;
-            padding-bottom: 1px;
-            white-space: nowrap;
-            transition: color 0.2s, border-color 0.2s;
-        }
-        .lien-accueil:hover { color: #D32F2F; border-color: #D32F2F; }
-
-        /* Lien vers la vraie page de l'étape, flottant sur le dessin */
-        .visite-lien {
-            position: fixed;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%);
-            z-index: 10;
-            display: inline-block;
-            background: linear-gradient(135deg, #D32F2F, #EC407A);
-            color: white;
-            padding: 0.7rem 1.5rem;
-            border-radius: 50px;
-            text-decoration: none;
-            font-weight: bold;
-            font-size: 1rem;
-            white-space: nowrap;
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
-            transition: transform 0.2s, box-shadow 0.2s;
-        }
-        .visite-lien:hover {
-            transform: translateX(-50%) translateY(-3px);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.4);
-        }
-        .visite-lien.cache { display: none; }
-
-        /* Panneau affiche quand le service de conversation est injoignable
-           (script bloque, panne ElevenLabs, reseau coupe). Il remplace le widget
-           a sa place, en bas a droite, pour ne jamais laisser une page morte. */
-        .poupif-indispo {
-            position: fixed; right: 32px; bottom: 32px; z-index: 1000;
-            width: min(340px, calc(100vw - 40px));
-            background: #FDF6E3; color: var(--text-dark);
-            border: 3px solid var(--jaune-accent); border-radius: 20px;
-            padding: 1rem 1.15rem; box-shadow: 0 10px 32px rgba(0,0,0,.35);
-            font-family: 'Quicksand', sans-serif; font-size: .92rem; line-height: 1.45;
-        }
-        .poupif-indispo[hidden] { display: none; }
-        .poupif-indispo strong { display: block; margin-bottom: .5rem; font-family: 'Fredoka', sans-serif; font-size: 1.02rem; }
-        .poupif-indispo p { margin: 0 0 .55rem; }
-        .poupif-indispo p:last-child { margin-bottom: 0; }
-        .poupif-indispo a { color: #8A4B12; font-weight: 700; }
-        @media (max-width: 600px) {
-            .poupif-indispo { right: 12px; bottom: 12px; left: 12px; width: auto; }
-        }
-
-        @media (max-width: 600px) {
-            .navbar { height: 48px; }
-            .navbar-container { padding: 0 0.8rem; }
-            .nav-left-group { gap: 0.4rem; }
-            .logo-wrapper img { height: 80px; margin-top: 30px; }
-            .back-arrow { width: 32px; height: 32px; font-size: 1rem; }
-            .nav-icon-img { height: 26px; }
-            .icon-wrapper .icon-label { font-size: 0.5rem; }
-            .nav-icons { gap: 0.7rem; }
-            .poupif-entete {
-                top: 118px; /* sous l'emprise réelle du logo, qui déborde de la navbar */
-                padding: 0.3rem 0.7rem;
-                border-radius: 14px;
-            }
-            .poupif-title { font-size: 0.95rem; }
-            .poupif-indice { font-size: 0.66rem; line-height: 1.25; }
-            .poupif-precision { font-size: 0.54rem; line-height: 1.25; margin-top: 0.08rem; }
-            .visite-lien {
-                font-size: 0.85rem;
-                padding: 0.55rem 1.1rem;
-                bottom: 135px; /* au-dessus de la carte du widget de conversation */
-            }
-        }
-
-        /* ========== BOUTON « PARLER A POUPIF » (propre au site) ========== */
-        .poupif-parler {
-            position: fixed; right: 18px; bottom: 18px; z-index: 60;
-            display: flex; align-items: center; gap: 10px;
-        }
-        .poupif-parler-btn {
-            font-family: 'Fredoka', sans-serif; font-size: 1.05rem; font-weight: 600;
-            padding: 12px 24px; border: 2px solid #7a5c3e; border-radius: 999px; cursor: pointer;
-            background: rgba(242, 228, 196, 0.96); color: #2C1810;
-            box-shadow: 0 6px 18px rgba(0,0,0,.35); transition: transform .2s, box-shadow .2s;
-        }
-        .poupif-parler-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0,0,0,.4); }
-        .poupif-parler-btn:disabled { opacity: .65; cursor: default; transform: none; }
-        .poupif-parler-btn.en-appel {
-            background: linear-gradient(135deg, #D32F2F, #EC407A); color: #fff; border-color: transparent;
-        }
-        .poupif-parler-etat {
-            font-family: 'Quicksand', sans-serif; font-size: .85rem; font-weight: 600;
-            background: rgba(242, 228, 196, 0.94); color: #2C1810;
-            padding: 6px 12px; border-radius: 999px; border: 1px solid #7a5c3e;
-        }
-        .cache { display: none !important; }
-
-        /* ========== NOTICE PRE-APPEL (seul endroit nommant ElevenLabs) ========== */
-        .poupif-notice {
-            position: fixed; inset: 0; z-index: 70;
-            background: rgba(15,20,32,.55); display: flex; align-items: center; justify-content: center; padding: 20px;
-        }
-        .poupif-notice-carte {
-            max-width: 420px; background: #F7EAD3; color: #2C1810;
-            border: 2px solid #7a5c3e; border-radius: 18px; padding: 22px 24px;
-            font-family: 'Quicksand', sans-serif; line-height: 1.5; box-shadow: 0 16px 48px rgba(0,0,0,.5);
-        }
-        .poupif-notice-carte h2 { font-family: 'Fredoka', sans-serif; margin: 0 0 10px; font-size: 1.25rem; }
-        .poupif-notice-carte p { margin: 0 0 8px; }
-        .poupif-notice-mention { font-size: .8rem; opacity: .75; margin-top: 12px; } /* petit mais lisible */
-        .poupif-notice-actions { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
-        .poupif-notice-annuler {
-            background: none; border: 1px solid #2C1810; border-radius: 999px;
-            padding: 10px 18px; font-family: 'Quicksand', sans-serif; cursor: pointer; color: #2C1810;
-        }
-
-        /* ========== PERSONNAGE QUI SE PROMENE ========== */
-        .poupif-perso {
-            position: fixed; bottom: 6px; left: 0; z-index: 5;
-            pointer-events: none; /* ne bloque jamais les liens ni le dessin */
-        }
-        .poupif-perso.cache { display: none !important; }
-
-        @media (max-width: 600px) {
-            .poupif-parler { right: 12px; bottom: 12px; gap: 8px; }
-            .poupif-parler-btn { font-size: 0.95rem; padding: 10px 18px; }
-            .poupif-parler-etat { font-size: .75rem; padding: 5px 10px; }
-        }
-    </style>
-</head>
-<body>
-
-<nav class="navbar">
-    <div class="navbar-container">
-        <div class="nav-left-group">
-            <a href="index.html" class="logo-wrapper">
-                <img src="images/logo.webp" alt="Récré Magic">
-            </a>
-            <div class="back-arrow" onclick="history.back()" title="Retour">←</div>
-        </div>
-
-        <div class="nav-icons">
-            <a href="calendrier.html" class="icon-wrapper">
-    <img src="images/icone-calendrier.webp" alt="Calendrier" class="nav-icon-img">
-    <span class="icon-label">Calendrier</span>
-</a>
-            <a href="boutique.html" class="icon-wrapper">
-                <img src="images/icone-boutique.webp" alt="Boutique" class="nav-icon-img">
-                <span class="icon-label">Boutique</span>
-            </a>
-            <a href="Abonnement.html" class="icon-wrapper">
-                <img src="images/icone-abonnement.webp" alt="Abonnement" class="nav-icon-img">
-                <span class="icon-label">Abonnement</span>
-            </a>
-        </div>
-    </div>
-</nav>
-
-<div class="visite-viewport" id="visiteViewport">
-    <div class="visite-stage" id="visiteStage">
-        <img src="images/poupif-visite/visite-poupif.svg?v=388d98c" alt="Plan dessiné de la visite : les spectacles, le calendrier et la caravane du site Récré Magic">
-        <div class="visite-spot" id="visiteSpot" aria-hidden="true"></div>
-    </div>
-</div>
-
-<header class="poupif-entete">
-    <div class="ligne-intro">
-        <h1 class="poupif-title">Monsieur Poupif</h1>
-        <p class="poupif-indice">- Le directeur de la troupe vous reçoit : parlez-lui en bas à droite, il déplace le dessin pour vous montrer spectacles, calendrier et caravane.</p>
-    </div>
-    <p class="poupif-precision">Conversation générée par une IA qui incarne Monsieur Poupif ; le micro ne s'active que si vous lancez la conversation. <a href="index.html" class="lien-accueil">← Retour à l'accueil</a></p>
-</header>
-
-<a id="visiteLien" class="visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
-
-<!-- Filet de securite : affiche seulement si le widget de conversation ne charge pas. -->
-<div class="poupif-indispo" id="poupifIndispo" hidden role="alert">
-    <strong>Le directeur est momentanément indisponible</strong>
-    <p>Monsieur Poupif ne peut pas recevoir de visite pour l'instant — le service de conversation est injoignable. Ce n'est pas vous.</p>
-    <p>En attendant, <a href="Devis.html">demandez un devis</a> ou <a href="index.html">revenez à l'accueil</a>.</p>
-</div>
-
-<!-- Personnage anime qui se promene sur la page (decoratif, non interactif) -->
-<canvas id="poupifPerso" class="poupif-perso cache" aria-hidden="true"></canvas>
-
-<!-- Bouton de conversation propre au site (aucun habillage ElevenLabs) -->
-<div id="poupifParler" class="poupif-parler">
-    <span id="poupifParlerEtat" class="poupif-parler-etat cache" role="status" aria-live="polite"></span>
-    <button type="button" id="poupifParlerBtn" class="poupif-parler-btn">Parler à Poupif</button>
-</div>
-
-<!-- Notice pre-appel : seul endroit ou ElevenLabs est nomme (petit mais lisible) -->
-<div id="poupifNotice" class="poupif-notice cache" role="dialog" aria-modal="true" aria-labelledby="poupifNoticeTitre">
-    <div class="poupif-notice-carte">
-        <h2 id="poupifNoticeTitre">Avant de parler à Poupif</h2>
-        <p>
-            Poupif est un personnage incarné par une IA, pas un humain.
-            Le micro n'est actif que pendant l'appel.
-            La conversation est enregistrée (voix et texte).
-        </p>
-        <p class="poupif-notice-mention">
-            Voix et texte de la conversation traités par ElevenLabs et ses prestataires.
-        </p>
-        <div class="poupif-notice-actions">
-            <button type="button" id="poupifNoticeGo" class="poupif-parler-btn">Commencer la conversation</button>
-            <button type="button" id="poupifNoticeStop" class="poupif-notice-annuler">Annuler</button>
-        </div>
-    </div>
-</div>
-
-<script>
-/* Surveillance du service de conversation (SDK charge en module).
-   Trois cas ou l'on affiche le panneau "indisponible" plutot qu'une page muette :
-   - le module SDK ElevenLabs ne charge pas (bloqueur, panne, reseau) ;
-   - il charge mais n'a pas signale sa disponibilite sous 12 s ;
-   - le navigateur a le micro refuse, donc la visite vocale est impossible. */
-(function () {
-    var panneau = document.getElementById('poupifIndispo');
-    var bouton = document.getElementById('poupifParler');
-    var affiche = false;
-
-    function montrerIndisponible() {
-        if (affiche || !panneau) return;
-        affiche = true;
-        panneau.hidden = false;
-        if (bouton) bouton.classList.add('cache');
-    }
-    window.poupifMontrerIndispo = montrerIndisponible;
-
-    var debut = Date.now();
-    (function surveiller() {
-        if (window.poupifSDKEchec) { montrerIndisponible(); return; }
-        if (window.poupifSDKPret) return; /* charge : on s'arrete la */
-        if (Date.now() - debut > 12000) { montrerIndisponible(); return; }
-        setTimeout(surveiller, 500);
-    })();
-
-    if (navigator.permissions && navigator.permissions.query) {
-        navigator.permissions.query({ name: 'microphone' }).then(function (etat) {
-            if (etat.state === 'denied') montrerIndisponible();
-            etat.onchange = function () { if (etat.state === 'denied') montrerIndisponible(); };
-        }).catch(function () { /* API indisponible : on ne bloque rien */ });
-    }
+document.getElementById('paysage').addEventListener('error',()=>document.getElementById('erreur').hidden=false);
+const dbg=parseFloat(new URLSearchParams(location.search).get('t'));
+if(!isNaN(dbg)){run++;pActu=Math.min(2,Math.max(-2,dbg));rendre(pActu);document.body.dataset.scene=pActu<=0?'carte':'caravane';if(pActu>=2){lueur.classList.add('on');ouvrirScene();}fin=performance.now();}
+else {reposer();document.body.dataset.scene='carte';rendre(-2);}
 })();
 </script>
-
-
-<script>
-(function () {
-    var ETAPES = {
-        accueil:    { cx: 2164, cy: 886,  w: 4360, h: 1810 },
-        spectacles: { cx: 664,  cy: 781,  w: 1280, h: 960, lien: 'spectacles.html',  libelle: 'Voir les spectacles' },
-        calendrier: { cx: 2164, cy: 1281, w: 1280, h: 960, lien: 'calendrier.html',  libelle: 'Voir le calendrier' },
-        caravane:   { cx: 3664, cy: 781,  w: 1280, h: 960, lien: 'familles.html',    libelle: 'Découvrir la caravane' }
-    };
-    var viewport = document.getElementById('visiteViewport');
-    var stage = document.getElementById('visiteStage');
-    var lien = document.getElementById('visiteLien');
-    var spot = document.getElementById('visiteSpot');
-    var entete = document.querySelector('.poupif-entete');
-    var etapeCourante = 'accueil';
-
-    function goToStep(nom) {
-        var e = ETAPES[nom];
-        if (!e) return;
-        etapeCourante = nom;
-        var vw = viewport.clientWidth;
-        var vh = viewport.clientHeight;
-        /* Téléphone portrait : à l'accueil on cadre la colonne centrale du plan
-           (titre dessiné + scène du calendrier) pour que le dessin remplisse
-           l'écran en largeur, au lieu d'une vignette perdue dans le vide. */
-        var accueilMobile = (nom === 'accueil' && vw <= 600 && vw < vh);
-        var cadre = accueilMobile ? { cx: 2164, cy: 886, w: 1400, h: 1810 } : e;
-        var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
-        var reserveBas = e.lien ? 70 : (accueilMobile ? 120 : 0); /* place pour le lien flottant, ou le widget de conversation à l'accueil mobile */
-        var spanH = Math.max(120, vh - reserveHaut - reserveBas);
-        var z = Math.min(vw / cadre.w, spanH / cadre.h);
-        var tx = vw / 2 - z * cadre.cx;
-        var ty = reserveHaut + spanH / 2 - z * cadre.cy;
-        var tyMin = reserveHaut - z * (cadre.cy - cadre.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
-        var tyMax = vh - reserveBas - z * (cadre.cy + cadre.h / 2); /* bas du cadre au-dessus du lien ou du widget */
-        if (ty < tyMin) ty = tyMin;
-        if (ty > tyMax) ty = tyMax;
-        stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
-        if (e.lien) {
-            lien.href = e.lien;
-            lien.textContent = e.libelle + ' →';
-            lien.classList.remove('cache');
-            spot.style.left = (e.cx - e.w / 2) + 'px';
-            spot.style.top = (e.cy - e.h / 2) + 'px';
-            spot.style.width = e.w + 'px';
-            spot.style.height = e.h + 'px';
-            spot.style.opacity = '1';
-        } else {
-            lien.classList.add('cache');
-            spot.style.opacity = '0';
-        }
-    }
-    window.poupifMontrerEtape = goToStep;
-
-    function repositionnerSansTransition() {
-        var t1 = stage.style.transition;
-        stage.style.transition = 'none';
-        goToStep(etapeCourante);
-        stage.style.transition = t1;
-    }
-    window.addEventListener('resize', repositionnerSansTransition);
-    window.addEventListener('load', repositionnerSansTransition);
-    if ('ResizeObserver' in window) {
-        var derniereLargeur = viewport.clientWidth;
-        var derniereHauteur = viewport.clientHeight;
-        new ResizeObserver(function () {
-            if (viewport.clientWidth !== derniereLargeur || viewport.clientHeight !== derniereHauteur) {
-                derniereLargeur = viewport.clientWidth;
-                derniereHauteur = viewport.clientHeight;
-                repositionnerSansTransition();
-            }
-        }).observe(viewport);
-    }
-
-    var demandee = new URLSearchParams(window.location.search).get('etape');
-    stage.style.transition = 'none';
-    goToStep(ETAPES[demandee] ? demandee : 'accueil');
-    requestAnimationFrame(function () { stage.style.transition = ''; });
-
-    /* Outil vocal partage : le SDK conversation l'appelle via clientTools. */
-    window.poupifOutilMontrerEtape = function (params) {
-        var nom = String((params && params.etape) || '').toLowerCase();
-        if (!ETAPES[nom]) return 'Etape inconnue : ' + nom;
-        goToStep(nom);
-        return 'La scene de la visite montre maintenant l etape : ' + nom;
-    };
-})();
-</script>
-
-
 <script type="module">
-/* Bouton « Parler a Poupif » : conversation via le SDK officiel (aucune cle cote client,
-   l'agent est public). La notice s'affiche AVANT toute connexion ; son ouverture est
-   geree par un script classique (pas d'attente du chargement de ce module). */
-try {
-    const { Conversation } = await import('https://esm.sh/@elevenlabs/client@1.36.1');
-
-    const AGENT_ID = 'agent_6601m7bt4995eh0anx8pek1nj0f4';
-    const btn    = document.getElementById('poupifParlerBtn');
-    const etat   = document.getElementById('poupifParlerEtat');
-    const go     = document.getElementById('poupifNoticeGo');
-
-    const setEtat = (txt) => {
-        etat.textContent = txt || '';
-        etat.classList.toggle('cache', !txt);
-    };
-    const repos = () => {
-        btn.disabled = false; btn.textContent = 'Parler à Poupif';
-        btn.classList.remove('en-appel'); setEtat('');
-    };
-
-    window.poupifDemarrerAppel = async () => {
-        btn.disabled = true; btn.textContent = 'Connexion…';
-        try {
-            window.poupifConversation = await Conversation.startSession({
-                agentId: AGENT_ID,
-                clientTools: { montrerEtape: (p) => window.poupifOutilMontrerEtape(p) },
-                onStatusChange: ({ status }) => {
-                    if (status === 'connected') {
-                        btn.disabled = false; btn.textContent = 'Arrêter';
-                        btn.classList.add('en-appel'); setEtat('Poupif écoute');
-                    }
-                    if (status === 'disconnected') { window.poupifConversation = null; repos(); }
-                },
-                onModeChange: ({ mode }) => {
-                    if (!window.poupifConversation) return;
-                    setEtat(mode === 'speaking' ? 'Poupif parle' : 'Poupif écoute');
-                },
-                onDisconnect: () => { window.poupifConversation = null; repos(); },
-                onError: () => { setEtat('Problème de connexion'); }
-            });
-        } catch (e) {
-            window.poupifConversation = null; repos();
-            setEtat('La connexion n’a pas abouti, réessayez');
-        }
-    };
-    go.disabled = false;
-    go.textContent = 'Commencer la conversation';
-
-    window.poupifSDKPret = true; /* signale au surveillant que le service est la */
-} catch (e) {
-    window.poupifSDKEchec = true; /* module bloque ou panne : le surveillant affiche le panneau */
+const btn=document.getElementById('parler'),notice=document.getElementById('notice'),go=document.getElementById('commencer'),etat=document.getElementById('appelEtat'),terminer=document.getElementById('terminer'),note=document.getElementById('sessionNote');
+let attente=false,demarrage=false,pauseMicro=false,parle=false,reprise=false;
+function actualiser(){
+ const session=window.poupifConversation;if(!session)return;
+ const mute=pauseMicro;session.setMicMuted(mute);
+ btn.textContent=pauseMicro?'Reprendre le micro':'Mettre le micro en pause';btn.setAttribute('aria-pressed',String(pauseMicro));
+ etat.textContent=parle?(pauseMicro?'Poupif parle · micro en pause':'Poupif parle · micro actif'):(pauseMicro?'Micro en pause · session ouverte':'Poupif écoute · micro actif');
+ note.hidden=!pauseMicro;
 }
+function repos(){btn.disabled=false;btn.textContent='Reparler à Poupif ici';btn.removeAttribute('aria-pressed');document.body.dataset.vocal='non';document.getElementById('legende').classList.remove('on');terminer.hidden=true;note.hidden=true;demarrage=false;attente=false;pauseMicro=false;parle=false;}
+function fermerNotice(){notice.hidden=true;btn.focus();}
+btn.addEventListener('click',()=>{
+ if(window.poupifConversation){pauseMicro=!pauseMicro;actualiser();return;}
+ notice.hidden=false;document.getElementById('annuler').focus();
+});
+terminer.addEventListener('click',async()=>{if(!window.poupifConversation)return;terminer.disabled=true;btn.disabled=true;const session=window.poupifConversation;try{await session.endSession();}finally{if(window.poupifConversation===session){window.poupifConversation=null;repos();}terminer.disabled=false;etat.textContent='Conversation terminée, micro libéré. La visite reste ici.';}});
+document.getElementById('sousTitres').addEventListener('change',e=>{document.body.dataset.soustitres=e.target.checked?'oui':'non';});
+
+document.getElementById('annuler').addEventListener('click',fermerNotice);
+notice.addEventListener('keydown',e=>{if(e.key==='Escape')fermerNotice();if(e.key==='Tab'){const first=go.disabled?document.getElementById('annuler'):go,last=document.getElementById('annuler');if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus();}}});
+function lancer(){if(!attente||demarrage)return;demarrage=true;attente=false;if(!reprise)window.poupifJouer();}
+try{
+ const {Conversation}=await import('https://esm.sh/@elevenlabs/client@1.36.1');
+ go.disabled=false;go.textContent='Démarrer avec la voix et le micro';
+ go.addEventListener('click',async()=>{
+ if(go.disabled)return;fermerNotice();go.disabled=true;btn.disabled=true;btn.textContent='Connexion…';etat.textContent='Connexion à Poupif…';
+ try{
+ reprise=window.poupifEtatVisite().commencee;attente=true;demarrage=false;pauseMicro=false;parle=false;document.body.dataset.vocal='oui';document.getElementById('legende').classList.remove('on');
+ const session=await Conversation.startSession({agentId:'agent_6601m7bt4995eh0anx8pek1nj0f4',clientTools:{montrerEtape:p=>window.poupifOutilMontrerEtape(p),piloterPresentation:p=>window.poupifOutilPresentation(p)},
+ onModeChange:({mode})=>{parle=mode==='speaking';actualiser();if(parle)lancer();else document.getElementById('legende').classList.remove('on');},
+ onMessage:message=>{if(message.source==='ai'){lancer();const leg=document.getElementById('legende');leg.textContent=message.message;leg.classList.add('on');}},
+ onDisconnect:()=>{window.poupifConversation=null;repos();etat.textContent='Conversation terminée, micro libéré. La visite reste ici.';},
+ onError:()=>{etat.textContent='La connexion a rencontré un problème.';}
+ });
+ window.poupifConversation=session;btn.disabled=false;terminer.hidden=false;actualiser();
+ window.poupifNotifierPresentation(true);const v=window.poupifEtatVisite();session.sendContextualUpdate('ouverture-scene : '+(v.commencee?'Reconnexion à la visite déjà commencée. Reste à la position actuelle, sans recommencer le trajet. '+(v.scenePrete?'Scène prête. Écran actuel : '+v.projection+'.':'Trajet en cours vers la petite scène.'):'Visite avec trajet animé vers la roulotte, puis atelier et château. Tu peux parler pendant le déplacement. Les projections attendent la scène prête.'));
+ }catch(e){window.poupifConversation=null;repos();etat.textContent='Connexion impossible ou micro refusé. La visite est conservée, vous pouvez réessayer.';}
+ finally{go.disabled=false;}
+ });
+}catch(e){go.textContent='Voix indisponible';etat.textContent='Le service vocal ne charge pas. L’ouverture reste disponible sans le son.';}
+window.addEventListener('pagehide',()=>{window.poupifConversation?.endSession().catch(()=>{});});
 </script>
-
-<script>
-/* Notice pre-appel : ouverture immediate, sans attendre le SDK. Le bouton
-   « Commencer la conversation » reste grise tant que le service n'est pas charge. */
-(function () {
-    var btn    = document.getElementById('poupifParlerBtn');
-    var notice = document.getElementById('poupifNotice');
-    var go     = document.getElementById('poupifNoticeGo');
-    var stop   = document.getElementById('poupifNoticeStop');
-    if (!btn || !notice || !go || !stop) return;
-
-    go.disabled = true;
-    go.textContent = 'Chargement…';
-
-    btn.addEventListener('click', function () {
-        if (window.poupifConversation) {          // etat actif -> Arreter
-            btn.disabled = true;
-            window.poupifConversation.endSession().catch(function () {});
-            return;                               // onDisconnect remet l'UI au repos
-        }
-        notice.classList.remove('cache');         // 1er clic : notice AVANT toute connexion
-    });
-    stop.addEventListener('click', function () { notice.classList.add('cache'); });
-    go.addEventListener('click', function () {
-        if (go.disabled || !window.poupifDemarrerAppel) return;
-        notice.classList.add('cache');
-        window.poupifDemarrerAppel();
-    });
-})();
-</script>
-
-<script>
-/* Le personnage qui se promene : planches d'images alpha dessinees sur canvas
-   (compatible partout, aucun codec video requis). Choregraphie : il traverse, salue en profil a une extremite,
-   salue de face a l'autre ; les saluts sont rejoues a l'envers avant de repartir
-   pour un raccord doux (le salut profil finit chapeau leve). Si une image manque,
-   le personnage reste cache et la page fonctionne sans lui. */
-(function () {
-    var CONF = {
-        marche:  { src: 'images/poupif-visite/poupif-marche.webp',
-                   frames: 24, cols: 6, fw: 240, fh: 431, fps: 24 },
-        salutp:  { src: 'images/poupif-visite/poupif-salut-profil.webp',
-                   frames: 67, cols: 9, fw: 240, fh: 431, fps: 12 },
-        salutf:  { src: 'images/poupif-visite/poupif-salut-face.webp',
-                   frames: 96, cols: 10, fw: 240, fh: 431, fps: 12 },
-        hauteurVh: { bureau: 30, mobile: 26 },
-        basPx: 6,
-        pasParSeconde: 1.4,    // vitesse = 1.4 x sa hauteur par seconde : les pas suivent le sol
-        margeDroite: { bureau: 250, mobile: 12 },   // bureau : ne passe pas sous le bouton ; mobile : il passe dessous (bouton au-dessus)
-        margeGauche: 20,
-        pauseSalutMs: 700   // temps de tenue avant de rejouer le salut a l'envers
-    };
-    var el = document.getElementById('poupifPerso');
-    if (!el) return;
-    var ctx = el.getContext('2d');
-    var dpr = Math.max(1, Math.min(2, window.devicePixelRatio || 1));
-    var reduit = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-    var pret = { marche: false, salutp: false, salutf: false };
-    var img = {};
-    function charge(nom, differer) {
-        var c = CONF[nom];
-        var faire = function () {
-            var i = new Image();
-            i.onload = function () { img[nom] = i; pret[nom] = true; if (pret.marche) demarrer(); };
-            i.onerror = function () { /* image absente : ce mouvement reste inutilise */ };
-            i.src = c.src;
-        };
-        if (differer && 'requestIdleCallback' in window) requestIdleCallback(faire, { timeout: 4000 });
-        else if (differer) setTimeout(faire, 2500);
-        else faire();
-    }
-
-    var x = -9999, dir = 1;                 // dir 1 = va a droite (miroir), -1 = va a gauche
-    var phase = 'attente';                  // attente|marche|salut|retour|statique
-    var frame = 0, sens = 1, dernierT = 0, acc = 0, salutEnCours = null, pauseFin = 0;
-    var elW = 0, elH = 0, vitesse = 230, salutAlterne = 'salutp';
-    function estMobile() { return window.innerWidth <= 600; }
-    function margeD() { return estMobile() ? CONF.margeDroite.mobile : CONF.margeDroite.bureau; }
-    var cadreCourant = { nom: 'marche', n: 0, miroir: false };
-
-    function mesurer() {
-        var mobile = estMobile();
-        elH = Math.round(window.innerHeight * (mobile ? CONF.hauteurVh.mobile : CONF.hauteurVh.bureau) / 100);
-        elW = Math.round(CONF.marche.fw * (elH / CONF.marche.fh));
-        vitesse = elH * CONF.pasParSeconde;
-        el.width = Math.round(elW * dpr);
-        el.height = Math.round(elH * dpr);
-        el.style.width = elW + 'px';
-        el.style.height = elH + 'px';
-        el.style.bottom = CONF.basPx + 'px';
-    }
-
-    function cadre(nom, n, miroir) {
-        var c = CONF[nom];
-        if (!pret[nom]) return;
-        n = Math.max(0, Math.min(c.frames - 1, n));
-        cadreCourant = { nom: nom, n: n, miroir: !!miroir };
-        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        ctx.clearRect(0, 0, elW, elH);
-        if (miroir) { ctx.translate(elW, 0); ctx.scale(-1, 1); }
-        ctx.drawImage(img[nom], (n % c.cols) * c.fw, Math.floor(n / c.cols) * c.fh, c.fw, c.fh, 0, 0, elW, elH);
-    }
-
-    function placer() {
-        el.style.transform = 'translateX(' + Math.round(x) + 'px)';
-    }
-
-    function demarrer() {
-        if (phase !== 'attente') return;
-        mesurer();
-        el.classList.remove('cache');
-        if (reduit) {   // mouvement reduit : il reste debout pres du bouton, sans animation
-            x = window.innerWidth - elW - margeD();
-            cadre('marche', 0, true); placer(); phase = 'statique'; return;
-        }
-        x = -elW; dir = 1; phase = 'marche'; frame = 0;
-        requestAnimationFrame(boucle);
-    }
-
-    function debutSalut() {
-        // il se tourne vers le centre de la page pour saluer ; alterne profil et face
-        var nom = salutAlterne;
-        if (!pret[nom]) nom = (nom === 'salutp') ? 'salutf' : 'salutp';
-        if (!pret[nom]) { finSalutImmediate(); return; }
-        salutEnCours = nom; salutAlterne = (nom === 'salutp') ? 'salutf' : 'salutp';
-        phase = 'salut'; frame = 0; sens = 1;
-    }
-    function finSalutImmediate() { dir = -dir; phase = 'marche'; frame = 0; }
-
-    function boucle(t) {
-        if (phase === 'statique') return;
-        var dt = Math.min(64, t - dernierT || 16); dernierT = t;
-        var nom = (phase === 'salut' || phase === 'retour') ? salutEnCours : 'marche';
-        var c = CONF[nom];
-
-        if (phase === 'marche') {
-            acc += dt * c.fps / 1000;
-            while (acc >= 1) { acc -= 1; frame = (frame + 1) % c.frames; }
-            x += dir * vitesse * dt / 1000;
-            var buteD = window.innerWidth - elW - margeD();
-            var buteG = CONF.margeGauche;
-            if (dir === 1 && x >= buteD) { x = buteD; debutSalut(); }
-            else if (dir === -1 && x <= buteG) { x = buteG; debutSalut(); }
-            cadre('marche', frame, dir === 1);   // miroir quand il va a droite (la source regarde a gauche)
-            placer();
-        } else if (phase === 'salut') {
-            acc += dt * c.fps / 1000;
-            while (acc >= 1) { acc -= 1; frame += sens; }
-            if (frame >= c.frames - 1) { frame = c.frames - 1; phase = 'retour'; pauseFin = t + CONF.pauseSalutMs; }
-            cadre(nom, frame, dir === -1);       // il salue vers le centre : a droite il regarde a gauche (pas de miroir)
-            placer();
-        } else if (phase === 'retour') {
-            if (t >= pauseFin) {
-                acc += dt * c.fps / 1000;
-                while (acc >= 1) { acc -= 1; frame -= 1; }
-                cadre(nom, Math.max(0, frame), dir === -1);
-                placer();
-                if (frame <= 0) finSalutImmediate();
-            }
-        }
-        requestAnimationFrame(boucle);
-    }
-
-    window.addEventListener('resize', function () {
-        if (phase === 'attente') return;
-        mesurer();
-        var max = window.innerWidth - elW - margeD();
-        if (x > max) x = max;
-        cadre(cadreCourant.nom, cadreCourant.n, cadreCourant.miroir);
-        placer();
-    });
-
-    charge('marche', false);                // la marche tout de suite
-    charge('salutp', true); charge('salutf', true);   // les saluts apres la page
-})();
-</script>
-
-</body>
-</html>
-
-
+</body></html>
