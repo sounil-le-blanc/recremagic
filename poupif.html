@@ -440,14 +440,31 @@ function creerSession(){
     return Math.sqrt(s/d.length);
   }
 
-  function jouerReponse(charge,mime){
-    return new Promise(res=>{
-      if(!S.vivante)return res();
-      const a=new Audio('data:'+(mime||'audio/mpeg')+';base64,'+charge);
-      S.audio=a;parle=true;actualiser();
-      const fin=()=>{S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}res();};
-      a.onended=fin;a.onerror=fin;
-      a.play().catch(fin);
+  async function jouerReponse(charge,mime){
+    if(!S.vivante)return;
+    const octets=Uint8Array.from(atob(charge),c=>c.charCodeAt(0));
+    const tampon=await S.ctx.decodeAudioData(octets.buffer);
+    if(!S.vivante)return;
+    if(S.ctx.state!=='running'){
+      etat.textContent='Le navigateur a suspendu le son. Touchez pour écouter la réponse.';
+      await new Promise((resolve,reject)=>{
+        const bouton=document.createElement('button');bouton.textContent='Écouter la réponse de Poupif';
+        S.repriseAudio=bouton;S.annulerReprise=resolve;
+        bouton.onclick=async()=>{
+          try{await S.ctx.resume();if(S.ctx.state!=='running')throw Error('son toujours suspendu');
+            bouton.remove();S.repriseAudio=null;S.annulerReprise=null;resolve();
+          }catch(e){etat.textContent='Son bloqué ('+e.message+'). Touchez à nouveau pour réessayer.';}
+        };
+        etat.insertAdjacentElement('afterend',bouton);
+      });
+    }
+    if(!S.vivante)return;
+    if(S.ctx.state!=='running')throw Error('Lecture audio suspendue');
+    await new Promise((resolve,reject)=>{
+      const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.ctx.destination);
+      S.audio={pause:()=>{try{source.stop();}catch(e){}}};parle=true;actualiser();etat.textContent='Poupif parle…';
+      source.onended=()=>{S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}resolve();};
+      try{source.start();}catch(e){S.audio=null;parle=false;reject(e);}
     });
   }
 
@@ -457,7 +474,9 @@ function creerSession(){
     if(d.texte){leg.textContent=d.texte;leg.classList.add('on');}
     let boucle=0;
     while(d.outil&&boucle++<3&&S.vivante&&generation===S.generation){
+      etat.textContent="Poupif prépare l'écran…";
       const resultat=await executerOutil(d.outil.nom,d.outil.args);
+      etat.textContent='Écran affiché, Poupif prépare sa réponse vocale…';
       if(!S.vivante||generation!==S.generation)return;
       d=await poster('/outil',{session:S.id,outil_id:d.outil.id,nom:d.outil.nom,resultat:resultat,
                                contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
@@ -465,6 +484,7 @@ function creerSession(){
     }
     if(!S.vivante||generation!==S.generation)return;
     if(d.reponse&&!d.outil){leg.textContent=d.reponse;leg.classList.add('on');}
+    if(d.outil)throw new Error("La commande demande trop d'étapes. Réessayez une demande plus courte.");
     if(d.audio)await jouerReponse(d.audio,d.audio_mime);
     else if(S.vivante)etat.textContent='Poupif écoute';
   }
@@ -488,7 +508,7 @@ function creerSession(){
       if(d.session)S.id=d.session;
       await traiterReponse(d,generation);
     }catch(e){
-      if(S.vivante&&generation===S.generation)etat.textContent='Connexion au moteur impossible ('+e.message+')';
+      if(S.vivante&&generation===S.generation)etat.textContent='Échange ou lecture audio impossible ('+e.message+'). La réponse reste visible en sous-titres.';
     }finally{
       S.envoi=false;
     }
@@ -521,8 +541,11 @@ function creerSession(){
   }
 
   async function demarrer(){
-    S.flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
+    // Déverrouiller le son pendant le clic utilisateur, avant tout appel asynchrone.
     S.ctx=new (window.AudioContext||window.webkitAudioContext)();
+    const reveil=S.ctx.resume();
+    S.flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
+    await reveil;
     const src=S.ctx.createMediaStreamSource(S.flux);
     S.analyse=S.ctx.createAnalyser();S.analyse.fftSize=1024;src.connect(S.analyse);
     S.minuterie=setInterval(veille,80);
@@ -540,6 +563,8 @@ function creerSession(){
   function fermer(){
     S.vivante=false;S.generation++;
     if(S.rec){const r=S.rec;S.rec=null;try{r.onstop=null;r.stop();}catch(e){}}
+    if(S.repriseAudio){S.repriseAudio.remove();S.repriseAudio=null;}
+    if(S.annulerReprise){S.annulerReprise();S.annulerReprise=null;}
     if(S.audio){try{S.audio.pause();}catch(e){}S.audio=null;}
     if(S.minuterie){clearInterval(S.minuterie);S.minuterie=null;}
     if(S.flux)S.flux.getTracks().forEach(t=>t.stop());
