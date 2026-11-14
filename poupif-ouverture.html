@@ -100,13 +100,26 @@ const pret=Promise.all(images.map(i=>i.decode?i.decode().catch(()=>{}):0));
 let scenePrete=false,projectionEnAttente='accueil';
 const ECRANS={spectacles:{titre:'Les spectacles',src:'ecrans-spectacles.webp',lien:'spectacles'},calendrier:{titre:'Le calendrier',src:'ecrans-calendrier.webp',lien:'calendrier'},caravane:{titre:'La caravane',src:'ecrans-caravane.webp',lien:'familles'}};
 function contexte(texte){window.poupifConversation?.sendContextualUpdate('ouverture-scene : '+texte);}
-function projeter(etape){
+let changementEcran=0,ecranAnime=null,gesteDebut=-Infinity;
+function annulerEcran(){changementEcran++;ecranAnime?.cancel();ecranAnime=null;gesteDebut=-Infinity;}
+async function projeter(etape){
  if(etape!=='accueil'&&!ECRANS[etape])return 'Erreur : écran inconnu. Valeurs : accueil, spectacles, calendrier, caravane.';
- projectionEnAttente=etape;
+ const demandePrecedente=projectionEnAttente;projectionEnAttente=etape;
  if(!scenePrete)return 'Écran '+etape+' en attente : le trajet continue, projection à l’arrivée sur la petite scène.';
- document.getElementById('invitation').hidden=etape!=='accueil';const cadre=document.getElementById('ecran');
- if(etape==='accueil'){cadre.hidden=true;return 'Écrans retirés, le château est visible.';}
- const e=ECRANS[etape];document.getElementById('ecranImage').src='images/poupif-visite/'+e.src;document.getElementById('ecranImage').alt='Capture du site : '+e.titre;document.getElementById('ecranTitre').textContent=e.titre;document.getElementById('ecranLien').href=e.lien;cadre.hidden=false;
+ const cadre=document.getElementById('ecran'),invitation=document.getElementById('invitation');
+ if(demandePrecedente===etape&&cadre.dataset.etape===etape&&!cadre.hidden&&!ecranAnime)return 'Écran déjà affiché.';
+ annulerEcran();const id=changementEcran;
+ // Charger la prochaine capture avant de faire sortir la précédente.
+ const e=ECRANS[etape];let image;
+ if(e){image=new Image();image.src='images/poupif-visite/'+e.src;try{await image.decode();}catch{if(id===changementEcran)contexte('Capture non chargée, écran actuel conservé.');return 'La capture ne peut pas être chargée. Réessaie.';}}
+ if(id!==changementEcran||!scenePrete)return 'Changement remplacé par une demande plus récente.';
+ const animer=async(images,duree)=>{const animation=cadre.animate(images,{duration:duree,easing:'cubic-bezier(.4,0,.2,1)',fill:'both'});ecranAnime=animation;try{await animation.finished;}catch{}if(id===changementEcran){animation.cancel();ecranAnime=null;}};
+ if(!reduced&&(e||!cadre.hidden)){gesteDebut=performance.now();invitation.hidden=true;}
+ if(!cadre.hidden&&!reduced)await animer([{transform:'translateX(0) rotate(0)',opacity:1},{transform:'translateX(-115vw) rotate(-8deg)',opacity:0}],480);
+ if(id!==changementEcran||!scenePrete)return 'Changement remplacé par une demande plus récente.';
+ if(!e){cadre.hidden=true;delete cadre.dataset.etape;invitation.hidden=false;return 'Écrans retirés, le château est visible.';}
+ invitation.hidden=true;const img=document.getElementById('ecranImage');img.src=image.src;img.alt='Capture du site : '+e.titre;document.getElementById('ecranTitre').textContent=e.titre;document.getElementById('ecranLien').href=e.lien;cadre.dataset.etape=etape;cadre.hidden=false;
+ if(!reduced)await animer([{transform:'translateX(115vw) rotate(8deg)',opacity:0},{transform:'translateX(0) rotate(0)',opacity:1}],650);
  return 'Écran '+e.titre+' projeté sur scène. Aperçu figé ; le lien ouvre la page actuelle.';
 }
 window.poupifOutilMontrerEtape=params=>projeter(params?.etape);
@@ -114,6 +127,7 @@ window.poupifProjection=projeter;
 document.querySelectorAll('[data-ecran]').forEach(b=>b.addEventListener('click',()=>{projeter(b.dataset.ecran);contexte('Le visiteur a affiché '+b.dataset.ecran+'. Ne réagis pas automatiquement.');}));
 function ouvrirScene(){scenePrete=true;repere.textContent='La petite scène';repere.hidden=true;if(document.body.dataset.vocal!=='oui')leg.classList.remove('on');document.getElementById('ecranNav').hidden=false;projeter(projectionEnAttente);contexte('Scène prête, arrivée devant le château. Les écrans spectacles, calendrier et caravane peuvent maintenant apparaître.');}
 async function jouer(){
+ annulerEcran();
  scenePrete=false;projectionEnAttente='accueil';document.getElementById('invitation').hidden=true;document.getElementById('ecran').hidden=true;document.getElementById('ecranNav').hidden=true;
  document.getElementById('muet').hidden=true;contexte('Début du trajet peint vers la roulotte. Tu peux parler au visiteur pendant que tu marches.');
  repere.hidden=false;const id=++run;const ok=()=>id===run;
@@ -145,6 +159,9 @@ debut=performance.now();fin=performance.now();let dernier=-1,dernierePlanche='';
 function dessin(t){
  const bouge=t<fin&&!reduced;const img=bouge?marche:salut;
  let n=bouge?Math.floor((t-debut)/1000*24)%24:(reduced?0:Math.min(95,Math.floor(Math.max(0,t-fin)/1000*12)));
+ // Geste de présentation : retour du chapeau, main levée, puis retour à la pose.
+ const geste=(t-gesteDebut)/1000;
+ if(!bouge&&!reduced&&geste>=0&&geste<1.45){n=geste<.55?Math.round(95-71*geste/.55):geste<.85?Math.round(24+12*(geste-.55)/.30):Math.round(36+59*(geste-.85)/.60);}
  const cols=bouge?6:10,ident=bouge?'marche':'salut';
  if(img.complete&&img.naturalWidth&&(n!==dernier||ident!==dernierePlanche)){
   ctx.clearRect(0,0,240,431);ctx.save();if(bouge){ctx.translate(240,0);ctx.scale(-1,1);}ctx.drawImage(img,(n%cols)*240,Math.floor(n/cols)*431,240,431,0,0,240,431);ctx.restore();dernier=n;dernierePlanche=ident;
