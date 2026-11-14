@@ -113,7 +113,7 @@ header{padding-top:9px;padding-bottom:9px}header p{display:none}header h1{font-s
 <p id="erreur" hidden>Le dessin n'a pas pu se charger. Rechargez la page pour réessayer.</p>
 </main>
 <footer><div class="commandes"><button class="principal" id="parler">Suivre Poupif avec sa voix</button><button id="muet">Voir sans le son</button><button id="rejouer" hidden>↻ Revoir l'ouverture</button></div><button class="fin-session" id="terminer" hidden>Terminer la conversation</button><div class="options-visite"><label><input type="checkbox" id="sousTitres"> Sous-titres</label></div><p class="session-note" id="sessionNote" hidden>Micro en pause : Poupif peut continuer à parler. La session reste ouverte. « Terminer » ferme la connexion.</p><p class="appel-etat" id="appelEtat" role="status" aria-live="polite"></p><section id="ecranNav" hidden aria-label="Commandes de présentation"><div class="menu-entete" id="menuEntete" hidden><button type="button" id="retourThemes">← Thèmes</button><span id="menuTheme"></span></div><div class="ecran-nav" id="themesNav" aria-label="Les écrans de scène"><button data-ecran="spectacles">Spectacles</button><button data-ecran="expositions">Expositions</button><button data-ecran="sejours">Séjours artistiques</button><button data-ecran="ecrin">L’Écrin</button><button data-ecran="calendrier">Calendrier</button><button data-ecran="caravane">Caravane</button><button data-ecran="accueil">Le château</button></div><div id="commandesCalendrier" hidden><div class="cal-commandes"><button id="calAvant" type="button" aria-label="Mois précédent">‹</button><label>Mois <input id="calMois" type="month"></label><button id="calApres" type="button" aria-label="Mois suivant">›</button><button id="calVue" type="button">Toutes les dates</button><button id="calLire" type="button">Actualiser</button></div><label class="cal-date">Montrer une date <input id="calDate" type="date"></label></div><div class="choix-diapos" id="choixDiapos" hidden aria-label="Choisir une diapositive"></div><div id="presentationInfos" hidden><div class="diapo-texte"><h2 id="diapoTitre"></h2><p id="diapoAccroche"></p></div><figcaption><span id="ecranTitre"></span><span class="separateur"> · </span><a id="ecranLien" target="_blank" rel="noopener">Ouvrir la page actuelle ↗</a><br><small id="ecranMention">Visuels du site · aucune disponibilité en temps réel</small></figcaption></div></section><p class="note">Poupif est incarné par une IA. Micro uniquement après votre accord, pendant la conversation. <a href="poupif-dessinee">La visite dessinée</a></p></footer>
-<div class="modal" id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitre"><div class="modal-carte"><h2 id="noticeTitre">Avant de suivre Poupif</h2><p>Sa voix vous accompagne pendant le trajet, puis vous pouvez lui parler et lui demander de projeter les spectacles, les expositions, les séjours artistiques, L'Écrin, le calendrier ou la caravane.</p><p>Poupif est une IA, pas un humain. Le micro ne s'ouvre qu'après votre accord et reste actif pendant la conversation. Votre voix est transcrite par DeepSeek, la réponse est écrite par DeepSeek et prononcée sur cet appareil par un moteur vocal local. Nous ne conservons aucune trace de l'échange ; consultez la politique de DeepSeek pour le traitement de la transcription et du texte.</p><p>Aucune conversation ne démarre sans votre accord.</p><button id="commencer" disabled>Chargement de la voix…</button><button id="annuler">Annuler</button></div></div>
+<div class="modal" id="notice" hidden role="dialog" aria-modal="true" aria-labelledby="noticeTitre"><div class="modal-carte"><h2 id="noticeTitre">Avant de suivre Poupif</h2><p>Sa voix vous accompagne pendant le trajet, puis vous pouvez lui parler et lui demander de projeter les spectacles, les expositions, les séjours artistiques, L'Écrin, le calendrier ou la caravane.</p><p>Poupif est une IA, pas un humain. Le micro ne s'ouvre qu'après votre accord et reste actif pendant la conversation. Votre voix est transcrite par DeepSeek, la réponse est écrite par DeepSeek et prononcée sur cet appareil par un moteur vocal local. Nous ne conservons aucune trace de l'échange ; consultez la politique de DeepSeek pour le traitement de la transcription et du texte.</p><p>Aucune conversation ne démarre sans votre accord.</p><p id="essai"><label for="codeEssai">Code d'essai</label> <input id="codeEssai" type="text" autocomplete="one-time-code" inputmode="text" maxlength="12" placeholder="8 caractères" aria-describedby="essaiNote"> <small id="essaiNote">Accès temporaire, réservé à l'essai en cours.</small></p><button id="commencer" disabled>Chargement de la voix…</button><button id="annuler">Annuler</button></div></div>
 <script>
 /* Ouverture mise en scène. Fond peint généré (poupif-paysage.webp) sous la carte Excalidraw (essai-carte.excalidraw, export SVG inline sans son fond bleu) ; mêmes deux décors générés
    que l'essai précédent ; ici la caméra est dirigée par une petite partition (pauses, saluts, surprise).
@@ -379,7 +379,7 @@ function lancer(){if(!attente||demarrage)return;demarrage=true;attente=false;if(
 try{
 /* ---- Boucle vocale locale : micro -> moteur (ASR + LLM DeepSeek, voix Poupif) ----
    La clé reste côté moteur. Cette page ne fait que transporter du son et des états. */
-const API = window.POUPIF_API || 'http://localhost:8099';
+const API = window.POUPIF_API || '/api/poupif';
 let fileContexte = [];
 const noterContexte = t => { fileContexte.push(String(t)); if(fileContexte.length>12) fileContexte.shift(); };
 
@@ -400,12 +400,28 @@ function b64(buf){
   for(let i=0;i<octets.length;i+=0x8000)s+=String.fromCharCode.apply(null,octets.subarray(i,i+0x8000));
   return btoa(s);
 }
+function jeton(){return sessionStorage.getItem('poupif_jeton')||'';}
 async function poster(chemin,charge){
-  const r=await fetch(API+chemin,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(charge)});
+  const entetes={'Content-Type':'application/json'};
+  const t=jeton();if(t)entetes['Authorization']='Bearer '+t;
+  const r=await fetch(API+chemin,{method:'POST',headers:entetes,body:JSON.stringify(charge)});
   const texte=await r.text();
   let d;try{d=JSON.parse(texte);}catch(e){throw new Error('réponse illisible du moteur');}
+  if(r.status===401){sessionStorage.removeItem('poupif_jeton');}
   if(!r.ok||d.erreur)throw new Error(d.erreur||('HTTP '+r.status));
   return d;
+}
+/* Ouvre la session d'essai avec le code saisi dans la notice. Aucune clé dans la page. */
+async function ouvrirEssai(){
+  if(jeton())return;
+  const champ=document.getElementById('codeEssai');
+  const code=(champ&&champ.value||'').trim();
+  if(!code)throw new Error('code d’essai requis');
+  const r=await fetch(API+'/session',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({code:code})});
+  const d=await r.json();
+  if(!r.ok||!d.jeton)throw new Error(d.erreur||'code refusé');
+  sessionStorage.setItem('poupif_jeton',d.jeton);
 }
 
 /* Exécute une demande d'outil venue du moteur, après validation des arguments.
@@ -518,6 +534,7 @@ function creerSession(){
   }
 
   async function demarrer(){
+    await ouvrirEssai();
     S.flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
     S.ctx=new (window.AudioContext||window.webkitAudioContext)();
     const src=S.ctx.createMediaStreamSource(S.flux);
