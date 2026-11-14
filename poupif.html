@@ -236,7 +236,7 @@
             position: relative;
             z-index: 10;
             width: 100%;
-            max-width: 1150px;
+            max-width: 1500px;
             padding: 0 1rem;
             margin-top: 2rem;
         }
@@ -274,35 +274,15 @@
             transition: transform 1.4s cubic-bezier(0.45, 0.05, 0.35, 1);
         }
         .visite-stage img { width: 4328px; height: 1772px; display: block; }
-        .visite-nav {
-            display: flex;
-            justify-content: center;
-            gap: 0.6rem;
-            margin-top: 1.2rem;
-            flex-wrap: wrap;
-        }
-        .visite-dot {
-            border: 2px solid #5a3e2a;
-            background: transparent;
-            color: #5a3e2a;
-            border-radius: 50px;
-            padding: 0.45rem 1.1rem;
-            font-family: 'Quicksand', sans-serif;
-            font-weight: 700;
-            font-size: 0.95rem;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-        .visite-dot:hover { background: rgba(90, 62, 42, 0.12); }
-        .visite-dot.active { background: #5a3e2a; color: #F2E4C4; }
         .visite-lien.cache { display: none; }
+        .visite-box .btn-back.visite-lien { display: inline-block; margin-top: 1.2rem; }
+        .visite-box .btn-back.visite-lien.cache { display: none; }
 
         @media (max-width: 600px) {
             .visite-box { padding: 1.4rem 1rem; }
             .visite-title { font-size: 1.6rem; }
             .visite-subtitle { font-size: 0.9rem; }
             .visite-viewport { border-radius: 16px; }
-            .visite-dot { font-size: 0.85rem; padding: 0.4rem 0.9rem; }
         }
 
         @media (max-width: 600px) {
@@ -318,6 +298,8 @@
             .poupif-title { font-size: 2rem; }
             .poupif-subtitle { font-size: 1rem; }
             .message-box { padding: 1.8rem 1.4rem; margin: 0 1rem; }
+            .visite-section { padding: 0 0.25rem; }
+            .message-box.visite-box { margin: 0 0.25rem; padding: 1rem 0.5rem; }
         }
     </style>
 </head>
@@ -375,12 +357,6 @@
                 <img src="images/poupif-visite/visite-poupif.svg" alt="Plan dessiné de la visite : les spectacles, le calendrier et la caravane du site Récré Magic">
             </div>
         </div>
-        <div class="visite-nav">
-            <button type="button" class="visite-dot" data-etape="accueil">Vue d'ensemble</button>
-            <button type="button" class="visite-dot" data-etape="spectacles">Les spectacles</button>
-            <button type="button" class="visite-dot" data-etape="calendrier">Le calendrier</button>
-            <button type="button" class="visite-dot" data-etape="caravane">La caravane</button>
-        </div>
         <a id="visiteLien" class="btn-back visite-lien cache" href="spectacles.html">Voir les spectacles →</a>
     </div>
 </div>
@@ -394,14 +370,13 @@
     var SVG_W = 4328, SVG_H = 1772;
     var ETAPES = {
         accueil:    { cx: 2164, cy: 886,  w: 4500, h: 1900 },
-        spectacles: { cx: 664,  cy: 781,  w: 1500, h: 1080, lien: 'spectacles.html',  libelle: 'Voir les spectacles' },
-        calendrier: { cx: 2164, cy: 1281, w: 1500, h: 1080, lien: 'calendrier.html',  libelle: 'Voir le calendrier' },
-        caravane:   { cx: 3664, cy: 781,  w: 1500, h: 1080, lien: 'familles.html',    libelle: 'Découvrir la caravane' }
+        spectacles: { cx: 664,  cy: 781,  w: 1280, h: 960, lien: 'spectacles.html',  libelle: 'Voir les spectacles' },
+        calendrier: { cx: 2164, cy: 1281, w: 1280, h: 960, lien: 'calendrier.html',  libelle: 'Voir le calendrier' },
+        caravane:   { cx: 3664, cy: 781,  w: 1280, h: 960, lien: 'familles.html',    libelle: 'Découvrir la caravane' }
     };
     var viewport = document.getElementById('visiteViewport');
     var stage = document.getElementById('visiteStage');
     var lien = document.getElementById('visiteLien');
-    var dots = Array.prototype.slice.call(document.querySelectorAll('.visite-dot'));
     var etapeCourante = 'accueil';
 
     function goToStep(nom) {
@@ -409,13 +384,12 @@
         if (!e) return;
         etapeCourante = nom;
         var vw = viewport.clientWidth;
-        var z = Math.min(vw / e.w, (window.innerHeight * 0.62) / e.h);
+        var z = Math.min(vw / e.w, (window.innerHeight * 0.8) / e.h);
         var vh = Math.round(e.h * z);
         viewport.style.height = vh + 'px';
         var tx = vw / 2 - z * e.cx;
         var ty = vh / 2 - z * e.cy;
         stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
-        dots.forEach(function (d) { d.classList.toggle('active', d.dataset.etape === nom); });
         if (e.lien) {
             lien.href = e.lien;
             lien.textContent = e.libelle + ' →';
@@ -426,9 +400,6 @@
     }
     window.poupifMontrerEtape = goToStep;
 
-    dots.forEach(function (d) {
-        d.addEventListener('click', function () { goToStep(d.dataset.etape); });
-    });
     function repositionnerSansTransition() {
         var t1 = stage.style.transition;
         var t2 = viewport.style.transition;
