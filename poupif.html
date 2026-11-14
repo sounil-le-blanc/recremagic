@@ -211,13 +211,13 @@ function rendreCalendrier(){
  const box=document.getElementById('calendrierScene');if(!box)return;box.replaceChildren();
  const titre=document.createElement('h2');titre.textContent=calendrier.vue==='liste'?'Toutes les dates annoncées':moisLisible(calendrier.mois);box.append(titre);
  const statut=document.createElement('p');statut.className='cal-statut';statut.textContent=calendrier.statut==='chargement'?'Lecture du calendrier public…':calendrier.statut==='erreur'?calendrier.erreur:'Dates annoncées · pas un état des disponibilités';box.append(statut);
- document.getElementById('calMois').value=calendrier.mois;document.getElementById('calVue').textContent=calendrier.vue==='liste'?'Vue du mois':'Toutes les dates';
+ document.getElementById('calMois').value=calendrier.mois;document.getElementById('calDate').value=calendrier.date||'';document.getElementById('calVue').textContent=calendrier.vue==='liste'?'Vue du mois':'Toutes les dates';
  if(calendrier.statut!=='pret')return;
  if(calendrier.vue==='mois'&&!calendrier.date){
   const grille=document.createElement('div');grille.className='cal-grille';for(const jour of ['L','M','M','J','V','S','D']){const e=document.createElement('span');e.className='cal-jour';e.textContent=jour;grille.append(e);}
   const [an,mo]=calendrier.mois.split('-').map(Number),debut=(new Date(Date.UTC(an,mo-1,1)).getUTCDay()+6)%7,fin=new Date(Date.UTC(an,mo,0)).getUTCDate();
   for(let i=0;i<debut;i++)grille.append(document.createElement('span'));
-  for(let d=1;d<=fin;d++){const date=calendrier.mois+'-'+String(d).padStart(2,'0'),ev=calendrier.evenements.filter(e=>e.date===date),caseJour=document.createElement('div');caseJour.className='cal-case'+(ev.length?' annonce':'')+(calendrier.date===date?' selection':'');const n=document.createElement('strong');n.textContent=d;caseJour.append(n);if(ev.length){const mini=document.createElement('small');mini.textContent=ev[0].titre;caseJour.append(mini);const lieu=document.createElement('small');lieu.className='cal-lieu';lieu.textContent=ev[0].lieu;caseJour.append(lieu);}grille.append(caseJour);}box.append(grille);
+  for(let d=1;d<=fin;d++){const date=calendrier.mois+'-'+String(d).padStart(2,'0'),ev=calendrier.evenements.filter(e=>e.date===date),caseJour=document.createElement('div');caseJour.className='cal-case'+(ev.length?' annonce':'')+(calendrier.date===date?' selection':'');const n=document.createElement('strong');n.textContent=d;caseJour.append(n);if(ev.length){const mini=document.createElement('small');mini.textContent=ev[0].titre+(ev.length>1?' (+'+(ev.length-1)+')':'');caseJour.title=ev.map(e=>e.titre+' · '+e.lieu).join(' / ');caseJour.append(mini);const lieu=document.createElement('small');lieu.className='cal-lieu';lieu.textContent=ev[0].lieu;caseJour.append(lieu);}grille.append(caseJour);}box.append(grille);
  }
  const lignes=calendrier.evenements.filter(e=>calendrier.vue==='liste'?true:calendrier.date?e.date===calendrier.date:e.date.startsWith(calendrier.mois));
  const liste=document.createElement('div');liste.className='cal-liste';
@@ -300,7 +300,7 @@ window.poupifEtatPresentation=etatPresentation;window.poupifNotifierPresentation
 window.poupifProjection=projeter;
 actionsCalendrier();
 document.querySelectorAll('[data-ecran]').forEach(b=>b.addEventListener('click',()=>projeter(b.dataset.ecran)));
-document.getElementById('retourThemes').addEventListener('click',()=>{document.getElementById('themesNav').hidden=false;document.getElementById('menuEntete').hidden=true;document.getElementById('choixDiapos').hidden=true;document.getElementById('presentationInfos').hidden=true;});
+document.getElementById('retourThemes').addEventListener('click',()=>{document.getElementById('commandesCalendrier').hidden=true;document.getElementById('themesNav').hidden=false;document.getElementById('menuEntete').hidden=true;document.getElementById('choixDiapos').hidden=true;document.getElementById('presentationInfos').hidden=true;});
 
 
 function ouvrirScene(){scenePrete=true;repere.textContent='La petite scène';repere.hidden=true;if(document.body.dataset.vocal!=='oui')leg.classList.remove('on');document.getElementById('ecranNav').hidden=false;projeter(projectionEnAttente,diapoEnAttente);contexte('Scène prête, arrivée devant le château. Les thèmes présents dans le catalogue de la régie peuvent maintenant apparaître.');}
