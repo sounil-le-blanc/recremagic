@@ -29,7 +29,7 @@ const theatre=document.getElementById('theatre'),monde=document.getElementById('
 const repere=document.getElementById('repere'),leg=document.getElementById('legende'),lueur=document.getElementById('lueur'),rejouerBtn=document.getElementById('rejouer');
 const petite=document.getElementById('petite');
 const reduced=matchMedia('(prefers-reduced-motion: reduce)').matches;
-const PLAN_W=4328,PLAN_H=1772,PH={x:3064,y:354,w:1200,h:750},PORTE={x:4011,y:900},CHEMIN=[[450,1470],[1000,1430],[1800,1480],[2500,1480],[3200,1440],[3600,1370],[3800,1250],[3900,1100]];
+const PLAN_W=4328,PLAN_H=1772,PH={x:3064,y:354,w:1200,h:750},PORTE={x:4011,y:900},CHEMIN=[[450,1530],[1000,1470],[1800,1500],[2500,1480],[3200,1400],[3400,1390],[3500,1365],[3580,1345],[3635,1320],[3650,1300],[3640,1275],[3600,1250],[3660,1225],[3730,1200],[3740,1170],[3800,1150],[3900,1140]];
 const IW=750*16/9,IX=PH.x-(IW-PH.w)/2,ST={x:IX+0.540*IW,y:PH.y+0.43*750,w:0.125*IW,h:0.14*750};
 lueur.style.cssText+=`left:${ST.x-ST.w*0.3}px;top:${ST.y-ST.h*0.3}px;width:${ST.w*1.6}px;height:${ST.h*1.6}px`;
 function cadres(){
@@ -61,7 +61,22 @@ function cadreAt(p){
 function opAtelier(p){return p<=0.48?0:p>=0.74?1:(p-0.48)/0.26;}
 function opPetite(p){return p<=1.4?0:p>=1.8?1:(p-1.4)/0.4;}
 let pActu=-2,run=0,debut=0,fin=0;
-function rendre(p){const c=cadreAt(p);monde.style.transform=`translate(${c.x}px,${c.y}px) scale(${c.z})`;atelier.style.opacity=opAtelier(p);petite.style.opacity=opPetite(p);}
+/* Les pieds suivent le chemin dans le même repère que le paysage, y compris
+   quand le cadrage mobile se resserre. Le premier plan de l'atelier est conservé. */
+function placerPoupif(p,c){
+ const perso=document.getElementById('poupif');
+ if(p>=0.55){perso.style.removeProperty('left');perso.style.removeProperty('bottom');perso.style.removeProperty('transition');perso.style.removeProperty('height');return;}
+ const pt=surChemin(soft(Math.max(0,Math.min(1,p+1))));
+ const w=theatre.clientWidth,h=theatre.clientHeight;
+ const u=p>0?soft(Math.min(1,p/0.55)):0;
+ const base=w<=600?Math.min(220,Math.max(130,innerHeight*0.25)):431;
+ const dehors=Math.min(base,h*0.43),ph=dehors+(base-dehors)*u,pw=ph*240/431;
+ perso.style.height=`${ph}px`;
+ let x=c.x+pt.x*c.z-pw*0.5,y=c.y+pt.y*c.z-ph*(420/431);
+ if(p>0){x+=(w*0.19-x)*u;y+=(h-8-ph-y)*u;}
+ perso.style.transition='none';perso.style.left=`${x}px`;perso.style.bottom=`${h-y-ph}px`;
+}
+function rendre(p){const c=cadreAt(p);monde.style.transform=`translate(${c.x}px,${c.y}px) scale(${c.z})`;atelier.style.opacity=opAtelier(p);petite.style.opacity=opPetite(p);placerPoupif(p,c);}
 new ResizeObserver(()=>rendre(pActu)).observe(theatre);rendre(-2);
 const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 function marcher(){debut=performance.now();fin=Infinity;}
