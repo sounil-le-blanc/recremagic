@@ -468,6 +468,68 @@ function creerSession(){
     });
   }
 
+  async function reveillerAudioFlux(){
+    if(S.ctx.state==='running')return;
+    try{await S.ctx.resume();}catch{}
+    if(S.ctx.state==='running')return;
+    etat.textContent='Son suspendu. Touchez pour écouter Poupif.';
+    await new Promise(resolve=>{
+      const b=document.createElement('button');b.textContent='Écouter la réponse de Poupif';
+      S.repriseAudio=b;S.annulerReprise=resolve;
+      b.onclick=async()=>{try{await S.ctx.resume();if(S.ctx.state!=='running')return;b.remove();S.repriseAudio=null;S.annulerReprise=null;resolve();}catch{}};
+      etat.insertAdjacentElement('afterend',b);
+    });
+  }
+  function couperAudioFlux(){
+    for(const source of S.sources||[]){try{source.stop();}catch{}}
+    S.sources=[];S.audio=null;S.prochainSon=0;parle=false;
+  }
+  async function empilerPCM(e){
+    if(!S.vivante)return;
+    await reveillerAudioFlux();if(!S.vivante)return;
+    const raw=atob(e.pcm||'');if(!raw.length||raw.length%2)throw Error('Morceau audio invalide');
+    const vue=new DataView(new ArrayBuffer(raw.length));for(let i=0;i<raw.length;i++)vue.setUint8(i,raw.charCodeAt(i));
+    const tampon=S.ctx.createBuffer(1,raw.length/2,S.rate||24000),canal=tampon.getChannelData(0);
+    for(let i=0;i<canal.length;i++)canal[i]=vue.getInt16(i*2,true)/32768;
+    const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.ctx.destination);
+    const debut=Math.max(S.ctx.currentTime+0.06,S.prochainSon||0);S.prochainSon=debut+tampon.duration;
+    S.sources=S.sources||[];S.sources.push(source);S.audio={pause:couperAudioFlux};parle=true;actualiser();etat.textContent='Poupif parle…';
+    const fin=new Promise(resolve=>{source.onended=()=>{S.sources=S.sources.filter(x=>x!==source);resolve();};});
+    S.finsAudio.push(fin);source.start(debut);
+    if(!S.premierSon){S.premierSon=performance.now();window.poupifDerniersTemps={premierSonMs:Math.round(S.premierSon-S.debutTour),route:S.routeFlux};}
+  }
+  async function posterFlux(chemin,charge){
+    const entetes={'Content-Type':'application/json'};if(jeton())entetes.Authorization='Bearer '+jeton();
+    S.routeFlux=chemin;S.requete=new AbortController();
+    const r=await fetch(API+chemin,{method:'POST',headers:entetes,body:JSON.stringify(charge),signal:S.requete.signal});
+    if(!r.ok){let d;try{d=await r.json();}catch{}if(r.status===401)sessionStorage.removeItem('poupif_jeton');throw Error(d?.erreur||('HTTP '+r.status));}
+    if(!r.body)throw Error('Lecture progressive indisponible');
+    const lecteur=r.body.getReader(),decodeur=new TextDecoder();let reste='',d={},terminal=false;
+    async function ligne(texte){
+      if(!texte.trim())return;const e=JSON.parse(texte);
+      if(!S.vivante)throw Error('Session terminée');
+      if(e.type==='erreur'||e.erreur)throw Error(e.erreur||'Erreur du moteur');
+      if(e.session)d.session=e.session;
+      const leg=document.getElementById('legende');
+      if(e.type==='texte'){d.texte=e.texte;leg.textContent=e.texte||'';leg.classList.add('on');}
+      if(e.type==='outil'){if(S.finsAudio.length)throw Error('Ordre audio/outil invalide');d.outil=e.outil;}
+      if(e.type==='reponse'){d.reponse=e.reponse;leg.textContent=e.reponse||'';leg.classList.add('on');}
+      if(e.type==='audio_debut'){
+        if(d.outil)throw Error('Audio avant résultat écran');
+        if(e.rate!==24000||e.canaux!==1||e.format!=='s16le')throw Error('Format audio du flux non reconnu');S.rate=e.rate;
+        if(e.pcm)await empilerPCM(e);
+      }
+      if(e.type==='audio'){if(d.outil)throw Error('Audio avant résultat écran');await empilerPCM(e);}
+      if(e.type==='fin'||e.type==='attente_outil')terminal=true;
+    }
+    try{
+      while(true){const {done,value}=await lecteur.read();if(done)break;reste+=decodeur.decode(value,{stream:true});let i;while((i=reste.indexOf('\n'))>=0){const t=reste.slice(0,i);reste=reste.slice(i+1);await ligne(t);}}
+      reste+=decodeur.decode();if(reste.trim())await ligne(reste);
+      if(!terminal)throw Error('Flux audio incomplet');return d;
+    }catch(e){S.requete?.abort();couperAudioFlux();throw e;}
+    finally{lecteur.releaseLock();S.requete=null;}
+  }
+
   async function traiterReponse(d,generation){
     if(!S.vivante||generation!==S.generation)return;
     const leg=document.getElementById('legende');
@@ -478,14 +540,15 @@ function creerSession(){
       const resultat=await executerOutil(d.outil.nom,d.outil.args);
       etat.textContent='Écran affiché, Poupif prépare sa réponse vocale…';
       if(!S.vivante||generation!==S.generation)return;
-      d=await poster('/outil',{session:S.id,outil_id:d.outil.id,nom:d.outil.nom,resultat:resultat,
+      d=await posterFlux('/outil-flux',{session:S.id,outil_id:d.outil.id,nom:d.outil.nom,resultat:resultat,
                                contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
       if(d.reponse){leg.textContent=d.reponse;leg.classList.add('on');}
     }
     if(!S.vivante||generation!==S.generation)return;
     if(d.reponse&&!d.outil){leg.textContent=d.reponse;leg.classList.add('on');}
     if(d.outil)throw new Error("La commande demande trop d'étapes. Réessayez une demande plus courte.");
-    if(d.audio)await jouerReponse(d.audio,d.audio_mime);
+    if(S.finsAudio?.length){await Promise.all(S.finsAudio);S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}}
+    else if(d.audio)await jouerReponse(d.audio,d.audio_mime);
     else if(S.vivante)etat.textContent='Poupif écoute';
   }
 
@@ -503,7 +566,8 @@ function creerSession(){
         presentation:window.poupifEtatPresentation(true)
       };
       fileContexte=[];
-      const d=await poster('/tour',charge);
+      S.debutTour=performance.now();S.premierSon=0;S.prochainSon=0;S.finsAudio=[];
+      const d=await posterFlux('/tour-flux',charge);
       if(!S.vivante||generation!==S.generation)return;
       if(d.session)S.id=d.session;
       await traiterReponse(d,generation);
@@ -562,6 +626,7 @@ function creerSession(){
 
   function fermer(){
     S.vivante=false;S.generation++;
+    S.requete?.abort();couperAudioFlux();
     if(S.rec){const r=S.rec;S.rec=null;try{r.onstop=null;r.stop();}catch(e){}}
     if(S.repriseAudio){S.repriseAudio.remove();S.repriseAudio=null;}
     if(S.annulerReprise){S.annulerReprise();S.annulerReprise=null;}
