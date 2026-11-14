@@ -679,10 +679,10 @@ try {
                    frames: 67, cols: 9, fw: 240, fh: 431, fps: 12 },
         salutf:  { src: 'images/poupif-visite/poupif-salut-face.webp',
                    frames: 96, cols: 10, fw: 240, fh: 431, fps: 12 },
-        hauteurVh: { bureau: 30, mobile: 17 },
+        hauteurVh: { bureau: 30, mobile: 26 },
         basPx: 6,
-        vitessePxS: 230,
-        margeDroite: 250,   // ne passe pas sous le bouton Parler a Poupif
+        pasParSeconde: 1.4,    // vitesse = 1.4 x sa hauteur par seconde : les pas suivent le sol
+        margeDroite: { bureau: 250, mobile: 12 },   // bureau : ne passe pas sous le bouton ; mobile : il passe dessous (bouton au-dessus)
         margeGauche: 20,
         pauseSalutMs: 700   // temps de tenue avant de rejouer le salut a l'envers
     };
@@ -710,13 +710,16 @@ try {
     var x = -9999, dir = 1;                 // dir 1 = va a droite (miroir), -1 = va a gauche
     var phase = 'attente';                  // attente|marche|salut|retour|statique
     var frame = 0, sens = 1, dernierT = 0, acc = 0, salutEnCours = null, pauseFin = 0;
-    var elW = 0, elH = 0, salutAlterne = 'salutp';
+    var elW = 0, elH = 0, vitesse = 230, salutAlterne = 'salutp';
+    function estMobile() { return window.innerWidth <= 600; }
+    function margeD() { return estMobile() ? CONF.margeDroite.mobile : CONF.margeDroite.bureau; }
     var cadreCourant = { nom: 'marche', n: 0, miroir: false };
 
     function mesurer() {
-        var mobile = window.innerWidth <= 600;
+        var mobile = estMobile();
         elH = Math.round(window.innerHeight * (mobile ? CONF.hauteurVh.mobile : CONF.hauteurVh.bureau) / 100);
         elW = Math.round(CONF.marche.fw * (elH / CONF.marche.fh));
+        vitesse = elH * CONF.pasParSeconde;
         el.width = Math.round(elW * dpr);
         el.height = Math.round(elH * dpr);
         el.style.width = elW + 'px';
@@ -744,7 +747,7 @@ try {
         mesurer();
         el.classList.remove('cache');
         if (reduit) {   // mouvement reduit : il reste debout pres du bouton, sans animation
-            x = window.innerWidth - elW - CONF.margeDroite;
+            x = window.innerWidth - elW - margeD();
             cadre('marche', 0, true); placer(); phase = 'statique'; return;
         }
         x = -elW; dir = 1; phase = 'marche'; frame = 0;
@@ -770,8 +773,8 @@ try {
         if (phase === 'marche') {
             acc += dt * c.fps / 1000;
             while (acc >= 1) { acc -= 1; frame = (frame + 1) % c.frames; }
-            x += dir * CONF.vitessePxS * dt / 1000;
-            var buteD = window.innerWidth - elW - CONF.margeDroite;
+            x += dir * vitesse * dt / 1000;
+            var buteD = window.innerWidth - elW - margeD();
             var buteG = CONF.margeGauche;
             if (dir === 1 && x >= buteD) { x = buteD; debutSalut(); }
             else if (dir === -1 && x <= buteG) { x = buteG; debutSalut(); }
@@ -798,7 +801,7 @@ try {
     window.addEventListener('resize', function () {
         if (phase === 'attente') return;
         mesurer();
-        var max = window.innerWidth - elW - CONF.margeDroite;
+        var max = window.innerWidth - elW - margeD();
         if (x > max) x = max;
         cadre(cadreCourant.nom, cadreCourant.n, cadreCourant.miroir);
         placer();
