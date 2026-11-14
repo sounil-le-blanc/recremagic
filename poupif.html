@@ -269,12 +269,12 @@
             .nav-icons { gap: 0.7rem; }
             .poupif-entete {
                 top: 118px; /* sous l'emprise réelle du logo, qui déborde de la navbar */
-                padding: 0.45rem 0.8rem;
-                border-radius: 20px;
+                padding: 0.3rem 0.7rem;
+                border-radius: 14px;
             }
-            .poupif-title { font-size: 1.1rem; }
-            .poupif-indice { font-size: 0.74rem; }
-            .poupif-precision { font-size: 0.62rem; margin-top: 0.2rem; }
+            .poupif-title { font-size: 0.95rem; }
+            .poupif-indice { font-size: 0.66rem; line-height: 1.25; }
+            .poupif-precision { font-size: 0.54rem; line-height: 1.25; margin-top: 0.08rem; }
             .visite-lien {
                 font-size: 0.85rem;
                 padding: 0.55rem 1.1rem;
@@ -353,16 +353,29 @@
         etapeCourante = nom;
         var vw = viewport.clientWidth;
         var vh = viewport.clientHeight;
-        var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
-        var reserveBas = e.lien ? 70 : 0; /* place pour le lien flottant vers la vraie page */
-        var spanH = Math.max(120, vh - reserveHaut - reserveBas);
-        var z = Math.min(vw / e.w, spanH / e.h);
-        var tx = vw / 2 - z * e.cx;
-        var ty = reserveHaut + spanH / 2 - z * e.cy;
-        var tyMin = reserveHaut - z * (e.cy - e.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
-        var tyMax = vh - reserveBas - z * (e.cy + e.h / 2); /* bas du cadre au-dessus du lien */
-        if (ty < tyMin) ty = tyMin;
-        if (ty > tyMax) ty = tyMax;
+        var z, tx, ty;
+        if (nom === 'accueil' && vw <= 600 && vw < vh) {
+            /* Téléphone portrait : zoom dans le plan pour que le dessin remplisse
+               tout l'écran au lieu de tenir en vignette au milieu d'un vide.
+               Le titre dessiné (haut du plan, y ≈ 48) se place juste sous la navbar. */
+            z = Math.max(vw / e.w, vh / e.h);
+            tx = vw / 2 - z * e.cx;
+            if (tx > 0) tx = 0;
+            if (tx < vw - z * e.w) tx = vw - z * e.w;
+            ty = 50 - z * 48;
+            if (ty < vh - z * e.h) ty = vh - z * e.h;
+        } else {
+            var reserveHaut = (entete ? entete.getBoundingClientRect().bottom : 0) + 12; /* l'en-tete ne couvre jamais l'apercu */
+            var reserveBas = e.lien ? 70 : 0; /* place pour le lien flottant vers la vraie page */
+            var spanH = Math.max(120, vh - reserveHaut - reserveBas);
+            z = Math.min(vw / e.w, spanH / e.h);
+            tx = vw / 2 - z * e.cx;
+            ty = reserveHaut + spanH / 2 - z * e.cy;
+            var tyMin = reserveHaut - z * (e.cy - e.h / 2); /* haut du cadre sous l'en-tete : jamais rogne ni couvert */
+            var tyMax = vh - reserveBas - z * (e.cy + e.h / 2); /* bas du cadre au-dessus du lien */
+            if (ty < tyMin) ty = tyMin;
+            if (ty > tyMax) ty = tyMax;
+        }
         stage.style.transform = 'translate(' + tx + 'px, ' + ty + 'px) scale(' + z + ')';
         if (e.lien) {
             lien.href = e.lien;
@@ -420,3 +433,4 @@
 
 </body>
 </html>
+
