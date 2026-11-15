@@ -520,6 +520,7 @@ function creerSession(){
       if(e.conduite_active===false){S.conduite=false;S.fileEvenements=[];}
       if(e.conduite_terminee===true){S.conduite=false;S.fileEvenements=[];d.conduite_terminee=true;}
       if(e.type==='ignore'){terminal=true;d.ignore=true;if(e.raison==='attente_reponse_visiteur'){S.attendVisiteur=true;S.fileEvenements=[];clearTimeout(S.attenteConduite);}}
+      if(e.type==='voix_coupee'){terminal=true;d.voixCoupee=true;d.audioIgnore=true;couperAudioFlux();S.finsAudio=[];}
       const leg=document.getElementById('legende');
       if(e.type==='texte'){d.texte=e.texte;leg.textContent=e.texte||'';leg.classList.add('on');}
       if(e.type==='outil'){if(S.finsAudio.length)throw Error('Ordre audio/outil invalide');d.outil=e.outil;}
@@ -527,12 +528,18 @@ function creerSession(){
         const texte=e.reponse||'';
         if(S.auto){
           const tokens=t=>new Set(t.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').match(/[a-z0-9]+/g)||[]);
-          const now=tokens(texte),avant=tokens(S.dernierePhraseAuto||'');
-          const commun=[...now].filter(t=>avant.has(t)).length;
-          const affiche=JSON.stringify(window.poupifEtatPresentation(false).affiche);
-          if(now.size>12&&avant.size>12&&affiche===S.dernierEcranParle&&commun/Math.max(now.size,avant.size)>0.78){
-            d.ignore=true;d.audioIgnore=true;S.conduite=false;S.fileEvenements=[];
-          }else{S.dernierePhraseAuto=texte;S.dernierEcranParle=affiche;}
+          const now=tokens(texte);
+          if(now.size>12){
+            const affiche=JSON.stringify(window.poupifEtatPresentation(false).affiche);
+            if(d.refAuto===undefined){d.refAuto=S.dernierePhraseAuto||'';d.refEcran=S.dernierEcranParle;}
+            if(!d.audioIgnore){
+              const avant=tokens(d.refAuto);
+              const commun=[...now].filter(t=>avant.has(t)).length;
+              if(avant.size>12&&affiche===d.refEcran&&commun/Math.max(now.size,avant.size)>0.78){
+                d.ignore=true;d.audioIgnore=true;S.conduite=false;S.fileEvenements=[];couperAudioFlux();S.finsAudio=[];
+              }else{S.dernierePhraseAuto=texte;S.dernierEcranParle=affiche;}
+            }
+          }
         }
         if(!d.audioIgnore){d.reponse=texte;leg.textContent=texte;leg.classList.add('on');}
       }
