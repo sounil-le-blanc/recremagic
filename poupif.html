@@ -461,7 +461,7 @@ function creerSession(){
     if(!S.vivante)return;
     if(S.ctx.state!=='running')throw Error('Lecture audio suspendue');
     await new Promise((resolve,reject)=>{
-      const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.ctx.destination);
+      const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.sortie||S.ctx.destination);
       S.audio={pause:()=>{try{source.stop();}catch(e){}}};parle=true;actualiser();etat.textContent='Poupif parle…';
       source.onended=()=>{S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}resolve();};
       try{source.start();}catch(e){S.audio=null;parle=false;reject(e);}
@@ -491,7 +491,7 @@ function creerSession(){
     const vue=new DataView(new ArrayBuffer(raw.length));for(let i=0;i<raw.length;i++)vue.setUint8(i,raw.charCodeAt(i));
     const tampon=S.ctx.createBuffer(1,raw.length/2,S.rate||24000),canal=tampon.getChannelData(0);
     for(let i=0;i<canal.length;i++)canal[i]=vue.getInt16(i*2,true)/32768;
-    const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.ctx.destination);
+    const source=S.ctx.createBufferSource();source.buffer=tampon;source.connect(S.sortie||S.ctx.destination);
     const debut=Math.max(S.ctx.currentTime+0.06,S.prochainSon||0);S.prochainSon=debut+tampon.duration;
     S.sources=S.sources||[];S.sources.push(source);S.audio={pause:couperAudioFlux};parle=true;actualiser();etat.textContent='Poupif parle…';
     const fin=new Promise(resolve=>{source.onended=()=>{S.sources=S.sources.filter(x=>x!==source);resolve();};});
@@ -616,7 +616,7 @@ function creerSession(){
       }
     }else{
       if(n<0.014)S.silence++;else S.silence=0;
-      if(S.silence>11||Date.now()-S.debut>15000){try{S.rec.stop();}catch(e){S.rec=null;}}
+      if(S.silence>7||Date.now()-S.debut>15000){try{S.rec.stop();}catch(e){S.rec=null;}}
     }
   }
 
@@ -624,6 +624,14 @@ function creerSession(){
     // Déverrouiller le son pendant le clic utilisateur, avant tout appel asynchrone.
     S.ctx=new (window.AudioContext||window.webkitAudioContext)();
     const reveil=S.ctx.resume();
+    // +6 dB pour la parole ; limiteur doux sans écrêtage numérique.
+    S.sortie=S.ctx.createWaveShaper();
+    const courbe=new Float32Array(65537);
+    for(let i=0;i<courbe.length;i++){
+      const x=(i/(courbe.length-1)*2-1)*2,a=Math.abs(x);
+      courbe[i]=Math.sign(x)*(a<=0.8?a:0.8+0.18*(1-Math.exp(-(a-0.8)/0.18)));
+    }
+    S.sortie.curve=courbe;S.sortie.oversample='4x';S.sortie.connect(S.ctx.destination);
     S.flux=await navigator.mediaDevices.getUserMedia({audio:{echoCancellation:true,noiseSuppression:true,channelCount:1}});
     await reveil;
     const src=S.ctx.createMediaStreamSource(S.flux);
