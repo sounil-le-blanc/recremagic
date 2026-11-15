@@ -513,9 +513,13 @@ function creerSession(){
       if(!S.vivante)throw Error('Session terminée');
       if(e.type==='erreur'||e.erreur)throw Error(e.erreur||'Erreur du moteur');
       if(e.session)d.session=e.session;
+      if(e.attente_visiteur===true){
+        S.attendVisiteur=true;S.fileEvenements=[];clearTimeout(S.attenteConduite);d.attente_visiteur=true;
+      }else if(e.attente_visiteur===false){S.attendVisiteur=false;}
+      if(e.conduite_active===true){S.conduite=true;}
       if(e.conduite_active===false){S.conduite=false;S.fileEvenements=[];}
       if(e.conduite_terminee===true){S.conduite=false;S.fileEvenements=[];d.conduite_terminee=true;}
-      if(e.type==='ignore'){terminal=true;d.ignore=true;}
+      if(e.type==='ignore'){terminal=true;d.ignore=true;if(e.raison==='attente_reponse_visiteur'){S.attendVisiteur=true;S.fileEvenements=[];clearTimeout(S.attenteConduite);}}
       const leg=document.getElementById('legende');
       if(e.type==='texte'){d.texte=e.texte;leg.textContent=e.texte||'';leg.classList.add('on');}
       if(e.type==='outil'){if(S.finsAudio.length)throw Error('Ordre audio/outil invalide');d.outil=e.outil;}
@@ -569,14 +573,15 @@ function creerSession(){
     if(S.finsAudio?.length){await Promise.all(S.finsAudio);S.audio=null;parle=false;if(S.vivante){actualiser();etat.textContent='Poupif écoute';}}
     else if(d.audio)await jouerReponse(d.audio,d.audio_mime);
     else if(S.vivante)etat.textContent='Poupif écoute';
+    if(S.vivante&&S.attendVisiteur)etat.textContent=S.muet?'À vous de répondre · reprenez le micro quand vous le souhaitez':'À vous de répondre · Poupif vous écoute';
   }
 
   function programmerConduite(delai=1200){
     clearTimeout(S.attenteConduite);
-    if(S.vivante&&S.conduite&&!S.muet)S.attenteConduite=setTimeout(pomperConduite,delai);
+    if(S.vivante&&S.conduite&&!S.muet&&!S.attendVisiteur)S.attenteConduite=setTimeout(pomperConduite,delai);
   }
   function conduire(e){
-    if(!S.vivante||!S.conduite)return;
+    if(!S.vivante||!S.conduite||S.attendVisiteur)return;
     const cle=e.type==='poursuivre_presentation'?null:e.type+':'+e.etape;
     if(cle&&S.vus.has(cle))return;if(cle)S.vus.add(cle);
     // Une étape dépassée ne doit pas être racontée après l'arrivée.
@@ -584,7 +589,7 @@ function creerSession(){
     S.fileEvenements.push({...e,id:'scene-'+(++S.numeroEvenement)});programmerConduite(150);
   }
   async function pomperConduite(){
-    if(!S.vivante||!S.conduite||S.muet)return;
+    if(!S.vivante||!S.conduite||S.muet||S.attendVisiteur)return;
     if(S.envoi||S.audio||S.rec){programmerConduite(250);return;}
     const e=S.fileEvenements.shift();if(!e)return;
     if(++S.toursAuto>16){S.conduite=false;etat.textContent='Poupif vous laisse la parole.';return;}
@@ -594,7 +599,7 @@ function creerSession(){
       const d=await posterFlux('/conduite-flux',{session:S.id,evenement:e,visite:window.poupifEtatVisite(),presentation:window.poupifEtatPresentation(true),contexte:prendreContexte()});
       if(!S.vivante||generation!==S.generation)return;
       await traiterReponse(d,generation);
-      if(S.conduite&&window.poupifEtatVisite().scenePrete&&!d.ignore&&!d.conduite_terminee&&!S.fileEvenements.length)
+      if(S.conduite&&!S.attendVisiteur&&window.poupifEtatVisite().scenePrete&&!d.ignore&&!d.conduite_terminee&&!S.fileEvenements.length)
         S.fileEvenements.push({id:'scene-'+(++S.numeroEvenement),type:'poursuivre_presentation',etape:'petite_scene'});
     }catch(e){if(S.vivante&&S.conduite){S.conduite=false;S.fileEvenements=[];etat.textContent='La visite guidée est en pause ('+e.message+'). Vous pouvez parler à Poupif.';}}
     finally{S.auto=false;S.envoi=false;programmerConduite();}
@@ -620,6 +625,7 @@ function creerSession(){
       if(!S.vivante||generation!==S.generation)return;
       if(d.session)S.id=d.session;
       await traiterReponse(d,generation);
+      if(S.conduite&&!S.attendVisiteur&&!S.fileEvenements.length&&window.poupifEtatVisite().scenePrete)conduire({type:'poursuivre_presentation',etape:'petite_scene'});
     }catch(e){
       if(S.vivante&&generation===S.generation)etat.textContent='Échange ou lecture audio impossible ('+e.message+'). La réponse reste visible en sous-titres.';
     }finally{
