@@ -188,6 +188,7 @@ const pret=Promise.all(images.map(i=>i.decode?i.decode().catch(()=>{}):0));
 let scenePrete=false,projectionEnAttente='accueil';
 const THEMES={"spectacles":{"titre":"Les spectacles","lien":"spectacles","diapos":[{"id":"du-coup-1","titre":"Du coup on vient chez vous","accroche":"Flo rêve d'entrer dans la troupe. Toto va devoir suivre.","image":"images/Ducoup-on-vien-chez-vous.webp","faits":"Flo passe une audition pour intégrer la troupe sous l'œil de Poupif. Toto tente de canaliser son imagination. Musique, magie et théâtre burlesque.","source":"https://www.recremagic.com/spectacles","texteGuide":"Bienvenue dans la troupe ! Dans Du coup on vient chez vous, Flo rêve de nous rejoindre. Les auditions commencent sous mon œil de directeur... mais avec son imagination débordante, Toto a bien du mal à le canaliser ! Magie, musique, marionnettes et théâtre burlesque se rencontrent dans cette première aventure.","reperes":"1 h. En extérieur avec les roulottes ou sur votre scène en intérieur."},{"id":"du-coup-2","titre":"Du coup on revient chez vous","accroche":"Une tournée joyeuse. Une ancienne malédiction. Un royaume à défendre.","image":"images/Ducoup-on-revient-chez-vous.webp","faits":"Une ancienne malédiction perturbe la tournée de Flo et Toto. Gros Boulard enrôle les créatures du royaume magique pour conquérir le monde.","source":"https://www.recremagic.com/spectacles","texteGuide":"Ah, les revoilà sur les routes ! Dans Du coup on revient chez vous, la tournée de Flo et Toto prend un drôle de tournant : une ancienne malédiction se réveille. Gros Boulard veut conquérir le monde et enrôle les créatures du royaume magique. Nos deux amis réussiront-ils à déjouer ses plans ?","reperes":"1 h. Tout public dès 3 ans. En extérieur avec les roulottes ou sur votre scène en intérieur."},{"id":"du-coup-3","titre":"Du coup 3 - Le royaume magique en péril ?","accroche":"Les êtres du royaume disparaissent. Toto et Flo doivent comprendre pourquoi.","image":"images/Du-coup-3.webp","faits":"Les habitants du royaume disparaissent pendant les numéros de Toto et Flo. Ils doivent résoudre cette énigme. Grand final de la trilogie.","source":"https://www.recremagic.com/spectacles","texteGuide":"Quelque chose ne tourne pas rond dans le royaume ! Pendant les numéros de Toto et Flo, ses habitants disparaissent les uns après les autres. Dans Du coup 3 - Le royaume magique en péril ?, il faut résoudre cette énigme pour sauver le monde imaginaire. C'est le grand final de la trilogie, entre magie, musique, théâtre et marionnettes.","reperes":"Grand final de la série de trois spectacles. Durée et âge minimum non indiqués sur la fiche actuelle : à confirmer avant de les annoncer."},{"id":"roulettes","titre":"Comme sur des roulettes","accroche":"Toto aime l'ordre. Flo préfère y semer un peu de folie.","image":"images/Comme-sur-des-roulette.webp","faits":"Toto partage la scène avec Flo, imprévisible et farceur. Humour, illusion, quiproquos et tendresse.","source":"https://www.recremagic.com/spectacles","texteGuide":"Avec ces deux-là, rien ne roule tout à fait comme prévu ! Dans Comme sur des roulettes, Toto doit partager la scène avec Flo, aussi farceur qu'attachant. Gaffes, illusions, quiproquos et moments de tendresse bousculent son univers bien ordonné. Un duo complice qui embarque petits et grands dans sa drôle de mécanique.","reperes":"55 min. Tout public. Sur votre scène en intérieur ou en extérieur."},{"id":"maboul","titre":"Délicieusement Maboul","accroche":"Un clown haut en couleurs, des gags et de la magie.","image":"images/ybos.webp","faits":"Monsieur YBOS, clown haut en couleurs : gags, magie et surprises dans un spectacle rythmé et joyeux.","source":"https://www.recremagic.com/spectacles","texteGuide":"Je te présente maintenant Monsieur YBOS ! Dans Délicieusement Maboul, ce clown haut en couleurs arrive avec une énergie débordante et son grain de folie. Entre gags et numéros de magie, il entraîne petits et grands dans un tourbillon de rires et de surprises. De quoi découvrir qu'il est bon d'être un peu maboul !","reperes":"1 h. Tout public dès 4 ans. Sur votre scène en intérieur ou en extérieur."}]},"calendrier":{"titre":"Le calendrier","lien":"calendrier","diapos":[{"id":"apercu","titre":"Le calendrier","image":"images/poupif-visite/ecrans-calendrier.webp","faits":"Calendrier interactif public chargé à la demande : dates, types, titres et lieux. Navigation par mois, date et liste complète. L’état renvoie statut/horodatage. Aucun événement annoncé ne signifie jamais troupe libre ; aucune disponibilité ou place vérifiée.","source":"https://www.recremagic.com/calendrier"}]},"caravane":{"titre":"La caravane","lien":"familles","diapos":[{"id":"apercu","titre":"La caravane","image":"images/poupif-visite/ecrans-caravane.webp","faits":"Aperçu figé de la page caravane. Pas de diapositive de détail supplémentaire disponible dans ce thème. Le lien ouvre la page actuelle.","source":"https://www.recremagic.com/familles"}]},"expositions":{"titre":"Les expositions","lien":"expos.html","diapos":[{"id":"marionnettes","titre":"La Féerie des marionnettes","accroche":"Un bouton, et 56 personnages prennent vie.","image":"images/expo-marionnettes.webp","faits":"12 vitrines animées et sonorisées, 56 personnages. Intérieur uniquement. 40 m² minimum, prise 220 V par vitrine, installation annoncée de 2 h.","texteGuide":"Approche... ici, c'est le public qui réveille les personnages ! La Féerie des marionnettes réunit douze vitrines animées et sonorisées. On appuie sur un bouton, et cinquante-six personnages prennent vie. Une exposition à installer en intérieur pour ouvrir une fenêtre sur notre imaginaire.","source":"https://www.recremagic.com/expos.html"},{"id":"geants","titre":"Les Géants du Carnaval","accroche":"Douze géants animés. En intérieur ou extérieur couvert.","image":"images/expo-geants.webp","faits":"12 personnages géants de 2 à 3 m. Intérieur ou extérieur couvert. 40 m² minimum. Installation annoncée de 2 h. Besoins électriques selon configuration.","texteGuide":"Ceux-là, difficile de les manquer ! Les Géants du Carnaval, ce sont douze personnages de deux à trois mètres qui s'animent et suivent les visiteurs du regard. On les accueille en intérieur ou dans un extérieur couvert. Pour les conditions d'installation, on regarde le lieu avec la troupe.","source":"https://www.recremagic.com/expos.html"}]},"sejours":{"titre":"Les séjours artistiques","lien":"stages.html","diapos":[{"id":"apprendre","titre":"Venir apprendre","accroche":"Créer avec la troupe, même quand on débute.","image":"images/Super-photo4.webp","faits":"Stages guidés ouverts aux novices. Apprentissage en créant : marionnettes, décors, sons, lumières. Dates à venir. Tarifs et inscriptions à préciser directement.","texteGuide":"Et si, cette fois, tu passais de l'autre côté du décor ? Avec nos stages, on apprend en fabriquant : marionnettes, décors, sons ou lumières. Pas besoin d'être déjà artiste, la troupe guide les premiers pas. Les prochaines dates et les modalités sont à préciser directement avec nous.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir apprendre · photo"},{"id":"apprendre-texte","titre":"Venir apprendre","accroche":"Créer avec la troupe, même quand on débute.","image":"images/Super-photo4.webp","faits":"Stages guidés ouverts aux novices. Apprentissage en créant : marionnettes, décors, sons, lumières. Dates à venir. Tarifs et inscriptions à préciser directement.","texteGuide":"Et si, cette fois, tu passais de l'autre côté du décor ? Avec nos stages, on apprend en fabriquant : marionnettes, décors, sons ou lumières. Pas besoin d'être déjà artiste, la troupe guide les premiers pas. Les prochaines dates et les modalités sont à préciser directement avec nous.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir apprendre · texte","format":"texte","titreEcran":"Une semaine. Une troupe. Votre spectacle.","ideesEcran":["Imaginer une histoire","Fabriquer ensemble","Jouer pour de vrai"],"noteEcran":"Dates et modalités avec la troupe"},{"id":"creer","titre":"Venir créer","accroche":"Votre projet au cœur du séjour.","image":"images/2-roulottes-nuit-vergnet.webp","faits":"Résidence autour du projet du visiteur : regard artistique, accompagnement ponctuel ou lieu et quotidien pris en charge. Modalités à convenir. Pas de dates ni tarifs annoncés.","texteGuide":"Tu as déjà une idée qui te trotte dans la tête ? Ici, tu peux venir avec ton propre projet. Un regard artistique, un coup de main ponctuel, ou simplement le lieu et le quotidien pris en charge : le séjour se construit autour de ta création. On en parle avec la troupe pour trouver la bonne forme.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir créer · photo"},{"id":"creer-texte","titre":"Venir créer","accroche":"Votre projet au cœur du séjour.","image":"images/2-roulottes-nuit-vergnet.webp","faits":"Résidence autour du projet du visiteur : regard artistique, accompagnement ponctuel ou lieu et quotidien pris en charge. Modalités à convenir. Pas de dates ni tarifs annoncés.","texteGuide":"Tu as déjà une idée qui te trotte dans la tête ? Ici, tu peux venir avec ton propre projet. Un regard artistique, un coup de main ponctuel, ou simplement le lieu et le quotidien pris en charge : le séjour se construit autour de ta création. On en parle avec la troupe pour trouver la bonne forme.","source":"https://www.recremagic.com/stages.html","menuTitre":"Venir créer · texte","format":"texte","titreEcran":"Votre projet. Le temps de créer.","ideesEcran":["Écrire · répéter · fabriquer","Un regard artistique à la carte","Le lieu et le quotidien pris en charge"],"noteEcran":"Accueil à construire ensemble"},{"id":"enfants","titre":"Séjours enfants : en préparation","accroche":"Une jeune troupe, un séjour, un spectacle à inventer.","image":"images/Super-photo5.webp","faits":"Projet en préparation, pas une session ouverte ou réservable annoncée. Apprendre au fil du séjour puis monter un spectacle. Âges, dates, tarifs et encadrement non détaillés sur la page.","texteGuide":"Une autre aventure se prépare pour les jeunes troupes : apprendre ensemble au fil d'un séjour, puis monter un spectacle à jouer à la fin. Ce projet est encore en préparation. Je peux te raconter l'idée, mais je n'ai pas de date ni de place à te promettre.","source":"https://www.recremagic.com/stages.html","menuTitre":"Séjours enfants · photo"},{"id":"enfants-texte","titre":"Séjours enfants : en préparation","accroche":"Une jeune troupe, un séjour, un spectacle à inventer.","image":"images/Super-photo5.webp","faits":"Projet en préparation, pas une session ouverte ou réservable annoncée. Apprendre au fil du séjour puis monter un spectacle. Âges, dates, tarifs et encadrement non détaillés sur la page.","texteGuide":"Une autre aventure se prépare pour les jeunes troupes : apprendre ensemble au fil d'un séjour, puis monter un spectacle à jouer à la fin. Ce projet est encore en préparation. Je peux te raconter l'idée, mais je n'ai pas de date ni de place à te promettre.","source":"https://www.recremagic.com/stages.html","menuTitre":"Séjours enfants · texte","format":"texte","titreEcran":"Une jeune troupe, un spectacle.","ideesEcran":["Découvrir · fabriquer · répéter","Créer ensemble","Jouer à la fin"],"noteEcran":"En préparation · inscriptions non ouvertes"}]},"ecrin":{"titre":"L'Écrin Récré Magic","lien":"ecrin","diapos":[{"id":"lieu","titre":"L'Écrin Récré Magic","accroche":"Créer, séjourner, partager dans un lieu habité par le spectacle.","image":"images/2-ecrin-roulotte-allee.webp","faits":"Résidence d'artistes et séjour en roulotte. 6 personnes : 2 lits doubles et 2 lits simples. Restauration possible selon modalités avec Thomas. Conditions, tarifs et disponibilités directement avec la troupe.","texteGuide":"Bienvenue à L'Écrin ! Des roulottes de caractère, des décors nourris de cirque et le plaisir de prendre un autre rythme. On peut y séjourner ou venir créer en résidence. Pour préparer ton accueil, les tarifs et les disponibilités, c'est avec la troupe qu'on construit la suite.","source":"https://www.recremagic.com/ecrin"}]}};
 let diapoEnAttente=null;
+function guider(type,etape){window.poupifConversation?.conduire({type,etape});}
 function contexte(texte){window.poupifConversation?.sendContextualUpdate('ouverture-scene : '+texte);}
 let changementEcran=0,ecranAnime=null,gesteDebut=-Infinity;
 function annulerEcran(){changementEcran++;ecranAnime?.cancel();ecranAnime=null;gesteDebut=-Infinity;}
@@ -303,7 +304,7 @@ document.querySelectorAll('[data-ecran]').forEach(b=>b.addEventListener('click',
 document.getElementById('retourThemes').addEventListener('click',()=>{document.getElementById('commandesCalendrier').hidden=true;document.getElementById('themesNav').hidden=false;document.getElementById('menuEntete').hidden=true;document.getElementById('choixDiapos').hidden=true;document.getElementById('presentationInfos').hidden=true;});
 
 
-function ouvrirScene(){scenePrete=true;repere.textContent='La petite scène';repere.hidden=true;if(document.body.dataset.vocal!=='oui')leg.classList.remove('on');document.getElementById('ecranNav').hidden=false;projeter(projectionEnAttente,diapoEnAttente);contexte('Scène prête, arrivée devant le château. Les thèmes présents dans le catalogue de la régie peuvent maintenant apparaître.');}
+function ouvrirScene(){scenePrete=true;guider('arrivee_scene','petite_scene');repere.textContent='La petite scène';repere.hidden=true;if(document.body.dataset.vocal!=='oui')leg.classList.remove('on');document.getElementById('ecranNav').hidden=false;projeter(projectionEnAttente,diapoEnAttente);contexte('Scène prête, arrivée devant le château. Les thèmes présents dans le catalogue de la régie peuvent maintenant apparaître.');}
 async function jouer(){
  annulerEcran();
  scenePrete=false;projectionEnAttente='accueil';diapoEnAttente=null;document.getElementById('invitation').hidden=true;document.getElementById('ecran').hidden=true;document.getElementById('ecranNav').hidden=true;
@@ -318,14 +319,14 @@ async function jouer(){
  await anim(-2,-1,2800,id);if(!ok())return;
  dire('Poupif connaît le chemin.');
  await anim(-1,0,6200,id);if(!ok())return;
- reposer();await dire('Là. La petite roulotte, lumière allumée.');await sleep(2600);if(!ok())return;
+ reposer();guider('etape_trajet','roulotte');await dire('Là. La petite roulotte, lumière allumée.');await sleep(2600);if(!ok())return;
  await dire('Il frappe. Personne ne répond… il entre.');await sleep(1400);if(!ok())return;
  document.body.dataset.scene='caravane';marcher();repere.textContent='Dans la roulotte';
  await anim(0,1,4600,id);if(!ok())return;
- reposer();contexte('Nous sommes dans l’atelier. La petite scène est encore au fond.');repere.textContent="L'atelier";await dire('Plus grand dedans que dehors.');await sleep(3200);if(!ok())return;
+ reposer();guider('etape_trajet','atelier');contexte('Nous sommes dans l’atelier. La petite scène est encore au fond.');repere.textContent="L'atelier";await dire('Plus grand dedans que dehors.');await sleep(3200);if(!ok())return;
  await dire('Au fond, une toute petite scène.');await sleep(1700);if(!ok())return;
  marcher();await anim(1,2,4200,id);if(!ok())return;
- reposer();repere.textContent='La petite scène';await sleep(900);if(!ok())return;
+ reposer();guider('etape_trajet','petite_scene');repere.textContent='La petite scène';await sleep(900);if(!ok())return;
  lueur.classList.add('on');petite.classList.add('allume');await dire('Chut… le château s\'allume.');await sleep(3600);if(!ok())return;
  await dire('Monsieur Poupif vous attend.');await sleep(2600);if(!ok())return;
  rejouerBtn.hidden=false;ouvrirScene();
@@ -381,6 +382,7 @@ try{
    La clé reste côté moteur. Cette page ne fait que transporter du son et des états. */
 const API = window.POUPIF_API || '/api/poupif';
 let fileContexte = [];
+const prendreContexte=()=>fileContexte.splice(0);
 const noterContexte = t => { fileContexte.push(String(t)); if(fileContexte.length>12) fileContexte.shift(); };
 
 const ETAPES_VALIDES = ['accueil','spectacles','expositions','sejours','ecrin','calendrier','caravane'];
@@ -433,6 +435,7 @@ function creerSession(){
   const S={vivante:true,generation:0,rec:null,flux:null,ctx:null,analyse:null,minuterie:null,
            audio:null,envoi:false,silence:0,debut:0,muet:false,id:null};
   const session={id:null};
+  Object.assign(S,{conduite:true,auto:false,fileEvenements:[],vus:new Set(),numeroEvenement:0,toursAuto:0});
 
   function niveau(){
     const d=new Float32Array(S.analyse.fftSize);S.analyse.getFloatTimeDomainData(d);
@@ -510,6 +513,9 @@ function creerSession(){
       if(!S.vivante)throw Error('Session terminée');
       if(e.type==='erreur'||e.erreur)throw Error(e.erreur||'Erreur du moteur');
       if(e.session)d.session=e.session;
+      if(e.conduite_active===false){S.conduite=false;S.fileEvenements=[];}
+      if(e.conduite_terminee===true){S.conduite=false;S.fileEvenements=[];d.conduite_terminee=true;}
+      if(e.type==='ignore'){terminal=true;d.ignore=true;}
       const leg=document.getElementById('legende');
       if(e.type==='texte'){d.texte=e.texte;leg.textContent=e.texte||'';leg.classList.add('on');}
       if(e.type==='outil'){if(S.finsAudio.length)throw Error('Ordre audio/outil invalide');d.outil=e.outil;}
@@ -541,7 +547,7 @@ function creerSession(){
       etat.textContent='Écran affiché, Poupif prépare sa réponse vocale…';
       if(!S.vivante||generation!==S.generation)return;
       d=await posterFlux('/outil-flux',{session:S.id,outil_id:d.outil.id,nom:d.outil.nom,resultat:resultat,
-                               contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
+                               contexte:prendreContexte(),visite:window.poupifEtatVisite()});
       if(d.reponse){leg.textContent=d.reponse;leg.classList.add('on');}
     }
     if(!S.vivante||generation!==S.generation)return;
@@ -552,8 +558,38 @@ function creerSession(){
     else if(S.vivante)etat.textContent='Poupif écoute';
   }
 
+  function programmerConduite(delai=1200){
+    clearTimeout(S.attenteConduite);
+    if(S.vivante&&S.conduite&&!S.muet)S.attenteConduite=setTimeout(pomperConduite,delai);
+  }
+  function conduire(e){
+    if(!S.vivante||!S.conduite)return;
+    const cle=e.type==='poursuivre_presentation'?null:e.type+':'+e.etape;
+    if(cle&&S.vus.has(cle))return;if(cle)S.vus.add(cle);
+    // Une étape dépassée ne doit pas être racontée après l'arrivée.
+    if(e.type==='etape_trajet'||e.type==='arrivee_scene')S.fileEvenements=S.fileEvenements.filter(x=>x.type!=='etape_trajet');
+    S.fileEvenements.push({...e,id:'scene-'+(++S.numeroEvenement)});programmerConduite(150);
+  }
+  async function pomperConduite(){
+    if(!S.vivante||!S.conduite||S.muet)return;
+    if(S.envoi||S.audio||S.rec){programmerConduite(250);return;}
+    const e=S.fileEvenements.shift();if(!e)return;
+    if(++S.toursAuto>16){S.conduite=false;etat.textContent='Poupif vous laisse la parole.';return;}
+    const generation=S.generation;S.envoi=true;S.auto=true;
+    S.debutTour=performance.now();S.premierSon=0;S.prochainSon=0;S.finsAudio=[];
+    try{
+      const d=await posterFlux('/conduite-flux',{session:S.id,evenement:e,visite:window.poupifEtatVisite(),presentation:window.poupifEtatPresentation(true),contexte:prendreContexte()});
+      if(!S.vivante||generation!==S.generation)return;
+      await traiterReponse(d,generation);
+      if(S.conduite&&window.poupifEtatVisite().scenePrete&&!d.ignore&&!d.conduite_terminee&&!S.fileEvenements.length)
+        S.fileEvenements.push({id:'scene-'+(++S.numeroEvenement),type:'poursuivre_presentation',etape:'petite_scene'});
+    }catch(e){if(S.vivante&&S.conduite){S.conduite=false;S.fileEvenements=[];etat.textContent='La visite guidée est en pause ('+e.message+'). Vous pouvez parler à Poupif.';}}
+    finally{S.auto=false;S.envoi=false;programmerConduite();}
+  }
+
   async function envoyerTour(blob,mime){
     if(!S.vivante||S.envoi)return;
+    S.conduite=false;S.fileEvenements=[];clearTimeout(S.attenteConduite);
     const generation=S.generation;
     S.envoi=true;etat.textContent='Réflexion…';
     try{
@@ -561,7 +597,7 @@ function creerSession(){
         session:S.id,
         mime:mime||'audio/webm',
         audio:b64(await blob.arrayBuffer()),
-        contexte:fileContexte.slice(),
+        contexte:prendreContexte(),
         visite:window.poupifEtatVisite(),
         presentation:window.poupifEtatPresentation(true)
       };
@@ -586,16 +622,23 @@ function creerSession(){
     try{
       const d=await posterFlux('/accueil-flux',{
         session:S.id,visite:window.poupifEtatVisite(),presentation:window.poupifEtatPresentation(true),
-        contexte:['Ouverture consentie par le visiteur. Début du trajet peint vers la roulotte.',...fileContexte.slice()]
+        contexte:['Ouverture consentie par le visiteur. Début du trajet peint vers la roulotte.',...prendreContexte()]
       });
       if(!S.vivante||generation!==S.generation)return;
       await traiterReponse(d,generation);
     }catch(e){if(S.vivante&&generation===S.generation)etat.textContent="L'accueil vocal n'a pas pu démarrer ("+e.message+'). Vous pouvez parler à Poupif.';}
-    finally{S.envoi=false;}
+    finally{S.envoi=false;programmerConduite();}
   }
 
   function veille(){
-    if(!S.vivante||!S.analyse||S.envoi||S.muet||S.audio)return;
+    if(!S.vivante||!S.analyse||S.muet)return;
+    // Priorité au visiteur pendant une prise de parole automatique.
+    if(S.auto){
+      S.interruption=niveau()>0.065?(S.interruption||0)+1:0;
+      if(S.interruption>=3){S.conduite=false;S.fileEvenements=[];S.generation++;S.requete?.abort();couperAudioFlux();S.interruption=0;}
+      return;
+    }
+    if(S.envoi||S.audio)return;
     const n=niveau();
     if(!S.rec){
       if(n>0.02){
@@ -638,7 +681,7 @@ function creerSession(){
     S.analyse=S.ctx.createAnalyser();S.analyse.fftSize=1024;src.connect(S.analyse);
     S.minuterie=setInterval(veille,80);
     try{
-      const d=await poster('/session',{contexte:fileContexte.slice(),visite:window.poupifEtatVisite()});
+      const d=await poster('/session',{contexte:prendreContexte(),visite:window.poupifEtatVisite()});
       if(!d.jeton||!d.session)throw new Error('Démarrage incomplet du moteur');
       sessionStorage.setItem('poupif_jeton',d.jeton);
       if(d.session)S.id=d.session;
@@ -649,7 +692,7 @@ function creerSession(){
   }
 
   function fermer(){
-    S.vivante=false;S.generation++;
+    S.vivante=false;S.generation++;clearTimeout(S.attenteConduite);S.conduite=false;S.fileEvenements=[];
     S.requete?.abort();couperAudioFlux();
     if(S.rec){const r=S.rec;S.rec=null;try{r.onstop=null;r.stop();}catch(e){}}
     if(S.repriseAudio){S.repriseAudio.remove();S.repriseAudio=null;}
@@ -666,8 +709,9 @@ function creerSession(){
   return {
     demarrer:demarrer,
     accueillir:accueillir,
+    conduire:conduire,
     endSession:async()=>{fermer();},
-    setMicMuted:m=>{S.muet=!!m;if(S.flux)S.flux.getAudioTracks().forEach(t=>t.enabled=!S.muet);},
+    setMicMuted:m=>{S.muet=!!m;if(S.muet)clearTimeout(S.attenteConduite);else if(S.conduite&&S.fileEvenements.length)programmerConduite();if(S.flux)S.flux.getAudioTracks().forEach(t=>t.enabled=!S.muet);},
     sendContextualUpdate:t=>{noterContexte(t);}
   };
 }
