@@ -142,29 +142,22 @@
         btn.textContent = 'Connexion...';
 
         try {
-            // Hasher le mot de passe
-            const passwordHash = await sha256(password);
+            // Connexion via Supabase Auth, puis controle du role cote base
+            const { data: authData, error: authError } = await window._supabase.auth.signInWithPassword({ email, password });
+            let role = null;
+            if (!authError && authData && authData.session) {
+                const r = await window._supabase.rpc('my_admin_role');
+                role = r.error ? null : r.data;
+            }
 
-            // Chercher l'admin dans la base
-            const { data, error } = await window._supabase
-                .rpc('admin_login', { p_email: email, p_hash: passwordHash });
-
-            if (error || !data) {
-                errorEl.textContent = '❌ Email ou mot de passe incorrect.';
+            if (!role) {
+                if (!authError) { await window._supabase.auth.signOut(); }
+                errorEl.textContent = '❌ Email ou mot de passe incorrect, ou accès admin non autorisé.';
                 errorEl.classList.add('active');
                 btn.disabled = false;
                 btn.textContent = 'Se connecter';
                 return;
             }
-
-            // Stocker la session
-            var session = {
-                id: data.id,
-                email: data.email,
-                role: data.role,
-                expires: Date.now() + (8 * 60 * 60 * 1000)
-            };
-            localStorage.setItem('admin_session', JSON.stringify(session));
 
             // Rediriger
             window.location.href = 'admin-calendrier.html';

@@ -504,24 +504,9 @@
 <!--  VÉRIFICATION DE SESSION ADMIN - REDIRECTION AUTOMATIQUE      -->
 <!-- ============================================================ -->
 <script>
-(function() {
-    try {
-        var session = JSON.parse(localStorage.getItem('admin_session') || '{}');
-        // Si pas d'ID ou session expirée → rediriger vers login
-        if (!session.id || !session.expires || session.expires < Date.now()) {
-            localStorage.removeItem('admin_session');
-            window.location.href = 'admin-login.html';
-        } else {
-            // Session valide
-            window.adminRole = session.role || 'admin';
-            console.log('✅ Session admin active - Rôle:', window.adminRole);
-        }
-    } catch (e) {
-        console.error('Erreur de session:', e);
-        localStorage.removeItem('admin_session');
-        window.location.href = 'admin-login.html';
-    }
-})();
+// L'acces admin est verifie par Supabase Auth + role en base (voir plus bas). Page masquee tant que non verifie.
+document.documentElement.style.visibility = 'hidden';
+window.adminRole = null;
 </script>
 
 <div class="admin-wrapper">
@@ -558,14 +543,31 @@
 <div class="events-popup" id="eventsPopup"><div class="popup-content" id="popupContent"></div></div>
 
 <script>
-    function logout() {
-        localStorage.removeItem('admin_session');
+    async function logout() {
+        try { await _supabase.auth.signOut(); } catch (e) {}
         window.location.href = 'admin-login.html';
     }
 
     const SUPABASE_URL = 'https://ilpnwxuecooxthnoxyws.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImlscG53eHVlY29veHRobm94eXdzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTYxNTcsImV4cCI6MjA5MzI5MjE1N30.0iwBXWrLCNcqdfVjAlp8f_F0q6yHQYfLj_SAvLCt9jY';
     const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    // Verification d'acces admin : session Auth + role lu en base (fonction my_admin_role)
+    (async function() {
+        try {
+            const { data: { session } } = await _supabase.auth.getSession();
+            let role = null;
+            if (session) {
+                const r = await _supabase.rpc('my_admin_role');
+                role = r.error ? null : r.data;
+            }
+            if (!role) { window.location.href = 'admin-login.html'; return; }
+            window.adminRole = role;
+            document.documentElement.style.visibility = 'visible';
+        } catch (e) {
+            window.location.href = 'admin-login.html';
+        }
+    })();
 
     let currentMonth, currentYear, eventsData = {};
     let editingEventId = null, editingEventDate = null, editingPeriodId = null;
