@@ -147,11 +147,7 @@
 
             // Chercher l'admin dans la base
             const { data, error } = await window._supabase
-                .from('admin_users')
-                .select('*')
-                .eq('email', email)
-                .eq('password_hash', passwordHash)
-                .single();
+                .rpc('admin_login', { p_email: email, p_hash: passwordHash });
 
             if (error || !data) {
                 errorEl.textContent = '❌ Email ou mot de passe incorrect.';

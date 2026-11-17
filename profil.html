@@ -270,13 +270,9 @@
 
     async function checkAdminAccess(userEmail) {
         // Vérifier si l'email est dans la table admin_users
-        const { data: adminData } = await supabaseClient
-            .from('admin_users')
-            .select('role')
-            .eq('email', userEmail)
-            .single();
+        const { data: adminRole } = await supabaseClient.rpc('my_admin_role');
 
-        if (adminData && (adminData.role === 'admin' || adminData.role === 'superadmin' || adminData.role === 'editor')) {
+        if (adminRole === 'admin' || adminRole === 'superadmin' || adminRole === 'editor') {
             document.getElementById('admin-btn').style.display = 'inline-block';
         }
     }
