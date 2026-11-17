@@ -507,6 +507,13 @@
             .choice-card { border-width: 4px; }
         }
 
+        /* Ordinateur (zoom 150 % actif des 1024 px) : toujours deux cartes par ligne (2 + 2), quelle que soit la largeur.
+           Aucun effet sous 1024 px : telephone et tablette strictement inchanges. */
+        @media (min-width: 1024px) {
+            .prestations-grid { max-width: 900px; margin-left: auto; margin-right: auto; }
+            .choice-card { width: min(380px, calc(50% - 48px)); }
+        }
+
         @media (max-width: 600px) {
             body { padding-top: 100px; }
             .navbar { height: 48px; }
